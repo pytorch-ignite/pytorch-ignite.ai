@@ -110,9 +110,9 @@ params:
       text: Out-of-the-box metrics to easily evaluate models
       url: /
       buttonText: Learn More
-    - title: Unparalleled flexibility of Handlers
+    - title: Flexible Handlers
       icon: plug-cloud
-      text: Built-in handlers to compose training pipeline, save artifacts and log parameters and metrics
+      text: Compose training pipelines, save artifacts, and log parameters and metrics
       url: /
       buttonText: Learn More
   section2:
