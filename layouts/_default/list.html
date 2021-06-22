@@ -6,9 +6,7 @@
       {{- block "title" . -}} {{- if .Title -}} {{ .Title }} | {{ .Site.Title }}
       {{- else -}} {{ .Site.Title }} {{- end -}} {{- end -}}
     </title>
-    {{ partial "css.html" . }} {{ $style := resources.Get "css/posts.css" |
-    resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}" />
+    {{ partial "css.html" . }}
   </head>
   <body>
     <!-- Preloader -->
