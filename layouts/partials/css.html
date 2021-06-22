@@ -17,4 +17,4 @@
 {{- end }}
 <link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">
 {{ $style := resources.Get "css/custom.css" | resources.Minify | resources.Fingerprint }}
-<link rel="stylesheet" href="{{ $style.Permalink }}">
+<link rel="stylesheet" href="{{ $style.RelPermalink }}">
