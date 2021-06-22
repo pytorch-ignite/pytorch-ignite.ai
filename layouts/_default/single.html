@@ -3,8 +3,13 @@
   <head>
     {{ partial "meta.html" . }}
     <title>
-      {{- block "title" . -}} {{- if .Title -}} {{ .Title }} | {{ .Site.Title }}
-      {{- else -}} {{ .Site.Title }} {{- end -}} {{- end -}}
+      {{- block "title" . -}}
+      {{- if eq .Title .Site.Title -}}
+        {{ .Site.Title }}
+      {{- else -}}
+        {{ .Title }} | {{ .Site.Title }}
+      {{- end -}}
+      {{- end -}}
     </title>
     {{ partial "css.html" . }}
   </head>

@@ -1,4 +1,4 @@
-baseURL: https://pytorch-ignite.ai
+baseURL: https://pytorch-ignite.netlify.app
 languageCode: en-us
 title: PyTorch-Ignite
 theme: hugo-fresh
@@ -23,6 +23,8 @@ markup:
 
 # for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
+  images:
+    - static/images/logos/ignite_logo_feature.png
   # Open graph allows easy social sharing. If you don't want it you can set it to false or just delete the variable
   openGraph: true
   # Used as meta data; describe your site to make Google Bots happy
