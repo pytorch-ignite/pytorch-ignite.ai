@@ -1,0 +1,14 @@
+{{- $logo     := .Params.sidebarlogo }}
+<div class="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-close" href="javascript:void(0);">
+      <i data-feather="x"></i>
+    </a>
+  </div>
+  <div class="inner">
+  <aside>
+    <h1 class="toc">Table Of Contents</h1>
+    {{ .TableOfContents }}
+  </aside>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        {{- if .Params.date -}}
+        <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
+        {{- end -}}
+        {{- if .Params.image -}}
+        <div class="post-image">
+        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}">
+        </div>
+        {{- end -}}
+        <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>

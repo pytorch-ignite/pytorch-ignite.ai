@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+  <head>
+    {{ partial "meta.html" . }}
+    <title>
+      {{- block "title" . -}} {{- if .Title -}} {{ .Title }} | {{ .Site.Title }}
+      {{- else -}} {{ .Site.Title }} {{- end -}} {{- end -}}
+    </title>
+    {{ partial "css.html" . }} {{ $style := resources.Get "css/posts.css" |
+    resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}" />
+  </head>
+  <body>
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+
+    {{ partial "single/single.html" . }}
+
+    <main class="section">
+      <ul class="blogs">
+        <!-- Ranges through content/posts/*.md -->
+        {{ range .Pages }}
+        <li class="blog">
+          <div class="row">
+            <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
+            <div class="line">
+              <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
+              <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+              <div class="summary">{{ .Summary }}</div>
+            </div>
+          </div>
+        </li>
+        {{ end }}
+      </ul>
+    </main>
+
+    {{ if .Params.include_footer }} {{ partial "footer.html" . }} {{ end }}
+
+    <!-- Back To Top Button -->
+    <div id="backtotop"><a href="#"></a></div>
+
+    {{ partial "javascript.html" . }}
+  </body>
+</html>

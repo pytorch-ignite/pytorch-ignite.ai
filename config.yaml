@@ -5,9 +5,18 @@ theme: hugo-fresh
 googleAnalytics: # Put in your tracking code without quotes like this: UA-XXXXXX...
 # Disables warnings
 disableKinds:
-- taxonomy
-- taxonomyTerm
+  - taxonomy
+  - taxonomyTerm
 markup:
+  highlight:
+    lineNoStart: 1
+    lineNos: true
+    anchorlinenos: true
+    tabWidth: 4
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 1
   goldmark:
     renderer:
       unsafe: true # Allows you to write raw html in your md files
@@ -19,12 +28,12 @@ params:
   # Used as meta data; describe your site to make Google Bots happy
   description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
   navbarlogo:
-  # Logo (from static/images/logos/___)
+    # Logo (from static/images/logos/___)
     image: logos/ignite_logomark.svg
     link: /
   font:
     name: "Oxygen"
-    sizes: [400,600]
+    sizes: [400, 600]
   hero:
     # Main hero title
     title: PyTorch-Ignite
@@ -35,79 +44,79 @@ params:
     # Where the main hero button links to
     buttonlink: "#"
     # Hero image (from static/images/___)
-    image: logos/ignite_logo.svg
+    image: logos/ignite_logomark.svg
 
   navbar:
-  - title: Documentation
-    url: https://pytorch.org/ignite
-  - title: GitHub
-    url: https://github.com/pytorch/ignite
-  - title: Blog
-    url: /blog/
-  - title: Community
-    url: /community
+    - title: Documentation
+      url: https://pytorch.org/ignite
+    - title: GitHub
+      url: https://github.com/pytorch/ignite
+    - title: Blog
+      url: /posts/
+    - title: Community
+      url: /community
 
   section1:
     title: Places Ignite shines
     # subtitle: with great responsibility
     tiles:
-    - title: Simplicity
-      icon: mouse-globe
-      text: Extremely simple engine and event system
-      url: /
-      buttonText: Learn More
-    - title: Rich metrics
-      icon: laptop-cloud
-      text: Out-of-the-box metrics to easily evaluate models
-      url: /
-      buttonText: Learn More
-    - title: Flexible Handlers
-      icon: plug-cloud
-      text: Compose training pipelines, save artifacts, and log parameters and metrics
-      url: /
-      buttonText: Learn More
+      - title: Simplicity
+        icon: mouse-globe
+        text: Extremely simple engine and event system
+        url: /
+        buttonText: Learn More
+      - title: Rich metrics
+        icon: laptop-cloud
+        text: Out-of-the-box metrics to easily evaluate models
+        url: /
+        buttonText: Learn More
+      - title: Flexible Handlers
+        icon: plug-cloud
+        text: Compose training pipelines, save artifacts, and log parameters and metrics
+        url: /
+        buttonText: Learn More
 
   section2:
     title: E C O S Y S T E M
     subtitle: And we know it
     features:
-    - title: Project MONAI
-      text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-      # Icon (from /images/illustrations/icons/___.svg)
-      icon: laptop-globe
-    - title: DeepSeismic
-      text: Deep Learning for Seismic Imaging and Interpretation
-      icon: doc-sync
-    - title: Nussl
-      text: A flexible source separation library in Python
-      icon: mobile-feed
+      - title: Project MONAI
+        text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
+        # Icon (from /images/illustrations/icons/___.svg)
+        icon: laptop-globe
+      - title: DeepSeismic
+        text: Deep Learning for Seismic Imaging and Interpretation
+        icon: doc-sync
+      - title: Nussl
+        text: A flexible source separation library in Python
+        icon: mobile-feed
 
   footer:
     # Logo (from /images/logos/___)
     logo: ignite_logomark.svg
     socialmedia:
-    - link: https://github.com/pytorch/ignite
-      icon: github
-    - link: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
-      icon: facebook
-    - link: https://twitter.com/pytorch_ignite
-      icon: twitter
+      - link: https://github.com/pytorch/ignite
+        icon: github
+      - link: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
+        icon: facebook
+      - link: https://twitter.com/pytorch_ignite
+        icon: twitter
     quicklinks:
       column2:
         title: Resources
         links:
-        - text: Tutorials
-          link: https://pytorch.org/ignite/tutorials
-        - text: Docs
-          link: https://pytorch.org/ignite
-        - text: GitHub Discuss
-          link: https://github.com/pytorch/ignite/discussions
-        - text: Discord
-          link: https://discord.gg/djZtm3EmKj
+          - text: Tutorials
+            link: https://pytorch.org/ignite/tutorials
+          - text: Docs
+            link: https://pytorch.org/ignite
+          - text: GitHub Discuss
+            link: https://github.com/pytorch/ignite/discussions
+          - text: Discord
+            link: https://discord.gg/djZtm3EmKj
       column3:
         title: Blog
         links:
-        - text: Latest news
-          link: /blog/first
-        - text: Tech articles
-          link: /blog/second
+          - text: Latest news
+            link: /posts/first
+          - text: Tech articles
+            link: /posts/second

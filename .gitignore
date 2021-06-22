@@ -1,1 +1,10 @@
 public
+resources
+*.log
+.vscode
+.idea
+.vs
+build
+dist
+.DS_Store
+node_modules
