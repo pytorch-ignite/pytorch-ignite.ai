@@ -25,7 +25,7 @@
             <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
             <div class="line">
               <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
-              <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+              <h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
               <div class="summary">{{ .Summary }}</div>
             </div>
           </div>
