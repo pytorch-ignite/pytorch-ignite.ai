@@ -20,18 +20,6 @@ footer.footer-dark .footer-logo img {
 .feature-card {
   height: 350px;
 }
-@media screen and (max-width: 768px) {
-  .columns.is-vcentered {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: initial;
-    align-content: center;
-  }
-  .image.is-4by3 {
-    width: 50%;
-    margin: 0 auto;
-  }
-}
 .post-image {
   text-align: center;
 }
@@ -72,6 +60,9 @@ footer.footer-dark .footer-logo img {
 #TableOfContents {
   margin-top: 0.5rem;
 }
+.section.main {
+  padding-top: 0;
+}
 .section .blogs .blog img {
   border-radius: 0.5rem;
   width: 100%;
@@ -87,8 +78,27 @@ footer.footer-dark .footer-logo img {
   display: flex;
   align-content: center;
   align-items: center;
-  justify-content: space-evenly;
 }
 .date {
   margin-bottom: 0.5rem;
+}
+@media screen and (max-width: 768px) {
+  .columns.is-vcentered {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: initial;
+    align-content: center;
+  }
+  .image.is-4by3 {
+    width: 50%;
+    margin: 0 auto;
+  }
+  .blog .row {
+    flex-direction: column;
+  }
+  .section .blogs .blog img {
+    width: 50%;
+    height: 50%;
+    margin-bottom: 1rem;
+  }
 }

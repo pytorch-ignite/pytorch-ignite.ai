@@ -1,6 +1,7 @@
 ---
 layout: post
 sidebar: true
+include_footer: true
 title: "Introduction to PyTorch-Ignite"
 date: 2020-09-10
 draft: false
