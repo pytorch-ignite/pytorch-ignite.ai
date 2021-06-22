@@ -12,6 +12,7 @@ markup:
     renderer:
       unsafe: true # Allows you to write raw html in your md files
 
+# for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
   # Open graph allows easy social sharing. If you don't want it you can set it to false or just delete the variable
   openGraph: true
@@ -30,72 +31,22 @@ params:
     # Hero subtitle (optional)
     subtitle: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
     # Button text
-    buttontext: Get started
+    buttontext: GET STARTED
     # Where the main hero button links to
     buttonlink: "#"
     # Hero image (from static/images/___)
     image: logos/ignite_logo.svg
-    # Footer logos (from static/images/logos/clients/___.svg)
-    # clientlogos:
-    # - systek
-    # - tribe
-    # - kromo
-    # - infinite
-    # - gutwork
-  # Customizable navbar. For a dropdown, add a "sublinks" list.
+
   navbar:
   - title: Documentation
     url: https://pytorch.org/ignite
   - title: GitHub
     url: https://github.com/pytorch/ignite
   - title: Blog
-    url: /blog
-    # sublinks:
-    # - title: Dropdown item
-    #   url: /
-    # - title: Dropdown item
-    #   url: /
-    # - title: Dropdown item
-    #   url: /
+    url: /blog/
   - title: Community
     url: /community
-  # - title: Sign up
-  #   url: /
-  #   button: true
-  # sidebar:
-    # Logo (from /images/logos/___.svg)
-    # logo: fresh-square
-    # sections:
-    # - title: User
-    #   icon: user
-    #   links:
-    #   - text: Profile
-    #     url: /
-    #   - text: Account
-    #     url: /
-    #   - text: Settings
-    #     url: /
-    # - title: Messages
-    #   icon: envelope
-    #   links:
-    #   - text: Inbox
-    #     url: /
-    #   - text: Compose
-    #     url: /
-    # - title: Images
-    #   icon: image
-    #   links:
-    #   - text: Library
-    #     url: /
-    #   - text: Upload
-    #     url: /
-    # - title: Settings
-    #   icon: cog
-    #   links:
-    #   - text: User settings
-    #     url: /
-    #   - text: App settings
-    #     url: /
+
   section1:
     title: Places Ignite shines
     # subtitle: with great responsibility
@@ -115,6 +66,7 @@ params:
       text: Compose training pipelines, save artifacts, and log parameters and metrics
       url: /
       buttonText: Learn More
+
   section2:
     title: E C O S Y S T E M
     subtitle: And we know it
@@ -129,70 +81,31 @@ params:
     - title: Nussl
       text: A flexible source separation library in Python
       icon: mobile-feed
-  # section3:
-  #   title: One platform
-  #   subtitle: To rule them all
-  #   image: illustrations/mockups/app-mockup.png
-  #   buttonText: Get started
-  #   buttonLink: "#"
-  # section4:
-  #   title: Our Clients love us!
-  #   subtitle: Lorem ipsum sit dolor amet is a dummy text used by typography industry
-  #   clients:
-  #   - name: Irma Walters
-  #     quote: Lorem ipsum dolor sit amet, elit deleniti dissentias quo eu, hinc minim appetere te usu, ea case duis scribentur has. Duo te consequat elaboraret, has quando suavitate at.
-  #     job: Accountant
-  #     img: 1
-  #   - name: John Bradley
-  #     quote: Lorem ipsum dolor sit amet, elit deleniti dissentias quo eu, hinc minim appetere te usu, ea case duis scribentur has. Duo te consequat elaboraret, has quando suavitate at.
-  #     job: Financial Analyst
-  #     img: 2
-  #   - name: Gary Blackman
-  #     quote: Lorem ipsum dolor sit amet, elit deleniti dissentias quo eu, hinc minim appetere te usu, ea case duis scribentur has. Duo te consequat elaboraret, has quando suavitate at.
-  #     job: HR Manager
-  #     img: 3
-  # section5: true
+
   footer:
     # Logo (from /images/logos/___)
     logo: ignite_logomark.svg
-    # Social Media Title
-    socialmediatitle: Follow Us
-    # Social media links (GitHub, Twitter, etc.). All are optional.
     socialmedia:
     - link: https://github.com/pytorch/ignite
-      # Icons are from Font Awesome
       icon: github
-    - link: https://facebook.com/pytorch-ignite
+    - link: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
       icon: facebook
     - link: https://twitter.com/pytorch_ignite
       icon: twitter
     quicklinks:
-      column1:
-        title: "Product"
-        links:
-        - text: Discover features
-          link: /
-        - text: Why choose our product?
-          link: /
-        - text: Compare features
-          link: /
-        - text: Our roadmap
-          link: /
-        - text: AGB
-          link: /agb
       column2:
-        title: "Docs"
+        title: Resources
         links:
-        - text: Get started
-          link: /
-        - text: User guides
-          link: /
-        - text: Admin guide
-          link: /
-        - text: Developers
-          link: /
+        - text: Tutorials
+          link: https://pytorch.org/ignite/tutorials
+        - text: Docs
+          link: https://pytorch.org/ignite
+        - text: GitHub Discuss
+          link: https://github.com/pytorch/ignite/discussions
+        - text: Discord
+          link: https://discord.gg/djZtm3EmKj
       column3:
-        title: "Blog"
+        title: Blog
         links:
         - text: Latest news
           link: /blog/first
