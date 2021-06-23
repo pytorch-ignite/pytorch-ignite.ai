@@ -23,6 +23,7 @@ markup:
 
 # for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
+  featuredPost: /posts/2020-09-pytorch-ignite/
   images:
     - images/logos/ignite_logo_feature.png
   # Open graph allows easy social sharing. If you don't want it you can set it to false or just delete the variable

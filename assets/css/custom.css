@@ -9,6 +9,9 @@ footer.footer-dark .footer-logo img {
   max-height: 50px !important;
   height: 50px;
 }
+.hero-body {
+  padding: 0 1.5rem 1rem;
+}
 .hero-body .title,
 .hero-body .subtitle,
 .button.cta,
@@ -81,6 +84,20 @@ footer.footer-dark .footer-logo img {
 }
 .date {
   margin-bottom: 0.5rem;
+}
+.featured-post {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1.5rem 1rem;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+}
+.featured-post a:hover {
+  color: #ee4c2c;
+  text-decoration: underline;
 }
 @media screen and (max-width: 768px) {
   .columns.is-vcentered {
