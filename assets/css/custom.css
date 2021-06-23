@@ -8,9 +8,14 @@ body {
 footer.footer-dark .footer-logo img {
   max-height: 50px !important;
   height: 50px;
+  width: 50px;
 }
 .hero-body {
   padding: 0 1.5rem 1rem;
+}
+.navbar-item {
+  margin: 0 .5rem;
+  padding: 0;
 }
 .hero-body .title,
 .hero-body .subtitle,
