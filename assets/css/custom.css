@@ -104,6 +104,21 @@ footer.footer-dark .footer-logo img {
   color: #ee4c2c;
   text-decoration: underline;
 }
+#twitter-widget-0 {
+  display: none !important;
+}
+.twitter-tweets {
+  margin: 0 5rem 3rem;
+}
+.tweets-wrapper {
+  display: flex;
+}
+.tweet-author {
+  margin-top: 2rem;
+}
+.col-md-4 {
+  margin: 0 1rem;
+}
 @media screen and (max-width: 768px) {
   .columns.is-vcentered {
     display: flex;
@@ -122,5 +137,17 @@ footer.footer-dark .footer-logo img {
     width: 50%;
     height: 50%;
     margin-bottom: 1rem;
+  }
+  .tweets-wrapper {
+    display: block;
+  }
+  .twitter-tweets{
+    margin: 0 2rem 2.5rem;
+  }
+  .col-md-4 {
+    padding: 1rem 0;
+  }
+  .tweet-author {
+    margin-top: 1rem;
   }
 }

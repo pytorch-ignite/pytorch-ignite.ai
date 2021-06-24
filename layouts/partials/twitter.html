@@ -1,0 +1,11 @@
+<a
+  class="twitter-timeline"
+  href="https://twitter.com/pytorch_ignite"
+  data-height="0"
+  data-chrome="noheader nofooter noborders transparent noscrollbar"
+  data-tweet-limit="3"
+  data-link-color="#e44c2c"
+  data-dnt="true"></a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{{ $script := resources.Get "js/load-tweets.js" }}
+<script src="{{ $script.RelPermalink }}" defer></script>

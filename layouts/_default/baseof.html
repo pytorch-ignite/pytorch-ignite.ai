@@ -19,12 +19,16 @@
       <div id="status"></div>
     </div>
 
-    {{ block "main" . }} {{ end }}
+    {{ block "main" . }}{{ end }}
 
     <!-- Back To Top Button -->
     <div id="backtotop"><a href="#"></a></div>
-
-    {{ if .Site.Params.sidebar }} {{ partial "sidebar.html" . }} {{ end }} {{
-    partial "javascript.html" . }}
+    
+    {{ if .Site.Params.sidebar }}
+    {{ partial "sidebar.html" . }}
+    {{ end }}
+    
+    {{ partial "twitter.html" . }}
+    {{ partial "javascript.html" . }}
   </body>
 </html>
