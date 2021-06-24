@@ -49,7 +49,6 @@ const interval = setInterval(function() {
     embedTweet(iframe)
   }
 
-  console.log(count)
   // cancel after 8 seconds
   if (count > 8) {
     clearInterval(interval)
