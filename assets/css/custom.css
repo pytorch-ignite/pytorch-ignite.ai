@@ -119,6 +119,12 @@ footer.footer-dark .footer-logo img {
 .col-md-4 {
   margin: 0 1rem;
 }
+.col-md-4 .Emoji {
+  /* these emoji needs to adjust with font size */
+  /* if changed */
+  width: 1rem;
+  height: 1rem;
+}
 @media screen and (max-width: 768px) {
   .columns.is-vcentered {
     display: flex;
