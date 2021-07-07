@@ -13,9 +13,11 @@ footer.footer-dark .footer-logo img {
 .hero-body {
   padding: 0 1.5rem 1rem;
 }
-.navbar-item {
+.navbar-item img {
   margin: 0 .5rem;
-  padding: 0;
+}
+.hero.is-fullheight {
+  min-height: auto;
 }
 .hero-body .title,
 .hero-body .subtitle,
@@ -91,17 +93,18 @@ footer.footer-dark .footer-logo img {
   margin-bottom: 0.5rem;
 }
 .featured-post {
-  border: 1px solid #ddd;
-  border-radius: 8px;
   text-align: center;
-  margin-top: 2rem;
   padding: 1.5rem 1rem;
   font-size: 1.25rem;
   line-height: 1.5rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+  background-color: #ee4c2c;
+  width: 100vw;
+}
+.featured-post a {
+  color: #fff;
+  font-weight: 600;
 }
 .featured-post a:hover {
-  color: #ee4c2c;
   text-decoration: underline;
 }
 #twitter-widget-0 {
@@ -125,13 +128,10 @@ footer.footer-dark .footer-logo img {
   width: 1rem;
   height: 1rem;
 }
+.title-and-img {
+  display: flex;
+}
 @media screen and (max-width: 768px) {
-  .columns.is-vcentered {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: initial;
-    align-content: center;
-  }
   .image.is-4by3 {
     width: 50%;
     margin: 0 auto;
