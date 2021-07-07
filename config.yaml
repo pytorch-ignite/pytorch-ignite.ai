@@ -51,7 +51,7 @@ params:
 
   navbar:
     - title: Documentation
-      url: https://pytorch.org/ignite
+      url: /docs/
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
