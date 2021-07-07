@@ -1,3 +1,6 @@
+<!-- https://gohugo.io/functions/where/ -->
+{{- $posts := where .Pages "Section" "posts" }}
+
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
   <head>
@@ -21,10 +24,11 @@
 
     {{ partial "single/single.html" . }}
 
+    {{- if $posts -}}
     <main class="section main">
       <ul class="blogs">
         <!-- Ranges through content/posts/*.md -->
-        {{ range .Pages }}
+        {{ range $posts }}
         <li class="blog">
           <div class="row">
             <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
@@ -38,8 +42,11 @@
         {{ end }}
       </ul>
     </main>
+    {{- end -}}
 
-    {{ if .Params.include_footer }} {{ partial "footer.html" . }} {{ end }}
+    {{ if .Params.include_footer }}
+      {{ partial "footer.html" . }}
+    {{ end }}
 
     <!-- Back To Top Button -->
     <div id="backtotop"><a href="#"></a></div>
