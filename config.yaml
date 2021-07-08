@@ -39,7 +39,7 @@ params:
     sizes: [400, 600]
   hero:
     # Main hero title
-    title: PyTorch-Ignite
+    # title: PyTorch-Ignite
     # Hero subtitle (optional)
     subtitle: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
     # Button text
@@ -47,7 +47,7 @@ params:
     # Where the main hero button links to
     buttonlink: "#"
     # Hero image (from static/images/___)
-    image: logos/ignite_logomark.svg
+    image: logos/ignite_logo.svg
 
   navbar:
     - title: Documentation
