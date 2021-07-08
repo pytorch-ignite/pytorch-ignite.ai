@@ -131,6 +131,10 @@ footer.footer-dark .footer-logo img {
 .title-and-img {
   display: flex;
 }
+.button.primary-btn {
+  background-color: #eaa700;
+  border-color: #eaa700;
+}
 @media screen and (max-width: 768px) {
   .image.is-4by3 {
     width: 50%;
