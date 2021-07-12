@@ -9,10 +9,13 @@
 <div class="hero-body">
   <div class="container">
     <div class="columns is-vcentered">
-      <div class="column landing-caption is-5 is-offset-1">
+      <div class="column landing-caption title-and-img is-5 is-offset-1">
         <h1 class="title is-bold is-spaced is-1">
           {{ $title }}
         </h1>
+        <img src="{{ printf "/images/%s" $image | relURL }}" alt="Description">
+      </div>
+      <div class="column is-5 is-offset-1">
         {{ with $subtitle }}
         <h2 class="subtitle is-muted is-5">
           {{ . }}
@@ -24,20 +27,15 @@
           </a>
         </p>
       </div>
-      <div class="column is-5 is-offset-1">
-        <figure class="image is-4by3">
-          <img src="{{ printf "/images/%s" $image | relURL }}" alt="Description">
-        </figure>
-      </div>
     </div>
-    {{- range $posts -}}
-    <div class="featured-post">
-    {{- if (and ($featuredPost) (eq $featuredPost .RelPermalink)) -}}
-      <a href="{{ $featuredPost }}">
-        {{ .Title }}
-      </a>
-    {{- end -}}
-    {{- end -}}
   </div>
 </div>
+{{- range $posts -}}
+<div class="featured-post">
+  {{- if (and ($featuredPost) (eq $featuredPost .RelPermalink)) -}}
+  <a href="{{ $featuredPost }}">
+    {{ .Title }}
+  </a>
+  {{- end -}}
+  {{- end -}}
 </div>
