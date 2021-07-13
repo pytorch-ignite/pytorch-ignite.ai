@@ -15,7 +15,6 @@ function copyCode() {
         .then(function () {
           button.blur();
           button.innerText = "Copied";
-          alert("Code has been copied to clipboard.");
           setTimeout(function () {
             button.innerText = "Copy";
           }, 1500);
