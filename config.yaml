@@ -84,14 +84,16 @@ params:
     features:
       - title: Project MONAI
         text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-        # Icon (from /images/illustrations/icons/___.svg)
-        icon: laptop-globe
+        link: https://monai.io/
       - title: DeepSeismic
         text: Deep Learning for Seismic Imaging and Interpretation
-        icon: doc-sync
+        link: https://github.com/microsoft/seismic-deeplearning
       - title: Nussl
         text: A flexible source separation library in Python
-        icon: mobile-feed
+        link: https://nussl.github.io/docs/
+      - title: Code-Generator
+        text: Application to generate your training scripts with PyTorch-Ignite.
+        link: https://code-generator.pytorch-ignite.ai
 
   footer:
     # Logo (from /images/logos/___)

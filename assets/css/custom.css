@@ -1,3 +1,7 @@
+:root {
+  --c-primary: #ee4c2c;
+  --c-secondary: #eaa700;
+}
 body {
   font-family: Oxygen, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
@@ -97,7 +101,7 @@ footer.footer-dark .footer-logo img {
   padding: 1.5rem 1rem;
   font-size: 1.25rem;
   line-height: 1.5rem;
-  background-color: #ee4c2c;
+  background-color: var(--c-primary);
   width: 100vw;
 }
 .featured-post a {
@@ -132,8 +136,16 @@ footer.footer-dark .footer-logo img {
   display: flex;
 }
 .button.primary-btn {
-  background-color: #eaa700;
-  border-color: #eaa700;
+  background-color: var(--c-secondary);
+  border-color: var(--c-secondary);
+}
+.media-content {
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.media.icon-box .media-content:hover .content p .icon-box-title {
+  color: var(--c-primary);
 }
 @media screen and (max-width: 768px) {
   .image.is-4by3 {
