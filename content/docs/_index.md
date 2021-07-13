@@ -3,8 +3,7 @@ title: PyTorch-Ignite Documentation
 include_footer: true
 ---
 
-1. [Getting Started](getting-started)
-2. [Tutorials](/docs/tutorials)
-3. [How To Guides](/docs/how-to-guides)
-4. [API Reference](/docs/api-reference)
-5. [Explanations](/docs/explanations)
+1. [Tutorials](/docs/tutorials)
+2. [How To Guides](/docs/how-to-guides)
+3. [API Reference](/docs/api-reference)
+4. [Explanations](/docs/explanations)

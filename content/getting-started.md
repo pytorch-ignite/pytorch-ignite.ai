@@ -3,9 +3,6 @@ title: Getting Started
 include_footer: true
 ---
 
-Quick start
-===========
-
 Welcome to **PyTorch-Ignite**'s quick start guide that covers the essentials of getting a project up and running while walking through basic concepts of Ignite. In just a few lines of code, you can get your model trained and validated. The complete code can be found in
 [examples/mnist/mnist.py](https://github.com/pytorch/ignite/blob/master/examples/mnist/mnist.py).
 
@@ -29,7 +26,7 @@ pip install pytorch-ignite
 conda install ignite -c pytorch
 ```
 
-See [here]() for other installation options.
+See [here](/docs/how-to-guides/installation) for other installation options.
 
 Code
 -----
