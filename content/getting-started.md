@@ -1,6 +1,7 @@
 ---
 title: Getting Started
 include_footer: true
+sidebar: True
 ---
 
 Welcome to **PyTorch-Ignite**'s quick start guide that covers the essentials of getting a project up and running while walking through basic concepts of Ignite. In just a few lines of code, you can get your model trained and validated. The complete code can be found at the [end of this guide]().
