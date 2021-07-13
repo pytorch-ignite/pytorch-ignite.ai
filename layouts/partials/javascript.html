@@ -4,3 +4,11 @@
 <script src="{{ $modernizr.RelPermalink }}"></script>
 <script src='{{ "js/fresh.js" | relURL }}'></script>
 <script src='{{ "js/jquery.panelslider.min.js" | relURL }}'></script>
+{{- if (findRE "<pre" .Content 1) -}}
+  {{ $style := resources.Get "css/syntax.css" | resources.Minify | resources.Fingerprint }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{ $style := resources.Get "css/copy-code.css" | resources.Minify | resources.Fingerprint }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{ $script := resources.Get "js/copy-code.js" | resources.Minify | resources.Fingerprint }}
+  <script src="{{ $script.RelPermalink }}"></script>
+{{- end -}}

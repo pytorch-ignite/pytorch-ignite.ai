@@ -30,7 +30,7 @@ Other attributes can be found in the docs of
 In the code below, [engine.state.output]{.title-ref} will store the
 batch loss. This output is used to print the loss at every iteration.
 
-``` {.python}
+```python
 def update(engine, batch):
     x, y = batch
     y_pred = model(inputs)
@@ -65,7 +65,7 @@ loss, y_pred, y for the processed batch. If we want to attach
 engine, [output_transform]{.title-ref} will be needed to get y_pred and
 y from [engine.state.output]{.title-ref}. Let\'s see how that is done:
 
-``` {.python}
+```python
 def update(engine, batch):
     x, y = batch
     y_pred = model(inputs)
@@ -94,7 +94,7 @@ the processed batch, this is how the user can use
 [output_transform]{.title-ref} to get y_pred and y from
 [engine.state.output]{.title-ref}. See below:
 
-``` {.python}
+```python
 def update(engine, batch):
     x, y = batch
     y_pred = model(inputs)

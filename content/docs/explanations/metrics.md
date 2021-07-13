@@ -10,7 +10,7 @@ and 2) storing the entire output history.
 Metrics can be attached to
 `~ignite.engine.engine.Engine`{.interpreted-text role="class"}:
 
-``` {.python}
+```python
 from ignite.metrics import Accuracy
 
 accuracy = Accuracy()
@@ -25,7 +25,7 @@ print("Result:", state.metrics)
 
 or can be used as stand-alone objects:
 
-``` {.python}
+```python
 from ignite.metrics import Accuracy
 
 accuracy = Accuracy()
