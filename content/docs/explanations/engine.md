@@ -3,12 +3,9 @@ title: Engine
 include_footer: true
 ---
 
-The **essence** of the framework is the class
-`~ignite.engine.engine.Engine`{.interpreted-text role="class"}, an
-abstraction that loops a given number of times over provided data,
-executes a processing function and returns a result:
+The **essence** of the framework is the class `~ignite.engine.engine.Engine`{.interpreted-text role="class"}, an abstraction that loops a given number of times over provided data, executes a processing function and returns a result:
 
-``` {.python}
+```python
 while epoch < max_epochs:
     # run an epoch on data
     data_iter = iter(data)
@@ -24,14 +21,11 @@ while epoch < max_epochs:
             break
 ```
 
-Thus, a model trainer is simply an engine that loops multiple times over
-the training dataset and updates model parameters. Similarly, model
-evaluation can be done with an engine that runs a single time over the
-validation dataset and computes metrics.
+Thus, a model trainer is simply an engine that loops multiple times over the training dataset and updates model parameters. Similarly, model evaluation can be done with an engine that runs a single time over the validation dataset and computes metrics.
 
 For example, model trainer for a supervised task:
 
-``` {.python}
+```python
 def train_step(trainer, batch):
     model.train()
     optimizer.zero_grad()
@@ -46,17 +40,11 @@ trainer = Engine(train_step)
 trainer.run(data, max_epochs=100)
 ```
 
-The type of output of the training step (i.e. `loss.item()` in the above
-example) is not restricted. Training step function can return everything
-user wants. Output is set to `trainer.state.output` and can be used
-further for any type of processing.
+The type of output of the training step (i.e. `loss.item()` in the above example) is not restricted. Training step function can return everything user wants. Output is set to `trainer.state.output` and can be used further for any type of processing.
 
-**Training logic of any complexity** can be coded with `train_step`
-method and a trainer can be constructed using this method. Argument
-`batch` in `train_step` function is user-defined and can contain any
-data required for a single iteration.
+**Training logic of any complexity** can be coded with `train_step` method and a trainer can be constructed using this method. Argument `batch` in `train_step` function is user-defined and can contain any data required for a single iteration.
 
-``` {.python}
+```python
 model_1 = ...
 model_2 = ...
 # ...
@@ -98,5 +86,4 @@ trainer = Engine(train_step)
 trainer.run(data, max_epochs=100)
 ```
 
-For multi-models training examples like GAN\'s, please, see our
-`examples`{.interpreted-text role="doc"}.
+For multi-model training examples like GAN's, please, see our [`tutorials`](/docs/tutorials).
