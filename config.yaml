@@ -44,7 +44,7 @@ params:
     # Button text
     buttontext: GET STARTED
     # Where the main hero button links to
-    buttonlink: "#"
+    buttonlink: "/getting-started"
     # Hero image (from static/images/___)
     image: logos/ignite_logo.svg
 
