@@ -3,7 +3,7 @@ title: Engine
 include_footer: true
 ---
 
-The **essence** of the framework is the class `~ignite.engine.engine.Engine`{.interpreted-text role="class"}, an abstraction that loops a given number of times over provided data, executes a processing function and returns a result:
+The **essence** of the framework is the class [`Engine`](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine), an abstraction that loops a given number of times over provided data, executes a processing function and returns a result:
 
 ```python
 while epoch < max_epochs:

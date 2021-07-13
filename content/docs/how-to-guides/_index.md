@@ -8,3 +8,4 @@ include_footer: true
 3. [Work with data in the form of iterators](data-iterator)
 4. [Switch data provider during training](switch-data-training)
 5. [Time profiling during training](time-profiling)
+6. [Install PyTorch-Ignite](installation)

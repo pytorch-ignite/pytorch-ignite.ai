@@ -1,29 +1,25 @@
 ---
 title: Events and Handlers
 include_footer: true
+sidebar: true
 ---
 
-To improve the `~ignite.engine.engine.Engine`{.interpreted-text
-role="class"}\'s flexibility, an event system is introduced which
-facilitates interaction on each step of the run:
+To improve the [`Engine`](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine)'s flexibility, an event system is introduced which facilitates interaction on each step of the run:
 
 -   *engine is started/completed*
 -   *epoch is started/completed*
 -   *batch iteration is started/completed*
 
-Complete list of events can be found at
-`~ignite.engine.events.Events`{.interpreted-text role="class"}.
+Complete list of events can be found at [`Events`]().
 
-Thus, a user can execute a custom code as an event handler. Handlers can
-be any function: e.g. lambda, simple function, class method etc. The
-first argument can be optionally [engine]{.title-ref}, but not
+Thus, a user can execute a custom code as an event handler. Handlers can be any function: e.g. lambda, simple function, class method etc. The first argument can be optionally [engine](), but not
 necessarily.
 
 Let us consider in more detail what happens when
 `~ignite.engine.engine.Engine.run`{.interpreted-text role="meth"} is
 called:
 
-``` {.python}
+```python
 fire_event(Events.STARTED)
 while epoch < max_epochs:
     fire_event(Events.EPOCH_STARTED)
@@ -49,7 +45,7 @@ Attaching an event handler is simple using method
 role="meth"} or `~ignite.engine.engine.Engine.on`{.interpreted-text
 role="meth"} decorator:
 
-``` {.python}
+```python
 trainer = Engine(update_model)
 
 trainer.add_event_handler(Events.STARTED, lambda _: print("Start training"))
@@ -80,7 +76,7 @@ role="class"} reference returned by
 role="meth"}. This can be used to reuse a configured engine for multiple
 loops:
 
-``` {.python}
+```python
 model = ...
 train_loader, validation_loader, test_loader = ...
 
@@ -107,7 +103,7 @@ trainer.run(train_loader, max_epochs=100)
 Event handlers can be also configured to be called with a user pattern:
 every n-th events, once or using a custom event filtering function:
 
-``` {.python}
+```python
 model = ...
 train_loader, validation_loader, test_loader = ...
 
@@ -141,7 +137,7 @@ role="class"} and be registered with
 `~ignite.engine.engine.Engine.register_events`{.interpreted-text
 role="meth"} in an [engine]{.title-ref}.
 
-``` {.python}
+```python
 from ignite.engine import EventEnum
 
 class CustomEvents(EventEnum):
@@ -158,7 +154,7 @@ These events could be used to attach any handler and are fired using
 `~ignite.engine.engine.Engine.fire_event`{.interpreted-text
 role="meth"}.
 
-``` {.python}
+```python
 @engine.on(CustomEvents.CUSTOM_STARTED)
 def call_on_custom_event(engine):
      # do something
@@ -177,7 +173,7 @@ If you want to use filtering with custom events (e.g.
     `~ignite.engine.engine.Engine.register_events`{.interpreted-text
     role="meth"}, which maps between events and state attributes, e.g.
 
-``` {.python}
+```python
 event_to_attr = {
     CustomEvents.CUSTOM_STARTED: "custom_started",
     CustomEvents.CUSTOM_COMPLETED: "custom_completed",
@@ -210,7 +206,7 @@ Some classes can be simply added to
 `~ignite.engine.engine.Engine`{.interpreted-text role="class"} as a
 callable function. For example,
 
-``` {.python}
+```python
 from ignite.handlers import TerminateOnNan
 
 trainer.add_event_handler(Events.ITERATION_COMPLETED, TerminateOnNan())
@@ -219,7 +215,7 @@ trainer.add_event_handler(Events.ITERATION_COMPLETED, TerminateOnNan())
 Others provide an `attach` method to internally add several handlers to
 `~ignite.engine.engine.Engine`{.interpreted-text role="class"}:
 
-``` {.python}
+```python
 from ignite.contrib.handlers.tensorboard_logger import *
 
 # Create a logger
