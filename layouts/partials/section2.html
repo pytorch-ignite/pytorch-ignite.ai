@@ -1,0 +1,29 @@
+{{- $section2 := .Site.Params.section2 }}
+{{- $title    := index $section2 "title" }}
+{{- $subtitle := index $section2 "subtitle" }}
+{{- $features := index $section2 "features" }}
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ $title }}</h1>
+        <h3 class="subtitle is-muted is-5">{{ $subtitle }}</h3>
+        <div class="divider"></div>
+      </div>
+      <div class="mt-60 column is-7">
+        {{- range $features }}
+        <article class="media icon-box">
+          <div class="mt-50 media-content">
+            <a href="{{ .link }}" target="_blank" rel="noopener noreferrer" class="content">
+              <p>
+                <span class="icon-box-title">{{ .title }}</span>
+                <span class="icon-box-text">{{ .text | markdownify }}</span>
+              </p>
+            </a>
+          </div>
+        </article>
+        {{- end }}
+      </div>
+    </div>
+  </div>
+</section>
