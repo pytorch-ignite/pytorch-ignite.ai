@@ -1,64 +1,27 @@
-<!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}">
-  <head>
-    {{ partial "meta.html" . }}
-    <title>
-      {{- block "title" . -}}
-      {{- if eq .Title .Site.Title -}}
-        {{ .Site.Title }}
-      {{- else -}}
-        {{ .Title }} | {{ .Site.Title }}
-      {{- end -}}
-      {{- end -}}
-    </title>
-    {{ partial "css.html" . }}
-  </head>
-  <body>
-    <!-- Preloader -->
-    <div id="preloader">
-      <div id="status"></div>
+{{- define "main" -}}
+<!-- This template apply to all other *.md except for _index.md -->
+<!-- Based from layouts/partials/single/content.html -->
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        {{- if .Params.date -}}
+        <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
+        {{- end -}}
+        {{- if .Params.image -}}
+        <div class="post-image">
+        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}">
+        </div>
+        {{- end -}}
+        <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
+        <div class="divider"></div>
+      </div>
     </div>
 
-    {{ block "main" . }}
-    {{ partial "navbar.html" . }}
-    {{ partial "navbar-clone.html" . }}
-
-    <section class="section is-medium">
-      <div class="container">
-        <div class="columns">
-          <div class="column is-centered-tablet-portrait">
-            <h1 class="title section-title">{{ .Title }}</h1>
-            {{- if .Params.date -}}
-            <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
-            {{- end -}}
-            {{- if .Params.image -}}
-            <div class="post-image">
-            <img src="{{ .Params.image }}" alt="{{ .Params.alt }}">
-            </div>
-            {{- end -}}
-            <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
-            <div class="divider"></div>
-          </div>
-        </div>
-    
-        <div class="content">
-          {{ .Content }}
-        </div>
-      </div>
-    </section>
-
-    {{ if .Params.include_footer }}
-      {{ partial "footer.html" . }}
-    {{ end }}
-
-    <!-- Back To Top Button -->
-    <div id="backtotop"><a href="#"></a></div>
-
-    {{ if .Params.sidebar }}
-      {{ partial "single/sidebar.html" . }}
-    {{ end }}
-    {{ end }}
-
-    {{ partial "javascript.html" . }}
-  </body>
-</html>
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
+{{- end -}}

@@ -1,34 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}">
-  <head>
-    {{ partial "meta.html" . }}
-    <title>
-      {{- block "title" . -}}
-      {{- if eq .Title .Site.Title -}}
-        {{ .Site.Title }}
-      {{- else -}}
-        {{ .Title }} | {{ .Site.Title }}
-      {{- end -}}
-      {{- end -}}
-    </title>
-    {{ partial "css.html" . }}
-  </head>
-  <body>
-
-    {{ block "main" . }}
-    {{ partial "single/single.html" . }}
-    {{ if .Params.include_footer }}
-      {{ partial "footer.html" . }}
-    {{ end }}
-
-    <!-- Back To Top Button -->
-    <div id="backtotop"><a href="#"></a></div>
-
-    {{ if .Params.sidebar }}
-      {{ partial "single/sidebar.html" . }}
-    {{ end }}
-    {{ end }}
-
-    {{ partial "javascript.html" . }}
-  </body>
-</html>
+{{- define "main" -}}
+<!-- This template apply to all other *.md except for _index.md -->
+{{- partial "single/content.html" . -}}
+{{- end -}}

@@ -1,3 +1,14 @@
+{{- if .Params.include_footer -}}
+{{- partial "footer.html" . -}}
+{{- end -}}
+
+<!-- Back To Top Button -->
+<div id="backtotop"><a href="#"></a></div>
+
+{{- if .Site.Params.sidebar -}}
+{{- partial "sidebar.html" . -}}
+{{- end -}}
+
 <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
 {{ $modernizr := resources.Get "js/modernizr.js" | resources.Minify | resources.Fingerprint }}

@@ -3,10 +3,23 @@
   --c-secondary: #eaa700;
 }
 body {
-  font-family: Oxygen, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Oxygen, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+}
+pre,
+code {
+  font-family: Monaco, Menlo, Consolas, "Liberation Mono", monospace !important;
 }
 /* img width and height 50px */
 .navbar.is-fresh .navbar-brand img,
@@ -20,7 +33,7 @@ footer.footer-dark .footer-logo img {
 }
 /* top left nav img */
 .navbar-item img {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 /* set auto so that it won't take full view height */
 .hero.is-fullheight {
@@ -180,10 +193,10 @@ table a {
   flex-wrap: wrap;
 }
 .downloads a {
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   margin: 0 8px;
   border-bottom: 1px solid #eee;
-  transition: border-bottom-color .2s ease-out;
+  transition: border-bottom-color 0.2s ease-out;
 }
 .downloads a:hover {
   border-bottom-color: #ee4c2c;
@@ -208,7 +221,7 @@ table a {
   .tweets-wrapper {
     display: block;
   }
-  .twitter-tweets{
+  .twitter-tweets {
     margin: 0 2rem 2.5rem;
   }
   .col-md-4 {

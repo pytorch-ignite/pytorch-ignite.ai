@@ -1,0 +1,35 @@
+{{- $inServerMode := .Site.IsServer }}
+{{- $sass         := "style.sass" }}
+{{- $cssTarget    := "css/style.css" }}
+{{- $cssOpts      := cond ($inServerMode) (dict "targetPath" $cssTarget "enableSourceMap" true) (dict "targetPath" $cssTarget "outputStyle" "compressed") }}
+
+<head>
+  {{- template "_internal/google_analytics.html" . -}}
+  {{- template "_internal/opengraph.html" . -}}
+  {{- template "_internal/twitter_cards.html" . -}}
+  <meta name="description" content="{{ if .Params.summary }}{{ .Params.summary }}{{ else if .Site.Params.Description }}{{ .Site.Params.Description }}{{ else }}{{ end }}" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+  <title>
+    {{- if eq .Title .Site.Title -}}
+      {{ .Site.Title }}
+    {{- else -}}
+      {{ .Title }} | {{ .Site.Title }}
+    {{- end -}}
+  </title>
+  {{- if $inServerMode -}}
+  {{- $css := resources.Get $sass | resources.ToCSS $cssOpts -}}
+  <link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}">
+  {{- else -}}
+  {{- $css := resources.Get $sass | resources.ToCSS $cssOpts | minify | fingerprint -}}
+  <link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- end -}}
+  <link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">
+  {{- $style := resources.Get "css/custom.css" | resources.Minify | resources.Fingerprint -}}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+
+  <link rel="icon" type="image/svg+xml" href="{{ "images/logos/ignite_logomark.svg" | relURL }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
