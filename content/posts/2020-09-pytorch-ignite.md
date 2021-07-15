@@ -1,5 +1,4 @@
 ---
-layout: post
 sidebar: true
 include_footer: true
 title: "Introduction to PyTorch-Ignite"

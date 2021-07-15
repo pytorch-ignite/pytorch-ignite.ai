@@ -164,6 +164,33 @@ footer.footer-dark .footer-logo img {
 table a {
   text-decoration: underline;
 }
+/* download link tutorials */
+.downloads {
+  padding: 1rem 1.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.downloads a {
+  padding: .5rem 1rem;
+  margin: 0 8px;
+  border-bottom: 1px solid #eee;
+  transition: border-bottom-color .2s ease-out;
+}
+.downloads a:hover {
+  border-bottom-color: #ee4c2c;
+}
+.downloads img {
+  vertical-align: middle;
+}
 /* mobile */
 @media screen and (max-width: 768px) {
   .image.is-4by3 {

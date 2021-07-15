@@ -1,0 +1,18 @@
+{{- if .Params.downloads -}}
+  {{ partial "downloads.html" . }}
+{{- end -}}
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title section-title">{{ .Title }}</h1>
+        <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+  </div>
+</section>
