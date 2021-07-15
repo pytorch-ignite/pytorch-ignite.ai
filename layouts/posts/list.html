@@ -5,12 +5,17 @@
   <p class="subtitle">{{ .Params.subtitle }}</p>
   </div>
   <ul class="blogs">
-    {{ range .Pages }}
+    {{ range .Pages.ByDate.Reverse }}
     <li class="blog">
       <article class="article">
         <div class="date">
           <span class="sr-only">Published on</span>
-          {{ .Date.Format "January 2, 2006" }}
+          {{ .Date.Format "January 2, 2006" }} –
+          {{ if gt .ReadingTime 1 }}
+          <span>{{ .ReadingTime }} mins</span>
+          {{ else }}
+          <span>{{ .ReadingTime }} min</span>
+          {{ end }}
         </div>
         <div class="line">
           <h1 class="blog-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>

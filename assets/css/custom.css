@@ -184,6 +184,51 @@ table a {
 .downloads img {
   vertical-align: middle;
 }
+/* Previous and next links */
+.prev-n-next {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(60, 60, 67, 0.12);
+}
+.prev-n-next .prev, .next {
+  display: flex;
+  flex-shrink: 0;
+  width: 50%;
+}
+.prev-n-next .prev {
+  justify-content: flex-start;
+  padding-right: 12px;
+}
+.prev-n-next .next {
+  justify-content: flex-end;
+  padding-left: 12px;
+}
+.prev-n-next .link {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.prev-n-next .text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.prev-n-next .iconify {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+}
+.prev-n-next .icon-prev {
+  margin-right: 8px;
+}
+.prev-n-next .icon-next {
+  margin-left: 8px;
+}
 /* mobile */
 @media screen and (max-width: 768px) {
   .image.is-4by3 {

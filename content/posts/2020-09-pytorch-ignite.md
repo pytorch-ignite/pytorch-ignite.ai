@@ -877,5 +877,3 @@ Instead of a conclusion, we will wrap up with some current project news:
 ---
 
 Check out the project on [GitHub](https://github.com/pytorch/ignite) and follow us on [Twitter](https://twitter.com/pytorch_ignite). For any questions, support or issues, please [reach out to us](https://github.com/pytorch/ignite#communication). For all other questions and inquiries, please send an email to contact@pytorch-ignite.ai
-
----
