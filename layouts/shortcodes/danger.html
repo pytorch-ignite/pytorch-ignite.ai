@@ -1,0 +1,10 @@
+<div class="admonition danger">
+  <p class="admonition-title">
+    {{- if .Get 0 -}}
+    {{ .Get 0 }}
+    {{- else -}}
+    DANGER
+    {{- end -}}
+  </p>
+  <p>{{ .Inner | markdownify }}</p>
+</div>

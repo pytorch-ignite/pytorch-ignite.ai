@@ -1,0 +1,10 @@
+<div class="admonition tip">
+  <p class="admonition-title">
+    {{- if .Get 0 -}}
+    {{ .Get 0 }}
+    {{- else -}}
+    TIP
+    {{- end -}}
+  </p>
+  <p>{{ .Inner | markdownify }}</p>
+</div>

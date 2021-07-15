@@ -229,6 +229,40 @@ table a {
 .prev-n-next .icon-next {
   margin-left: 8px;
 }
+/* admonitions */
+.admonition p {
+  margin: 1rem 0;
+}
+.admonition-title {
+  font-weight: 600;
+}
+.admonition.tip, .admonition.warning, .admonition.danger {
+  border-left: .5rem solid;
+  margin: 1rem 0;
+  padding: .1rem 1.5rem;
+  overflow-x: auto;
+  border-radius: 4px;
+}
+.admonition.tip {
+  border-color: #14b8a6;
+  background-color: #f6f6f6;
+}
+.admonition.warning {
+  border-color: #eab308;
+  background-color: #fef08a;
+  color: #a16207;
+}
+.admonition.danger {
+  border-color: #ef4444;
+  background-color: #fecaca;
+  color: #b91c1c;
+}
+.admonition.details {
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #eee;
+}
 /* mobile */
 @media screen and (max-width: 768px) {
   .image.is-4by3 {

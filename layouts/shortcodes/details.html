@@ -1,0 +1,10 @@
+<details class="admonition details">
+  <summary>
+    {{- if .Get 0 -}}
+    {{ .Get 0 }}
+    {{- else -}}
+    Details
+    {{- end -}}
+  </summary>
+  <p>{{ .Inner | markdownify }}</p>
+</details>
