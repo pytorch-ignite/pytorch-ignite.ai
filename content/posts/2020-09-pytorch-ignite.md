@@ -14,7 +14,7 @@ Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite
 
 [This tutorial can be also executed in Google Colab.](https://colab.research.google.com/drive/1gFIPXmUX73HWlLSxFvvYEweQBD_OPx1t)
 
-# PyTorch-Ignite: What and Why ?
+## PyTorch-Ignite: What and Why ?
 
 PyTorch-Ignite is a high-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
 
@@ -55,7 +55,7 @@ The design of the library is guided by:
 - Providing tools targeted to maximizing cohesion and minimizing coupling.
 - Keeping it simple.
 
-# Quick-start example
+## Quick-start example
 
 In this section we will use PyTorch-Ignite to build and train a classifier of the well-known MNIST dataset. This simple example will introduce the principal concepts behind PyTorch-Ignite.
 
@@ -65,7 +65,7 @@ For additional information and details about the API, please, refer to the proje
 pip install pytorch-ignite
 ```
 
-## Common PyTorch code
+### Common PyTorch code
 
 First, we define our model, training and validation datasets, optimizer and loss function:
 

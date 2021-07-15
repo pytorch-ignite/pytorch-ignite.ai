@@ -1,14 +1,29 @@
 {{- $logo     := .Params.sidebarlogo }}
+{{- $currentTitle := .Title }}
+{{- $dir := (strings.TrimSuffix "/" .File.Dir) }}
 <div class="sidebar">
   <div class="sidebar-header">
     <a class="sidebar-close" href="javascript:void(0);">
       <i data-feather="x"></i>
     </a>
+    <div class="text">
+      {{ title $dir }}
+    </div>
   </div>
   <div class="inner">
   <aside>
-    <h1 class="toc">Table Of Contents</h1>
-    {{ .TableOfContents }}
+    <ul>
+      {{ range where .Site.RegularPages "Section" $dir }}
+      <li>
+        <a href="{{ .RelPermalink }}" class="{{ if eq .Title $currentTitle }}active{{ end }}">
+          {{ .Title }}
+        </a>
+        {{- if eq .Title $currentTitle -}}
+        {{ .TableOfContents }}
+        {{- end -}}
+      </li>
+      {{ end }}
+    </ul>
   </aside>
   </div>
 </div>

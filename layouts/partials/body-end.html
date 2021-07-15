@@ -5,8 +5,8 @@
 <!-- Back To Top Button -->
 <div id="backtotop"><a href="#"></a></div>
 
-{{- if .Site.Params.sidebar -}}
-{{- partial "sidebar.html" . -}}
+{{- if .Params.sidebar -}}
+{{- partial "single/sidebar.html" . -}}
 {{- end -}}
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
