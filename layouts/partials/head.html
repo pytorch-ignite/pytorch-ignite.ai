@@ -32,4 +32,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+
+  {{- if eq .Section "posts" -}}
+  {{- $style := resources.Get "css/post.css" | resources.Minify | resources.Fingerprint -}}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{- end -}}
 </head>

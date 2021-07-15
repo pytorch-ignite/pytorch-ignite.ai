@@ -5,9 +5,12 @@
   <div class="container">
     <div class="columns">
       <div class="column is-centered-tablet-portrait">
-        <h1 class="title section-title">{{ .Title }}</h1>
         {{- if .Params.date -}}
-        <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
+        <div class="date">
+          <span class="sr-only">Published on</span>
+          {{ .Date.Format "January 2, 2006" }}
+        </div>
+        <h1 class="post-title">{{ .Title }}</h1>
         {{- end -}}
         {{- if .Params.image -}}
         <div class="post-image">

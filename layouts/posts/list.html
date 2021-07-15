@@ -1,17 +1,26 @@
 {{- define "main" -}}
-{{- partial "single/content.html" . -}}
-<main class="section main">
+<main class="posts main">
+  <div class="divide">
+  <h1 class="title">{{ .Title }}</h1>
+  <p class="subtitle">{{ .Params.subtitle }}</p>
+  </div>
   <ul class="blogs">
     {{ range .Pages }}
     <li class="blog">
-      <div class="row">
-        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
-        <div class="line">
-          <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
-          <h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
-          <div class="summary">{{ .Summary }}</div>
+      <article class="article">
+        <div class="date">
+          <span class="sr-only">Published on</span>
+          {{ .Date.Format "January 2, 2006" }}
         </div>
-      </div>
+        <div class="line">
+          <h1 class="blog-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+          <p align="center">
+          <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
+          </p>
+          <div class="summary">{{ .Summary }}</div>
+          <div class="read-more"><a href="{{ .RelPermalink }}">Read More →</a></div>
+        </div>
+      </article>
     </li>
     {{ end }}
   </ul>

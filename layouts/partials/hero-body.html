@@ -31,11 +31,11 @@
   </div>
 </div>
 {{- range $posts -}}
+{{- if (and ($featuredPost) (eq $featuredPost .RelPermalink)) -}}
 <div class="featured-post">
-  {{- if (and ($featuredPost) (eq $featuredPost .RelPermalink)) -}}
   <a href="{{ $featuredPost }}">
     {{ .Title }}
   </a>
   {{- end -}}
-  {{- end -}}
 </div>
+{{- end -}}
