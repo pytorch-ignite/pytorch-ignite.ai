@@ -6,7 +6,6 @@ on:
       - main
   pull_request:
 
-# https://gohugo.io/hosting-and-deployment/hosting-on-github/#build-hugo-with-github-action
 jobs:
   up-to-date:
     runs-on: ubuntu-latest
