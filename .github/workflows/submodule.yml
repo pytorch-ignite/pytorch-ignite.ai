@@ -6,8 +6,14 @@ on:
       - main
   pull_request:
 
+<<<<<<< HEAD
 jobs:
   check-update:
+=======
+# https://gohugo.io/hosting-and-deployment/hosting-on-github/#build-hugo-with-github-action
+jobs:
+  up-to-date:
+>>>>>>> 94e1dba... check submodule up to date, fix #27
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,4 +21,8 @@ jobs:
           submodules: true # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
+<<<<<<< HEAD
       - run: bash scripts/check_submodules.sh
+=======
+      - run: sh scripts/check_submodules.sh
+>>>>>>> 94e1dba... check submodule up to date, fix #27
