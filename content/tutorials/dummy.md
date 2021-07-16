@@ -3,7 +3,6 @@ title: This is a dummy notebook for prototyping.
 downloads: true
 include_footer: true
 ---
-
 This is a dummy notebook for prototyping.
 
 
