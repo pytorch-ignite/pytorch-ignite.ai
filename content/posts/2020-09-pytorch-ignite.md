@@ -5,7 +5,7 @@ title: "Introduction to PyTorch-Ignite"
 date: 2020-09-10
 draft: false
 image: https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png
-alt:
+alt: Ignite your PyTorch neural networks image
 ---
 
 This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
@@ -13,6 +13,8 @@ This post is a general introduction of PyTorch-Ignite. It intends to give a brie
 Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.
 
 [This tutorial can be also executed in Google Colab.](https://colab.research.google.com/drive/1gFIPXmUX73HWlLSxFvvYEweQBD_OPx1t)
+
+<!--more-->
 
 ## PyTorch-Ignite: What and Why ?
 

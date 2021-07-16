@@ -81,7 +81,7 @@ footer.footer-dark .footer-logo img {
   transform: translateX(0%);
 }
 .sidebar .inner a {
-  padding: .35rem 1.5rem .35rem 2rem;
+  padding: .35rem 1rem .35rem 2rem;
   border-left: 4px solid transparent;
 }
 .sidebar .inner .active {
