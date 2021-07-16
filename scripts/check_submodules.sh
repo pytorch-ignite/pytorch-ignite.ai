@@ -43,9 +43,10 @@ check_submodules() {
   TO_HASH=$(git rev-parse HEAD)
   CHANGED=$(git diff --name-only ${FROM_HASH}...${TO_HASH})
   if [ -z "$CHANGED" ]; then
-    success "Submodule ${SUBMODULES} is up to date"
+    success "Submodule ${SUBMODULES} is up to date."
   else
-    error "Submodule ${SUBMODULES} is not up to date"
+    error "Submodule ${SUBMODULES} is not up to date."
+    info "Run git submodule update --remote ${SUBMODULES} to update."
     exit 1
   fi
   cd ${CURRENT_DIR}
