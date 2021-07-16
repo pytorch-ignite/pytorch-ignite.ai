@@ -1,0 +1,19 @@
+name: submodule
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+
+# https://gohugo.io/hosting-and-deployment/hosting-on-github/#build-hugo-with-github-action
+jobs:
+  up-to-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+
+      - run: sh scripts/check_submodules.sh
