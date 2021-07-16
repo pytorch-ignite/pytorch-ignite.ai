@@ -15,4 +15,23 @@ jobs:
           submodules: true # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
-      - run: bash scripts/check_submodules.sh
+      - run: bash ./scripts/check_submodules.sh
+
+  check-ipynb-to-md:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - run: |
+          pip install pip wheel setuptools -Uqq
+          pip install -r ./scripts/requirements.txt -Uqq
+
+      - run: bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
+      - run: diff -r content/tutorials tmp/tutorials --exclude=_index.md

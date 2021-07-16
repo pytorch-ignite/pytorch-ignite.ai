@@ -29,7 +29,7 @@ def main(dir):
                     # Get title (for now its the first line)
                     if i == 0:
                         title = line.strip()
-                        hugo_meta = f"---\ntitle: {title}\ninclude_footer: true\n---\n"
+                        hugo_meta = f"---\ntitle: {title}\ndownloads: true\ninclude_footer: true\n---\n"
                         f2.write(hugo_meta)
                     f2.write(line)
 
