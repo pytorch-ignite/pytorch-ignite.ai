@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -xeuo pipefail
+set -xeu
 
 export TERM=xterm-256color
 
