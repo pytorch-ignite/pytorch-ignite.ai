@@ -1,10 +1,6 @@
 #!/bin/bash
 
-<<<<<<< HEAD
 set -e
-=======
-set -xeuo pipefail
->>>>>>> 94e1dba... check submodule up to date, fix #27
 
 export TERM=xterm-256color
 
@@ -34,7 +30,6 @@ success() {
 }
 
 CURRENT_DIR=$(pwd)
-<<<<<<< HEAD
 SUBMODULES="static/examples"
 
 check_submodules() {
@@ -64,26 +59,3 @@ check_submodules() {
 }
 
 check_submodules
-=======
-SUBMODULES=(
-  static/examples
-)
-
-check_submodules() {
-  for module in ${SUBMODULES[@]}
-  do
-    cd ${module}
-    FROM_HASH=$(git rev-parse HEAD)
-    git submodule update --remote
-    TO_HASH=$(git rev-parse HEAD)
-    CHANGED=$(git diff --name-only ${FROM_HASH}...${TO_HASH})
-    if [ ${CHANGED} != "" ]; then
-      error "Submodule ${module} is not up to date"
-      exit 1
-    fi
-    cd ${CURRENT_DIR}
-  done
-}
-
-check_submodules()
->>>>>>> 94e1dba... check submodule up to date, fix #27
