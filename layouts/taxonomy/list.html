@@ -1,0 +1,30 @@
+{{- define "main" -}}
+<div class="tags-section">
+  {{- if eq .Title "Tags" -}}
+  <h1 class="title">{{ .Title }}</h1>
+  {{- else -}}
+  <h1 class="title">Posts about {{ .Title }}</h1>
+  {{- end -}}
+  {{- if eq .Title "Tags" -}}
+  <ul class="list-disc list-inside">
+    {{ range .Data.Terms.ByCount }}
+    <li>
+      <a href="{{ .Page.RelPermalink }}" class="link">{{ .Page.Title }}</a>
+      <span class="count">{{ .Count }}</span>
+    </li>
+    {{ end }}
+  </ul>
+  {{- else -}}
+  <ul class="list-disc list-inside">
+    {{ range .Pages.ByDate.Reverse }}
+    <li>
+      <span>{{ .Date.Format "2006-01-02" }} – </span>
+      <a href="{{ .RelPermalink }}">
+        {{ .Title }}
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+  {{- end -}}
+</div>
+{{- end -}}

@@ -6,6 +6,15 @@ date: 2020-09-10
 draft: false
 image: https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png
 alt: Ignite your PyTorch neural networks image
+tags:
+  - Deep Learning
+  - Labs
+  - Machine Learning
+  - Neural Networks
+  - Python
+  - PyTorch
+  - PyTorch-Ignite
+  - Tutorial
 ---
 
 This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
