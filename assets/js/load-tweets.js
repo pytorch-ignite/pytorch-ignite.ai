@@ -54,16 +54,19 @@ async function embedTweet(iframe) {
 
 let count = 0;
 const interval = setInterval(function () {
+  const tweets = document.getElementById('twitter-tweets')
+  tweets.innerText = 'Loading Twitter Timeline...'
   const iframe = document.getElementById("twitter-widget-0");
   if (iframe !== null) {
+    tweets.innerText = ''
     clearInterval(interval);
     embedTweet(iframe);
   }
 
-  // cancel after 8 seconds
-  if (count > 8) {
+  // cancel after 5 seconds
+  if (count > 5) {
     clearInterval(interval);
-    document.getElementById("twitter-tweets").innerText =
+    tweets.innerText =
       "Twitter widget could not be loaded.";
   } else {
     count += 1;

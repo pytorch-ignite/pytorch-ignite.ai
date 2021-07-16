@@ -131,16 +131,21 @@ footer.footer-dark .footer-logo img {
   display: none !important;
 }
 .twitter-tweets {
-  margin: 0 5rem 3rem;
+  width: 90vw;
+  margin: 0 auto 3rem;
 }
 .tweets-wrapper {
   display: flex;
 }
 .tweet-author {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 .col-md-4 {
-  margin: 0 1rem;
+  margin: 1rem;
+  width: 33%;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, .1);
 }
 .col-md-4 .Emoji {
   /* these emoji needs to adjust with font size */
@@ -290,16 +295,12 @@ table a {
     height: 50%;
     margin-bottom: 1rem;
   }
+}
+@media screen and (max-width: 1050px) {
   .tweets-wrapper {
-    display: block;
-  }
-  .twitter-tweets {
-    margin: 0 2rem 2.5rem;
+    flex-wrap: wrap;
   }
   .col-md-4 {
-    padding: 1rem 0;
-  }
-  .tweet-author {
-    margin-top: 1rem;
+    width: 100%;
   }
 }
