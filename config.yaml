@@ -2,6 +2,7 @@ baseURL: https://pytorch-ignite.netlify.app
 languageCode: en-us
 title: PyTorch-Ignite
 theme: hugo-fresh
+enableGitInfo: true
 googleAnalytics: G-5FELLLFHCP # Put in your tracking code without quotes like this: UA-XXXXXX...
 # Disables warnings
 disableKinds:
