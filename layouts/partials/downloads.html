@@ -3,11 +3,11 @@
     <img src="/images/logos/colab.svg" alt="Google Colab Logo" width="30" height="30">
     <span>Run in Google Colab</span>
   </a>
-  <a class="notebook" href="/examples/{{ .File.TranslationBaseName }}.ipynb" target="_blank" rel="noopener noreferrer">
+  <a class="notebook" href="/examples/{{ .File.TranslationBaseName }}.ipynb" target="_blank" rel="noopener noreferrer" download="{{ .File.TranslationBaseName }}.ipynb">
     <img src="/images/logos/download.svg" alt="Download Logo" width="20" height="20">
     <span>Download as Jupyter Notebook</span>
   </a>
-  <a class="script" href="/examples/{{ .File.TranslationBaseName }}.py" target="_blank" rel="noopener noreferrer">
+  <a class="script" href="/examples/{{ .File.TranslationBaseName }}.py" target="_blank" rel="noopener noreferrer" download="{{ .File.TranslationBaseName }}.py">
     <img src="/images/logos/download.svg" alt="Download Logo" width="20" height="20">
     <span>Download as Python script</span>
   </a>
