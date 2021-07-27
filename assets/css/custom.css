@@ -281,6 +281,25 @@ table a {
   padding: 1rem;
   background-color: #eee;
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clear: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+.tag:not(body) {
+  font-size: 0.85rem;
+  background: var(--c-primary);
+  color: #fff;
+}
+.tag a {
+  color: #fff;
+}
 /* mobile */
 @media screen and (max-width: 768px) {
   .image.is-4by3 {
@@ -302,5 +321,10 @@ table a {
   }
   .col-md-4 {
     width: 100%;
+  }
+}
+@media screen and (min-width: 1088px) {
+  .section.is-medium {
+    padding: 3rem 1.5rem;
   }
 }

@@ -1,0 +1,31 @@
+{{- define "main" -}}
+<!-- This template apply to all other *.md except for _index.md -->
+<!-- Based from layouts/partials/single/content.html -->
+{{- if .Params.downloads -}}
+  {{ partial "downloads.html" . }}
+{{- end -}}
+<section class="section is-medium">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-centered-tablet-portrait">
+        <h1 class="title tutorial-title">{{ .Title }}</h1>
+        <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
+      </div>
+    </div>
+    <div class="tags">
+      {{ range .Params.tags }}
+      <span class="tag">
+        <a href="/tags/{{ . | urlize }}">
+        {{ . }}
+        </a>
+      </span>
+      {{ end }}
+    </div>
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+    {{ partial "prev-next.html" . }}
+  </div>
+</section>
+{{- end -}}

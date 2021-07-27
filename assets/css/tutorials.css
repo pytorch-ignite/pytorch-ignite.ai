@@ -1,0 +1,36 @@
+.tutorials.main {
+  max-width: 60rem;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+.tutorials.main .title {
+  padding-bottom: 1rem;
+}
+.tutorial {
+  background: #f6f6f6;
+  padding: 1rem;
+  border-radius: 4px;
+  border: 2px solid #f6f6f6;
+  transition: border-color .2s ease-in;
+}
+.tutorial:hover {
+  border-color: var(--c-primary);
+  transition: border-color .25s ease-in-out;
+}
+.tutorial a {
+  color: #475569;
+}
+.tutorial .tutorial-title {
+  font-size: 1.5rem;
+}
+.tutorial .summary {
+  padding: 1rem 0;
+}
+.section .tutorial-title {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  font-family: "Inter" !important;
+}

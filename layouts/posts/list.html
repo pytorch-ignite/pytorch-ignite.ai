@@ -23,6 +23,15 @@
           <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
           </p>
           <div class="summary">{{ .Summary }}</div>
+          <div class="tags">
+            {{ range .Params.tags }}
+            <span class="tag">
+              <a href="/tags/{{ . | urlize }}">
+              {{ . }}
+              </a>
+            </span>
+            {{ end }}
+          </div>
           <div class="read-more"><a href="{{ .RelPermalink }}">Read More →</a></div>
         </div>
       </article>

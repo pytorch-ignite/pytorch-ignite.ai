@@ -41,4 +41,8 @@
   {{- $style := resources.Get "css/tags.css" | resources.Minify | resources.Fingerprint -}}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
   {{- end -}}
+  {{- if eq .Section "tutorials" -}}
+  {{- $style := resources.Get "css/tutorials.css" | resources.Minify | resources.Fingerprint -}}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{- end -}}
 </head>

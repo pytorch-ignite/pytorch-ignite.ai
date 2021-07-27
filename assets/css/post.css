@@ -29,19 +29,8 @@
 .summary {
   padding: 1rem 0;
 }
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clear: rect(0,0,0,0);
-  white-space: nowrap;
-  border-width: 0;
-}
 .post-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   text-align: center;
   padding-bottom: 1rem;
