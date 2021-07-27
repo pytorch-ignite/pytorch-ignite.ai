@@ -4,4 +4,4 @@
 [submodule "static/examples"]
 	path = static/examples
 	url = https://github.com/pytorch-ignite/examples
-	branch = dummy-notebook
+	branch = main
