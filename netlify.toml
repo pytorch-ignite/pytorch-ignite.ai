@@ -8,3 +8,9 @@ HUGO_ENV = "production"
 
 [context.deploy-preview.environment]
 HUGO_VERSION = "0.83.1"
+
+[[redirects]]
+  from = "https://pytorch-ignite.netlify.app/*"
+  to = "https://pytorch-ignite.ai/:splat"
+  status = 301
+  force = true
