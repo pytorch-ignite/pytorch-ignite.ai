@@ -5,10 +5,14 @@ on:
     branches-ignore:
       - main
   pull_request:
+  schedule:
+    # Run at 00:00 UTC Every Day
+    - cron: "0 0 * * *"
 
 jobs:
   check-update:
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -19,6 +23,7 @@ jobs:
 
   check-ipynb-to-md:
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -35,3 +40,29 @@ jobs:
 
       - run: bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
       - run: diff -r content/tutorials tmp/tutorials --exclude=_index.md
+
+  auto-pr:
+    runs-on: ubuntu-latest
+    # if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - run: |
+          pip install pip wheel setuptools -Uqq
+          pip install -r ./scripts/requirements.txt -Uqq
+
+      - run: bash ./scripts/nb_to_md.sh static/examples content/tutorials
+
+      - uses: peter-evans/create-pull-request@v3
+        with:
+          title: '[automated] Submodule update'
+          body: This is an automated pull request.
+          commit-message: 'chore: update submodules'
+          branch: submodule-update
