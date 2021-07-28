@@ -1,9 +1,10 @@
 ---
 sidebar: true
 include_footer: true
-title: Introducing Code Generator v0.2.0
+title: Introducing PyTorch-Ignite's Code Generator v0.2.0
+slug: introducing-code-generator-v020
 description: Overview of the key features and updates of the Code Generator v0.2.0 project release
-date: 2021-07-08
+date: 2021-07-16
 draft: false
 image: https://raw.githubusercontent.com/pytorch-ignite/code-generator/main/src/assets/code-generator-demo.gif
 alt: Code-Generator demo GIF
@@ -15,21 +16,21 @@ tags:
   - PyTorch
 ---
 
-Along with the [PyTorch-Ignite v0.4.5 release](https://github.com/pytorch/ignite/releases/tag/v0.4.5), we are excited to announce the new release of the web application for generating PyTorch-Ignite's training pipelines. This blog post is an overview of the key features and updates of the [Code Generator v0.2.0 project release](https://github.com/pytorch-ignite/code-generator/releases/tag/v0.2.0).
+Along with the [PyTorch-Ignite 0.4.5 release](https://github.com/pytorch/ignite/releases/tag/v0.4.5), we are excited to announce the new release of the web application for generating PyTorch-Ignite's training pipelines. This blog post is an overview of the key features and updates of the [Code Generator v0.2.0 project release](https://github.com/pytorch-ignite/code-generator/releases/tag/v0.2.0).
 
 <!--more-->
 
 ## Deep Learning As a Routine
 
-In deep learning applications, neural networks are typically accompanied by the codebase to preprocess the input and output data, visualize the results, define proper training and evaluation pipelines, and more. A significant part of this supporting code consists of reusable components, like data loaders, training loops, logging, and tracking. Therefore, deep learning practitioners usually organize their boilerplate codebases into collections of reusable components to speed up the development.
+In deep learning applications, neural networks are typically accompanied by code to preprocess the input and output data, visualize the results, define proper training and evaluation pipelines, and more. A significant part of this supporting code consists of reusable components, like data loaders, training loops, logging, and tracking. Therefore, deep learning practitioners usually organize their boilerplate codebases into collections of reusable components to speed up development.
 
 PyTorch-Ignite is one such practical solution, a high-level library from the PyTorch ecosystem for training neural networks designed to simplify workflow development while maintaining maximum control, flexibility, and reproducibility. PyTorch-Ignite feels like a natural extension to PyTorch.
 
 ## Ignite Your Training Pipelines
 
-Ignite's Code Generator is an open-source tool developed to boost your training pipeline's scripts, carefully designed by PyTorch-Ignite's contributors to promote Ignite's best practices. The application has a user-friendly and intuitive web interface, simple enough for day-to-day use, and it is an excellent choice for fast configured PyTorch training script prototyping.
+PyTorch-Ignite's Code Generator is an open-source tool developed to boost your training pipeline's scripts, carefully designed by PyTorch-Ignite's contributors to promote PyTorch-Ignite's best practices. The application has a user-friendly and intuitive web interface, simple enough for day-to-day use, and it is an excellent choice for quickly generating a custom templates for training PyTorch models.
 
-In this release, we are using a new application development stack to enhance the user experience tenfold. For UI, we will proceed with the JavaScript stack, and the PyTorch framework and the PyTorch-Ignite library will remain as is for elaborating template code.
+In this release, we are using a new application development stack to enhance the user experience tenfold. For UI, we switched to a JavaScript stack. The PyTorch and PyTorch-Ignite specific generated code remains the same.
 
 ### Getting Started
 
@@ -45,7 +46,9 @@ Start adjusting the code in the template by visiting different tabs on the left 
 - **Handlers**: To set up Checkpointing, Termination on NaNs, Early Stopping, etc
 - **Loggers**: To configure Logging
 
-Once you choose the appropriate settings, press the "Download" or "Open in Colab" button on the top to export generated code as a zip archive or a notebook, and follow any given additional steps. The `requirements.txt` file contains all the required dependencies, and the `README` contains all the necessary information for launching the script. The resulting archive contains both these files and the config file bundled together.
+Once you choose the appropriate settings, press the "Download" or "Open in Colab" button at the top to export generated code as a zip archive or a notebook, and follow any given additional steps. The resulting archive contains generated files bundled together. The `requirements.txt` file contains all the required dependencies, and the `README` contains all the necessary information for launching the script.
+
+You are now ready to add in your data and model and run the code!
 
 ## I Want To Contribute!
 
@@ -57,4 +60,4 @@ In future releases, we plan to extend our template store and add more features, 
 
 ## Acknowledgements
 
-The development of this project is supported by NumFOCUS Small Development Grant. We are very grateful to them for this support!
+The development of this project is supported by a NumFOCUS Small Development Grant. We are very grateful to them for this support!
