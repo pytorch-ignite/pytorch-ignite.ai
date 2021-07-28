@@ -49,8 +49,12 @@ params:
     image: logos/ignite_logo.svg
 
   navbar:
-    - title: Documentation
-      url: /docs/
+    - title: Docs
+      sublinks:
+        - title: Guide
+          url: /guide/
+        - title: Tutorials
+          url: /tutorials/
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
@@ -85,9 +89,6 @@ params:
       - title: Project MONAI
         text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
         link: https://monai.io/
-      - title: DeepSeismic
-        text: Deep Learning for Seismic Imaging and Interpretation
-        link: https://github.com/microsoft/seismic-deeplearning
       - title: Nussl
         text: A flexible source separation library in Python
         link: https://nussl.github.io/docs/
