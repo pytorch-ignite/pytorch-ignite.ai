@@ -7,7 +7,6 @@ which include all common head tag and body end partial template. -->
   <body>
 
   {{- partial "navbar.html" . -}}
-  {{- partial "navbar-clone.html" . -}}
   <!-- This is the kind of block scope that can be override by child layouts.
   Similar to Jinja template block. -->
   {{ block "main" . }}

@@ -1,5 +1,5 @@
-<section class="section is-medium">
-  <div class="container">
+<section class="section is-medium {{ if .Params.sidebar }}has-sidebar{{ end }}">
+  <div class="container {{ if .Params.sidebar }}sidebar-on{{ end }}">
     <div class="columns">
       <div class="column is-centered-tablet-portrait">
         <h1 class="title section-title">{{ .Title }}</h1>

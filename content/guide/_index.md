@@ -1,6 +1,5 @@
 ---
 title: PyTorch-Ignite Documentation
-include_footer: true
 ---
 
 1. [Tutorials](/docs/tutorials)

@@ -3,7 +3,7 @@
   margin: 1rem auto;
   padding: 0 1rem;
 }
-.tutorials.main .title {
+.tutorials .title {
   padding-bottom: 1rem;
 }
 .tutorial {
@@ -20,13 +20,13 @@
 .tutorial a {
   color: #475569;
 }
-.tutorial .tutorial-title {
+.tutorial .tutorial-title-h2 {
   font-size: 1.5rem;
 }
 .tutorial .summary {
   padding: 1rem 0;
 }
-.section .tutorial-title {
+.tutorial-title {
   font-size: 2rem;
   font-weight: 600;
   text-align: center;

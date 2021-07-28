@@ -3,7 +3,6 @@ title: Getting Started
 date: 2021-07-27
 downloads: true
 sidebar: true
-include_footer: true
 tags:
   - beginner
   - basics

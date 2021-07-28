@@ -1,6 +1,5 @@
 ---
 sidebar: true
-include_footer: true
 title: Introducing PyTorch-Ignite's Code Generator v0.2.0
 slug: introducing-code-generator-v020
 description: Overview of the key features and updates of the Code Generator v0.2.0 project release

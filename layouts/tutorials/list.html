@@ -1,14 +1,13 @@
 {{- define "main" -}}
-<main class="tutorials main">
-  <div class="divide">
+<main class="section tutorials {{ if .Params.sidebar }}has-sidebar{{ end }}">
+  <div class="container divide {{ if .Params.sidebar }}sidebar-on{{ end }}">
   <h1 class="title">{{ .Title }}</h1>
   <p class="subtitle">{{ .Params.subtitle }}</p>
-  </div>
   <ul class="tutorials-list">
     {{ range .Pages.ByDate.Reverse }}
     <li class="tutorial">
       <a href="{{ .RelPermalink }}">
-        <h2 class="tutorial-title">{{ .Title }}</h2>
+        <h2 class="tutorial-title-h2">{{ .Title }}</h2>
         <div class="summary">{{ .Summary }}</div>
         <div class="tags">
         {{ range .Params.tags }}
@@ -19,5 +18,6 @@
     </li>
     {{ end }}
   </ul>
+  </div>
 </main>
 {{- end -}}

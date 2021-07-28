@@ -1,6 +1,5 @@
 ---
 sidebar: true
-include_footer: true
 title: Distributed Training Made Easy with PyTorch-Ignite
 slug: distributed-made-easy-with-ignite
 description: Distributed code with PyTorch-Ignite

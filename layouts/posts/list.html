@@ -1,9 +1,8 @@
 {{- define "main" -}}
-<main class="posts main">
-  <div class="divide">
+<main class="section posts {{ if .Params.sidebar }}has-sidebar{{ end }}">
+  <div class="container divide {{ if .Params.sidebar }}sidebar-on{{ end }}">
   <h1 class="title">{{ .Title }}</h1>
   <p class="subtitle">{{ .Params.subtitle }}</p>
-  </div>
   <ul class="blogs">
     {{ range .Pages.ByDate.Reverse }}
     <li class="blog">
@@ -38,5 +37,6 @@
     </li>
     {{ end }}
   </ul>
+  </div>
 </main>
 {{- end -}}
