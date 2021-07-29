@@ -1,12 +1,55 @@
 # pytorch-ignite.ai
 
-The website is made with [Gohugo](https://gohugo.io). You will need to install extended version of Hugo 0.83.1.
+This website is built with [Hugo](https://gohugo.io). You will need to install the extended version of Hugo 0.83.1.
+
+> Blog posts relating to PyTorch-Ignite are welcomed for pull requests.
+
+## Development
+
+Current directory structure:
+
+```sh
+.
+├── archetypes      # frontmatter template for markdown files
+├── assets          # website assets (css + js)
+│   ├── css
+│   └── js
+├── content         # the main markdown content
+│   ├── guide       # PyTorch-Ignite How-to guides
+│   ├── posts       # blog posts
+│   └── tutorials   # PyTorch-Ignite tutorials
+├── layouts
+│   ├── _default    # default layout theme
+│   ├── partials    # partial layouts (can be reused)
+│   ├── posts       # layouts for blog posts
+│   ├── shortcodes  # Hugo shortcodes
+│   ├── taxonomy    # layouts for tags
+│   └── tutorials   # layouts for tutorials
+├── scripts         # various CI/CD scripts
+├── static
+│   ├── examples    # https://github.com/pytorch-ignite/examples submodule
+│   └── images      # static images
+└── themes
+    └── hugo-fresh
+```
+
+After installing Hugo, start a dev server with
+
+```sh
+hugo server  # dev server at localhost:1313
+```
+
+If the included submodules are out of sync, run
+
+```sh
+git submodule update --remote -- static/examples
+```
+
+Hugo and theme level configurations are defined in [config.yaml](./config.yaml).
 
 ## Available usages
 
-- Use `hugo new posts/file-name.md` to make a new markdown file inside `content/posts`. That file will include frontmatter defined in `archetypes/posts.md` and will be inside `content/posts`.
-
-> Tutorials, Guides, ... can also be created inside `archetypes` directory.
+- Use `hugo new posts/file-name.md` to make a new markdown file inside `content/posts`. That file will include frontmatter defined in `archetypes/posts.md`. If custom slug url is desired, `slug` in frontmatter can be used.
 
 - New blog posts automatically get previous and next blog post links.
 
@@ -55,7 +98,7 @@ Some text
 {{% /details %}}
 ```
 
-It also accpet optional title. For eg,
+It also accept optional title. For example,
 
 For custom note title:
 
