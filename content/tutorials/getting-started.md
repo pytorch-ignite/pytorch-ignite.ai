@@ -4,9 +4,7 @@ date: 2021-07-27
 downloads: true
 sidebar: true
 tags:
-  - beginner
-  - basics
-  - pytorch-ignite
+  - PyTorch-Ignite
 ---
 
 Welcome to **PyTorch-Ignite**’s quick start guide that covers the

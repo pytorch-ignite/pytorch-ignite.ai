@@ -5,36 +5,30 @@ Example Usage:
     run this command from the repo root dir:
     python ./scripts/md_to_hugo.py ./content/docs/tutorials/
 """
-import glob
-import os
-import shutil
+import re
 import sys
+from pathlib import Path
 
 PATTERN = "../../../static/images/notebooks/"
 IMG_DIR = "/images/notebooks/"
 
 
-def main(dir):
+def main(dir: str):
     if dir is None:
-        raise ValueError(f"Please specify directory containing md files")
-    # Iterate over md files in a dir
-    for md in glob.iglob(f"{dir}/*md"):
-        # Ignore _index.md, etc
-        if not os.path.basename(md).startswith("_"):
-            # Prepare md for hugo acceptable format
-            with open(md, "r") as f1, open(f"{md}.fixed", "w") as f2:
-                for i, line in enumerate(f1):
-                    if PATTERN in line:
-                        line = line.replace(PATTERN, IMG_DIR)
-                    # Get title (for now its the first line)
-                    if i == 0:
-                        title = line.strip()
-                        hugo_meta = f"---\ntitle: {title}\ndownloads: true\ninclude_footer: true\n---\n"
-                        f2.write(hugo_meta)
-                    f2.write(line)
+        raise ValueError("Please specify directory containing md files")
 
-            # Replace md file with correct one
-            shutil.move(f"{md}.fixed", md)
+    path = Path(dir)
+
+    for file in path.rglob("*.md"):
+        if not file.name.startswith("_"):
+            text = (
+                file.read_text("utf-8")
+                .replace("<!-- ", "", 1)
+                .replace(" -->", "", 1)
+                .replace(PATTERN, IMG_DIR)
+            )
+            text = re.sub(r"\#[\s\w]+\n\n", "", text, 1)
+            file.write_text(text, "utf-8")
 
 
 if __name__ == "__main__":

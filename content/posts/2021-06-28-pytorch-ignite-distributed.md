@@ -173,6 +173,7 @@ ws = idist.get_world_size()
 model = idist.auto_model(model)
 dist.destroy_process_group()
 ```
+
 {{% /tip %}}
 
 ## Running Distributed Code
@@ -231,6 +232,7 @@ In order to run this example and to avoid the installation procedure, you can pu
 docker run --gpus all -it -v $PWD:/project pytorchignite/hvd-vision:latest /bin/bash
 cd project
 ```
+
 {{% /tip %}}
 
 #### With slurm
