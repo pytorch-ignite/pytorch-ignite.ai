@@ -316,6 +316,21 @@ table a {
 .tag a {
   color: #fff;
 }
+/* header anchors */
+h2:hover .header-anchor,
+h3:hover .header-anchor {
+  opacity: 1;
+  color: var(--c-primary);
+}
+.header-anchor {
+  padding-right: .25em;
+  margin-left: -.85em;
+  font-size: .85em;
+  opacity: 0;
+}
+.header-anchor:hover {
+  opacity: 1;
+}
 /* mobile */
 @media screen and (max-width: 768px) {
   .image.is-4by3 {

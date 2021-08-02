@@ -24,3 +24,7 @@
   {{ $script := resources.Get "js/copy-code.js" | resources.Minify | resources.Fingerprint }}
   <script src="{{ $script.RelPermalink }}"></script>
 {{- end -}}
+{{- if .IsPage -}}
+{{ $anchor := resources.Get "js/anchor.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $anchor.RelPermalink }}"></script>
+{{- end -}}
