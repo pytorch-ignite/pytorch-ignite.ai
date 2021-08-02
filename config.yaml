@@ -53,10 +53,10 @@ params:
   navbar:
     - title: Docs
       sublinks:
-        - title: How to Guides
-          url: /how-to-guides/
         - title: Tutorials
           url: /tutorials/
+        - title: How to Guides
+          url: /how-to-guides/
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
