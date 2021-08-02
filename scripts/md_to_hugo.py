@@ -22,7 +22,7 @@ def main(dir: str):
                 file.read_text("utf-8")
                 .replace("<!-- ", "", 1)
                 .replace(" -->", "", 1)
-                .replace(str(path.cwd() / 'static/images/notebooks'), '/images/notebooks/')
+                .replace(str(path.cwd() / 'static/images/notebooks'), '/images/notebooks')
             )
             text = re.sub(r"\#[\s\w]+\n\n", "", text, 1)
             file.write_text(text, "utf-8")
