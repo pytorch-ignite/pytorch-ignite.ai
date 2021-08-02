@@ -4,7 +4,9 @@
 {{- $cssOpts      := cond ($inServerMode) (dict "targetPath" $cssTarget "enableSourceMap" true) (dict "targetPath" $cssTarget "outputStyle" "compressed") }}
 
 <head>
-  {{- template "_internal/google_analytics.html" . -}}
+  {{- if not $inServerMode -}}
+    {{- template "_internal/google_analytics.html" . -}}
+  {{- end -}}
   {{- template "_internal/opengraph.html" . -}}
   {{- template "_internal/twitter_cards.html" . -}}
   <meta name="description" content="{{ if .Params.summary }}{{ .Params.summary }}{{ else if .Site.Params.Description }}{{ .Site.Params.Description }}{{ else }}{{ end }}" />
