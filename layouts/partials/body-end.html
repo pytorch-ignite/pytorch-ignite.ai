@@ -13,7 +13,8 @@
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
 {{ $modernizr := resources.Get "js/modernizr.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $modernizr.RelPermalink }}"></script>
-<script src='{{ "js/fresh.js" | relURL }}'></script>
+{{ $fresh := resources.Get "js/fresh.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $fresh.RelPermalink }}"></script>
 <script src='{{ "js/jquery.panelslider.min.js" | relURL }}'></script>
 {{- if (findRE "<pre" .Content 1) -}}
   {{ $style := resources.Get "css/syntax.css" | resources.Minify | resources.Fingerprint }}
