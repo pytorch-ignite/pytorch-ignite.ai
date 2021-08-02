@@ -9,9 +9,6 @@ import re
 import sys
 from pathlib import Path
 
-PATTERN = "../../../static/images/notebooks/"
-IMG_DIR = "/images/notebooks/"
-
 
 def main(dir: str):
     if dir is None:
@@ -25,7 +22,7 @@ def main(dir: str):
                 file.read_text("utf-8")
                 .replace("<!-- ", "", 1)
                 .replace(" -->", "", 1)
-                .replace(PATTERN, IMG_DIR)
+                .replace(str(path.cwd() / 'static/images/notebooks'), '/images/notebooks')
             )
             text = re.sub(r"\#[\s\w]+\n\n", "", text, 1)
             file.write_text(text, "utf-8")

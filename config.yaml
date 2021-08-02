@@ -2,6 +2,8 @@ baseURL: https://pytorch-ignite.ai
 languageCode: en-us
 title: PyTorch-Ignite
 theme: hugo-fresh
+publishdir: dist
+enableemoji: true
 enableGitInfo: true
 googleAnalytics: G-5FELLLFHCP # Put in your tracking code without quotes like this: UA-XXXXXX...
 taxonomies:
@@ -51,8 +53,8 @@ params:
   navbar:
     - title: Docs
       sublinks:
-        - title: Guide
-          url: /guide/
+        - title: How to Guides
+          url: /how-to-guides/
         - title: Tutorials
           url: /tutorials/
     - title: GitHub

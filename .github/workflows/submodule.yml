@@ -40,8 +40,15 @@ jobs:
           pip install pip wheel setuptools -Uqq
           pip install -r ./scripts/requirements.txt -Uqq
 
-      - run: bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
-      - run: diff -r content/tutorials tmp/tutorials --exclude=_index.md
+      - name: Check tutorials
+        run: |
+          bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
+          diff -r content/tutorials tmp/tutorials --exclude=_index.md
+
+      - name: Check how-to-guides
+        run: |
+          bash ./scripts/nb_to_md.sh static/examples/how-to-guides tmp/how-to-guides
+          diff -r content/how-to-guides tmp/how-to-guides --exclude=_index.md
 
   auto-pr:
     runs-on: ubuntu-latest
@@ -61,6 +68,7 @@ jobs:
           pip install -r ./scripts/requirements.txt -Uqq
 
       - run: bash ./scripts/nb_to_md.sh static/examples content/tutorials
+      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides content/how-to-guides
 
       - uses: peter-evans/create-pull-request@v3
         with:

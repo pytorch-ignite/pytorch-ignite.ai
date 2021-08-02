@@ -78,7 +78,9 @@ class Net(nn.Module):
         self.model = resnet18(num_classes=10)
 
         # Changed the input layer to take grayscale images for MNIST instaed of RGB images
-        self.model.conv1 = nn.Conv2d(1, 64, kernel_size=(3, 3), stride=(2, 2), padding=(3, 3), bias=False)
+        self.model.conv1 = nn.Conv2d(
+            1, 64, kernel_size=3, padding=1, bias=False
+        )
 
     def forward(self, x):
         return self.model(x)
@@ -208,8 +210,8 @@ trainer.add_event_handler(Events.ITERATION_COMPLETED, log_training_loss)
 ```
 
 After an epoch ends during training, we can compute the training and
-validation metrics by running `evaluator` on `train_loader` and
-`val_loader`. Hence we will attach two additional handlers to `trainer`
+validation metrics by running `train_evaluator` on `train_loader` and `val_evaluator` on
+`val_loader` respectively. Hence we will attach two additional handlers to `trainer`
 when an epoch completes:
 
 
@@ -389,7 +391,9 @@ class Net(nn.Module):
     
         self.model = resnet18(num_classes=10)
 
-        self.model.conv1 = nn.Conv2d(1, 64, kernel_size=(3, 3), stride=(2, 2), padding=(3, 3), bias=False)
+        self.model.conv1 = self.model.conv1 = nn.Conv2d(
+            1, 64, kernel_size=3, padding=1, bias=False
+        )
 
     def forward(self, x):
         return self.model(x)
