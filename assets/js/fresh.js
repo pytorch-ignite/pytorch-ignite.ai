@@ -5,6 +5,15 @@ $(document).ready(function(){
         $('#status').fadeOut(); // will first fade out the loading animation 
         $('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website. 
         $('body').delay(350).css({'overflow':'visible'});
+        let target = $(location.hash)
+        target = target.length ? target : $('[name=' + location.hash.slice(1) + ']')
+        if (target.length) {
+            window.scroll({
+                top: target.offset().top - 80,
+                left: 0,
+                behavior: 'smooth'
+            })
+        }
     })
 
     //Mobile menu toggle
@@ -125,8 +134,9 @@ $(document).ready(function(){
                 // Only prevent default if animation is actually gonna happen
                 event.preventDefault();
                 $('html, body').animate({
-                    scrollTop: target.offset().top - 70
+                    scrollTop: target.offset().top - 80
                 }, 550, function() {
+                    history.replaceState(null, '', target.selector)
                     // Callback after animation
                     // Must change focus!
                     var $target = $(target);
