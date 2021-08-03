@@ -33,8 +33,8 @@
 {{- if $featuredPost -}}
 {{ with $featuredPost }}
 <div class="featured-post">
-  <a href='{{ index $featuredPost "link" }}'>
-    {{ index $featuredPost "title" }}
+  <a href="{{ .link }}" target="blank" rel="noopener noreferrer">
+    {{ .title }}
   </a>
 </div>
 {{- end -}}
