@@ -7,7 +7,6 @@ image: https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png
 alt: Ignite your PyTorch neural networks image
 tags:
   - Deep Learning
-  - Labs
   - Machine Learning
   - Neural Networks
   - Python
@@ -23,6 +22,8 @@ Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite
 [This tutorial can be also executed in Google Colab.](https://colab.research.google.com/drive/1gFIPXmUX73HWlLSxFvvYEweQBD_OPx1t)
 
 <!--more-->
+
+Crossposted from https://labs.quansight.org/blog/2020/09/pytorch-ignite/
 
 ## PyTorch-Ignite: What and Why ?
 
@@ -859,31 +860,3 @@ and examples:
   - semantic segmentation on Pascal VOC2012 (single/multi-GPU, DDP, AMP)
 
 The package can be installed with pip or conda. More info and guides can be found [here](https://github.com/pytorch/ignite#installation).
-
-# Project news
-
-Instead of a conclusion, we will wrap up with some current project news:
-
----
-
-🎊🚄 [Trains Ignite server](https://app.ignite.trains.allegro.ai/) is open to everyone to browse our reproducible experiment logs, compare performances and restart any run on their own [Trains server](https://github.com/allegroai/trains) and associated infrastructure. Many thanks to the folks at [Allegro AI](https://allegro.ai/) who are making this possible!
-
----
-
-🎉🎊 Since June 2020, PyTorch-Ignite has joined [NumFOCUS as an affiliated project](https://numfocus.org/sponsored-projects/affiliated-projects) as well as [Quansight Labs](https://labs.quansight.org/projects/). We believe that it will be a new step in our project’s development, and in promoting open practices in research and industry.
-
----
-
-🎉 [Hacktoberfest 2020](https://hacktoberfest.digitalocean.com/) is the open-source coding festival for everyone to attend in October and PyTorch-Ignite is also preparing for it. Please, check out [our announcement](https://github.com/pytorch/ignite/issues/1257).
-
----
-
-🎉 We are pleased to announce that we will run a mentored sprint session to contribute to PyTorch-Ignite at PyData Global 2020. We are looking forward to seeing you in November at this event!
-
----
-
-.\ | 📈💻 The project is currently maintained by a team of volunteers and we are looking for motivated contributors to help us to move the project forward. Please see the [contribution guidelines](https://github.com/pytorch/ignite/blob/master/CONTRIBUTING.md) for more information if this sounds interesting to you.
-
----
-
-Check out the project on [GitHub](https://github.com/pytorch/ignite) and follow us on [Twitter](https://twitter.com/pytorch_ignite). For any questions, support or issues, please [reach out to us](https://github.com/pytorch/ignite#communication). For all other questions and inquiries, please send an email to contact@pytorch-ignite.ai
