@@ -71,6 +71,9 @@ footer.footer-dark .footer-logo img {
 .section {
   margin-top: 4rem;
 }
+.section-feature-grey {
+  margin-top: 0;
+}
 .section .sidebar-on {
   max-width: 50rem;
   margin: 0 auto;
