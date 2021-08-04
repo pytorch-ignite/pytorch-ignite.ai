@@ -86,6 +86,9 @@ footer.footer-dark .footer-logo img {
   width: 16.4rem;
   transform: translateX(0%);
   z-index: 95;
+  height: auto;
+  bottom: 0;
+  padding-bottom: 2rem;
 }
 .sidebar .sidebar-header {
   border-bottom: 0;
