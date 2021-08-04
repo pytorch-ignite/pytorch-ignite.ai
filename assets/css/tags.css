@@ -1,6 +1,7 @@
 .tags-section {
   max-width: 60rem;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 1rem;
 }
 .list-disc {
