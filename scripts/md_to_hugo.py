@@ -24,7 +24,7 @@ def main(dir: str):
                 .replace(" -->", "", 1)
                 .replace(str(path.cwd() / 'static/images/notebooks'), '/images/notebooks')
             )
-            text = re.sub(r"\#[\s\w]+\n\n", "", text, 1)
+            text = re.sub(r"(?<=-{3}\n\n)\#{1} .*\n+", "", text, 1)
             file.write_text(text, "utf-8")
 
 
