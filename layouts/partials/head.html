@@ -11,7 +11,8 @@
   {{- template "_internal/twitter_cards.html" . -}}
   <meta name="description" content="{{ if .Params.summary }}{{ .Params.summary }}{{ else if .Site.Params.Description }}{{ .Site.Params.Description }}{{ else }}{{ end }}" />
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ee4c2c">
   <title>
     {{- if eq .Title .Site.Title -}}
       {{ .Site.Title }}

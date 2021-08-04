@@ -1,9 +1,10 @@
 .copy-code-button {
   border-radius: 4px;
   background: #f6f6f6;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border: 1px solid #ccc;
-  float: right;
+  position: absolute;
+  right: 0;
 }
 .copy-code-button:hover {
   cursor: pointer;

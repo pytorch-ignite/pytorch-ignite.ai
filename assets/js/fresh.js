@@ -5,14 +5,17 @@ $(document).ready(function(){
         $('#status').fadeOut(); // will first fade out the loading animation 
         $('#preloader').delay(350).fadeOut('slow'); // will fade out the white DIV that covers the website. 
         $('body').delay(350).css({'overflow':'visible'});
-        let target = $(location.hash)
-        target = target.length ? target : $('[name=' + location.hash.slice(1) + ']')
-        if (target.length) {
-            window.scroll({
-                top: target.offset().top - 80,
-                left: 0,
-                behavior: 'smooth'
-            })
+        const hash = location.hash
+        if (hash) {
+            let target = $(hash)
+            target = target.length ? target : $('[name=' + hash.slice(1) + ']')
+            if (target.length) {
+                window.scroll({
+                    top: target.offset().top - 80,
+                    left: 0,
+                    behavior: 'smooth'
+                })
+            }
         }
     })
 
