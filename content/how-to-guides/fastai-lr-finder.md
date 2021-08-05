@@ -6,6 +6,9 @@ sidebar: true
 tags:
   - lr finder
 ---
+# How to use FastaiLRFinder with Ignite
+
+
 This how-to guide demonstrates how we can leverage the [`FastaiLRFinder`](https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html) handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding.
 
 <!--more-->
