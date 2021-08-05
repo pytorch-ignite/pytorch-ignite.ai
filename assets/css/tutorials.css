@@ -34,3 +34,7 @@
   border-bottom: 1px solid #eee;
   font-family: "Inter" !important;
 }
+.tutorials-list > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
