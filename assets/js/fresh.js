@@ -17,6 +17,16 @@ $(document).ready(function(){
                 })
             }
         }
+        if (location.pathname === '/') {
+            const featuredPost = document.getElementById('featured-post-link')
+            if (featuredPost.getAttribute('href') === 'https://github.com/pytorch/ignite/releases/latest') {
+                fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
+                    .then(val => val.json())
+                    .then(val => {
+                        featuredPost.innerText = featuredPost.innerText.replace('{{ tag }}', val.tag_name)
+                    })
+            }
+        }
     })
 
     //Mobile menu toggle

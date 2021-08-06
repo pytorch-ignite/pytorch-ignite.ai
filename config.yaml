@@ -25,7 +25,7 @@ markup:
 # for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
   featuredPost:
-      title: 'Latest release: v0.4.6'
+      title: 'Latest release: {{ tag }}'
       link: https://github.com/pytorch/ignite/releases/latest
   images:
     - images/logos/ignite_logo_feature.png
