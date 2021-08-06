@@ -4,6 +4,8 @@
     {{ partial "hero-footer.html" . }}
 </section>
 
+    {{- partial "sponsors.html" . -}}
+
     {{ if .Site.Params.section1 }}
     {{ partial "section1.html" . }}
     {{ end }}

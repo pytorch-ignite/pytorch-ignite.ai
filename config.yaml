@@ -24,6 +24,11 @@ markup:
 
 # for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
+  sponsors:
+    - name: NumFOCUS
+      url: https://numfocus.org
+      img: https://numfocus.org/wp-content/uploads/2017/07/NumFocus_LRG.png
+
   featuredPost:
       title: 'Latest release: {{ tag }}'
       link: https://github.com/pytorch/ignite/releases/latest
