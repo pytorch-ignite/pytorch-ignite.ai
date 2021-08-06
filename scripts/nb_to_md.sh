@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 # Usage: nb_to_md.sh <notebook_dir> <target_dir>
 # Example: ./scripts/nb_to_md.sh examples ./content/docs/tutorials
 # Convert from ipynb to plain md
