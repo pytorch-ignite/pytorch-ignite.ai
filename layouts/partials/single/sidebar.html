@@ -1,6 +1,6 @@
 {{- $logo     := .Params.sidebarlogo }}
 {{- $currentTitle := .Title }}
-{{- $dir := (strings.TrimSuffix "/" .File.Dir) }}
+{{- $dir := trim .File.Dir "/" }}
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="text">

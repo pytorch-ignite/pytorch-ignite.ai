@@ -1,8 +1,8 @@
-{{- $sponsors := .Site.Params.sponsors }}
+{{- $sponsors := .Params.sponsors }}
 
 <section class="section-sponsors">
   <div class="inner">
-    <h2 class="heading">Sponsors</h2>
+    <h2 class="title">Sponsors</h2>
     <div class="sponsors">
       {{- range $sponsors -}}
       <a href="{{ .url }}" target="_blank" rel="sponsored noopener" class="sponsor">

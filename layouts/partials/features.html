@@ -1,0 +1,10 @@
+{{- $features := .Params.features }}
+
+<div class="features">
+  {{- range $features -}}
+  <section class="feature">
+    <h2 class="feature-title">{{ .title }}</h2>
+    <p class="details">{{ .details }}</p>
+  </section>
+  {{- end -}}
+</div>
