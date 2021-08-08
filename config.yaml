@@ -72,21 +72,14 @@ params:
       - link: https://twitter.com/pytorch_ignite
         icon: twitter
     quicklinks:
-      column2:
+      column1:
         title: Resources
         links:
           - text: Tutorials
-            link: https://pytorch.org/ignite/tutorials
+            link: /tutorials/
           - text: Docs
             link: https://pytorch.org/ignite
           - text: GitHub Discuss
             link: https://github.com/pytorch/ignite/discussions
           - text: Discord
             link: https://discord.gg/djZtm3EmKj
-      column3:
-        title: Blog
-        links:
-          - text: Latest news
-            link: /posts/first
-          - text: Tech articles
-            link: /posts/second

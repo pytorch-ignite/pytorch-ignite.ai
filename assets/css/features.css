@@ -1,9 +1,9 @@
 .features {
   display: flex;
   flex-wrap: wrap;
-  max-width: 60rem;
+  max-width: 67.5rem;
   padding: 1.5rem 1rem 0;
-  margin: 0 auto -4rem;
+  margin: 0 auto -3rem;
 }
 .feature {
   width: 100%;
@@ -16,7 +16,7 @@
 }
 .details {
   padding-top: .25rem;
-  color: #888;
+  color: #64748b;
 }
 @media screen and (min-width: 720px) {
   .feature {
