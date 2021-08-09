@@ -24,33 +24,13 @@ markup:
 
 # for customizing https://stefma.github.io/hugo-fresh/getstarted/
 params:
-  featuredPost:
-      title: 'Latest release: {{ tag }}'
-      link: https://github.com/pytorch/ignite/releases/latest
   images:
     - images/logos/ignite_logo_feature.png
-  # Open graph allows easy social sharing. If you don't want it you can set it to false or just delete the variable
-  openGraph: true
-  # Used as meta data; describe your site to make Google Bots happy
   description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
   navbarlogo:
     # Logo (from static/images/logos/___)
     image: logos/ignite_logomark.svg
     link: /
-  font:
-    name: "Oxygen"
-    sizes: [400, 600]
-  hero:
-    # Main hero title
-    # title: PyTorch-Ignite
-    # Hero subtitle (optional)
-    subtitle: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
-    # Button text
-    buttontext: GET STARTED
-    # Where the main hero button links to
-    buttonlink: /tutorials/getting-started/
-    # Hero image (from static/images/___)
-    image: logos/ignite_logo.svg
 
   navbar:
     - title: Docs
@@ -59,6 +39,8 @@ params:
           url: /tutorials/
         - title: How to Guides
           url: /how-to-guides/
+    - title: API Reference
+      url: /api/
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
@@ -66,29 +48,8 @@ params:
     - title: Community
       url: /community
 
-  section1:
-    title: Places Ignite shines
-    # subtitle: with great responsibility
-    tiles:
-      - title: Simplicity
-        icon: mouse-globe
-        text: Extremely simple engine and event system
-        url: /
-        buttonText: Learn More
-      - title: Rich metrics
-        icon: laptop-cloud
-        text: Out-of-the-box metrics to easily evaluate models
-        url: /
-        buttonText: Learn More
-      - title: Flexible Handlers
-        icon: plug-cloud
-        text: Compose training pipelines, save artifacts, and log parameters and metrics
-        url: /
-        buttonText: Learn More
-
   section2:
-    title: E C O S Y S T E M
-    subtitle: And we know it
+    title: Ecosystem
     features:
       - title: Project MONAI
         text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
@@ -111,21 +72,14 @@ params:
       - link: https://twitter.com/pytorch_ignite
         icon: twitter
     quicklinks:
-      column2:
+      column1:
         title: Resources
         links:
           - text: Tutorials
-            link: https://pytorch.org/ignite/tutorials
+            link: /tutorials/
           - text: Docs
             link: https://pytorch.org/ignite
           - text: GitHub Discuss
             link: https://github.com/pytorch/ignite/discussions
           - text: Discord
             link: https://discord.gg/djZtm3EmKj
-      column3:
-        title: Blog
-        links:
-          - text: Latest news
-            link: /posts/first
-          - text: Tech articles
-            link: /posts/second

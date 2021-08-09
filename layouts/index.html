@@ -1,8 +1,9 @@
 {{ define "main" }}
 <section class="hero is-fullheight is-default is-bold">
     {{ partial "hero-body.html" . }}
-    {{ partial "hero-footer.html" . }}
 </section>
+
+    {{- partial "features.html" . -}}
 
     {{ if .Site.Params.section1 }}
     {{ partial "section1.html" . }}
@@ -23,6 +24,15 @@
     {{ if .Site.Params.section5 }}
     {{ partial "section5.html" . }}
     {{ end }}
+
+    <section class="section is-medium">
+      <div class="container">
+        <h2 class="title">Follow Us on Twitter</h2>
+        <div class="twitter-tweets" id="twitter-tweets" data-target='twitter-timeline'></div>
+      </div>
+    </section>
+
+    {{- partial "sponsors.html" . -}}
 
     {{ if .Site.Params.footer }}
     {{ partial "footer.html" . }}

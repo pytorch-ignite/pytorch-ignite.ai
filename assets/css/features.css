@@ -1,0 +1,25 @@
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 67.5rem;
+  padding: 1.5rem 1rem 0;
+  margin: 0 auto -3rem;
+}
+.feature {
+  width: 100%;
+  padding: 1rem;
+}
+.feature-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding-bottom: .25rem;
+}
+.details {
+  padding-top: .25rem;
+  color: #64748b;
+}
+@media screen and (min-width: 720px) {
+  .feature {
+    width: calc(100% / 3);
+  }
+}
