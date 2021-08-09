@@ -8,6 +8,7 @@
 .feature {
   width: 100%;
   padding: 1rem;
+  border: 1px solid #ccc;
 }
 .feature-title {
   font-size: 1.4rem;
