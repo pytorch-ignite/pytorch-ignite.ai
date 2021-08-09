@@ -8,8 +8,6 @@
 .feature {
   width: 100%;
   padding: 1rem;
-  border: 1px solid #ccc;
-  margin: .5rem;
 }
 .feature-title {
   font-size: 1.4rem;
@@ -22,6 +20,16 @@
 }
 @media screen and (min-width: 720px) {
   .feature {
-    width: calc(100% / 3.2);
+    width: calc(100% / 3);
+    border: 0px solid #ccc;
+  }
+  .feature:nth-child(n+4) {
+    border-top-width: 1px;
+  }
+  .feature:nth-child(3n+2) {
+    border-left-width: 1px;
+  }
+  .feature:nth-child(3n+3) {
+    border-left-width: 1px;
   }
 }
