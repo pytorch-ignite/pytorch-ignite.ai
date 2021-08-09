@@ -30,11 +30,15 @@
   <link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">
   {{- $style := resources.Get "css/custom.css" | resources.Minify | resources.Fingerprint -}}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{- $style := resources.Get "css/sponsors.css" | resources.Minify | resources.Fingerprint -}}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  {{- $style := resources.Get "css/features.css" | resources.Minify | resources.Fingerprint -}}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
   <link rel="icon" type="image/svg+xml" href="{{ "images/logos/ignite_logomark.svg" | relURL }}" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   {{- if eq .Section "posts" -}}
   {{- $style := resources.Get "css/post.css" | resources.Minify | resources.Fingerprint -}}
