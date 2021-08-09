@@ -193,6 +193,13 @@ footer.footer-dark .footer-logo img {
 .media.icon-box .media-content:hover .content p .icon-box-title {
   color: var(--c-primary);
 }
+.ecosystem-link {
+  padding: .5rem 1rem;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 /* links in table */
 table a {
   text-decoration: underline;

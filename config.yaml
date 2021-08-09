@@ -41,8 +41,6 @@ params:
           url: /how-to-guides/
     - title: API Reference
       url: /api/
-    - title: Ecosystem
-      url: /ecosystem/
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
@@ -50,18 +48,18 @@ params:
     - title: Community
       url: /community
 
-  # section2:
-  #   title: Ecosystem
-  #   features:
-  #     - title: Project MONAI
-  #       text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-  #       link: https://monai.io/
-  #     - title: Nussl
-  #       text: A flexible source separation library in Python
-  #       link: https://nussl.github.io/docs/
-  #     - title: Code-Generator
-  #       text: Application to generate your training scripts with PyTorch-Ignite.
-  #       link: https://code-generator.pytorch-ignite.ai
+  section2:
+    title: Ecosystem
+    features:
+      - title: Project MONAI
+        text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
+        link: https://monai.io/
+      - title: Nussl
+        text: A flexible source separation library in Python
+        link: https://nussl.github.io/docs/
+      - title: Code-Generator
+        text: Application to generate your training scripts with PyTorch-Ignite.
+        link: https://code-generator.pytorch-ignite.ai
 
   footer:
     # Logo (from /images/logos/___)
