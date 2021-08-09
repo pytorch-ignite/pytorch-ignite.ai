@@ -9,6 +9,7 @@
   width: 100%;
   padding: 1rem;
   border: 1px solid #ccc;
+  margin: .5rem;
 }
 .feature-title {
   font-size: 1.4rem;
@@ -21,6 +22,6 @@
 }
 @media screen and (min-width: 720px) {
   .feature {
-    width: calc(100% / 3);
+    width: calc(100% / 3.2);
   }
 }
