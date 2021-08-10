@@ -23,13 +23,15 @@ Writing [agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>) [distributed
 
 <!--more-->
 
+Crossposted from https://labs.quansight.org/blog/2021/06/distributed-made-easy-with-ignite/
+
 ## Prerequisites
 
 This blog assumes you have some knowledge about:
 
 1. [PyTorch's distributed package](https://pytorch.org/docs/stable/distributed.html#basics), the [backends](https://pytorch.org/docs/stable/distributed.html#backends) and [collective functions](https://pytorch.org/docs/stable/distributed.html#collective-functions) it provides. In this blog, we will focus on [distributed data parallel code](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html).
 
-2. [PyTorch-Ignite](https://pytorch.org/ignite/). Refer to this [blog](https://labs.quansight.org/blog/2020/09/pytorch-ignite/) for a quick high-level overview.
+2. [PyTorch-Ignite](https://pytorch-ignite.ai). Refer to this [blog](https://pytorch-ignite.ai/posts/introduction) for a quick high-level overview.
 
 ## Introduction
 
@@ -287,18 +289,3 @@ while maintaining control and simplicity.
   of distributed training on CIFAR10 with muliple configurations: 1 or
   multiple GPUs, multiple nodes and GPUs, TPUs.
 
-## Next Steps
-
-- If you want to learn more about PyTorch-Ignite or have any further
-  queries, here is our [GitHub](https://github.com/pytorch/ignite),
-  [documentation](https://pytorch.org/ignite/) and
-  [Discord](https://discord.com/invite/djZtm3EmKj).
-
-- PyTorch-Ignite is currently maintained by a team of volunteers and we
-  are looking for more contributors.
-  See [CONTRIBUTING.md](https://github.com/pytorch/ignite/blob/master/CONTRIBUTING.md)
-  for how you can contribute.
-
-- Keep updated with all PyTorch-Ignite news by following us on
-  [Twitter](https://twitter.com/pytorch_ignite) and
-  [Facebook](https://facebook.com/PyTorch-Ignite-Community-105837321694508).
