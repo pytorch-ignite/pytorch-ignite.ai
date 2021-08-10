@@ -1,6 +1,7 @@
 ---
 sidebar: true
 title: "Introduction to PyTorch-Ignite"
+slug: introduction
 date: 2020-09-10
 draft: false
 image: https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png
