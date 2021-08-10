@@ -925,24 +925,19 @@ The purpose of the PyTorch-Ignite `ignite.distributed` package introduced in ver
 To make distributed configuration setup easier, the [`Parallel`](https://pytorch.org/ignite/distributed.html#ignite.distributed.launcher.Parallel) context manager has been introduced:
 
 ```py
-code = """
 import ignite.distributed as idist
 
 def training(local_rank, config, **kwargs):
     print(idist.get_rank(), ': run with config:', config, '- backend=', idist.backend())
     # do the training ...
 
-backend = 'gloo' # or "xla-tpu" or None
-dist_configs = {'nproc_per_node': 2}  # or dist_configs = {...}
+backend = 'gloo' # or "nccl" or "xla-tpu"
+dist_configs = {'nproc_per_node': 2}
+# dist_configs["start_method"] = "fork"  # If using Jupyter Notebook
 config = {'c': 12345}
 
-if __name__ == '__main__':
-
-    with idist.Parallel(backend=backend, **dist_configs) as parallel:
-        parallel.run(training, config, a=1, b=2)
-"""
-!echo "{code}" > main.py
-!python main.py
+with idist.Parallel(backend=backend, **dist_configs) as parallel:
+    parallel.run(training, config, a=1, b=2)
 ```
 
     2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'gloo'
