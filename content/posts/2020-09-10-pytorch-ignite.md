@@ -991,7 +991,7 @@ Please note that these `auto_*` methods are optional; a user is free use some of
 More details about distributed helpers provided by PyTorch-Ignite can be found in [the documentation](https://pytorch.org/ignite/distributed.html).
 A complete example of training on CIFAR10 can be found [here](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10).
 
-A detailed tutorial with distributed helpers is be published [here](https://pytorch-ignite.ai/posts/distributed-made-easy-with-ignite/).
+A detailed tutorial with distributed helpers is published [here](https://pytorch-ignite.ai/posts/distributed-made-easy-with-ignite/).
 
 ## Projects using PyTorch-Ignite
 
