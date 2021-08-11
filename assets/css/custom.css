@@ -350,9 +350,27 @@ h3:hover .header-anchor {
   padding: 1rem;
   margin: 0 !important;
 }
+.title-2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.docs {
+  display: flex;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.docs .admonition {
+  width: 100%;
+}
+.docs .admonition {
+  padding: .5rem;
+}
 @media screen and (min-width: 720px) {
   .media {
     width: calc(100% / 3);
+  }
+  .docs .admonition {
+    width: calc(100% / 4);
   }
 }
 /* mobile */
