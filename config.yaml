@@ -39,8 +39,8 @@ params:
           url: /tutorials/
         - title: How to Guides
           url: /how-to-guides/
-    - title: API Reference
-      url: /api/
+        - title: API Reference
+          url: https://pytorch.org/ignite/engine.html
     - title: GitHub
       url: https://github.com/pytorch/ignite
     - title: Blog
@@ -71,6 +71,8 @@ params:
         icon: facebook
       - link: https://twitter.com/pytorch_ignite
         icon: twitter
+      - link: https://dev.to/pytorch-ignite
+        icon: dev
     quicklinks:
       column1:
         title: Resources

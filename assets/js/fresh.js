@@ -23,7 +23,7 @@ $(document).ready(function(){
                 fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
                     .then(val => val.json())
                     .then(val => {
-                        featuredPost.innerText = featuredPost.innerText.replace('{{ tag }}', val.tag_name)
+                        featuredPost.innerText = featuredPost.innerText + ' ' + val.tag_name
                     })
             }
         }
