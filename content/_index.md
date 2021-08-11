@@ -31,6 +31,6 @@ sponsors:
     img: https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/files/images/QuansightLabs_logo_V2.png
 
 featuredPost:
-    title: 'New release: PyTorch-Ignite {{ tag }}'
+    title: 'New release: PyTorch-Ignite'
     link: https://github.com/pytorch/ignite/releases/latest
 ---
