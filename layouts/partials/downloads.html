@@ -1,13 +1,15 @@
 {{- $fileDir  := .File.Dir }}
 {{- $fileName := .File.BaseFileName }}
 {{- if eq $fileDir "tutorials/" -}}
-{{- $fileDir = "" -}}
+{{- $fileDir = "examples/" -}}
+{{- else if ne $fileDir "posts/" -}}
+{{- $fileDir = print "examples/" $fileDir -}}
 {{- end -}}
 
 <div class="downloads">
   <a
     class="colab"
-    href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/{{ $fileDir }}{{ $fileName }}.ipynb"
+    href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
@@ -21,7 +23,7 @@
   </a>
   <a
     class="notebook"
-    href="/examples/{{ $fileDir }}{{ $fileName }}.ipynb"
+    href="/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
     download="{{ $fileName }}.ipynb"
@@ -36,7 +38,7 @@
   </a>
   <a
     class="source"
-    href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/{{ $fileDir }}{{ $fileName }}.ipynb"
+    href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
