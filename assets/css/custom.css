@@ -374,11 +374,8 @@ footer.footer-dark {
   background: #222;
 }
 @media screen and (min-width: 720px) {
-  .media {
+  .media, .docs .admonition {
     width: calc(100% / 3);
-  }
-  .docs .admonition {
-    width: calc(100% / 4);
   }
 }
 /* mobile */

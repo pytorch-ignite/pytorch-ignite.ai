@@ -4,6 +4,7 @@
 </section>
 
     {{- partial "features.html" . -}}
+    {{- partial "docs.html" . -}}
 
     {{ if .Site.Params.section1 }}
     {{ partial "section1.html" . }}
@@ -33,7 +34,6 @@
     </section>
 
     {{- partial "sponsors.html" . -}}
-    {{- partial "docs.html" . -}}
 
     {{ if .Site.Params.footer }}
     {{ partial "footer.html" . }}
