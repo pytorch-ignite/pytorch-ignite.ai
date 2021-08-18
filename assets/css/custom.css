@@ -196,9 +196,14 @@ footer.footer-dark .footer-logo img {
 .ecosystem-link {
   padding: .5rem 1rem;
   background: #fff;
+  margin-left: .75rem;
+}
+@media (min-width: 720px) {
+.ecosystem-link {  
   position: absolute;
   top: 0;
   right: 0;
+  }
 }
 /* links in table */
 table a {
