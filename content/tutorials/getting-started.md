@@ -24,19 +24,19 @@ This tutorial assumes you are familiar with the:
 
 ## Installation
 
-1.  From `pip`
+From `pip`
 
 ``` shell
 pip install pytorch-ignite
 ```
 
-1.  From `conda`
+From `conda`
 
 ``` shell
 conda install ignite -c pytorch
 ```
 
-See [here](https://pytorch-ignite.ai/docs/how-to-guides/installation) for other installation
+See [here](https://pytorch-ignite.ai/how-to-guides/installation/) for other installation
 options.
 
 ## Code
