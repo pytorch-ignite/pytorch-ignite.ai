@@ -3,8 +3,13 @@
 <div class="features">
   {{- range $features -}}
   <section class="feature">
-    <h2 class="feature-title">{{ .title }}</h2>
-    <p class="details">{{ .details }}</p>
+    <div class="child">
+      <h3 class="feature-title">{{ .title }}</h3>
+      <p class="details">{{ .details }}</p>
+    </div>
+    <div class="child">
+      {{ .code | markdownify }}
+    </div>
   </section>
   {{- end -}}
 </div>

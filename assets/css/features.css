@@ -1,25 +1,38 @@
 .features {
   display: flex;
   flex-wrap: wrap;
-  max-width: 67.5rem;
+  max-width: 80rem;
   padding: 1.5rem 1rem 0;
   margin: 0 auto -3rem;
 }
 .feature {
   width: 100%;
   padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem 0;
+}
+.child {
+  width: 100%;
+  padding: .5rem 2rem;
 }
 .feature-title {
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 300;
   padding-bottom: .25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 .details {
   padding-top: .25rem;
   color: #64748b;
 }
 @media screen and (min-width: 720px) {
-  .feature {
-    width: calc(100% / 3);
+  .child {
+    width: 50%;
+  }
+  .feature:nth-child(2n+1) .child:nth-child(2n+1) {
+    order: 1;
   }
 }
