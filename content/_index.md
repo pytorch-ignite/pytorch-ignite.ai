@@ -10,7 +10,7 @@ image: logos/ignite_logo.svg
 
 features:
   - title: Simple Engine and Event System
-    details: Trigger any handlers at any event
+    details: Trigger any handlers at any built-in and custom events
     code: >
       ```py {linenos=false}
         from ignite.engine import Engine, Events
@@ -18,7 +18,7 @@ features:
         trainer = Engine(lambda engine, batch: batch / 2)
         @trainer.on(Events.ITERATION_COMPLETED(every=2))
         def print(engine):
-          print(engine.state.output)
+            print(engine.state.output)
       ```
   - title: Rich Handlers
     details: Checkpointing, early stopping, profiling, parameter scheduling, learning rate finder, and more.
@@ -36,8 +36,8 @@ features:
 
         # early stopping handler
         def score_function(engine):
-          val_loss = engine.state.metrics['acc']
-          return val_loss
+            val_loss = engine.state.metrics['acc']
+            return val_loss
         es = EarlyStopping(3, score_function, trainer)
         # Note: the handler is attached to an *Evaluator* (runs one epoch on validation dataset).
         evaluator.add_event_handler(Events.COMPLETED, handler)
@@ -53,17 +53,17 @@ features:
         import ignite.distributed as idist
 
         def training(local_rank, *args, **kwargs):
-          dataloder_train = idist.auto_dataloder(dataset, ...)
+            dataloder_train = idist.auto_dataloder(dataset, ...)
 
-          model = ...
-          model = idist.auto_model(model)
+            model = ...
+            model = idist.auto_model(model)
 
-          optimizer = ...
-          optimizer = idist.auto_optimizer(optimizer)
+            optimizer = ...
+            optimizer = idist.auto_optimizer(optimizer)
 
         backend = 'nccl'  # or 'gloo', 'horovod', 'xla-tpu'
         with idist.Parallel(backend) as parallel:
-          parallel.run(training)
+            parallel.run(training)
       ```
   - title: 50+ metrics
     details: Distributed ready out-of-the-box metrics to easily evaluate models.
@@ -89,13 +89,13 @@ features:
 
         # Create a tensorboard logger
         with TensorboardLogger(log_dir="experiments/tb_logs") as tb_logger:
-          # Attach the logger to the trainer to log training loss at each iteration
-          tb_logger.attach_output_handler(
-            trainer,
-            event_name=Events.ITERATION_COMPLETED,
-            tag="training",
-            output_transform=lambda loss: {"loss": loss}
-          )
+            # Attach the logger to the trainer to log training loss at each iteration
+            tb_logger.attach_output_handler(
+              trainer,
+              event_name=Events.ITERATION_COMPLETED,
+              tag="training",
+              output_transform=lambda loss: {"loss": loss}
+            )
       ```
 
 sponsors:
