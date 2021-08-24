@@ -196,9 +196,14 @@ footer.footer-dark .footer-logo img {
 .ecosystem-link {
   padding: .5rem 1rem;
   background: #fff;
+  margin-left: .75rem;
+}
+@media (min-width: 720px) {
+.ecosystem-link {  
   position: absolute;
   top: 0;
   right: 0;
+  }
 }
 /* links in table */
 table a {
@@ -350,8 +355,31 @@ h3:hover .header-anchor {
   padding: 1rem;
   margin: 0 !important;
 }
+.title-2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #eee;
+}
+.docs {
+  display: flex;
+  text-align: center;
+  flex-wrap: wrap;
+  color: #aaa;
+}
+.docs .admonition {
+  width: 100%;
+}
+.docs .admonition {
+  padding: .5rem;
+}
+.docs .admonition a {
+  color: var(--c-primary);
+}
+footer.footer-dark {
+  background: #222;
+}
 @media screen and (min-width: 720px) {
-  .media {
+  .media, .docs .admonition {
     width: calc(100% / 3);
   }
 }
