@@ -10,7 +10,7 @@ image: logos/ignite_logo.svg
 
 features:
   - title: Simple Engine and Event System
-    details: Trigger any handlers at any built-in and custom events
+    details: Trigger any handlers at any built-in and custom events.
     code: >
       ```py {linenos=false}
         from ignite.engine import Engine, Events
