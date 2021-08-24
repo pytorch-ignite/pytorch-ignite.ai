@@ -30,3 +30,7 @@
 {{ $anchor := resources.Get "js/anchor.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $anchor.RelPermalink }}"></script>
 {{- end -}}
+
+<script src='https://unpkg.com/shiki@0.9.7/dist/index.unpkg.iife.js'></script>
+{{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $shiki.RelPermalink }}"></script>
