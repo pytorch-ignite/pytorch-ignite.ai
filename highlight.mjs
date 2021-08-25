@@ -25,7 +25,8 @@ function *walkDir(dir) {
 async function preHighLightWithShiki(path) {
   try {
     for (const file of walkDir(path)) {
-      const { document } = (await JSDOM.fromFile(file)).window
+      const html = fs.readFileSync(file, { encoding: 'utf-8' })
+      const { document } = new JSDOM(html, { contentType: 'text/html' }).window
 
       // same code as in shiki.js
       const highligher = await getHighlighter({

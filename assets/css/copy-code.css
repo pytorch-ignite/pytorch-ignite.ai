@@ -5,6 +5,7 @@
   border: 1px solid #6A737D; /* needs to match with syntax highlight comment color */
   margin: 8px;
   position: absolute;
+  top: 0;
   right: 0;
   color: #E1E4E8; /* needs to match with syntax highlight text color */
   display: none;
