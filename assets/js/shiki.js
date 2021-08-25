@@ -1,6 +1,6 @@
 // @ts-check
 // only used in development
-export async function highLightWithShiki() {
+async function highLightWithShiki() {
   const highligher = await shiki.getHighlighter({
     theme: 'github-dark',
     langs: ['py', 'shell']
