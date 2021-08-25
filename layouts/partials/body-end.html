@@ -31,6 +31,8 @@
 <script src="{{ $anchor.RelPermalink }}"></script>
 {{- end -}}
 
-<script src='https://unpkg.com/shiki@0.9.7/dist/index.unpkg.iife.js'></script>
+{{- if .Site.IsServer -}}
+<script src="https://cdn.jsdelivr.net/npm/shiki/dist/index.jsdelivr.iife.min.js"></script>
 {{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $shiki.RelPermalink }}"></script>
+{{- end -}}

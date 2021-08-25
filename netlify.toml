@@ -1,13 +1,11 @@
 [build]
 publish = "dist"
-command = "hugo --gc --minify"
+command = "npx pnpm i --frozen-lockfile --store=node_modules/.pnpm-store && hugo --gc --minify && node highlight.mjs"
 
-[context.production.environment]
+[build.environment]
+NODE_VERSION = "14"
 HUGO_VERSION = "0.83.1"
 HUGO_ENV = "production"
-
-[context.deploy-preview.environment]
-HUGO_VERSION = "0.83.1"
 
 [[redirects]]
   from = "https://pytorch-ignite.netlify.app/*"

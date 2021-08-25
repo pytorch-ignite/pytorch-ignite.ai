@@ -1,4 +1,6 @@
-async function highLightWithShiki() {
+// @ts-check
+// only used in development
+export async function highLightWithShiki() {
   const highligher = await shiki.getHighlighter({
     theme: 'github-dark',
     langs: ['py', 'shell']
@@ -7,8 +9,8 @@ async function highLightWithShiki() {
   const preBlocks = document.querySelectorAll('pre[style]')
 
   for (const block of preBlocks) {
-    const output = highligher.codeToHtml(block.textContent, block.firstElementChild.getAttribute('data-lang') || 'text')
-    block.outerHTML = output
+    const html = highligher.codeToHtml(block.textContent, block.firstElementChild.getAttribute('data-lang') || 'text')
+    block.outerHTML = html
   }
 }
 

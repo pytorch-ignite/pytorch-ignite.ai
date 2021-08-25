@@ -1,16 +1,20 @@
 .copy-code-button {
   border-radius: 4px;
-  background: #6A737D;
+  background: #6A737D; /* needs to match with syntax highlight comment color */
   padding: 4px 8px;
+  border: 1px solid #6A737D; /* needs to match with syntax highlight comment color */
   margin: 8px;
-  border: 1px solid #6A737D;
   position: absolute;
   right: 0;
-  color: #E1E4E8;
+  color: #E1E4E8; /* needs to match with syntax highlight text color */
+  display: none;
 }
 .copy-code-button:hover {
   cursor: pointer;
 }
 .highlight {
   position: relative;
+}
+.highlight:hover > .copy-code-button {
+  display: block;
 }
