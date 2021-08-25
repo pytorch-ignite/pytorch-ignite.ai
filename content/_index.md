@@ -17,7 +17,7 @@ features:
 
       trainer = Engine(lambda engine, batch: batch / 2)
       @trainer.on(Events.ITERATION_COMPLETED(every=2))
-      def print(engine):
+      def print_output(engine):
           print(engine.state.output)
       ```
   - title: Rich Handlers
