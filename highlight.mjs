@@ -30,7 +30,7 @@ async function preHighLightWithShiki(path) {
 
       // same code as in shiki.js
       const highligher = await getHighlighter({
-        theme: 'github-dark',
+        theme: 'github-light',
         langs: ['py', 'shell'],
       })
 

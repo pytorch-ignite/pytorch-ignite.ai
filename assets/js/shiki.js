@@ -2,7 +2,7 @@
 // only used in development
 async function highLightWithShiki() {
   const highligher = await shiki.getHighlighter({
-    theme: 'github-dark',
+    theme: 'github-light',
     langs: ['py', 'shell'],
   })
 
