@@ -1,6 +1,8 @@
 :root {
   --c-primary: #ee4c2c;
   --c-secondary: #eaa700;
+  --docsearch-primary-color: var(--c-primary);
+  overflow: inherit;
 }
 body {
   font-family: 'Inter var', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -442,4 +444,21 @@ footer.footer-dark {
 }
 .highlight > div, .shiki {
   background: #f8f8f8 !important;
+}
+/* docsearch */
+.navbar > .container {
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+}
+#docsearch {
+  padding-right: 1rem;
+}
+@media screen and (max-width: 1087px) {
+  .navbar-menu.is-active {
+    position: absolute;
+    top: 66px;
+    left: 0;
+    right: 0;
+  }
 }

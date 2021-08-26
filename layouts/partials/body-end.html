@@ -34,3 +34,9 @@
 {{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $shiki.RelPermalink }}"></script>
 {{- end -}}
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>
+  docsearch({
+    container: '#docsearch'
+  })
+</script>

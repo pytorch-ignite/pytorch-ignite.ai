@@ -28,6 +28,7 @@
   <link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{- end -}}
   <link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css">
   {{- $style := resources.Get "css/custom.css" | resources.Minify | resources.Fingerprint -}}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
   {{- $style := resources.Get "css/sponsors.css" | resources.Minify | resources.Fingerprint -}}
