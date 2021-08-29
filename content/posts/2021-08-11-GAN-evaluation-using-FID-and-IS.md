@@ -14,14 +14,13 @@ In this notebook, two `PyTorch-Ignite`'s metrics to evaluate _Generative Adversa
 * **Frechet Inception Distance**, details can be found in [`Heusel et al. 2002`](https://arxiv.org/pdf/1706.08500.pdf)
 * **Inception Score**, details can be found in [`Barratt et al. 2018`](https://arxiv.org/pdf/1801.01973.pdf)
 
-See [here](https://github.com/pytorch/ignite/tree/master/ignite/metrics/gan) for more details about the implementation of the metrics in [PyTorch-Ignite](https://github.com/pytorch/ignite).
+See [here](https://pytorch.org/ignite/index.html) for more details about the implementation of the metrics in [PyTorch-Ignite](https://github.com/pytorch/ignite).
 
 Most of the code here is from [DCGAN example](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html) in [pytorch/examples](https://github.com/pytorch/examples). In addition to the original tutorial, this notebook will use in-built GAN based metric in `ignite.metrics` to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in `ignite`.
-
-
-About PyTorch-Ignite, please refer to [Github](https://github.com/pytorch/ignite) and [Documentation](https://pytorch.org/ignite/).<!--more-->
+<!--more-->
 
 # Required Dependencies
+Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will be installed/imported here.
 
 
 ```python
@@ -78,6 +77,8 @@ ignite.__version__
 
 # Import Libraries
 
+Note: torchsummary is an optional dependency here.
+
 
 ```python
 import os
@@ -107,7 +108,7 @@ import ignite.distributed as idist
 ignite.utils.manual_seed(999)
 ```
 
-The `logging` level `logging.WARNING` is used in internal `ignite` submodules in order to avoid internal messages.
+Optionally, the `logging` level `logging.WARNING` is used in internal `ignite` submodules in order to avoid internal messages.
 
 
 ```python
@@ -734,7 +735,7 @@ ProgressBar().attach(evaluator)
 
 ## Training
 
-Finally, the `trainer` engine is run here. The helper method [`Parallel`](https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.launcher.Parallel.html#parallel) of `idist` will help setting up a distributed configuration to run the `trainer` engine. It support  `nccl`, `gloo` and `mpi` native torch backends, `XLA` on `TPU` and `Horovod` distributed framework.
+Finally, the `trainer` engine is run here. The helper method [`Parallel`](https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.launcher.Parallel.html#parallel) of `idist` will help setting up a distributed configuration to run the `trainer` engine. It supports  `nccl`, `gloo` and `mpi` native torch backends, `XLA` on `TPU` and `Horovod` distributed framework.
 
 
 ```python
@@ -923,8 +924,3 @@ plt.imshow(np.transpose(vutils.make_grid(img_list[-1], padding=2, normalize=True
 ![png](/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png)
     
 
-
-
-```python
-
-```
