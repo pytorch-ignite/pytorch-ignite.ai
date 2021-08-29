@@ -1,6 +1,6 @@
 {
   "devDependencies": {
     "jsdom": "^17.0.0",
-    "shiki": "^0.9.7"
+    "shiki": "^0.9.8"
   }
 }

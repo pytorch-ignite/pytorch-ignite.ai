@@ -2,11 +2,11 @@ lockfileVersion: 5.3
 
 specifiers:
   jsdom: ^17.0.0
-  shiki: ^0.9.7
+  shiki: ^0.9.8
 
 devDependencies:
   jsdom: 17.0.0
-  shiki: 0.9.7
+  shiki: 0.9.8
 
 packages:
 
@@ -238,7 +238,7 @@ packages:
       whatwg-encoding: 1.0.5
       whatwg-mimetype: 2.3.0
       whatwg-url: 9.1.0
-      ws: 8.2.0
+      ws: 8.2.1
       xml-name-validator: 3.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -339,8 +339,8 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /shiki/0.9.7:
-    resolution: {integrity: sha512-rOoAmwRWDiGKjQ1GaSKmbp1J5CamCera+I+DMM3wG/phbwNYQPt1mrjBBZbK66v80Vl1/A9TTLgXVHMbgtOCIQ==}
+  /shiki/0.9.8:
+    resolution: {integrity: sha512-499zQUTjcNTVwwiaPrWldUTXIV3T9HZWxDwE82bY+9GE7P2uD6hpHUTXNbTof3iOG6WT+/062+OMbl0lDoG8WQ==}
     dependencies:
       json5: 2.2.0
       onigasm: 2.2.5
@@ -436,8 +436,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /ws/8.2.0:
-    resolution: {integrity: sha512-uYhVJ/m9oXwEI04iIVmgLmugh2qrZihkywG9y5FfZV2ATeLIzHf93qs+tUNqlttbQK957/VX3mtwAS+UfIwA4g==}
+  /ws/8.2.1:
+    resolution: {integrity: sha512-XkgWpJU3sHU7gX8f13NqTn6KQ85bd1WU7noBHTT8fSohx7OS1TPY8k+cyRPCzFkia7C4mM229yeHr1qK9sM4JQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
