@@ -7,7 +7,6 @@
 }
 .feature {
   width: 100%;
-  padding: 1rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -15,7 +14,7 @@
 }
 .child {
   width: 100%;
-  padding: .5rem 2rem;
+  padding: .5rem;
 }
 .feature-title {
   font-size: 1.4rem;
@@ -31,8 +30,12 @@
 @media screen and (min-width: 720px) {
   .child {
     width: 50%;
+    padding: .5rem 2rem;
   }
   .feature:nth-child(2n+1) .child:nth-child(2n+1) {
     order: 1;
+  }
+  .feature {
+    padding: 1rem;
   }
 }
