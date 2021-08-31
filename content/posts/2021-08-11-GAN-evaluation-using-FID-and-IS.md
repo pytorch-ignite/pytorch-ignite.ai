@@ -14,7 +14,7 @@ In this notebook, two `PyTorch-Ignite`'s metrics to evaluate _Generative Adversa
 * **Frechet Inception Distance**, details can be found in [`Heusel et al. 2002`](https://arxiv.org/pdf/1706.08500.pdf)
 * **Inception Score**, details can be found in [`Barratt et al. 2018`](https://arxiv.org/pdf/1801.01973.pdf)
 
-See [here](https://pytorch.org/ignite/index.html) for more details about the implementation of the metrics in [PyTorch-Ignite](https://github.com/pytorch/ignite).
+See [here](https://pytorch.org/ignite/metrics.html#complete-list-of-metrics) for more details about the implementation of the metrics in [PyTorch-Ignite](https://github.com/pytorch/ignite).
 
 Most of the code here is from [DCGAN example](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html) in [pytorch/examples](https://github.com/pytorch/examples). In addition to the original tutorial, this notebook will use in-built GAN based metric in `ignite.metrics` to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in `ignite`.
 <!--more-->
