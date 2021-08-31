@@ -13,7 +13,6 @@ markup:
   highlight:
     lineNos: true
     tabWidth: 4
-    noClasses: false
   tableOfContents:
     endLevel: 3
     ordered: false

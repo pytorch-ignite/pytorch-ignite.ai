@@ -32,7 +32,7 @@
   text-align: center;
   padding-bottom: 1rem;
   border-bottom: 1px solid #eee;
-  font-family: "Inter" !important;
+  font-family: 'Inter var', "Inter" !important;
 }
 .tutorials-list > :not([hidden]) ~ :not([hidden]) {
   margin-top: 1rem;

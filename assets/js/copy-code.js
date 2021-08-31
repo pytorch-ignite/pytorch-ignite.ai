@@ -1,7 +1,7 @@
 // reference from
 // https://www.dannyguo.com/blog/how-to-add-copy-to-clipboard-buttons-to-code-blocks-in-hugo/
 function copyCode() {
-  document.querySelectorAll("pre > code[data-lang]").forEach(function (value) {
+  document.querySelectorAll(".highlight td:last-child pre > code").forEach(function (value) {
     const button = document.createElement("button");
     button.className = "copy-code-button";
     button.type = "button";
@@ -24,7 +24,7 @@ function copyCode() {
         });
     });
 
-    value.closest(".highlight").insertAdjacentElement("afterbegin", button);
+    value.closest(".highlight").appendChild(button)
   });
 }
 copyCode();

@@ -18,8 +18,6 @@
 {{ $activeNavbar := resources.Get "js/active-navbar.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $activeNavbar.RelPermalink }}"></script>
 <script src='{{ "js/jquery.panelslider.min.js" | relURL }}'></script>
-{{ $style := resources.Get "css/syntax.css" | resources.Minify | resources.Fingerprint }}
-<link rel="stylesheet" href="{{ $style.RelPermalink }}">
 {{- if (findRE "<pre" .Content 1) -}}
   {{ $style := resources.Get "css/copy-code.css" | resources.Minify | resources.Fingerprint }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
@@ -29,4 +27,10 @@
 {{- if .IsPage -}}
 {{ $anchor := resources.Get "js/anchor.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $anchor.RelPermalink }}"></script>
+{{- end -}}
+
+{{- if .Site.IsServer -}}
+<script src="https://cdn.jsdelivr.net/npm/shiki@0.9.8/dist/index.jsdelivr.iife.min.js"></script>
+{{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $shiki.RelPermalink }}"></script>
 {{- end -}}
