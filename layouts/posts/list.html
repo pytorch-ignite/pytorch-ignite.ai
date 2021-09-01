@@ -18,9 +18,11 @@
         </div>
         <div class="line">
           <h1 class="blog-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+          {{- if .Params.image -}}
           <p align="center">
           <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
           </p>
+          {{- end -}}
           <div class="summary">{{ .Summary }}</div>
           <div class="tags">
             {{ range .Params.tags }}

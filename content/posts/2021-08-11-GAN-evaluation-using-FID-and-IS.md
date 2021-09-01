@@ -1,6 +1,8 @@
 ---
 title: GAN evaluation using FID and IS
 slug: gan-evaluation-with-FID-and-IS
+image: /images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png
+alt: GAN evaluation results using FID and IS
 date: 2021-08-11
 downloads: true
 sidebar: true
