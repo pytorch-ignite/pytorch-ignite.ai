@@ -452,7 +452,7 @@ footer.footer-dark {
   display: flex;
 }
 #docsearch {
-  padding-right: 1rem;
+  padding: 0 1rem;
 }
 @media screen and (max-width: 1087px) {
   .navbar-menu.is-active {
