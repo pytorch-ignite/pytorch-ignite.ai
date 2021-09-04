@@ -105,6 +105,9 @@ sponsors:
   - name: Quansight Labs
     url: https://labs.quansight.org
     img: https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/files/images/QuansightLabs_logo_V2.png
+  - name: IFP Energies nouvelles
+    url: https://www.ifpenergiesnouvelles.com/
+    img: /images/logos/ifpen.jpg
 
 featuredPost:
     title: 'New release: PyTorch-Ignite'
