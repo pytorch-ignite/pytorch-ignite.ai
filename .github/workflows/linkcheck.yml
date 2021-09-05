@@ -26,4 +26,4 @@ jobs:
         run: hugo --minify
 
       - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest dist -c .htmltest.yml
+      - run: ./bin/htmltest dist -c .htmltest.yml -l 0
