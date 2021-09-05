@@ -359,9 +359,9 @@ tb_logger.close()
 
 ## Next Steps
 
-1.  Check out [tutorials](https://pytorch-ignite.ai/docs/tutorials) if you want to continue
+1.  Check out [tutorials](https://pytorch-ignite.ai/tutorials) if you want to continue
     learning more about PyTorch-Ignite.
-2.  Head over to [how-to guides](https://pytorch-ignite.ai/docs/how-to-guides) if you’re looking
+2.  Head over to [how-to guides](https://pytorch-ignite.ai/how-to-guides) if you’re looking
     for a specific solution.
 3.  If you want to set-up a PyTorch-Ignite project, visit [Code
     Generator](https://code-generator.pytorch-ignite.ai/) to get a variety of
