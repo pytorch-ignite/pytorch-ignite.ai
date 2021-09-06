@@ -149,7 +149,7 @@ $(document).ready(function(){
                 $('html, body').animate({
                     scrollTop: target.offset().top - 80
                 }, 550, function() {
-                    history.replaceState(null, '', target.selector)
+                    history.replaceState(null, '', '#' + target[0].id)
                     // Callback after animation
                     // Must change focus!
                     var $target = $(target);

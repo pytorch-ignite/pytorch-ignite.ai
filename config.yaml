@@ -45,7 +45,7 @@ params:
     - title: Blog
       url: /posts/
     - title: Community
-      url: /community
+      url: /community/
 
   section2:
     title: Ecosystem
