@@ -114,7 +114,7 @@ Some text
 
 Contents are usually written in markdown files in the `posts` directory or in separate markdown files like [`community.md`](./content/community.md).
 
-To write How-to-guides or tutorials, make a pull request to [examples repo](https://github.com/pytorch-ignite/examples). GitHub bot will update the files in this repo evey 6 hours.
+To write How-to-guides or tutorials, make a pull request to [examples repo](https://github.com/pytorch-ignite/examples). GitHub bot will update the files in this repo every 6 hours.
 
 To write a blog post in jupyter notebook format, use [`generate.py`](https://github.com/pytorch-ignite/examples/blob/main/generate.py) script in `static/examples` to generate a notebook with pre-defined frontmatters.
 
