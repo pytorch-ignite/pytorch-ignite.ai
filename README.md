@@ -10,25 +10,27 @@ Current directory structure:
 
 ```sh
 .
-├── archetypes      # frontmatter template for markdown files
-├── assets          # website assets (css + js)
+├── archetypes          # frontmatter template for markdown files
+├── assets              # website assets (css + js)
 │   ├── css
 │   └── js
-├── content         # the main markdown content
-│   ├── guide       # PyTorch-Ignite How-to guides
-│   ├── posts       # blog posts
-│   └── tutorials   # PyTorch-Ignite tutorials
+├── content             # the main markdown content
+│   ├── how-to-guides   # PyTorch-Ignite How-to guides
+│   ├── posts           # blog posts
+│   └── tutorials       # PyTorch-Ignite tutorials
 ├── layouts
-│   ├── _default    # default layout theme
-│   ├── partials    # partial layouts (can be reused)
-│   ├── posts       # layouts for blog posts
-│   ├── shortcodes  # Hugo shortcodes
-│   ├── taxonomy    # layouts for tags
-│   └── tutorials   # layouts for tutorials
-├── scripts         # various CI/CD scripts
+│   ├── _default        # default layout theme
+|   ├── how-to-guides   # layouts for guides
+│   ├── partials        # partial layouts (can be reused)
+│   ├── posts           # layouts for blog posts
+│   ├── shortcodes      # Hugo shortcodes
+│   ├── taxonomy        # layouts for tags
+│   └── tutorials       # layouts for tutorials
+├── scripts             # various CI/CD scripts
 ├── static
-│   ├── examples    # https://github.com/pytorch-ignite/examples submodule
-│   └── images      # static images
+│   ├── examples        # https://github.com/pytorch-ignite/examples submodule
+│   └── images          # static images
+│   └── posts           # Blog posts in jupyter notebook format
 └── themes
     └── hugo-fresh
 ```
@@ -107,3 +109,13 @@ For custom note title:
 Some text
 {{% /tip %}}
 ```
+
+## Writing contents
+
+Contents are usually written in markdown files in the `posts` directory or in separate markdown files like [`community.md`](./content/community.md).
+
+To write How-to-guides or tutorials, make a pull request to [examples repo](https://github.com/pytorch-ignite/examples). GitHub bot will update the files in this repo every 6 hours.
+
+To write a blog post in jupyter notebook format, use [`generate.py`](https://github.com/pytorch-ignite/examples/blob/main/generate.py) script in `static/examples` to generate a notebook with pre-defined frontmatters.
+
+**Blog post filenames must be like `year-month-day-title.{md,ipynb}`. For examples, see [`2020-09-10-pytorch-ignite.md`](./content/posts/2020-09-10-pytorch-ignite.md).**
