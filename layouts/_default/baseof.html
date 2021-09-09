@@ -1,17 +1,29 @@
 <!-- This is the base template for all pages
-which include all common head tag and body end partial template. -->
+which include all common head tag and body end partial templates. -->
+
+{{ $lang := or .Site.LanguageCode "en-US" }}
 
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}">
-  {{ partial "head.html" . }}
-  <body>
+<html lang="{{ $lang }}" dir="ltr">
+{{ partial "head.html" . }}
 
-  {{- partial "navbar.html" . -}}
+<body class="
+        bg-white
+        font-sans
+        transition-all
+        text-blue-gray-600
+        duration-500 antialiased
+        dark:bg-dark-700 dark:text-warm-gray-200
+      ">
+  {{ partial "NavBar.html" . }}
   <!-- This is the kind of block scope that can be override by child layouts.
   Similar to Jinja template block. -->
-  {{ block "main" . }}
-  {{ end }}
+  <div class="mt-55px">
+    {{ block "main" . }}
+    {{ end }}
+  </div>
 
   {{ partial "body-end.html" . }}
-  </body>
+</body>
+
 </html>

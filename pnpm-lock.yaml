@@ -3,10 +3,12 @@ lockfileVersion: 5.3
 specifiers:
   jsdom: ^17.0.0
   shiki: ^0.9.8
+  windicss: ^3.1.7
 
 devDependencies:
   jsdom: 17.0.0
   shiki: 0.9.8
+  windicss: 3.1.7
 
 packages:
 
@@ -429,6 +431,12 @@ packages:
     dependencies:
       tr46: 2.1.0
       webidl-conversions: 6.1.0
+    dev: true
+
+  /windicss/3.1.7:
+    resolution: {integrity: sha512-Q/HQ9j+r2R0fdt85zAjccdo11kHWzQmpkuwIUQIO6PSypyDmBTfN14aAy4szLrpgo2woyuHM7Y+kir4IG4qnKQ==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /word-wrap/1.2.3:

@@ -4,55 +4,60 @@
 {{- $cssOpts      := cond ($inServerMode) (dict "targetPath" $cssTarget "enableSourceMap" true) (dict "targetPath" $cssTarget "outputStyle" "compressed") }}
 
 <head>
-  {{- if not $inServerMode -}}
-    {{- template "_internal/google_analytics.html" . -}}
-  {{- end -}}
-  {{- template "_internal/opengraph.html" . -}}
-  {{- template "_internal/twitter_cards.html" . -}}
-  <meta name="description" content="{{ if .Params.summary }}{{ .Params.summary }}{{ else if .Site.Params.Description }}{{ .Site.Params.Description }}{{ else }}{{ end }}" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ee4c2c">
-  <title>
-    {{- if eq .Title .Site.Title -}}
-      {{ .Site.Title }}
-    {{- else -}}
-      {{ .Title }} | {{ .Site.Title }}
-    {{- end -}}
-  </title>
-  {{- if $inServerMode -}}
-  {{- $css := resources.Get $sass | resources.ToCSS $cssOpts -}}
-  <link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}">
-  {{- else -}}
-  {{- $css := resources.Get $sass | resources.ToCSS $cssOpts | minify | fingerprint -}}
-  <link rel="stylesheet" type="text/css" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
-  {{- end -}}
-  <link rel="stylesheet" type="text/css" href="{{ "css/icons.css" | relURL }}">
-  {{- $style := resources.Get "css/custom.css" | resources.Minify | resources.Fingerprint -}}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- $style := resources.Get "css/sponsors.css" | resources.Minify | resources.Fingerprint -}}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- $style := resources.Get "css/features.css" | resources.Minify | resources.Fingerprint -}}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ee4c2c" />
+  <meta name="keywords" content="pytorch, pytorch ignite, ignite, engine, events, handlers, metrics, website" />
 
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@pytorch_ignite" />
+  <meta name="twitter:creator" content="@pytorch_ignite" />
+  <meta name="twitter:image"
+    content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png" />
+  <meta name="twitter:image:alt" content="PyTorch-Ignite logo" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PyTorch-Ignite" />
+  <meta property="og:image"
+    content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png" />
+  <meta property="og:image:alt" content="PyTorch-Ignite logo" />
+
+  {{ if .Params.summary }}
+  <meta name="description" content="{{ .Params.summary }}" />
+  <meta property="og:description" content="{{ .Params.summary }}" />
+  <meta name="twitter:description" content="{{ .Params.summary }}" />
+  {{ else if .Site.Params.Description }}
+  <meta name="description" content="{{ .Site.Params.Description }}" />
+  <meta property="og:description" content="{{ .Site.Params.Description }}" />
+  <meta name="twitter:description" content="{{ .Site.Params.Description }}" />
+  {{ end }} {{ if eq .Title .Site.Title }}
+  <title>{{ .Site.Title }}</title>
+  <meta property="og:title" content="{{ .Title }}" />
+  <meta name="twitter:title" content="{{ .Title }}" />
+  {{ else }}
+  <title>{{ .Title }} | {{ .Site.Title }}</title>
+  <meta property="og:title" content="{{ .Title }} | {{ .Site.Title }}" />
+  <meta name="twitter:title" content="{{ .Title }} | {{ .Site.Title }}" />
+  {{ end }}
   <link rel="icon" type="image/svg+xml" href="{{ "images/logos/ignite_logomark.svg" | relURL }}" />
-  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
 
-  {{- if eq .Section "posts" -}}
-  {{- $style := resources.Get "css/post.css" | resources.Minify | resources.Fingerprint -}}
+  <!-- css -->
+  <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css"
+    type="text/css" />
+
+  {{ $style := resources.Get "css/style.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- end -}}
-  {{- if eq .Section "tags" -}}
-  {{- $style := resources.Get "css/tags.css" | resources.Minify | resources.Fingerprint -}}
+
+  {{ $style := resources.Get "css/main.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- end -}}
-  {{- if eq .Section "tutorials" -}}
-  {{- $style := resources.Get "css/tutorials.css" | resources.Minify | resources.Fingerprint -}}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- end -}}
-  {{- if eq .Section "how-to-guides" -}}
-  {{- $style := resources.Get "css/tutorials.css" | resources.Minify | resources.Fingerprint -}}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{- end -}}
+
+  <script>
+    const saved = localStorage.getItem('ignite-color-scheme')
+    if (!saved ? window.matchMedia(`(prefers-color-scheme: dark)`).matches : saved === 'dark') {
+      document.documentElement.classList.add('dark')
+    }
+  </script>
 </head>

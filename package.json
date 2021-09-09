@@ -1,6 +1,10 @@
 {
   "devDependencies": {
     "jsdom": "^17.0.0",
-    "shiki": "^0.9.8"
+    "shiki": "^0.9.8",
+    "windicss": "^3.1.7"
+  },
+  "scripts": {
+    "dev": "windicss -f windi.config.js -dto assets/css/style.css"
   }
 }
