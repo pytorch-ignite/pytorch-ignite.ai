@@ -23,7 +23,7 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --minify
+        run: bash scripts/build.sh
 
       - run: curl https://htmltest.wjdp.uk | bash
       - run: ./bin/htmltest dist -c .htmltest.yml -l 0

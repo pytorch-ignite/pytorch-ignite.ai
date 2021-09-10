@@ -1,0 +1,229 @@
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ define "main" }}
+
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $featuredPost := .Params.featuredPost }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $features := .Params.features }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $docs := .Params.docs }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $ecosystem := .Params.ecosystem }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $sponsors := .Params.sponsors }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $footer := .Params.footer }}
+
+<section class="mx-auto max-w-6xl py-12 px-4">
+  <div class="grid gap-4 justify-items-center sm:grid-cols-2">
+    <img
+      src="{{ .Params.image | relURL }}"
+      alt="PyTorch-Ignite logo"
+      width="120"
+      height="120"
+      class="h-full w-3/5 sm:row-span-2 <sm:w-4/5"
+    />
+    <h1
+      class="
+        font-semibold
+        text-3xl
+        dark:bg-clip-text
+        dark:bg-gradient-to-br
+        dark:from-red-500
+        dark:to-amber-400
+        dark:text-transparent
+      "
+    >
+      {{ .Params.description }}
+    </h1>
+    <a
+      href="{{ .Params.actionLink }}"
+      class="
+        rounded-lg
+        font-semibold
+        bg-gray-200
+        w-max
+        py-3
+        px-6
+        place-self-start
+        group
+        sm:col-start-2
+        dark:bg-dark-200
+      "
+    >
+      {{ .Params.actionText }} {{ partial "icons/ArrowRight.html" . }}
+    </a>
+  </div>
+</section>
+
+{{ if $featuredPost }} {{ with $featuredPost }}
+<section class="bg-$c-primary text-center p-4">
+  <a
+    href="{{ .link }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="font-semibold text-xl text-white hover:underline"
+  >
+    {{ .title }}
+  </a>
+</section>
+{{ end }} {{ end }}
+
+<section
+  class="
+    mx-auto
+    max-w-6xl
+    grid
+    py-12
+    px-4
+    gap-4
+    grid-cols-2
+    items-center
+    <sm:grid-cols-1
+  "
+>
+  {{ range $idx, $_ := $features }}
+  <div>
+    <h2 class="font-light text-2xl uppercase">{{ .title }}</h2>
+    <p class="py-2 text-blue-gray-500">{{ .details }}</p>
+  </div>
+  <div>{{ .code | markdownify }}</div>
+  {{ end }}
+</section>
+
+<section class="bg-gray-200 text-center py-12 px-4 dark:bg-dark-400">
+  <div class="mx-auto max-w-6xl grid gap-4 sm:grid-cols-3">
+    {{ range $docs }}
+    <div>
+      <h2 class="font-semibold text-xl">{{ .title }}</h2>
+      <p class="py-2">{{ .text }}</p>
+      <a href="{{ .url }}" class="text-red-500 group">
+        View {{ .title }} {{ partial "icons/ArrowRight.html" . }}
+      </a>
+    </div>
+    {{ end }}
+  </div>
+</section>
+
+<section class="mx-auto max-w-6xl py-12 px-4">
+  <h2 class="text-3xl">Ecosystem</h2>
+  <div class="grid py-3 gap-4 grid-cols-3 <sm:grid-cols-1">
+    {{ range $ecosystem }}
+    <a
+      href="{{ .url }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="
+        border
+        rounded-lg
+        p-4
+        group
+        dark:border-dark-200 dark:shadow-red-500
+        hover:shadow-xl
+      "
+    >
+      <p class="group-hover:text-$c-primary">{{ .title }}</p>
+      <p>{{ .text | markdownify }}</p>
+    </a>
+    {{ end }}
+  </div>
+  <a
+    href="/ecosystem/"
+    class="
+      rounded-lg
+      font-semibold
+      bg-gray-200
+      w-max
+      py-3
+      px-6
+      group
+      inline-block
+      float-right
+      dark:bg-dark-200
+    "
+    >See all projects {{ partial "icons/ArrowRight.html" . }}
+  </a>
+</section>
+
+<section class="mx-auto max-w-6xl py-12 px-4">
+  <h2 class="text-3xl">Follow Us on Twitter</h2>
+  <div
+    class="twitter-tweets"
+    id="twitter-tweets"
+    data-target="twitter-timeline"
+  ></div>
+  <a
+    class="twitter-timeline"
+    href="https://twitter.com/pytorch_ignite"
+    data-height="0"
+    data-chrome="noheader nofooter noborders transparent noscrollbar"
+    data-tweet-limit="3"
+    data-link-color="#e44c2c"
+    data-dnt="true"
+  ></a>
+</section>
+
+<section class="mx-auto text-center max-w-6xl py-12 px-4">
+  <h2 class="text-3xl">With the support of:</h2>
+  <div class="my-4">
+    {{ range $sponsors }}
+    <a
+      href="{{ .url }}"
+      target="_blank"
+      rel="sponsored noopener"
+      class="mx-4 inline-block align-middle"
+    >
+      <img src="{{ .img }}" alt="{{ .name }}" width="160" />
+    </a>
+    {{ end }}
+  </div>
+  <a
+    href="https://opencollective.com/pytorch-ignite"
+    class="
+      border-$c-primary border
+      rounded-lg
+      max-w-max
+      py-2
+      px-4
+      inline-block
+      hover:bg-$c-primary hover:text-white
+    "
+    target="_blank"
+    rel="sponsored noopener"
+  >
+    Support PyTorch-Ignite
+  </a>
+</section>
+
+<footer
+  class="border-t mx-auto text-center max-w-6xl py-12 px-4 dark:border-dark-200"
+>
+  <div class="p-4">
+    {{ range $footer }}
+    <a
+      href="{{ .url }}"
+      class="mx-2 text-blue-gray-400 inline-block hover:text-blue-gray-500"
+    >
+      <span class="sr-only">{{ .name }}</span>
+      {{ partial (printf "icons/%s.html" .name) . }}
+    </a>
+    {{ end }}
+  </div>
+  BSD-3-Clause Licensed | Copyright &copy; {{ now.Format "2006" }}
+  PyTorch-Ignite Contributors
+</footer>
+{{ end }}

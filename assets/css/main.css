@@ -1,0 +1,14 @@
+:root {
+  --c-primary: #ee4c2c;
+  --c-secondary: #eaa700;
+}
+.highlight {
+  font-size: .875rem;
+}
+.shiki {
+  border-radius: 6px;
+  overflow: auto;
+  padding: 1.25rem 1.5rem;
+  white-space: pre;
+  word-wrap: normal;
+}

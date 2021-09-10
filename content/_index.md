@@ -1,12 +1,17 @@
 ---
+layout: front
 title: PyTorch-Ignite
 description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
 
-buttontext: GET STARTED
-buttonlink: /tutorials/getting-started/
+actionText: Get Started
+actionLink: /tutorials/getting-started/
 
 # Hero image (from static/images/___)
-image: logos/ignite_logo.svg
+image: /images/logos/ignite_logo.svg
+
+featuredPost:
+    title: 'New release: PyTorch-Ignite'
+    link: https://github.com/pytorch/ignite/releases/latest
 
 features:
   - title: Simple Engine and Event System
@@ -98,6 +103,28 @@ features:
           )
       ```
 
+docs:
+  - title: API Reference
+    text: Access comprehensive developer documentation for PyTorch-Ignite
+    url: https://pytorch.org/ignite/engine.html
+  - title: Tutorials
+    text: Get in-depth tutorials for beginners and advanced developers
+    url: /tutorials/
+  - title: How-to-Guides
+    text: Find short to the point how-to tips, tricks and best practices
+    url: /how-to-guides/
+
+ecosystem:
+  - title: Project MONAI
+    text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
+    url: https://monai.io/
+  - title: Code-Generator
+    text: Application to generate your training scripts with PyTorch-Ignite.
+    url: https://code-generator.pytorch-ignite.ai
+  - title: Nussl
+    text: A flexible source separation library in Python
+    url: https://nussl.github.io/docs/
+
 sponsors:
   - name: NumFOCUS
     url: https://numfocus.org
@@ -109,7 +136,15 @@ sponsors:
     url: https://www.ifpenergiesnouvelles.com/
     img: /images/logos/ifpen.jpg
 
-featuredPost:
-    title: 'New release: PyTorch-Ignite'
-    link: https://github.com/pytorch/ignite/releases/latest
+footer:
+  - name: GitHub
+    url: https://github.com/pytorch/ignite
+  - name: Twitter
+    url: https://twitter.com/pytorch_ignite
+  - name: Facebook
+    url: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
+  - name: DEV
+    url: https://dev.to/pytorch-ignite
+  - name: Discord
+    url: https://discord.gg/djZtm3EmKj
 ---

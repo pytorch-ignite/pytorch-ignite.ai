@@ -1,6 +1,6 @@
 [build]
 publish = "dist"
-command = "npx pnpm i --frozen-lockfile --store=node_modules/.pnpm-store && hugo --gc --minify && node highlight.mjs"
+command = "bash scripts/build.sh"
 
 [build.environment]
 NODE_VERSION = "14"

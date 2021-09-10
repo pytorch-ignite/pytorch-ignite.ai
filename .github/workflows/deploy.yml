@@ -21,8 +21,12 @@ jobs:
           hugo-version: "0.83.1"
           extended: true
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
       - name: Build
-        run: hugo --minify
+        run: bash scripts/build.sh
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

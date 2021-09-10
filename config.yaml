@@ -1,7 +1,5 @@
 baseURL: https://pytorch-ignite.ai
-languageCode: en-us
 title: PyTorch-Ignite
-theme: hugo-fresh
 publishdir: dist
 enableemoji: true
 enableGitInfo: true
@@ -31,7 +29,7 @@ params:
     image: logos/ignite_logomark.svg
     link: /
 
-  navbar:
+  nav:
     - title: Docs
       sublinks:
         - title: Tutorials
@@ -46,41 +44,3 @@ params:
       url: /posts/
     - title: Community
       url: /community/
-
-  section2:
-    title: Ecosystem
-    features:
-      - title: Project MONAI
-        text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-        link: https://monai.io/
-      - title: Nussl
-        text: A flexible source separation library in Python
-        link: https://nussl.github.io/docs/
-      - title: Code-Generator
-        text: Application to generate your training scripts with PyTorch-Ignite.
-        link: https://code-generator.pytorch-ignite.ai
-
-  footer:
-    # Logo (from /images/logos/___)
-    logo: ignite_logomark.svg
-    socialmedia:
-      - link: https://github.com/pytorch/ignite
-        icon: github
-      - link: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
-        icon: facebook
-      - link: https://twitter.com/pytorch_ignite
-        icon: twitter
-      - link: https://dev.to/pytorch-ignite
-        icon: dev
-    quicklinks:
-      column1:
-        title: Resources
-        links:
-          - text: Tutorials
-            link: /tutorials/
-          - text: Docs
-            link: https://pytorch.org/ignite
-          - text: GitHub Discuss
-            link: https://github.com/pytorch/ignite/discussions
-          - text: Discord
-            link: https://discord.gg/djZtm3EmKj
