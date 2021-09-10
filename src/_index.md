@@ -6,8 +6,7 @@ description: High-level library to help with training and evaluating neural netw
 actionText: Get Started
 actionLink: /tutorials/getting-started/
 
-# Hero image (from static/images/___)
-image: /images/logos/ignite_logo.svg
+image: /_images/ignite_logo.svg
 
 featuredPost:
     title: 'New release: PyTorch-Ignite'
@@ -134,7 +133,7 @@ sponsors:
     img: https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/files/images/QuansightLabs_logo_V2.png
   - name: IFP Energies nouvelles
     url: https://www.ifpenergiesnouvelles.com/
-    img: /images/logos/ifpen.jpg
+    img: /_images/ifpen.jpg
 
 footer:
   - name: GitHub

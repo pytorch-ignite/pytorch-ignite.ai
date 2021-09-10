@@ -34,5 +34,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          commit_message: Deploy pytorch-ignite.ai
           force_orphan: true
