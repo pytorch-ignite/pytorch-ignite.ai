@@ -103,16 +103,27 @@ features:
           )
       ```
 
+docs:
+  - title: API Reference
+    text: Access comprehensive developer documentation for PyTorch-Ignite
+    url: https://pytorch.org/ignite/engine.html
+  - title: Tutorials
+    text: Get in-depth tutorials for beginners and advanced developers
+    url: /tutorials/
+  - title: How-to-Guides
+    text: Find short to the point how-to tips, tricks and best practices
+    url: /how-to-guides/
+
 ecosystem:
   - title: Project MONAI
     text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
     url: https://monai.io/
-  - title: Nussl
-    text: A flexible source separation library in Python
-    url: https://nussl.github.io/docs/
   - title: Code-Generator
     text: Application to generate your training scripts with PyTorch-Ignite.
     url: https://code-generator.pytorch-ignite.ai
+  - title: Nussl
+    text: A flexible source separation library in Python
+    url: https://nussl.github.io/docs/
 
 sponsors:
   - name: NumFOCUS

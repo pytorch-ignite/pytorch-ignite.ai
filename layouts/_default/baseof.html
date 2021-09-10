@@ -4,15 +4,14 @@ which include all common head tag and body end partial templates. -->
 {{ $lang := or .Site.LanguageCode "en-US" }}
 
 <!DOCTYPE html>
-<html lang="{{ $lang }}" dir="ltr">
+<html lang="{{ $lang }}" dir="ltr" class="all:transition-all all:duration-500">
 {{ partial "head.html" . }}
 
 <body class="
         bg-white
         font-sans
-        transition-all
         text-blue-gray-600
-        duration-500 antialiased
+        antialiased
         dark:bg-dark-700 dark:text-warm-gray-200
       ">
   {{ partial "NavBar.html" . }}
