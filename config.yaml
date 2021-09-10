@@ -3,6 +3,7 @@ title: PyTorch-Ignite
 publishdir: dist
 enableemoji: true
 enableGitInfo: true
+disableFastRender: true
 googleAnalytics: G-5FELLLFHCP # Put in your tracking code without quotes like this: UA-XXXXXX...
 taxonomies:
   tag: tags
