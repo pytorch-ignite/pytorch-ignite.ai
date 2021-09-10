@@ -24,10 +24,6 @@
   {{ $script := resources.Get "js/copy-code.js" | resources.Minify | resources.Fingerprint }}
   <script src="{{ $script.RelPermalink }}"></script>
 {{- end -}}
-{{- if .IsPage -}}
-{{ $anchor := resources.Get "js/anchor.js" | resources.Minify | resources.Fingerprint }}
-<script src="{{ $anchor.RelPermalink }}"></script>
-{{- end -}}
 
 {{- if .Site.IsServer -}}
 <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.10/dist/index.jsdelivr.iife.min.js"></script>
