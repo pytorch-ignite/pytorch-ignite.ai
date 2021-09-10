@@ -1,0 +1,12 @@
+<!-- https://gohugo.io/getting-started/configuration-markup#link-with-title-markdown-example -->
+<!-- This template should not have newline at the end. It breaks Hugo templating. -->
+
+{{ $href := .Destination | safeURL }}
+{{ $target := ""}}
+{{ $rel := ""}}
+{{ if hasPrefix .Destination "https://" }}
+{{ $target = "_blank" }}
+{{ $rel = "noopener noreferrer" }}
+{{ end }}
+
+<a href="{{ $href }}" target="{{ $target }}" rel="{{ $rel }}">{{ .Text | safeHTML }}</a>

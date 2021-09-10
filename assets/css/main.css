@@ -12,3 +12,22 @@
   white-space: pre;
   word-wrap: normal;
 }
+.dark .prose a {
+  color: var(--c-primary);
+}
+.dark .prose a code {
+  color: inherit;
+}
+.dark .prose code {
+  color: #a78bfa;
+}
+.prose h1 .header-anchor,
+.prose h2 .header-anchor,
+.prose h3 .header-anchor,
+.prose h4 .header-anchor,
+.prose h5 .header-anchor,
+.prose h6 .header-anchor {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
