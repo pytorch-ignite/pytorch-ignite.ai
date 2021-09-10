@@ -48,10 +48,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css"
     type="text/css" />
 
-  {{ $style := resources.Get "css/style.css" }}
+  {{ $style := resources.Get "_hugo/css/style.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
-  {{ $style := resources.Get "css/main.css" }}
+  {{ $style := resources.Get "_hugo/css/main.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
   <script>

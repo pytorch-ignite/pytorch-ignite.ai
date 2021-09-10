@@ -11,25 +11,25 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
-{{ $modernizr := resources.Get "js/modernizr.js" | resources.Minify | resources.Fingerprint }}
+{{ $modernizr := resources.Get "_hugo/js/modernizr.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $modernizr.RelPermalink }}"></script>
-{{ $fresh := resources.Get "js/fresh.js" | resources.Minify | resources.Fingerprint }}
+{{ $fresh := resources.Get "_hugo/js/fresh.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $fresh.RelPermalink }}"></script>
-{{ $activeNavbar := resources.Get "js/active-navbar.js" | resources.Minify | resources.Fingerprint }}
+{{ $activeNavbar := resources.Get "_hugo/js/active-navbar.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $activeNavbar.RelPermalink }}"></script>
-<script src='{{ "js/jquery.panelslider.min.js" | relURL }}'></script>
+<script src='{{ "_hugo/js/jquery.panelslider.min.js" | relURL }}'></script>
 {{- if (findRE "<pre" .Content 1) -}}
-  {{ $style := resources.Get "css/copy-code.css" | resources.Minify | resources.Fingerprint }}
+  {{ $style := resources.Get "_hugo/css/copy-code.css" | resources.Minify | resources.Fingerprint }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{ $script := resources.Get "js/copy-code.js" | resources.Minify | resources.Fingerprint }}
+  {{ $script := resources.Get "_hugo/js/copy-code.js" | resources.Minify | resources.Fingerprint }}
   <script src="{{ $script.RelPermalink }}"></script>
 {{- end -}}
 
 {{- if .Site.IsServer -}}
 <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.10/dist/index.jsdelivr.iife.min.js"></script>
-{{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
+{{ $shiki := resources.Get "_hugo/js/shiki.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $shiki.RelPermalink }}"></script>
 {{- end -}}
 
-{{ $script := resources.Get "js/toggleDark.js" | resources.Minify | resources.Fingerprint }}
+{{ $script := resources.Get "_hugo/js/toggleDark.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $script.RelPermalink }}"></script>
