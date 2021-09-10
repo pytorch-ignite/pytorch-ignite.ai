@@ -30,7 +30,10 @@
 {{- end -}}
 
 {{- if .Site.IsServer -}}
-<script src="https://cdn.jsdelivr.net/npm/shiki@0.9.8/dist/index.jsdelivr.iife.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/shiki@0.9.10/dist/index.jsdelivr.iife.min.js"></script>
 {{ $shiki := resources.Get "js/shiki.js" | resources.Minify | resources.Fingerprint }}
 <script src="{{ $shiki.RelPermalink }}"></script>
 {{- end -}}
+
+{{ $script := resources.Get "js/toggleDark.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $script.RelPermalink }}"></script>

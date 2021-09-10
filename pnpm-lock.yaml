@@ -2,11 +2,15 @@ lockfileVersion: 5.3
 
 specifiers:
   jsdom: ^17.0.0
+  prettier: ^2.4.0
   shiki: ^0.9.8
+  windicss: ^3.1.7
 
 devDependencies:
   jsdom: 17.0.0
+  prettier: 2.4.0
   shiki: 0.9.8
+  windicss: 3.1.7
 
 packages:
 
@@ -319,6 +323,12 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
+  /prettier/2.4.0:
+    resolution: {integrity: sha512-DsEPLY1dE5HF3BxCRBmD4uYZ+5DCbvatnolqTqcxEgKVZnL2kUfyu7b8pPQ5+hTBkdhU9SLUmK0/pHb07RE4WQ==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
   /psl/1.8.0:
     resolution: {integrity: sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==}
     dev: true
@@ -429,6 +439,12 @@ packages:
     dependencies:
       tr46: 2.1.0
       webidl-conversions: 6.1.0
+    dev: true
+
+  /windicss/3.1.7:
+    resolution: {integrity: sha512-Q/HQ9j+r2R0fdt85zAjccdo11kHWzQmpkuwIUQIO6PSypyDmBTfN14aAy4szLrpgo2woyuHM7Y+kir4IG4qnKQ==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /word-wrap/1.2.3:
