@@ -39,7 +39,7 @@
   <meta property="og:title" content="{{ .Title }} | {{ .Site.Title }}" />
   <meta name="twitter:title" content="{{ .Title }} | {{ .Site.Title }}" />
   {{ end }}
-  <link rel="icon" type="image/svg+xml" href="{{ "images/logos/ignite_logomark.svg" | relURL }}" />
+  <link rel="icon" type="image/svg+xml" href="_images/ignite_logomark.svg" />
 
   <!-- css -->
   <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
@@ -48,10 +48,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css"
     type="text/css" />
 
-  {{ $style := resources.Get "css/style.css" }}
+  {{ $style := resources.Get "_hugo/css/style.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
-  {{ $style := resources.Get "css/main.css" }}
+  {{ $style := resources.Get "_hugo/css/main.css" }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
   <script>

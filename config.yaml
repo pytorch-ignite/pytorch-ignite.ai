@@ -1,34 +1,27 @@
 baseURL: https://pytorch-ignite.ai
-title: PyTorch-Ignite
-publishdir: dist
-enableemoji: true
+contentDir: src
+enableEmoji: true
 enableGitInfo: true
 googleAnalytics: G-NQNJSZEFB4 # Put in your tracking code without quotes like this: UA-XXXXXX...
 taxonomies:
   tag: tags
 
 markup:
-  highlight:
-    lineNos: false
-    tabWidth: 4
-  tableOfContents:
-    endLevel: 3
-    ordered: false
-    startLevel: 2
   goldmark:
     renderer:
-      unsafe: true # Allows you to write raw html in your md files
+      unsafe: true
 
-# for customizing https://stefma.github.io/hugo-fresh/getstarted/
+# menu:  # need to revisit
+
+minify:
+  minifyOutput: true
+
+taxonomies:
+  tag: tags
+
+
 params:
-  images:
-    - images/logos/ignite_logo_feature.png
   description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
-  navbarlogo:
-    # Logo (from static/images/logos/___)
-    image: logos/ignite_logomark.svg
-    link: /
-
   nav:
     - title: Docs
       sublinks:
