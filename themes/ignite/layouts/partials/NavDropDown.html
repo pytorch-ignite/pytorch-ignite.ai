@@ -1,3 +1,5 @@
+{{ $RelPermalink := .RelPermalink }}
+
 <div class="mx-2 relative group">
   <button>{{ .title }}</button>
   <span
@@ -6,7 +8,7 @@
     class="bg-white border rounded-lg min-w-50 p-2 right-0 absolute hidden dark:bg-dark-700 dark:border-dark-200 group-hover:block">
     {{ range .sublinks }}
     <li class="children:rounded-lg children:hover:bg-gray-200 dark:children:hover:bg-dark-200">
-      {{ partial "NavLink.html" . }}
+      {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
     </li>
     {{ end }}
   </ul>
