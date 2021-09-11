@@ -3,9 +3,11 @@
   <span
     class="border-l-transparent border-r-transparent border-t-6 border-l-4 border-r-4 border-t-gray-400 border-b-0 ml-1 align-middle inline-block"></span>
   <ul
-    class="bg-white border rounded-lg min-w-max py-2 px-4 right-0 absolute hidden dark:border dark:bg-dark-700 dark:border-dark-200 group-hover:block">
+    class="bg-white border rounded-lg min-w-50 p-2 right-0 absolute hidden dark:bg-dark-700 dark:border-dark-200 group-hover:block">
     {{ range .sublinks }}
-    <li>{{ partial "NavLink.html" . }}</li>
+    <li class="children:rounded-lg children:hover:bg-gray-200 dark:children:hover:bg-dark-200">
+      {{ partial "NavLink.html" . }}
+    </li>
     {{ end }}
   </ul>
 </div>

@@ -1,4 +1,8 @@
-{{- define "main" -}}
+{{ define "main" }}
 <!-- This template apply to all other *.md except for _index.md -->
-{{- partial "ContentMain.html" . -}}
-{{- end -}}
+<div class="grid px-4 gap-x-4 grid-cols-[20vw,1fr,20vw]">
+  {{ partial "single/sidebar.html" . }}
+  {{ partial "ContentMain.html" . }}
+  {{ partial "TOC.html" . }}
+</div>
+{{ end }}
