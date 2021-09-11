@@ -101,7 +101,7 @@
     <h2 class="font-light text-2xl uppercase">{{ .title }}</h2>
     <p class="py-2 text-blue-gray-500">{{ .details }}</p>
   </div>
-  <div>{{ .code | markdownify }}</div>
+  <div class="prose">{{ .code | markdownify }}</div>
   {{ end }}
 </section>
 
