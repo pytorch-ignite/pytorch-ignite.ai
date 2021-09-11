@@ -1,8 +1,6 @@
 {{ $target := "" }} {{ $rel := "" }} {{ if hasPrefix .url "https://"}} {{
 $target = "_blank" }} {{ $rel = "noopener noreferrer" }} {{ end }}
 
-<div class="p-2">
-  <a href="{{ .url }}" target="{{ $target }}" rel="{{ $rel }}" class="block whitespace-nowrap hover:text-$c-primary">
-    {{ .title }}
-  </a>
-</div>
+<a href="{{ .url }}" target="{{ $target }}" rel="{{ $rel }}" class="p-2 block whitespace-nowrap hover:text-$c-primary">
+  {{ .title }}
+</a>

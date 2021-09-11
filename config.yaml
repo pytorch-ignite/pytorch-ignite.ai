@@ -14,7 +14,7 @@ markup:
 # menu:  # need to revisit
 
 minify:
-  minifyOutput: true
+  minifyOutput: false
 
 taxonomies:
   tag: tags

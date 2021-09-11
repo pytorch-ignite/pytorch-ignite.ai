@@ -2,16 +2,6 @@
   --c-primary: #ee4c2c;
   --c-secondary: #eaa700;
 }
-.highlight {
-  font-size: .875rem;
-}
-.shiki {
-  border-radius: 6px;
-  overflow: auto;
-  padding: 1.25rem 1.5rem;
-  white-space: pre;
-  word-wrap: normal;
-}
 .dark .prose a {
   color: var(--c-primary);
 }
@@ -30,4 +20,13 @@
   color: inherit;
   font-weight: inherit;
   text-decoration: none;
+}
+#TableOfContents li > ul {
+  margin-left: 1rem;
+}
+#TableOfContents li {
+  padding: .5rem .25rem;
+}
+#TableOfContents a:hover {
+  color: var(--c-primary);
 }
