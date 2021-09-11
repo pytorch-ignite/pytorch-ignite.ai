@@ -1,3 +1,18 @@
-<main class="min-w-full py-6 px-6 prose prose-red">
-  {{ .Content }}
-</main>
+{{ $tags := .Params.tags }}
+
+<div class="py-6 px-6">
+  <div class="py-3">
+    {{ if $tags }}
+    {{ range $tags }}
+    <span class="rounded-lg bg-red-500 text-sm py-1 px-2 not-last:mr-2">
+      <a href="/tags/{{ . | urlize}}" class="text-white">{{ . }}</a>
+    </span>
+    {{ end }}
+    {{ end }}
+  </div>
+  <main class="min-w-full prose prose-red">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ partial "NextAndPrevLinks.html" . }}
+  </main>
+</div>

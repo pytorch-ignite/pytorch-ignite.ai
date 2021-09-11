@@ -1,0 +1,18 @@
+<div class="border-t grid py-12 gap-x-4 grid-cols-2 dark:border-dark-200">
+  <div>
+    {{ if .NextInSection }}
+    <a href="{{ .NextInSection.RelPermalink }}" class="group">
+      {{ partial "icons/ArrowLeft.html" . }}
+      {{ .NextInSection.Title }}
+    </a>
+    {{ end }}
+  </div>
+  <div>
+    {{ if .PrevInSection }}
+    <a href="{{ .PrevInSection.RelPermalink }}" class="group float-right">
+      {{ .PrevInSection.Title }}
+      {{ partial "icons/ArrowRight.html" . }}
+    </a>
+    {{ end }}
+  </div>
+</div>
