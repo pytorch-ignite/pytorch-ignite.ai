@@ -1,13 +1,13 @@
-{{- define "main" -}}
-<main class="section posts {{ if .Params.sidebar }}has-sidebar{{ end }}">
-  <div class="container divide {{ if .Params.sidebar }}sidebar-on{{ end }}">
-  <h1 class="title">{{ .Title }}</h1>
-  <p class="subtitle">{{ .Params.subtitle }}</p>
-  <ul class="blogs">
+{{ define "main" }}
+<main class="mx-auto max-w-3xl py-12 px-6">
+  <div class="max-w-none prose prose-red">
+    {{ .Content }}
+  </div>
+  <ul class="">
     {{ range .Pages.ByDate.Reverse }}
-    <li class="blog">
-      <article class="article">
-        <div class="date">
+    <li class="divide-y py-12">
+      <article class="max-w-none prose prose-red">
+        <time datetime="{{ time .Date }}">
           <span class="sr-only">Published on</span>
           {{ .Date.Format "January 2, 2006" }} –
           {{ if gt .ReadingTime 1 }}
@@ -15,30 +15,28 @@
           {{ else }}
           <span>{{ .ReadingTime }} min</span>
           {{ end }}
-        </div>
-        <div class="line">
-          <h1 class="blog-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
-          {{- if .Params.image -}}
-          <p align="center">
+        </time>
+        <h2 class=""><a href="{{ .RelPermalink }}" class="!no-underline">{{ .Title }}</a></h2>
+        {{ if .Params.image }}
+        <p align="center">
           <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
-          </p>
-          {{- end -}}
-          <div class="summary">{{ .Summary }}</div>
-          <div class="tags">
-            {{ range .Params.tags }}
-            <span class="tag">
-              <a href="/tags/{{ . | urlize }}/">
+        </p>
+        {{ end }}
+        {{ partial "Summary.html" . }}
+        <div class="">
+          {{ range .Params.tags }}
+          <span class="rounded-lg bg-red-500 text-sm py-1 px-2 not-last:mr-2">
+            <a href="/tags/{{ . | urlize }}/" class="!text-white !no-underline">
               {{ . }}
-              </a>
-            </span>
-            {{ end }}
-          </div>
-          <div class="read-more"><a href="{{ .RelPermalink }}">Read More →</a></div>
+            </a>
+          </span>
+          {{ end }}
         </div>
+        <div class=""><a href="{{ .RelPermalink }}" class="!no-underline">Read More →</a></div>
       </article>
     </li>
     {{ end }}
   </ul>
   </div>
 </main>
-{{- end -}}
+{{ end }}

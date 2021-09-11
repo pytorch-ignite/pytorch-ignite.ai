@@ -16,6 +16,8 @@ tags:
   - Tutorial
 ---
 
+# Introduction to PyTorch-Ignite
+
 This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
 
 Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.

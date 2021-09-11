@@ -5,7 +5,7 @@
     {{ if $tags }}
     {{ range $tags }}
     <span class="rounded-lg bg-red-500 text-sm py-1 px-2 not-last:mr-2">
-      <a href="/tags/{{ . | urlize}}" class="text-white">{{ . }}</a>
+      <a href="/tags/{{ . | urlize }}" class="text-white">{{ . }}</a>
     </span>
     {{ end }}
     {{ end }}
