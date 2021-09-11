@@ -1,6 +1,8 @@
 :root {
   --c-primary: #ee4c2c;
   --c-secondary: #eaa700;
+  --header-height: 55px;
+  --aside-height: calc(100vh - var(--header-height));
 }
 .dark .prose a {
   color: var(--c-primary);
