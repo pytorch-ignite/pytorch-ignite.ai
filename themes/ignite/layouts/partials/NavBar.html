@@ -1,4 +1,5 @@
 {{ $nav := .Site.Params.nav }}
+{{ $RelPermalink := .RelPermalink }}
 
 <header class="
   bg-white
@@ -25,8 +26,13 @@
   </a>
   <div class="flex-grow"></div>
   <nav class="flex place-content-center place-items-center">
-    {{ range $nav }} {{ if .sublinks }} {{ partial "NavDropDown.html" . }} {{
-    else }} {{ partial "NavLink.html" . }} {{ end }} {{ end }}
+    {{ range $nav }}
+      {{ if .sublinks }}
+        {{ partial "NavDropDown.html" (dict "sublinks" .sublinks "title" .title "RelPermalink" $RelPermalink) }}
+      {{ else }}
+        {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
+      {{ end }}
+      {{ end }}
     <button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2">
       {{ partial "icons/Sun.html" . }}
       {{ partial "icons/Moon.html" . }}
