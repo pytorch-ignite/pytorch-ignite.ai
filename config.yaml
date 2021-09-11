@@ -12,8 +12,6 @@ markup:
     renderer:
       unsafe: true
 
-# menu:  # need to revisit
-
 minify:
   minifyOutput: false
 
@@ -38,3 +36,22 @@ params:
       url: /posts/
     - title: Community
       url: /community/
+
+  sidebar:
+    - text: How-to Guides
+      children:
+        - text: Installation
+          link: /how-to-guides/installation/
+        - text: Data Iterator
+          link: /how-to-guides/data-iterator/
+        - text: FastAI LR Finder
+          link: /how-to-guides/fastai-lr-finder/
+        - text: Gradient Accumulation
+          link: /how-to-guides/gradient-accumulation/
+        - text: Time Profiling
+          link: /how-to-guides/time-profiling/
+
+    - text: Tutorials
+      children:
+        - text: Gettin Started
+          link: /tutorials/getting-started/

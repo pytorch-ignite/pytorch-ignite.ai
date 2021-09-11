@@ -1,0 +1,25 @@
+{{ $active := "" }}
+{{ $url := .RelPermalink }}
+
+<aside>
+  <nav class="h-$aside-height top-$header-height py-6 pl-6 bottom-0 left-0 sticky overflow-y-auto">
+    <ul>
+      {{ range .Site.Params.sidebar }}
+      <li class="py-1">
+        <h5 class="font-semibold uppercase">{{ .text }}</h5>
+        <ul class="ml-4">
+          {{ range .children }}
+          <li class="py-1">
+            {{ if eq $url .link }}
+            {{ $active = "text-$c-primary" }}
+            {{ end }}
+            <a href="{{ .link }}" class="{{ $active }} hover:text-$c-primary">{{ .text }}</a>
+            {{ $active = "" }}
+          </li>
+          {{ end }}
+        </ul>
+      </li>
+      {{ end }}
+    </ul>
+  </nav>
+</aside>
