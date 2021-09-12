@@ -1,44 +1,26 @@
-{{- define "main" -}}
-<!-- This template apply to all other *.md except for _index.md -->
-<!-- Based from layouts/partials/single/content.html -->
-<section class="section is-medium {{ if .Params.sidebar }}has-sidebar{{ end }}">
-  {{- if .Params.downloads -}}
-    {{ partial "downloads.html" . }}
-  {{- end -}}
-  <div class="container {{ if .Params.sidebar }}sidebar-on{{ end }}">
-    <div class="columns">
-      <div class="column is-centered-tablet-portrait">
-        {{- if .Params.date -}}
-        <div class="date">
-          <span class="sr-only">Published on</span>
-          {{ .Date.Format "January 2, 2006" }}
-        </div>
-        <h1 class="post-title">{{ .Title }}</h1>
-        {{- end -}}
-        {{- if .Params.image -}}
-        <div class="post-image">
-        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}">
-        </div>
-        {{- end -}}
-        <h5 class="subtitle is-muted is-5">{{ .Params.Subtitle }}</h5>
-        <div class="divider"></div>
-        <div class="mt-20 tags">
-          {{ range .Params.tags }}
-          <span class="tag">
-            <a href="/tags/{{ . | urlize }}/">
-            {{ . }}
-            </a>
-          </span>
-          {{ end }}
-        </div>
-        <div class="">Last updated: {{ dateFormat "January 2, 2006" .Lastmod }}</div>
-      </div>
+{{ define "main" }}
+<main class="mx-auto max-w-3xl py-12 px-6 prose prose-red">
+  <div class="py-3">
+    {{ range .Params.tags }}
+    <span class="text-sm not-last:mr-2">
+      <a href="/tags/{{ . | urlize }}/">
+        #{{ . }}
+      </a>
+    </span>
+    {{ end }}
+    <div>
+      <time datetime="{{ time .Date }}">
+        <span class="sr-only">Published on</span>
+        {{ .Date.Format "January 2, 2006" }} –
+        {{ if gt .ReadingTime 1 }}
+        <span>{{ .ReadingTime }} mins</span>
+        {{ else }}
+        <span>{{ .ReadingTime }} min</span>
+        {{ end }}
+      </time>
     </div>
-
-    <div class="content">
-      {{ .Content }}
-    </div>
-    {{ partial "NextAndPrevLinks.html" . }}
   </div>
-</section>
-{{- end -}}
+  {{ .Content }}
+  {{ partial "NextAndPrevLinks.html" . }}
+</main>
+{{ end }}
