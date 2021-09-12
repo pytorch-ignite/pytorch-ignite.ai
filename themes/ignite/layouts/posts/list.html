@@ -1,12 +1,11 @@
 {{ define "main" }}
-<main class="mx-auto max-w-3xl py-12 px-6">
-  <div class="max-w-none prose prose-red">
-    {{ .Content }}
-  </div>
-  <ul class="">
+<main class="mx-auto max-w-3xl py-12 px-6 prose prose-red">
+  {{ .Content }}
+  <ul class="divide-y border-t dark:divide-dark-200 dark:border-dark-200">
     {{ range .Pages.ByDate.Reverse }}
-    <li class="divide-y py-12">
-      <article class="max-w-none prose prose-red">
+    <li class="!pl-0 before:hidden">
+      <article>
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
         <time datetime="{{ time .Date }}">
           <span class="sr-only">Published on</span>
           {{ .Date.Format "January 2, 2006" }} –
@@ -16,27 +15,15 @@
           <span>{{ .ReadingTime }} min</span>
           {{ end }}
         </time>
-        <h2 class=""><a href="{{ .RelPermalink }}" class="!no-underline">{{ .Title }}</a></h2>
         {{ if .Params.image }}
-        <p align="center">
-          <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
-        </p>
+        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" width="120" height="100%"
+          class="rounded-lg mx-auto w-4/5" />
         {{ end }}
         {{ partial "Summary.html" . }}
-        <div class="">
-          {{ range .Params.tags }}
-          <span class="rounded-lg bg-red-500 text-sm py-1 px-2 not-last:mr-2">
-            <a href="/tags/{{ . | urlize }}/" class="!text-white !no-underline">
-              {{ . }}
-            </a>
-          </span>
-          {{ end }}
-        </div>
-        <div class=""><a href="{{ .RelPermalink }}" class="!no-underline">Read More →</a></div>
+        <a href="{{ .RelPermalink }}" class="group">Read More{{ partial "icons/ArrowRight.html" . }}</a>
       </article>
     </li>
     {{ end }}
   </ul>
-  </div>
 </main>
 {{ end }}
