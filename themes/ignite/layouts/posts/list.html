@@ -1,13 +1,12 @@
-{{- define "main" -}}
-<main class="section posts {{ if .Params.sidebar }}has-sidebar{{ end }}">
-  <div class="container divide {{ if .Params.sidebar }}sidebar-on{{ end }}">
-  <h1 class="title">{{ .Title }}</h1>
-  <p class="subtitle">{{ .Params.subtitle }}</p>
-  <ul class="blogs">
+{{ define "main" }}
+<main class="mx-auto max-w-3xl py-12 px-6 prose prose-red">
+  {{ .Content }}
+  <ul class="divide-y border-t dark:divide-dark-200 dark:border-dark-200">
     {{ range .Pages.ByDate.Reverse }}
-    <li class="blog">
-      <article class="article">
-        <div class="date">
+    <li class="!pl-0 before:hidden">
+      <article>
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <time datetime="{{ time .Date }}">
           <span class="sr-only">Published on</span>
           {{ .Date.Format "January 2, 2006" }} –
           {{ if gt .ReadingTime 1 }}
@@ -15,30 +14,16 @@
           {{ else }}
           <span>{{ .ReadingTime }} min</span>
           {{ end }}
-        </div>
-        <div class="line">
-          <h1 class="blog-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
-          {{- if .Params.image -}}
-          <p align="center">
-          <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" />
-          </p>
-          {{- end -}}
-          <div class="summary">{{ .Summary }}</div>
-          <div class="tags">
-            {{ range .Params.tags }}
-            <span class="tag">
-              <a href="/tags/{{ . | urlize }}/">
-              {{ . }}
-              </a>
-            </span>
-            {{ end }}
-          </div>
-          <div class="read-more"><a href="{{ .RelPermalink }}">Read More →</a></div>
-        </div>
+        </time>
+        {{ if .Params.image }}
+        <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" width="120" height="100%"
+          class="rounded-lg mx-auto w-4/5" />
+        {{ end }}
+        {{ partial "Summary.html" . }}
+        <a href="{{ .RelPermalink }}" class="group">Read More{{ partial "icons/ArrowRight.html" . }}</a>
       </article>
     </li>
     {{ end }}
   </ul>
-  </div>
 </main>
-{{- end -}}
+{{ end }}

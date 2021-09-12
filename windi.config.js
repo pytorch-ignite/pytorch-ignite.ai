@@ -16,7 +16,7 @@ module.exports = defineConfig({
       typography: {
         DEFAULT: {
           css: {
-            a: { '&:hover': { textDecoration: 'none' } },
+            a: { textDecoration: 'none' },
             code: { color: colors.violet[500] },
           }
         }

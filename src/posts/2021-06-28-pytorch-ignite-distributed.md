@@ -5,7 +5,7 @@ slug: distributed-made-easy-with-ignite
 description: Distributed code with PyTorch-Ignite
 date: 2021-06-28
 draft: false
-image: /images/logos/ignite_logo_mixed.svg
+image: /_images/ignite_logo_mixed.svg
 alt: PyTorch-Ignite logo
 tags:
   - Deep Learning
@@ -18,6 +18,8 @@ tags:
   - PyTorch DDP
   - Distributed
 ---
+
+# Distributed Training Made Easy with PyTorch-Ignite
 
 Writing [agnostic](<https://en.wikipedia.org/wiki/Agnostic_(data)>) [distributed code](https://pytorch.org/tutorials/beginner/dist_overview.html) that supports different platforms, hardware configurations (GPUs, TPUs) and communication frameworks is tedious. In this blog, we will discuss how [PyTorch-Ignite](https://pytorch.org/ignite/) solves this problem with minimal code change.
 
