@@ -11,7 +11,12 @@
     <div>
       <time datetime="{{ time .Date }}">
         <span class="sr-only">Published on</span>
-        {{ .Date.Format "January 2, 2006" }}
+        {{ .Date.Format "January 2, 2006" }} –
+        {{ if gt .ReadingTime 1 }}
+        <span>{{ .ReadingTime }} mins</span>
+        {{ else }}
+        <span>{{ .ReadingTime }} min</span>
+        {{ end }}
       </time>
     </div>
   </div>
