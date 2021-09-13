@@ -1,18 +1,33 @@
 {{ $tags := .Params.tags }}
 
-<div class="py-6 px-6">
-  <div class="py-3">
-    {{ if $tags }}
+<main class="min-w-0 py-6 px-6 prose prose-red">
+  {{ if $tags }}
+  <div class="pb-2">
     {{ range $tags }}
-    <span class="rounded-lg bg-red-500 text-sm py-1 px-2 not-last:mr-2">
-      <a href="/tags/{{ . | urlize }}" class="text-white">{{ . }}</a>
+    <span class="text-sm not-last:mr-2">
+      <a href="/tags/{{ . | urlize }}/">
+        #{{ . }}
+      </a>
     </span>
     {{ end }}
-    {{ end }}
   </div>
-  <main class="min-w-full prose prose-red">
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    {{ partial "NextAndPrevLinks.html" . }}
-  </main>
-</div>
+  {{ end }}
+  {{ if and (.Date) (eq .Section "posts") }}
+  <div class="pb-2">
+    <time datetime="{{ time .Date }}">
+      <span class="sr-only">Published on</span>
+      {{ .Date.Format "January 2, 2006" }} –
+      {{ if gt .ReadingTime 1 }}
+      <span>{{ .ReadingTime }} mins</span>
+      {{ else }}
+      <span>{{ .ReadingTime }} min</span>
+      {{ end }}
+    </time>
+  </div>
+  {{ end }}
+  {{ .Content }}
+  <p>Last updated:
+    <time datetime="{{ time .Lastmod }}">{{ dateFormat "January 2, 2006" .Lastmod }}</time>
+  </p>
+  {{ partial "NextAndPrevLinks.html" . }}
+</main>

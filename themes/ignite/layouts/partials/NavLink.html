@@ -2,17 +2,18 @@
 {{ $target := "" }}
 {{ $rel := "" }}
 {{ if hasPrefix .url "https://"}}
-  {{ $target = "_blank" }}
-  {{ $rel = "noopener noreferrer" }}
+{{ $target = "_blank" }}
+{{ $rel = "noopener noreferrer" }}
 {{ end }}
 
 {{ $active := "" }}
 
 {{ if in $RelPermalink .url }}
-  {{ $active = "text-$c-primary" }}
+{{ $active = "text-$c-primary" }}
 {{ end }}
 
 
-<a href="{{ .url }}" target="{{ $target }}" rel="{{ $rel }}" class="p-2 block whitespace-nowrap hover:text-$c-primary {{ $active }}">
+<a href="{{ .url }}" target="{{ $target }}" rel="{{ $rel }}"
+  class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary {{ $active }}">
   {{ .title }}
 </a>

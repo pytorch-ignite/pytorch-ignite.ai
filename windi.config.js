@@ -16,6 +16,7 @@ module.exports = defineConfig({
       typography: {
         DEFAULT: {
           css: {
+            maxWidth: 'none',
             a: { textDecoration: 'none' },
             code: { color: colors.violet[500] },
           }
