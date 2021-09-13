@@ -1,18 +1,29 @@
 {{ $active := "" }}
 {{ $url := .RelPermalink }}
 
-<aside>
-  <nav class="h-$aside-height top-$header-height py-6 pl-6 bottom-0 left-0 sticky overflow-y-auto">
+<aside
+  class="bg-white h-$aside-height top-$header-height p-4 transform z-10 fixed overflow-y-auto lg:sticky <lg:-translate-x-full <lg:w-64 dark:bg-dark-700"
+  id="sidebar">
+  <div class="lg:hidden">
+    {{ partial "NavBar.html" . }}
+  </div>
+  <hr class="lg:hidden">
+  <nav>
     <ul>
       <li class="py-1">
         <h5 class="font-semibold uppercase">{{ .Section }}</h5>
-        <ul class="ml-4">
+        <ul>
           {{ range where .Site.RegularPages "Section" .Section }}
           <li class="py-1">
             {{ if eq $url .RelPermalink }}
             {{ $active = "text-$c-primary" }}
             {{ end }}
             <a href="{{ .RelPermalink }}" class="{{ $active }} hover:text-$c-primary">{{ .Title }}</a>
+            {{ if $active }}
+            <div class="lg:hidden">
+              {{ .TableOfContents }}
+            </div>
+            {{ end }}
             {{ $active = "" }}
           </li>
           {{ end }}

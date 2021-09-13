@@ -1,41 +1,11 @@
-{{ $nav := .Site.Params.nav }}
 {{ $RelPermalink := .RelPermalink }}
 
-<header class="
-  bg-white
-  border-b
-    flex
-    max-h-$header-height
-    py-2
-    px-6
-    top-0
-    right-0
-    left-0
-    z-10
-    justify-between
-    items-center
-    sticky
-    <sm:px-4
-    dark:bg-dark-700
-    dark:border-b-dark-200
-  ">
-  <a href="/">
-    <img src="/_images/ignite_logomark.svg"
-      alt="PyTorch-Ignite logo" width="50" height="50" class="h-[40px] w-full" />
-    <span class="sr-only">PyTorch-Ignite</span>
-  </a>
-  <div class="flex-grow"></div>
-  <nav class="flex place-content-center place-items-center">
-    {{ range $nav }}
-      {{ if .sublinks }}
-        {{ partial "NavDropDown.html" (dict "sublinks" .sublinks "title" .title "RelPermalink" $RelPermalink) }}
-      {{ else }}
-        {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
-      {{ end }}
-      {{ end }}
-    <button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2">
-      {{ partial "icons/Sun.html" . }}
-      {{ partial "icons/Moon.html" . }}
-    </button>
-  </nav>
-</header>
+<nav class="place-content-center place-items-center block lg:flex">
+  {{ range .Site.Params.nav }}
+  {{ if .sublinks }}
+  {{ partial "NavDropDown.html" (dict "sublinks" .sublinks "title" .title "RelPermalink" $RelPermalink) }}
+  {{ else }}
+  {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
+  {{ end }}
+  {{ end }}
+</nav>

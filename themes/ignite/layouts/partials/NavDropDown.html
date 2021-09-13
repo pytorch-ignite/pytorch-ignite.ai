@@ -1,14 +1,27 @@
 {{ $RelPermalink := .RelPermalink }}
 
-<div class="mx-2 relative group">
-  <button>{{ .title }}</button>
-  <span
-    class="border-l-transparent border-r-transparent border-t-6 border-l-4 border-r-4 border-t-gray-400 border-b-0 ml-1 align-middle inline-block"></span>
-  <ul
-    class="bg-white border rounded-lg min-w-50 p-2 right-0 absolute hidden dark:bg-dark-700 dark:border-dark-200 group-hover:block">
+<div class="p-1 relative group lg:p-2">
+  <button id="dropDownBtn">{{ .title }}</button>
+  {{ partial "icons/ChevronRight.html" . }}
+  <ul id="dropDownList" class="
+      bg-white
+      border
+      rounded-lg
+      min-w-50
+      p-2
+      right-0
+      hidden
+      lg:absolute
+      dark:bg-dark-700 dark:border-dark-200
+      lg:group-hover:block
+    ">
     {{ range .sublinks }}
-    <li class="children:rounded-lg children:hover:bg-gray-200 dark:children:hover:bg-dark-200">
-      {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
+    <li class="
+        children:rounded-lg children:hover:bg-gray-200
+        dark:children:hover:bg-dark-200
+      ">
+      {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink"
+      $RelPermalink) }}
     </li>
     {{ end }}
   </ul>

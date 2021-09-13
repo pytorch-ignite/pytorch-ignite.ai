@@ -13,6 +13,12 @@ function toggle() {
   toggle.addEventListener('click', function (e) {
     toggleClassList()
     document.documentElement.classList.toggle('dark')
+    const theme = document.documentElement.dataset.theme
+    if (theme) {
+      document.documentElement.dataset.theme = ''
+    } else {
+      document.documentElement.dataset.theme = 'dark'
+    }
     save()
   })
 
