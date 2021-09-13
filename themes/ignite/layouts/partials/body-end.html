@@ -1,25 +1,30 @@
-{{- if (findRE "<pre" .Content 1) -}}
-  {{ $style := resources.Get "_hugo/css/copy-code.css" | resources.Minify | resources.Fingerprint }}
-  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
-  {{ $script := resources.Get "_hugo/js/copy-code.js" | resources.Minify | resources.Fingerprint }}
-  <script src="{{ $script.RelPermalink }}"></script>
-{{- end -}}
-
 {{- if .Site.IsServer -}}
-<script src="https://cdn.jsdelivr.net/npm/shiki@0.9.10/dist/index.jsdelivr.iife.min.js"></script>
-{{ $shiki := resources.Get "_hugo/js/shiki.js" | resources.Minify | resources.Fingerprint }}
-<script src="{{ $shiki.RelPermalink }}"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.10/dist/index.jsdelivr.iife.min.js"></script> -->
+
+  <!-- {{ $script := resources.Get "_hugo/js/shiki.js" }}
+  <script src="{{ $script.RelPermalink }}" defer></script> -->
+
+  {{ $script := resources.Get "_hugo/js/embedCopyBtn.js" }}
+  <script src="{{ $script.RelPermalink }}" defer></script>
+
 {{- end -}}
 
-{{ $script := resources.Get "_hugo/js/toggleDark.js" | resources.Minify | resources.Fingerprint }}
-<script src="{{ $script.RelPermalink }}"></script>
+{{ $script := resources.Get "_hugo/js/toggleDark.js" | fingerprint "md5" | minify }}
+<script src="{{ $script.RelPermalink }}" defer></script>
 
-{{ $script := resources.Get "_hugo/js/main.js" | resources.Minify | resources.Fingerprint }}
+{{ $script := resources.Get "_hugo/js/main.js" | fingerprint "md5" | minify }}
+<script src="{{ $script.RelPermalink }}" defer></script>
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+{{ $script := resources.Get "_hugo/js/embedTweets.js" }}
 <script src="{{ $script.RelPermalink }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
 <script>
   docsearch({
     container: '#docsearch',
+    apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
+    indexName: 'ignite',
   })
 </script>
