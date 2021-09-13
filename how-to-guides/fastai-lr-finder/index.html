@@ -1,0 +1,187 @@
+<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script><script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script><meta property="og:title" content="How to use FastaiLRFinder with Ignite"><meta property="og:description" content="This how-to guide demonstrates how we can leverage the FastaiLRFinder handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding."><meta property="og:type" content="article"><meta property="og:url" content="https://pytorch-ignite.ai/how-to-guides/fastai-lr-finder/"><meta property="og:image" content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta property="article:section" content="how-to-guides"><meta property="article:published_time" content="2021-08-02T00:00:00+00:00"><meta property="article:modified_time" content="2021-08-06T13:23:16+06:30"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta name=twitter:title content="How to use FastaiLRFinder with Ignite"><meta name=twitter:description content="This how-to guide demonstrates how we can leverage the FastaiLRFinder handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding."><meta name=description content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently."><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ee4c2c"><title>How to use FastaiLRFinder with Ignite | PyTorch-Ignite</title><link rel=stylesheet type=text/css href=/css/style.min.125203f72a92a60311cb74c041a2ee40c9a6af792496be325e393ab46013c90b.css integrity="sha256-ElID9yqSpgMRy3TAQaLuQMmmr3kklr4yXjk6tGATyQs="><link rel=stylesheet type=text/css href=/css/icons.css><link rel=stylesheet href=/css/custom.min.c8f188c4d411d4bd166d8bb069a1cf75538ea63eb0acc05b8a7ceab44e934224.css><link rel=stylesheet href=/css/sponsors.min.273831ae344a358d21cb7ddb8405ef325fe44a83b83e4d37c971b03189b642b1.css><link rel=stylesheet href=/css/features.min.e0e90cfae6f294d73e9cd004efadaf0185e51575d39356cc5b06d4e24e8cf5f4.css><link rel=icon type=image/svg+xml href=/images/logos/ignite_logomark.svg><link rel=stylesheet href=https://rsms.me/inter/inter.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css><link rel=stylesheet href=/css/tutorials.min.1f22b95d248e6143456ea9c18d5a0bce25e41ff3db05f7c70c090e73e25a2cdf.css></head><body><nav class="navbar is-fresh is-transparent no-shadow" role=navigation aria-label="main navigation"><div class=container><div class=navbar-brand><a class=navbar-item href=/><img src=/images/logos/ignite_logomark.svg alt width=112 height=28></a>
+<a class="navbar-item is-hidden-desktop is-hidden-tablet"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a><a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=navbar-menu><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a></div><div id=navbar-menu class="navbar-menu is-static"><div class=navbar-start><a class="navbar-item is-hidden-mobile"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a></div><div class=navbar-end><div class="navbar-item has-dropdown is-hoverable"><a class=navbar-link>Docs</a><div class=navbar-dropdown><a href=/tutorials/ class=navbar-item>Tutorials</a>
+<a href=/how-to-guides/ class=navbar-item>How to Guides</a>
+<a href=https://pytorch.org/ignite/engine.html class=navbar-item>API Reference</a></div></div><a href=https://github.com/pytorch/ignite class="navbar-item is-secondary">GitHub</a>
+<a href=/posts/ class="navbar-item is-secondary">Blog</a>
+<a href=/community/ class="navbar-item is-secondary">Community</a></div></div></div></nav><section class="section is-medium has-sidebar"><div class=downloads><a class=colab href=https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/how-to-guides/fastai-lr-finder.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/colab.svg alt="Google Colab Logo" width=30 height=30>
+<span>Run in Google Colab</span></a>
+<a class=notebook href=/examples/how-to-guides/fastai-lr-finder.ipynb target=_blank rel="noopener noreferrer" download=fastai-lr-finder.ipynb><img src=/images/logos/download.svg alt="Download Logo" width=20 height=20>
+<span>Download as Jupyter Notebook</span></a>
+<a class=source href=https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/how-to-guides/fastai-lr-finder.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/github.svg alt="GitHub Logo" width=20 height=20>
+<span>View on GitHub</span></a></div><div class="container sidebar-on"><div class=columns><div class="column is-centered-tablet-portrait"><h1 class="title tutorial-title">How to use FastaiLRFinder with Ignite</h1><h5 class="subtitle is-muted is-5"></h5></div></div><div class=tags><span class=tag><a href=/tags/lr-finder/>lr finder</a></span></div><div class=content><p>This how-to guide demonstrates how we can leverage the <a href=https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html><code>FastaiLRFinder</code></a> handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding.</p><p>In this example, we will be using a <a href=https://pytorch.org/vision/stable/models.html#torchvision.models.resnet18>ResNet18</a> model on the <a href=https://pytorch.org/vision/stable/datasets.html#torchvision.datasets.MNIST>MNIST</a> dataset. The base code is the same as used in the <a href=https://pytorch-ignite.ai/tutorials/getting-started/>Getting Started Guide</a>.</p><h2 id=basic-setup>Basic Setup</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>import</span> torch.nn <span style=color:#f92672>as</span> nn
+<span style=color:#f92672>from</span> torch.utils.data <span style=color:#f92672>import</span> DataLoader
+<span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> MNIST
+<span style=color:#f92672>from</span> torchvision.models <span style=color:#f92672>import</span> resnet18
+<span style=color:#f92672>from</span> torchvision.transforms <span style=color:#f92672>import</span> Compose, Normalize, ToTensor
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> create_supervised_trainer, create_supervised_evaluator
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy, Loss
+<span style=color:#f92672>from</span> ignite.handlers <span style=color:#f92672>import</span> FastaiLRFinder
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>device <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>device(<span style=color:#e6db74>&#34;cuda&#34;</span> <span style=color:#66d9ef>if</span> torch<span style=color:#f92672>.</span>cuda<span style=color:#f92672>.</span>is_available() <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;cpu&#34;</span>)
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Net</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Net, self)<span style=color:#f92672>.</span>__init__()
+
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> resnet18(num_classes<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+        self<span style=color:#f92672>.</span>model<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(
+            <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>64</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, padding<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False
+        )
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>model(x)
+
+
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+
+data_transform <span style=color:#f92672>=</span> Compose([ToTensor(), Normalize((<span style=color:#ae81ff>0.1307</span>,), (<span style=color:#ae81ff>0.3081</span>,))])
+
+train_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>True),
+    batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>128</span>,
+    shuffle<span style=color:#f92672>=</span>True,
+)
+
+test_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>False),
+    batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>,
+    shuffle<span style=color:#f92672>=</span>False,
+)
+
+
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+optimizer <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>optim<span style=color:#f92672>.</span>RMSprop(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>1e-06</span>)
+criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>CrossEntropyLoss()
+</code></pre></td></tr></table></div></div><p>We will first train the model with a fixed learning rate (lr) of 1e-06 and inspect our results. Let&rsquo;s save the initial state of the model and the optimizer to restore them later for comparision.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>init_model_state <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>state_dict()
+init_opt_state <span style=color:#f92672>=</span> optimizer<span style=color:#f92672>.</span>state_dict()
+</code></pre></td></tr></table></div></div><h2 id=without-lr-finder>Without LR Finder</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer <span style=color:#f92672>=</span> create_supervised_trainer(model, optimizer, criterion, device<span style=color:#f92672>=</span>device)
+
+trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>)
+</code></pre></td></tr></table></div></div><pre><code>State:
+	iteration: 1407
+	epoch: 3
+	epoch_length: 469
+	max_epochs: 3
+	output: 0.5554001927375793
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(
+    model, metrics<span style=color:#f92672>=</span>{<span style=color:#e6db74>&#34;Accuracy&#34;</span>: Accuracy(), <span style=color:#e6db74>&#34;Loss&#34;</span>: Loss(criterion)}, device<span style=color:#f92672>=</span>device
+)
+evaluator<span style=color:#f92672>.</span>run(test_loader)
+
+<span style=color:#66d9ef>print</span>(evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics)
+</code></pre></td></tr></table></div></div><pre><code>{'Accuracy': 0.8655, 'Loss': 0.602867822265625}
+</code></pre><p>Let&rsquo;s see how we can achieve better results by using the <a href=https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html><code>FastaiLRFinder</code></a> handler. But first, let&rsquo;s restore the initial state of the model and optimizer so we can re-train them from scratch.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>model<span style=color:#f92672>.</span>load_state_dict(init_model_state)
+optimizer<span style=color:#f92672>.</span>load_state_dict(init_opt_state)
+</code></pre></td></tr></table></div></div><h2 id=with-lr-finder>With LR Finder</h2><p>When attached to the <code>trainer</code>, this handler follows the same procedure used by <a href=https://docs.fast.ai/callback.schedule.html#LRFinder>fastai</a>. The model is trained for <code>num_iter</code> iterations while the learning rate is increased from <code>start_lr</code> (defaults to initial value specified by the optimizer, here 1e-06) to the upper bound called <code>end_lr</code>. This increase can be linear (<code>step_mode="linear"</code>) or exponential (<code>step_mode="exp"</code>). The default <code>step_mode</code> is exponential which is recommended for larger learning rate ranges while linear provides good results for small ranges.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>lr_finder <span style=color:#f92672>=</span> FastaiLRFinder()
+
+<span style=color:#75715e># To restore the model&#39;s and optimizer&#39;s states after running the LR Finder</span>
+to_save <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#34;model&#34;</span>: model, <span style=color:#e6db74>&#34;optimizer&#34;</span>: optimizer}
+
+<span style=color:#66d9ef>with</span> lr_finder<span style=color:#f92672>.</span>attach(trainer, to_save, end_lr<span style=color:#f92672>=</span><span style=color:#ae81ff>1e-02</span>) <span style=color:#66d9ef>as</span> trainer_with_lr_finder:
+    trainer_with_lr_finder<span style=color:#f92672>.</span>run(train_loader)
+</code></pre></td></tr></table></div></div><p>Let&rsquo;s plot how the learning rate changes within our specified range and print the suggested learning rate.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>lr_finder<span style=color:#f92672>.</span>plot()
+
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Suggested LR&#34;</span>, lr_finder<span style=color:#f92672>.</span>lr_suggestion())
+</code></pre></td></tr></table></div></div><p><img src=/images/notebooks/fastai-lr-finder_16_0.png alt=png></p><pre><code>Suggested LR 1.0148376909312998e-05
+</code></pre><p>Now we will apply the suggested learning rate to the optimizer, and train the model again with optimal learning rate.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>lr_finder<span style=color:#f92672>.</span>apply_suggested_lr(optimizer)
+<span style=color:#66d9ef>print</span>(optimizer<span style=color:#f92672>.</span>param_groups[<span style=color:#ae81ff>0</span>][<span style=color:#e6db74>&#34;lr&#34;</span>])
+</code></pre></td></tr></table></div></div><pre><code>1.0148376909312998e-05
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>)
+</code></pre></td></tr></table></div></div><pre><code>State:
+	iteration: 1407
+	epoch: 3
+	epoch_length: 469
+	max_epochs: 3
+	output: 0.09644963592290878
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Calculate the new metrics after using the optimal lr</span>
+evaluator<span style=color:#f92672>.</span>run(test_loader)
+<span style=color:#66d9ef>print</span>(evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics)
+</code></pre></td></tr></table></div></div><pre><code>{'Accuracy': 0.9715, 'Loss': 0.0908882568359375}
+</code></pre><p>As we saw the accuracy increased and loss decreased on the test dataset when we trained our model for the same number of epochs with an optimal learning rate.</p></div><div class=prev-n-next><div class=prev><a href=/how-to-guides/time-profiling/ class=link><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify icon-prev iconify--carbon" width="32" height="32" viewBox="0 0 32 32"><path d="M14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6 4 16l10 10z" fill="currentcolor"/></svg><span class=text>How to do time profiling</span></a></div><div class=next><a href=/how-to-guides/data-iterator/ class=link><span class=text>How to work with data iterators</span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify icon-next iconify--carbon" width="32" height="32" viewBox="0 0 32 32"><path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z" fill="currentcolor"/></svg></a></div></div></div></section><div id=backtotop><a href=#></a></div><div class=sidebar><div class=sidebar-header><div class=text>How-to-Guides</div></div><div class=inner><aside><ul><li><a href=/how-to-guides/gradient-accumulation/>How to effectively increase batch size on limited compute</a></li><li><a href=/how-to-guides/installation/>How to install PyTorch-Ignite</a></li><li><a href=/how-to-guides/data-iterator/>How to work with data iterators</a></li><li><a href=/how-to-guides/fastai-lr-finder/ class=active>How to use FastaiLRFinder with Ignite</a><nav id=TableOfContents><ul><li><a href=#basic-setup>Basic Setup</a></li><li><a href=#without-lr-finder>Without LR Finder</a></li><li><a href=#with-lr-finder>With LR Finder</a></li></ul></nav></li><li><a href=/how-to-guides/time-profiling/>How to do time profiling</a></li></ul></aside></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js></script><script src=/js/modernizr.min.48806575a40ede5e406c8278f3be521afb171e73d324994ced6b41306bdb230a.js></script><script src=/js/fresh.min.29a18383a93b919d639d60aca2437a08bec3ed15276e55dc1cb44a8ddd80bdc6.js></script><script src=/js/active-navbar.min.8067cab2f01a301954f5d28b2cb8cfa1ce10a23ea212f1c734c9b761503d5e0e.js></script><script src=/js/jquery.panelslider.min.js></script><link rel=stylesheet href=/css/copy-code.min.0032417fb3ddf66588bd7871ff6904ecb06695ccb2756f43792bbeec4b7da54f.css><script src=/js/copy-code.min.2597230d83cf7b0549c4a0d22b4e61a1b3fd86eaf05c491aa0b807c7803d9096.js></script><script src=/js/anchor.min.818717ad1ac9e378368b336d69c4a337a826937be38314c67bfca3669727e210.js></script></body></html>

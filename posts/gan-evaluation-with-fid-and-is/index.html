@@ -1,0 +1,785 @@
+<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script><script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script><meta property="og:title" content="GAN evaluation using FID and IS"><meta property="og:description" content="In this notebook, two PyTorch-Ignite&rsquo;s metrics to evaluate Generative Adversarial Networks (or GAN in short) are introduced :
+
+Frechet Inception Distance, details can be found in Heusel et al. 2002
+Inception Score, details can be found in Barratt et al. 2018
+
+See here for more details about the implementation of the metrics in PyTorch-Ignite.
+Most of the code here is from DCGAN example in pytorch/examples. In addition to the original tutorial, this notebook will use in-built GAN based metric in ignite.metrics to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in ignite."><meta property="og:type" content="article"><meta property="og:url" content="https://pytorch-ignite.ai/posts/gan-evaluation-with-fid-and-is/"><meta property="og:image" content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-08-11T00:00:00+00:00"><meta property="article:modified_time" content="2021-09-02T13:31:21+06:30"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta name=twitter:title content="GAN evaluation using FID and IS"><meta name=twitter:description content="In this notebook, two PyTorch-Ignite&rsquo;s metrics to evaluate Generative Adversarial Networks (or GAN in short) are introduced :
+
+Frechet Inception Distance, details can be found in Heusel et al. 2002
+Inception Score, details can be found in Barratt et al. 2018
+
+See here for more details about the implementation of the metrics in PyTorch-Ignite.
+Most of the code here is from DCGAN example in pytorch/examples. In addition to the original tutorial, this notebook will use in-built GAN based metric in ignite.metrics to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in ignite."><meta name=description content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently."><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ee4c2c"><title>GAN evaluation using FID and IS | PyTorch-Ignite</title><link rel=stylesheet type=text/css href=/css/style.min.125203f72a92a60311cb74c041a2ee40c9a6af792496be325e393ab46013c90b.css integrity="sha256-ElID9yqSpgMRy3TAQaLuQMmmr3kklr4yXjk6tGATyQs="><link rel=stylesheet type=text/css href=/css/icons.css><link rel=stylesheet href=/css/custom.min.c8f188c4d411d4bd166d8bb069a1cf75538ea63eb0acc05b8a7ceab44e934224.css><link rel=stylesheet href=/css/sponsors.min.273831ae344a358d21cb7ddb8405ef325fe44a83b83e4d37c971b03189b642b1.css><link rel=stylesheet href=/css/features.min.e0e90cfae6f294d73e9cd004efadaf0185e51575d39356cc5b06d4e24e8cf5f4.css><link rel=icon type=image/svg+xml href=/images/logos/ignite_logomark.svg><link rel=stylesheet href=https://rsms.me/inter/inter.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css><link rel=stylesheet href=/css/post.min.84329ebcd6e81746956e818bfd9674176663c4db7b7730d544587934955d3701.css></head><body><nav class="navbar is-fresh is-transparent no-shadow" role=navigation aria-label="main navigation"><div class=container><div class=navbar-brand><a class=navbar-item href=/><img src=/images/logos/ignite_logomark.svg alt width=112 height=28></a>
+<a class="navbar-item is-hidden-desktop is-hidden-tablet"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a><a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=navbar-menu><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a></div><div id=navbar-menu class="navbar-menu is-static"><div class=navbar-start><a class="navbar-item is-hidden-mobile"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a></div><div class=navbar-end><div class="navbar-item has-dropdown is-hoverable"><a class=navbar-link>Docs</a><div class=navbar-dropdown><a href=/tutorials/ class=navbar-item>Tutorials</a>
+<a href=/how-to-guides/ class=navbar-item>How to Guides</a>
+<a href=https://pytorch.org/ignite/engine.html class=navbar-item>API Reference</a></div></div><a href=https://github.com/pytorch/ignite class="navbar-item is-secondary">GitHub</a>
+<a href=/posts/ class="navbar-item is-secondary">Blog</a>
+<a href=/community/ class="navbar-item is-secondary">Community</a></div></div></div></nav><section class="section is-medium has-sidebar"><div class=downloads><a class=colab href=https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/posts/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/colab.svg alt="Google Colab Logo" width=30 height=30>
+<span>Run in Google Colab</span></a>
+<a class=notebook href=/posts/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb target=_blank rel="noopener noreferrer" download=2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb><img src=/images/logos/download.svg alt="Download Logo" width=20 height=20>
+<span>Download as Jupyter Notebook</span></a>
+<a class=source href=https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/posts/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/github.svg alt="GitHub Logo" width=20 height=20>
+<span>View on GitHub</span></a></div><div class="container sidebar-on"><div class=columns><div class="column is-centered-tablet-portrait"><div class=date><span class=sr-only>Published on</span>
+August 11, 2021</div><h1 class=post-title>GAN evaluation using FID and IS</h1><div class=post-image><img src=/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png alt="GAN evaluation results using FID and IS"></div><h5 class="subtitle is-muted is-5"></h5><div class=divider></div><div class="mt-20 tags"><span class=tag><a href=/tags/gan-evaluation/>GAN Evaluation</a></span>
+<span class=tag><a href=/tags/inception-score/>Inception Score</a></span>
+<span class=tag><a href=/tags/frechet-inception-distance/>Frechet Inception Distance</a></span></div><div>Last updated: September 2, 2021</div></div></div><div class=content><p>In this notebook, two <code>PyTorch-Ignite</code>&rsquo;s metrics to evaluate <em>Generative Adversarial Networks</em> (or GAN in short) are introduced :</p><ul><li><strong>Frechet Inception Distance</strong>, details can be found in <a href=https://arxiv.org/pdf/1706.08500.pdf><code>Heusel et al. 2002</code></a></li><li><strong>Inception Score</strong>, details can be found in <a href=https://arxiv.org/pdf/1801.01973.pdf><code>Barratt et al. 2018</code></a></li></ul><p>See <a href=https://pytorch.org/ignite/metrics.html#complete-list-of-metrics>here</a> for more details about the implementation of the metrics in <a href=https://github.com/pytorch/ignite>PyTorch-Ignite</a>.</p><p>Most of the code here is from <a href=https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html>DCGAN example</a> in <a href=https://github.com/pytorch/examples>pytorch/examples</a>. In addition to the original tutorial, this notebook will use in-built GAN based metric in <code>ignite.metrics</code> to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in <code>ignite</code>.</p><h1 id=required-dependencies>Required Dependencies</h1><p>Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will be installed/imported here.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#960050;background-color:#1e0010>!</span>pip install pytorch<span style=color:#f92672>-</span>ignite
+</code></pre></td></tr></table></div></div><pre><code>Collecting pytorch-ignite
+  Downloading pytorch_ignite-0.4.6-py3-none-any.whl (232 kB)
+[K     |████████████████████████████████| 232 kB 8.1 MB/s 
+[?25hRequirement already satisfied: torch&lt;2,&gt;=1.3 in /usr/local/lib/python3.7/dist-packages (from pytorch-ignite) (1.9.0+cu102)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (3.7.4.3)
+Installing collected packages: pytorch-ignite
+Successfully installed pytorch-ignite-0.4.6
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> torch
+torch<span style=color:#f92672>.</span>__version__
+</code></pre></td></tr></table></div></div><pre><code>'1.9.0+cu102'
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> torchvision
+torchvision<span style=color:#f92672>.</span>__version__
+</code></pre></td></tr></table></div></div><pre><code>'0.10.0+cu102'
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> ignite
+ignite<span style=color:#f92672>.</span>__version__
+</code></pre></td></tr></table></div></div><pre><code>'0.4.6'
+</code></pre><h1 id=import-libraries>Import Libraries</h1><p>Note: torchsummary is an optional dependency here.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> os
+<span style=color:#f92672>import</span> logging
+<span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+
+<span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+
+<span style=color:#f92672>from</span> torchsummary <span style=color:#f92672>import</span> summary
+
+<span style=color:#f92672>import</span> torch
+<span style=color:#f92672>import</span> torch.nn <span style=color:#f92672>as</span> nn
+<span style=color:#f92672>import</span> torch.optim <span style=color:#f92672>as</span> optim
+
+<span style=color:#f92672>import</span> torchvision.transforms <span style=color:#f92672>as</span> transforms
+<span style=color:#f92672>import</span> torchvision.utils <span style=color:#f92672>as</span> vutils
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Engine, Events
+<span style=color:#f92672>import</span> ignite.distributed <span style=color:#f92672>as</span> idist
+</code></pre></td></tr></table></div></div><h2 id=reproductibility-and-logging-details>Reproductibility and logging details</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ignite<span style=color:#f92672>.</span>utils<span style=color:#f92672>.</span>manual_seed(<span style=color:#ae81ff>999</span>)
+</code></pre></td></tr></table></div></div><p>Optionally, the <code>logging</code> level <code>logging.WARNING</code> is used in internal <code>ignite</code> submodules in order to avoid internal messages.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ignite<span style=color:#f92672>.</span>utils<span style=color:#f92672>.</span>setup_logger(name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;ignite.distributed.auto.auto_dataloader&#34;</span>, level<span style=color:#f92672>=</span>logging<span style=color:#f92672>.</span>WARNING)
+ignite<span style=color:#f92672>.</span>utils<span style=color:#f92672>.</span>setup_logger(name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;ignite.distributed.launcher.Parallel&#34;</span>, level<span style=color:#f92672>=</span>logging<span style=color:#f92672>.</span>WARNING)
+</code></pre></td></tr></table></div></div><pre><code>&lt;Logger ignite.distributed.launcher.Parallel (WARNING)&gt;
+</code></pre><h1 id=processing-data>Processing Data</h1><p>The <a href=http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html>Large-scale CelebFaces Attributes (CelebA) Dataset</a> is used in this tutorial. The <code>torchvision</code> library provides a <a href=https://pytorch.org/vision/stable/datasets.html#celeba>dataset class</a>, However this implementation suffers from issues related to the download limitations of <code>gdrive</code>. Here, we define a custom <code>CelebA</code> <a href=https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset><code>Dataset</code></a>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> ImageFolder
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#960050;background-color:#1e0010>!</span>gdown <span style=color:#f92672>--</span>id <span style=color:#ae81ff>1</span>O8LE<span style=color:#f92672>-</span>FpN79Diu6aCvppH5HwlcR5I<span style=color:#f92672>--</span>PX
+</code></pre></td></tr></table></div></div><pre><code>Downloading...
+From: https://drive.google.com/uc?id=1O8LE-FpN79Diu6aCvppH5HwlcR5I--PX
+To: /content/img_align_celeba.zip
+1.44GB [00:13, 107MB/s]
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#960050;background-color:#1e0010>!</span>mkdir data
+<span style=color:#960050;background-color:#1e0010>!</span>unzip <span style=color:#f92672>-</span>qq img_align_celeba<span style=color:#f92672>.</span>zip <span style=color:#f92672>-</span>d data
+</code></pre></td></tr></table></div></div><h2 id=dataset-and-transformation>Dataset and transformation</h2><p>The image size considered in this tutorial is <code>64</code>. Note that increase this size implies to modify the GAN models.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>image_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>64</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>data_transform <span style=color:#f92672>=</span> transforms<span style=color:#f92672>.</span>Compose(
+    [
+        transforms<span style=color:#f92672>.</span>Resize(image_size),
+        transforms<span style=color:#f92672>.</span>CenterCrop(image_size),
+        transforms<span style=color:#f92672>.</span>ToTensor(),
+        transforms<span style=color:#f92672>.</span>Normalize((<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.5</span>), (<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.5</span>)),
+    ]
+)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>train_dataset <span style=color:#f92672>=</span> ImageFolder(root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;./data&#34;</span>, transform<span style=color:#f92672>=</span>data_transform)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>test_dataset <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>utils<span style=color:#f92672>.</span>data<span style=color:#f92672>.</span>Subset(train_dataset, torch<span style=color:#f92672>.</span>arange(<span style=color:#ae81ff>3000</span>))
+</code></pre></td></tr></table></div></div><h2 id=dataloading>DataLoading</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>batch_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>128</span>
+</code></pre></td></tr></table></div></div><p>We wish to configure the dataloader to work in a disbtributed environment. Distributed Dataloading is support by Ignite as part of DDP support. This requires specific adjustments to the sequential case.</p><p>To handle this, <code>idist</code> provides an helper <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_dataloader.html#auto-dataloader><code>auto_dataloader</code></a> which automatically distributes the data over the processes.</p><p><strong>Note</strong>: Distributed dataloading is described in <a href=https://pytorch.org/tutorials/intermediate/ddp_tutorial.html>Distributed Data Parallel (DDP)</a> tutorial if you wish to learn more.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>train_dataloader <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_dataloader(
+    train_dataset, 
+    batch_size<span style=color:#f92672>=</span>batch_size, 
+    num_workers<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, 
+    shuffle<span style=color:#f92672>=</span>True, 
+    drop_last<span style=color:#f92672>=</span>True,
+)
+
+test_dataloader <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_dataloader(
+    test_dataset, 
+    batch_size<span style=color:#f92672>=</span>batch_size, 
+    num_workers<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, 
+    shuffle<span style=color:#f92672>=</span>False, 
+    drop_last<span style=color:#f92672>=</span>True,
+)
+</code></pre></td></tr></table></div></div><p>Let&rsquo;s explore the data.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>real_batch <span style=color:#f92672>=</span> next(iter(train_dataloader))
+
+plt<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>8</span>,<span style=color:#ae81ff>8</span>))
+plt<span style=color:#f92672>.</span>axis(<span style=color:#e6db74>&#34;off&#34;</span>)
+plt<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;Training Images&#34;</span>)
+plt<span style=color:#f92672>.</span>imshow(np<span style=color:#f92672>.</span>transpose(vutils<span style=color:#f92672>.</span>make_grid(real_batch[<span style=color:#ae81ff>0</span>][:<span style=color:#ae81ff>64</span>], padding<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, normalize<span style=color:#f92672>=</span>True)<span style=color:#f92672>.</span>cpu(),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>0</span>)))
+plt<span style=color:#f92672>.</span>show()
+</code></pre></td></tr></table></div></div><p><img src=/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_27_0.png alt=png></p><h1 id=models-for-gan>Models for GAN</h1><h2 id=generator>Generator</h2><p>The latent space dimension of input vectors for the generator is a key parameter of GAN.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>latent_dim <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>
+</code></pre></td></tr></table></div></div><h2 id=generator-1>Generator</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Generator3x64x64</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self, latent_dim):
+        super(Generator3x64x64, self)<span style=color:#f92672>.</span>__init__()
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Sequential(
+            nn<span style=color:#f92672>.</span>ConvTranspose2d(latent_dim, <span style=color:#ae81ff>512</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>0</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>512</span>),
+            nn<span style=color:#f92672>.</span>ReLU(True),
+            <span style=color:#75715e># state size. 512 x 4 x 4</span>
+            nn<span style=color:#f92672>.</span>ConvTranspose2d(<span style=color:#ae81ff>512</span>, <span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>256</span>),
+            nn<span style=color:#f92672>.</span>ReLU(True),
+            <span style=color:#75715e># state size. 256 x 8 x 8</span>
+            nn<span style=color:#f92672>.</span>ConvTranspose2d(<span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>128</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>128</span>),
+            nn<span style=color:#f92672>.</span>ReLU(True),
+            <span style=color:#75715e># state size. 128 x 16 x 16</span>
+            nn<span style=color:#f92672>.</span>ConvTranspose2d(<span style=color:#ae81ff>128</span>, <span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>64</span>),
+            nn<span style=color:#f92672>.</span>ReLU(True),
+            <span style=color:#75715e># state size. 64 x 32 x 32</span>
+            nn<span style=color:#f92672>.</span>ConvTranspose2d(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>Tanh()
+            <span style=color:#75715e># final state size. 3 x 64 x 64</span>
+        )
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        x <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>model(x)
+        <span style=color:#66d9ef>return</span> x
+</code></pre></td></tr></table></div></div><p>As for dataloading, distributed models requires some specifics that <code>idist</code> adresses providing the <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_model.html#auto-model><code>auto_model</code></a> helper.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>netG <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_model(Generator3x64x64(latent_dim))
+</code></pre></td></tr></table></div></div><p>Note that the model is automatically moved to the best device detected by <code>idist</code>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>idist<span style=color:#f92672>.</span>device()
+</code></pre></td></tr></table></div></div><pre><code>device(type='cuda')
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>summary(netG, (latent_dim, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>))
+</code></pre></td></tr></table></div></div><pre><code>----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+   ConvTranspose2d-1            [-1, 512, 4, 4]         819,200
+       BatchNorm2d-2            [-1, 512, 4, 4]           1,024
+              ReLU-3            [-1, 512, 4, 4]               0
+   ConvTranspose2d-4            [-1, 256, 8, 8]       2,097,152
+       BatchNorm2d-5            [-1, 256, 8, 8]             512
+              ReLU-6            [-1, 256, 8, 8]               0
+   ConvTranspose2d-7          [-1, 128, 16, 16]         524,288
+       BatchNorm2d-8          [-1, 128, 16, 16]             256
+              ReLU-9          [-1, 128, 16, 16]               0
+  ConvTranspose2d-10           [-1, 64, 32, 32]         131,072
+      BatchNorm2d-11           [-1, 64, 32, 32]             128
+             ReLU-12           [-1, 64, 32, 32]               0
+  ConvTranspose2d-13            [-1, 3, 64, 64]           3,072
+             Tanh-14            [-1, 3, 64, 64]               0
+================================================================
+Total params: 3,576,704
+Trainable params: 3,576,704
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.00
+Forward/backward pass size (MB): 3.00
+Params size (MB): 13.64
+Estimated Total Size (MB): 16.64
+----------------------------------------------------------------
+</code></pre><h2 id=discriminator>Discriminator</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Discriminator3x64x64</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Discriminator3x64x64, self)<span style=color:#f92672>.</span>__init__()
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Sequential(
+            <span style=color:#75715e># input is 3 x 64 x 64</span>
+            nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>LeakyReLU(<span style=color:#ae81ff>0.2</span>, inplace<span style=color:#f92672>=</span>True),
+            <span style=color:#75715e># state size. 64 x 32 x 32</span>
+            nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>128</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>128</span>),
+            nn<span style=color:#f92672>.</span>LeakyReLU(<span style=color:#ae81ff>0.2</span>, inplace<span style=color:#f92672>=</span>True),
+            <span style=color:#75715e># state size. 128 x 16 x 16</span>
+            nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>128</span>, <span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>256</span>),
+            nn<span style=color:#f92672>.</span>LeakyReLU(<span style=color:#ae81ff>0.2</span>, inplace<span style=color:#f92672>=</span>True),
+            <span style=color:#75715e># state size. 256 x 8 x 8</span>
+            nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>512</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>BatchNorm2d(<span style=color:#ae81ff>512</span>),
+            nn<span style=color:#f92672>.</span>LeakyReLU(<span style=color:#ae81ff>0.2</span>, inplace<span style=color:#f92672>=</span>True),
+            <span style=color:#75715e># state size. 512 x 4 x 4</span>
+            nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>512</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>0</span>, bias<span style=color:#f92672>=</span>False),
+            nn<span style=color:#f92672>.</span>Sigmoid()
+        )
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        x <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>model(x)
+        <span style=color:#66d9ef>return</span> x
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>netD <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_model(Discriminator3x64x64())
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>summary(netD, (<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>64</span>))
+</code></pre></td></tr></table></div></div><pre><code>----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1           [-1, 64, 32, 32]           3,072
+         LeakyReLU-2           [-1, 64, 32, 32]               0
+            Conv2d-3          [-1, 128, 16, 16]         131,072
+       BatchNorm2d-4          [-1, 128, 16, 16]             256
+         LeakyReLU-5          [-1, 128, 16, 16]               0
+            Conv2d-6            [-1, 256, 8, 8]         524,288
+       BatchNorm2d-7            [-1, 256, 8, 8]             512
+         LeakyReLU-8            [-1, 256, 8, 8]               0
+            Conv2d-9            [-1, 512, 4, 4]       2,097,152
+      BatchNorm2d-10            [-1, 512, 4, 4]           1,024
+        LeakyReLU-11            [-1, 512, 4, 4]               0
+           Conv2d-12              [-1, 1, 1, 1]           8,192
+          Sigmoid-13              [-1, 1, 1, 1]               0
+================================================================
+Total params: 2,765,568
+Trainable params: 2,765,568
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.05
+Forward/backward pass size (MB): 2.31
+Params size (MB): 10.55
+Estimated Total Size (MB): 12.91
+----------------------------------------------------------------
+</code></pre><h2 id=optimizers>Optimizers</h2><p>The <a href=https://pytorch.org/docs/stable/nn.html#torch.nn.BCELoss>Binary Cross Entropy Loss</a> is used in this tutorial.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>BCELoss()
+</code></pre></td></tr></table></div></div><p>A batch of <code>64</code> fixed samples will be used for generating images from throughout the training. This will allow a qualitative evaluation throughout the training progress.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>fixed_noise <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>randn(<span style=color:#ae81ff>64</span>, latent_dim, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>, device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device())
+</code></pre></td></tr></table></div></div><p>Finally, two separate optimizers are set up, one for the generator, and one for the discriminator. Yet, another helper method <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_optim.html#auto-optim><code>auto_optim</code></a> provided by <code>idist</code> will help to adapt optimizer for distributed configurations.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>optimizerD <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_optim(
+    optim<span style=color:#f92672>.</span>Adam(netD<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0002</span>, betas<span style=color:#f92672>=</span>(<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.999</span>))
+)
+
+optimizerG <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_optim(
+    optim<span style=color:#f92672>.</span>Adam(netG<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0002</span>, betas<span style=color:#f92672>=</span>(<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.999</span>))
+)
+</code></pre></td></tr></table></div></div><h1 id=ignite-training-concepts>Ignite Training Concepts</h1><p>Training in Ignite is based on three core components, namely, Engine, Events and Handlers. Let&rsquo;s briefly discuss each of them.</p><ul><li><p><strong>Engine</strong> - The <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.engine.Engine.html#engine>Engine</a> can be considered somewhat similar to a training loop. It takes a <code>train_step</code> as an argument and runs it over each batch of the dataset, emmiting events as it goes.</p></li><li><p><strong>Events</strong> - <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.events.Events.html#events>Events</a> are emmited by the Engine when it reaches a specific point in the run/training.</p></li><li><p><strong>Handlers</strong> - These are <a href=https://pytorch.org/ignite/v0.4.5/handlers.html#ignite-handlers>functions</a> which can be configured so that they are triggered when a certain Event is emmited by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics.</p></li></ul><h2 id=training-step-function>Training Step Function</h2><p>A training step function will be run batch wise over the entire dataset by the engine. It contains the basic training steps, namely, running the model, propagating the loss backward and taking an optimizer step. We run the discriminator model on both real images and fake images generated by the Generator model. The function returns Generator and Discriminator Losses and the output generated by Generator and Discriminator.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>real_label <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>
+fake_label <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">59
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>training_step</span>(engine, data):
+    <span style=color:#75715e># Set the models for training</span>
+    netG<span style=color:#f92672>.</span>train()
+    netD<span style=color:#f92672>.</span>train()
+
+    <span style=color:#75715e>############################</span>
+    <span style=color:#75715e># (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))</span>
+    <span style=color:#75715e>###########################</span>
+    <span style=color:#75715e>## Train with all-real batch</span>
+    netD<span style=color:#f92672>.</span>zero_grad()
+    <span style=color:#75715e># Format batch</span>
+    real <span style=color:#f92672>=</span> data[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>to(idist<span style=color:#f92672>.</span>device())
+    b_size <span style=color:#f92672>=</span> real<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>0</span>)
+    label <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>full((b_size,), real_label, dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>float, device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device())
+    <span style=color:#75715e># Forward pass real batch through D</span>
+    output1 <span style=color:#f92672>=</span> netD(real)<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#75715e># Calculate loss on all-real batch</span>
+    errD_real <span style=color:#f92672>=</span> criterion(output1, label)
+    <span style=color:#75715e># Calculate gradients for D in backward pass</span>
+    errD_real<span style=color:#f92672>.</span>backward()
+
+    <span style=color:#75715e>## Train with all-fake batch</span>
+    <span style=color:#75715e># Generate batch of latent vectors</span>
+    noise <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>randn(b_size, latent_dim, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>, device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device())
+    <span style=color:#75715e># Generate fake image batch with G</span>
+    fake <span style=color:#f92672>=</span> netG(noise)
+    label<span style=color:#f92672>.</span>fill_(fake_label)
+    <span style=color:#75715e># Classify all fake batch with D</span>
+    output2 <span style=color:#f92672>=</span> netD(fake<span style=color:#f92672>.</span>detach())<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#75715e># Calculate D&#39;s loss on the all-fake batch</span>
+    errD_fake <span style=color:#f92672>=</span> criterion(output2, label)
+    <span style=color:#75715e># Calculate the gradients for this batch, accumulated (summed) with previous gradients</span>
+    errD_fake<span style=color:#f92672>.</span>backward()
+    <span style=color:#75715e># Compute error of D as sum over the fake and the real batches</span>
+    errD <span style=color:#f92672>=</span> errD_real <span style=color:#f92672>+</span> errD_fake
+    <span style=color:#75715e># Update D</span>
+    optimizerD<span style=color:#f92672>.</span>step()
+
+    <span style=color:#75715e>############################</span>
+    <span style=color:#75715e># (2) Update G network: maximize log(D(G(z)))</span>
+    <span style=color:#75715e>###########################</span>
+    netG<span style=color:#f92672>.</span>zero_grad()
+    label<span style=color:#f92672>.</span>fill_(real_label)  <span style=color:#75715e># fake labels are real for generator cost</span>
+    <span style=color:#75715e># Since we just updated D, perform another forward pass of all-fake batch through D</span>
+    output3 <span style=color:#f92672>=</span> netD(fake)<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#75715e># Calculate G&#39;s loss based on this output</span>
+    errG <span style=color:#f92672>=</span> criterion(output3, label)
+    <span style=color:#75715e># Calculate gradients for G</span>
+    errG<span style=color:#f92672>.</span>backward()
+    <span style=color:#75715e># Update G</span>
+    optimizerG<span style=color:#f92672>.</span>step()
+
+    <span style=color:#66d9ef>return</span> {
+        <span style=color:#e6db74>&#34;Loss_G&#34;</span> : errG<span style=color:#f92672>.</span>item(),
+        <span style=color:#e6db74>&#34;Loss_D&#34;</span> : errD<span style=color:#f92672>.</span>item(),
+        <span style=color:#e6db74>&#34;D_x&#34;</span>: output1<span style=color:#f92672>.</span>mean()<span style=color:#f92672>.</span>item(),
+        <span style=color:#e6db74>&#34;D_G_z1&#34;</span>: output2<span style=color:#f92672>.</span>mean()<span style=color:#f92672>.</span>item(),
+        <span style=color:#e6db74>&#34;D_G_z2&#34;</span>: output3<span style=color:#f92672>.</span>mean()<span style=color:#f92672>.</span>item(),
+    }
+</code></pre></td></tr></table></div></div><p>A <code>PyTorch-Ignite</code> engine <code>trainer</code> is defined using the above <code>training_step</code> function.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer <span style=color:#f92672>=</span> Engine(training_step)
+</code></pre></td></tr></table></div></div><h3 id=handlers>Handlers</h3><p>In this section, the used <code>PyTorch-Ignite</code> handlers are introduced. These handlers will be responsible for printing out and storing important information such as losses and model predictions.</p><p>Like the DCGAN paper, we will also randomly initialize all the model weights from a Normal Distribution with <code>mean=0</code>, <code>stdev=0.02</code>. The following <code>initialize_fn</code> function must be applied to the generator and discriminator models at the start of training.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>initialize_fn</span>(m):
+    classname <span style=color:#f92672>=</span> m<span style=color:#f92672>.</span>__class__<span style=color:#f92672>.</span>__name__
+    <span style=color:#66d9ef>if</span> classname<span style=color:#f92672>.</span>find(<span style=color:#e6db74>&#39;Conv&#39;</span>) <span style=color:#f92672>!=</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>:
+        nn<span style=color:#f92672>.</span>init<span style=color:#f92672>.</span>normal_(m<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>data, <span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>0.02</span>)
+    <span style=color:#66d9ef>elif</span> classname<span style=color:#f92672>.</span>find(<span style=color:#e6db74>&#39;BatchNorm&#39;</span>) <span style=color:#f92672>!=</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>:
+        nn<span style=color:#f92672>.</span>init<span style=color:#f92672>.</span>normal_(m<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>data, <span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>0.02</span>)
+        nn<span style=color:#f92672>.</span>init<span style=color:#f92672>.</span>constant_(m<span style=color:#f92672>.</span>bias<span style=color:#f92672>.</span>data, <span style=color:#ae81ff>0</span>)
+</code></pre></td></tr></table></div></div><p>The following <code>init_weights</code> handler is triggered at the start of the engine run and it is responsible for applying the <code>initialize_fn</code> function to randomly generate weights for the Generator <code>netD</code> and the Discriminator <code>netG</code>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>STARTED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>init_weights</span>():
+    netD<span style=color:#f92672>.</span>apply(initialize_fn)
+    netG<span style=color:#f92672>.</span>apply(initialize_fn)
+</code></pre></td></tr></table></div></div><p>The <code>store_losses</code> handler is responsible for storing the generator and discriminator losses in <code>G_losses</code> and <code>D_losses</code> respectively. It is triggered at the end of every iteration.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>G_losses <span style=color:#f92672>=</span> []
+D_losses <span style=color:#f92672>=</span> []
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>store_losses</span>(engine):
+    o <span style=color:#f92672>=</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>output
+    G_losses<span style=color:#f92672>.</span>append(o[<span style=color:#e6db74>&#34;Loss_G&#34;</span>])
+    D_losses<span style=color:#f92672>.</span>append(o[<span style=color:#e6db74>&#34;Loss_D&#34;</span>])
+</code></pre></td></tr></table></div></div><p>The <code>store_images</code> handler is responsible for storing the images generated by the generator model during training. It provides us with a visual progress of the training. It is triggered every <code>500</code> iterations.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>img_list <span style=color:#f92672>=</span> []
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>500</span>))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>store_images</span>(engine):
+    <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+        fake <span style=color:#f92672>=</span> netG(fixed_noise)<span style=color:#f92672>.</span>cpu()
+    img_list<span style=color:#f92672>.</span>append(fake)
+</code></pre></td></tr></table></div></div><h2 id=evaluation-metrics>Evaluation Metrics</h2><p>For this tutorial, we will be showcasing two GAN based metric, namely, Frechet Inception Distance (FID) and Inception Score (IS).</p><p>Inception Score (IS) is an objective metric for evaluating the quality of generated images, specifically synthetic images output by generative adversarial network models. It uses the classification probabilities provided by a pre-trained Inceptionv3 Model to measure performance of a GAN. You can find more Inception Score in the paper found <a href=https://arxiv.org/pdf/1801.01973.pdf>here</a>.</p><p>Frechet Inception Distance (FID) is a metric that calculates the distance between feature vectors calculated for real and generated images. Like IS, it also uses a pre-trained Inceptionv3 model. It uses the mean and covariance between the real and generated images' feature vectors to measure performance of a GAN. You can find more about Frechet Inception Distance in the paper found <a href=https://arxiv.org/pdf/1706.08500.pdf>here</a></p><p>These metric are provided by the <a href=https://pytorch.org/ignite/v0.4.5/metrics.html><code>ignite.metric</code></a> submodule which provides a way to compute various quantities of interest in an online fashion without having to store the entire output history of a model.</p><p>In this example, the <code>FID</code> and <code>IS</code> metrics are computed every epoch, therefore an specific handler <code>log_training_results</code> should be triggered every epoch. Since the metric run on the entire dataset a separate engine <code>train_evaluator</code> is defined which will be run by <code>log_training_results</code> handler.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> FID, InceptionScore
+</code></pre></td></tr></table></div></div><p>The <code>FID</code> and <code>InceptionScore</code> metrics are created as the following. Here we wish to use <code>gpu</code> so we set the device to <code>idist.device()</code> but the metrics will be on <code>cpu</code> device by default if no metric is passed.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>fid_metric <span style=color:#f92672>=</span> FID(device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device())
+</code></pre></td></tr></table></div></div><pre><code>Downloading: &quot;https://download.pytorch.org/models/inception_v3_google-0cc3c7bd.pth&quot; to /root/.cache/torch/hub/checkpoints/inception_v3_google-0cc3c7bd.pth
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=108949747.0), HTML(value='')))
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>is_metric <span style=color:#f92672>=</span> InceptionScore(device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device(), output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: x[<span style=color:#ae81ff>0</span>])
+</code></pre></td></tr></table></div></div><p>The argument <code>output_transform</code> is run on the value returned by the engine. Since <code>InceptionScore</code> takes only single image as input whereas two values are returned by the engine, the function <code>output_transform</code> is used. As the name suggests, <code>output_transform</code> function is applied to the engine&rsquo;s output before it is provided to the metric for evaluation, so using <code>lambda x: x[0]</code> will ensure the InceptionScore metric only gets the first value for evaluation.</p><h2 id=evaluators>Evaluators</h2><p>We define the function for the evaluation engine, namely, <code>evaluation_step</code>. Our dataset provides <code>64 x 64 x 3</code> images but both <code>IS</code> and <code>FID</code> metrics use the <code>Inceptionv3</code> model for evaluation which requires images of minimum size <code>299 x 299 x 3</code>, so the images from the dataset and the images generated by the generator model must be interpolated.</p><p>Although pytorch has a native interpolate function, <code>PIL</code> interpolation is used instead because of poor anitaliasing in torch which can lead to poor scaling of images. These inconsistencies among implementations can have a drastic effect on the evaluations metrics and their final results. <a href=https://arxiv.org/abs/2104.11222>Parmar et al. (2021)</a> explains in much greater detail about the differences and inconsistencies in the interpolation functions of various libraries.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> PIL.Image <span style=color:#f92672>as</span> Image
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>interpolate</span>(batch):
+    arr <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>for</span> img <span style=color:#f92672>in</span> batch:
+        pil_img <span style=color:#f92672>=</span> transforms<span style=color:#f92672>.</span>ToPILImage()(img)
+        resized_img <span style=color:#f92672>=</span> pil_img<span style=color:#f92672>.</span>resize((<span style=color:#ae81ff>299</span>,<span style=color:#ae81ff>299</span>), Image<span style=color:#f92672>.</span>BILINEAR)
+        arr<span style=color:#f92672>.</span>append(transforms<span style=color:#f92672>.</span>ToTensor()(resized_img))
+    <span style=color:#66d9ef>return</span> torch<span style=color:#f92672>.</span>stack(arr)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>evaluation_step</span>(engine, batch):
+    <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+        noise <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>randn(batch_size, latent_dim, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>, device<span style=color:#f92672>=</span>idist<span style=color:#f92672>.</span>device())
+        netG<span style=color:#f92672>.</span>eval()
+        fake_batch <span style=color:#f92672>=</span> netG(noise)
+        fake <span style=color:#f92672>=</span> interpolate(fake_batch)
+        real <span style=color:#f92672>=</span> interpolate(batch[<span style=color:#ae81ff>0</span>])
+        <span style=color:#66d9ef>return</span> fake, real
+</code></pre></td></tr></table></div></div><p>The <code>train_evaluator</code> engine will run the metric on the entire dataset every epoch and attach <code>IS</code> and <code>FID</code> metrics to it.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>evaluator <span style=color:#f92672>=</span> Engine(evaluation_step)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>fid_metric<span style=color:#f92672>.</span>attach(evaluator, <span style=color:#e6db74>&#34;fid&#34;</span>)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>is_metric<span style=color:#f92672>.</span>attach(evaluator, <span style=color:#e6db74>&#34;is&#34;</span>)
+</code></pre></td></tr></table></div></div><p>The following handler attached to the <code>trainer</code> engine triggered every epoch will run the <code>train_evaluator</code> engine to evaluate the <code>IS</code> and <code>FID</code> metrics. The results are finally stored per epoch.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>fid_values <span style=color:#f92672>=</span> []
+is_values <span style=color:#f92672>=</span> []
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_results</span>(engine):
+    evaluator<span style=color:#f92672>.</span>run(test_dataloader,max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    metrics <span style=color:#f92672>=</span> evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    fid_score <span style=color:#f92672>=</span> metrics[<span style=color:#e6db74>&#39;fid&#39;</span>]
+    is_score <span style=color:#f92672>=</span> metrics[<span style=color:#e6db74>&#39;is&#39;</span>]
+    fid_values<span style=color:#f92672>.</span>append(fid_score)
+    is_values<span style=color:#f92672>.</span>append(is_score)
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Epoch [{engine.state.epoch}/5] Metric Scores&#34;</span>)
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;*   FID : {fid_score:4f}&#34;</span>)
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;*    IS : {is_score:4f}&#34;</span>)
+</code></pre></td></tr></table></div></div><h2 id=loss-metrics>Loss metrics</h2><p>The <code>RunningAverage</code> metric is used to keep track of the generator and discriminator Losses. Like the name suggests, <code>RunningAverage</code> keeps the track of average of all the values provided to it.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> RunningAverage
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>RunningAverage(output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: x[<span style=color:#e6db74>&#34;Loss_G&#34;</span>])<span style=color:#f92672>.</span>attach(trainer, <span style=color:#e6db74>&#39;Loss_G&#39;</span>)
+RunningAverage(output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: x[<span style=color:#e6db74>&#34;Loss_D&#34;</span>])<span style=color:#f92672>.</span>attach(trainer, <span style=color:#e6db74>&#39;Loss_D&#39;</span>)
+</code></pre></td></tr></table></div></div><h2 id=progress-bars>Progress bars</h2><p>Since the training process can take a lot of time and have a lot of iterations and epochs, a <code>ProgressBar</code> handler is added to show progress to prevent all the training data from filling up our screen.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> ProgressBar
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ProgressBar()<span style=color:#f92672>.</span>attach(trainer, metric_names<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;Loss_G&#39;</span>,<span style=color:#e6db74>&#39;Loss_D&#39;</span>])
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ProgressBar()<span style=color:#f92672>.</span>attach(evaluator)
+</code></pre></td></tr></table></div></div><h2 id=training>Training</h2><p>Finally, the <code>trainer</code> engine is run here. The helper method <a href=https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.launcher.Parallel.html#parallel><code>Parallel</code></a> of <code>idist</code> will help setting up a distributed configuration to run the <code>trainer</code> engine. It supports <code>nccl</code>, <code>gloo</code> and <code>mpi</code> native torch backends, <code>XLA</code> on <code>TPU</code> and <code>Horovod</code> distributed framework.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>training</span>(<span style=color:#f92672>*</span>args):
+    trainer<span style=color:#f92672>.</span>run(train_dataloader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>with</span> idist<span style=color:#f92672>.</span>Parallel(backend<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;nccl&#39;</span>) <span style=color:#66d9ef>as</span> parallel:
+    parallel<span style=color:#f92672>.</span>run(training)
+</code></pre></td></tr></table></div></div><pre><code>HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+/usr/local/lib/python3.7/dist-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [1/5] Metric Scores
+*   FID : 0.074513
+*    IS : 2.016599
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [2/5] Metric Scores
+*   FID : 0.033024
+*    IS : 2.243377
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [3/5] Metric Scores
+*   FID : 0.024583
+*    IS : 2.346609
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [4/5] Metric Scores
+*   FID : 0.015189
+*    IS : 2.514534
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [5/5] Metric Scores
+*   FID : 0.015975
+*    IS : 2.544078
+</code></pre><h2 id=inference>Inference</h2><p>Finally, let&rsquo;s check out the results. First, how the discriminator&rsquo;s and generator’s losses changed during training. Second, the <code>FID</code> and <code>IS</code> performance improvments of the model. And last, look a batch of real data next to a batch of fake data from the generator.</p><p><strong>Losses versus training iterations</strong></p><p>Below is a plot of the discriminator&rsquo;s and generator’s losses versus training iterations.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>%</span>matplotlib inline
+
+plt<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>10</span>,<span style=color:#ae81ff>5</span>))
+plt<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;Generator and Discriminator Loss During Training&#34;</span>)
+plt<span style=color:#f92672>.</span>plot(G_losses,label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;G&#34;</span>)
+plt<span style=color:#f92672>.</span>plot(D_losses,label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;D&#34;</span>)
+plt<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#34;iterations&#34;</span>)
+plt<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#34;Loss&#34;</span>)
+plt<span style=color:#f92672>.</span>legend()
+</code></pre></td></tr></table></div></div><pre><code>&lt;matplotlib.legend.Legend at 0x7f2ca90dd3d0&gt;
+</code></pre><p><img src=/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_93_1.png alt=png></p><p><strong>Evaluation Metric versus training iterations</strong></p><p>Below is a plot of Evaluation versus training iterations.
+As we can see <code>IS</code> increases sharply at first indicating the generator model is learning quickly how to generate faces. Unlike <code>IS</code>, <code>FID</code> is decreasing sharply at first similarly indicating the learning process of the generator model.</p><p>Note: Higher value of <code>FID</code> implies better results and lower value of <code>IS</code> implies better results.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>fig, ax1 <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>subplots()
+
+plt<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;Evaluation Metric During Training&#34;</span>)
+
+color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;tab:red&#39;</span>
+ax1<span style=color:#f92672>.</span>set_xlabel(<span style=color:#e6db74>&#39;epochs&#39;</span>)
+ax1<span style=color:#f92672>.</span>set_ylabel(<span style=color:#e6db74>&#39;IS&#39;</span>, color<span style=color:#f92672>=</span>color)
+ax1<span style=color:#f92672>.</span>plot(is_values, color<span style=color:#f92672>=</span>color)
+
+ax2 <span style=color:#f92672>=</span> ax1<span style=color:#f92672>.</span>twinx()
+
+color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;tab:blue&#39;</span>
+ax2<span style=color:#f92672>.</span>set_ylabel(<span style=color:#e6db74>&#39;FID&#39;</span>, color<span style=color:#f92672>=</span>color)
+ax2<span style=color:#f92672>.</span>plot(fid_values, color<span style=color:#f92672>=</span>color)
+
+fig<span style=color:#f92672>.</span>tight_layout()
+</code></pre></td></tr></table></div></div><p><img src=/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_95_0.png alt=png></p><p><strong>Real Images vs. Fake Images</strong></p><p>Finally, lets take a look at some real images and fake images side by side.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>%</span>matplotlib inline
+
+<span style=color:#75715e># Grab a batch of real images from the dataloader</span>
+real_batch <span style=color:#f92672>=</span> next(iter(train_dataloader))
+
+<span style=color:#75715e># Plot the real images</span>
+plt<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>15</span>,<span style=color:#ae81ff>15</span>))
+plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>1</span>)
+plt<span style=color:#f92672>.</span>axis(<span style=color:#e6db74>&#34;off&#34;</span>)
+plt<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;Real Images&#34;</span>)
+plt<span style=color:#f92672>.</span>imshow(np<span style=color:#f92672>.</span>transpose(vutils<span style=color:#f92672>.</span>make_grid(real_batch[<span style=color:#ae81ff>0</span>][:<span style=color:#ae81ff>64</span>], padding<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>, normalize<span style=color:#f92672>=</span>True)<span style=color:#f92672>.</span>cpu(),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>0</span>)))
+
+<span style=color:#75715e># Plot the fake images from the last epoch</span>
+plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>)
+plt<span style=color:#f92672>.</span>axis(<span style=color:#e6db74>&#34;off&#34;</span>)
+plt<span style=color:#f92672>.</span>title(<span style=color:#e6db74>&#34;Fake Images&#34;</span>)
+plt<span style=color:#f92672>.</span>imshow(np<span style=color:#f92672>.</span>transpose(vutils<span style=color:#f92672>.</span>make_grid(img_list[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>], padding<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>, normalize<span style=color:#f92672>=</span>True)<span style=color:#f92672>.</span>cpu(),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>0</span>)))
+</code></pre></td></tr></table></div></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7f2b1b872250&gt;
+</code></pre><p><img src=/images/notebooks/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png alt=png></p></div><div class=prev-n-next><div class=prev><a href=/posts/introducing-code-generator-v020/ class=link><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify icon-prev iconify--carbon" width="32" height="32" viewBox="0 0 32 32"><path d="M14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6 4 16l10 10z" fill="currentcolor"/></svg><span class=text>Introducing PyTorch-Ignite's Code Generator v0.2.0</span></a></div></div></div></section><div id=backtotop><a href=#></a></div><div class=sidebar><div class=sidebar-header><div class=text>Posts</div></div><div class=inner><aside><ul><li><a href=/posts/gan-evaluation-with-fid-and-is/ class=active>GAN evaluation using FID and IS</a><nav id=TableOfContents><ul><li><a href=#reproductibility-and-logging-details>Reproductibility and logging details</a></li></ul><ul><li><a href=#dataset-and-transformation>Dataset and transformation</a></li><li><a href=#dataloading>DataLoading</a></li></ul><ul><li><a href=#generator>Generator</a></li><li><a href=#generator-1>Generator</a></li><li><a href=#discriminator>Discriminator</a></li><li><a href=#optimizers>Optimizers</a></li></ul><ul><li><a href=#training-step-function>Training Step Function</a><ul><li><a href=#handlers>Handlers</a></li></ul></li><li><a href=#evaluation-metrics>Evaluation Metrics</a></li><li><a href=#evaluators>Evaluators</a></li><li><a href=#loss-metrics>Loss metrics</a></li><li><a href=#progress-bars>Progress bars</a></li><li><a href=#training>Training</a></li><li><a href=#inference>Inference</a></li></ul></nav></li><li><a href=/posts/introducing-code-generator-v020/>Introducing PyTorch-Ignite's Code Generator v0.2.0</a></li><li><a href=/posts/distributed-made-easy-with-ignite/>Distributed Training Made Easy with PyTorch-Ignite</a></li><li><a href=/posts/introduction/>Introduction to PyTorch-Ignite</a></li></ul></aside></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js></script><script src=/js/modernizr.min.48806575a40ede5e406c8278f3be521afb171e73d324994ced6b41306bdb230a.js></script><script src=/js/fresh.min.29a18383a93b919d639d60aca2437a08bec3ed15276e55dc1cb44a8ddd80bdc6.js></script><script src=/js/active-navbar.min.8067cab2f01a301954f5d28b2cb8cfa1ce10a23ea212f1c734c9b761503d5e0e.js></script><script src=/js/jquery.panelslider.min.js></script><link rel=stylesheet href=/css/copy-code.min.0032417fb3ddf66588bd7871ff6904ecb06695ccb2756f43792bbeec4b7da54f.css><script src=/js/copy-code.min.2597230d83cf7b0549c4a0d22b4e61a1b3fd86eaf05c491aa0b807c7803d9096.js></script><script src=/js/anchor.min.818717ad1ac9e378368b336d69c4a337a826937be38314c67bfca3669727e210.js></script></body></html>

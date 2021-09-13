@@ -1,0 +1,1138 @@
+<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script><script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script><meta property="og:title" content="Introduction to PyTorch-Ignite"><meta property="og:description" content="This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
+Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch."><meta property="og:type" content="article"><meta property="og:url" content="https://pytorch-ignite.ai/posts/introduction/"><meta property="og:image" content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-09-10T00:00:00+00:00"><meta property="article:modified_time" content="2021-08-11T00:51:40+02:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta name=twitter:title content="Introduction to PyTorch-Ignite"><meta name=twitter:description content="This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
+Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch."><meta name=description content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently."><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ee4c2c"><title>Introduction to PyTorch-Ignite | PyTorch-Ignite</title><link rel=stylesheet type=text/css href=/css/style.min.125203f72a92a60311cb74c041a2ee40c9a6af792496be325e393ab46013c90b.css integrity="sha256-ElID9yqSpgMRy3TAQaLuQMmmr3kklr4yXjk6tGATyQs="><link rel=stylesheet type=text/css href=/css/icons.css><link rel=stylesheet href=/css/custom.min.c8f188c4d411d4bd166d8bb069a1cf75538ea63eb0acc05b8a7ceab44e934224.css><link rel=stylesheet href=/css/sponsors.min.273831ae344a358d21cb7ddb8405ef325fe44a83b83e4d37c971b03189b642b1.css><link rel=stylesheet href=/css/features.min.e0e90cfae6f294d73e9cd004efadaf0185e51575d39356cc5b06d4e24e8cf5f4.css><link rel=icon type=image/svg+xml href=/images/logos/ignite_logomark.svg><link rel=stylesheet href=https://rsms.me/inter/inter.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css><link rel=stylesheet href=/css/post.min.84329ebcd6e81746956e818bfd9674176663c4db7b7730d544587934955d3701.css></head><body><nav class="navbar is-fresh is-transparent no-shadow" role=navigation aria-label="main navigation"><div class=container><div class=navbar-brand><a class=navbar-item href=/><img src=/images/logos/ignite_logomark.svg alt width=112 height=28></a>
+<a class="navbar-item is-hidden-desktop is-hidden-tablet"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a><a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=navbar-menu><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a></div><div id=navbar-menu class="navbar-menu is-static"><div class=navbar-start><a class="navbar-item is-hidden-mobile"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a></div><div class=navbar-end><div class="navbar-item has-dropdown is-hoverable"><a class=navbar-link>Docs</a><div class=navbar-dropdown><a href=/tutorials/ class=navbar-item>Tutorials</a>
+<a href=/how-to-guides/ class=navbar-item>How to Guides</a>
+<a href=https://pytorch.org/ignite/engine.html class=navbar-item>API Reference</a></div></div><a href=https://github.com/pytorch/ignite class="navbar-item is-secondary">GitHub</a>
+<a href=/posts/ class="navbar-item is-secondary">Blog</a>
+<a href=/community/ class="navbar-item is-secondary">Community</a></div></div></div></nav><section class="section is-medium has-sidebar"><div class="container sidebar-on"><div class=columns><div class="column is-centered-tablet-portrait"><div class=date><span class=sr-only>Published on</span>
+September 10, 2020</div><h1 class=post-title>Introduction to PyTorch-Ignite</h1><div class=post-image><img src=https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png alt="Ignite your PyTorch neural networks image"></div><h5 class="subtitle is-muted is-5"></h5><div class=divider></div><div class="mt-20 tags"><span class=tag><a href=/tags/deep-learning/>Deep Learning</a></span>
+<span class=tag><a href=/tags/machine-learning/>Machine Learning</a></span>
+<span class=tag><a href=/tags/neural-networks/>Neural Networks</a></span>
+<span class=tag><a href=/tags/python/>Python</a></span>
+<span class=tag><a href=/tags/pytorch/>PyTorch</a></span>
+<span class=tag><a href=/tags/pytorch-ignite/>PyTorch-Ignite</a></span>
+<span class=tag><a href=/tags/tutorial/>Tutorial</a></span></div><div>Last updated: August 11, 2021</div></div></div><div class=content><p>This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.</p><p>Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.</p><p>Crossposted from <a href=https://labs.quansight.org/blog/2020/09/pytorch-ignite/>https://labs.quansight.org/blog/2020/09/pytorch-ignite/</a></p><h2 id=pytorch-ignite-what-and-why->PyTorch-Ignite: What and Why ?</h2><p>PyTorch-Ignite is a high-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.</p><p>PyTorch-Ignite is designed to be at the crossroads of high-level Plug & Play features and under-the-hood expansion possibilities.
+PyTorch-Ignite aims to improve the deep learning community&rsquo;s technical skills by promoting best practices.
+Things are not hidden behind a divine tool that does everything, but remain within the reach of users.</p><p>PyTorch-Ignite takes a &ldquo;Do-It-Yourself&rdquo; approach as research is unpredictable and it is important to capture its requirements without blocking things.</p><h3 id=-pytorch--ignite->🔥 PyTorch + Ignite 🔥</h3><p>PyTorch-Ignite wraps native PyTorch abstractions such as Modules, Optimizers, and DataLoaders in thin abstractions which allow your models to be separated from their training framework completely. This is achieved by a way of inverting control using an abstraction known as the <strong>Engine</strong>. The <strong>Engine</strong> is responsible for running an arbitrary function - typically a training or evaluation function - and emitting events along the way.</p><p>A built-in event system represented by the <strong>Events</strong> class ensures <code>Engine</code>&rsquo;s flexibility, thus facilitating interaction on each step of the run.
+With this approach users can completely customize the flow of events during the run.</p><p>In summary, PyTorch-Ignite is</p><ul><li>Extremely simple engine and event system = Training loop abstraction</li><li>Out-of-the-box metrics to easily evaluate models</li><li>Built-in handlers to compose training pipelines, save artifacts and log parameters and metrics</li></ul><p>Additional benefits of using PyTorch-Ignite are</p><ul><li>Less code than pure PyTorch while ensuring maximum control and simplicity</li><li>More modular code</li></ul><table><thead><tr><th style=text-align:center>PyTorch-Ignite</th><th style=text-align:center>PyTorch</th></tr></thead></table><p><img src=https://raw.githubusercontent.com/pytorch/ignite/master/assets/ignite_vs_bare_pytorch.png alt=pytorch-ignite-vs-pytorch></p><h3 id=about-the-design-of-pytorch-ignite>About the design of PyTorch-Ignite</h3><p>PyTorch-Ignite allows you to compose your application without being focused on a super multi-purpose object, but rather on weakly coupled components allowing advanced customization.</p><p>The design of the library is guided by:</p><ul><li>Anticipating new software or use-cases to come in in the future without centralizing everything in a single class.</li><li>Avoiding configurations with a ton of parameters that are complicated to manage and maintain.</li><li>Providing tools targeted to maximizing cohesion and minimizing coupling.</li><li>Keeping it simple.</li></ul><h2 id=quick-start-example>Quick-start example</h2><p>In this section we will use PyTorch-Ignite to build and train a classifier of the well-known <a href=http://yann.lecun.com/exdb/mnist/>MNIST</a> dataset. This simple example will introduce the principal concepts behind PyTorch-Ignite.</p><p>For additional information and details about the API, please, refer to the project&rsquo;s <a href=https://pytorch.org/ignite/>documentation</a>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>pip install pytorch-ignite
+</code></pre></td></tr></table></div></div><pre><code>Collecting pytorch-ignite
+[?25l  Downloading https://files.pythonhosted.org/packages/c0/8e/08569347023611e40e62a14162024ca6238d42cb528b2302f84d662a2033/pytorch_ignite-0.4.1-py2.py3-none-any.whl (166kB)
+[K     |████████████████████████████████| 174kB 8.4MB/s eta 0:00:01
+[?25hRequirement already satisfied: torch&lt;2,&gt;=1.3 in /usr/local/lib/python3.6/dist-packages (from pytorch-ignite) (1.6.0+cu101)
+Requirement already satisfied: future in /usr/local/lib/python3.6/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (0.16.0)
+Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (1.18.5)
+Installing collected packages: pytorch-ignite
+Successfully installed pytorch-ignite-0.4.1
+</code></pre><h3 id=common-pytorch-code>Common PyTorch code</h3><p>First, we define our model, training and validation datasets, optimizer and loss function:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> os
+<span style=color:#f92672>import</span> torch
+<span style=color:#f92672>import</span> torch.nn <span style=color:#f92672>as</span> nn
+<span style=color:#f92672>import</span> torch.nn.functional <span style=color:#f92672>as</span> F
+<span style=color:#f92672>from</span> torch.optim <span style=color:#f92672>import</span> SGD
+<span style=color:#f92672>from</span> torch.utils.data <span style=color:#f92672>import</span> DataLoader
+
+<span style=color:#f92672>from</span> torchvision.transforms <span style=color:#f92672>import</span> Compose, ToTensor, Normalize
+<span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> MNIST
+
+<span style=color:#75715e># transform to normalize the data</span>
+transform <span style=color:#f92672>=</span> Compose([ToTensor(), Normalize((<span style=color:#ae81ff>0.1307</span>,), (<span style=color:#ae81ff>0.3081</span>,))])
+
+<span style=color:#75715e># Download and load the training data</span>
+trainset <span style=color:#f92672>=</span> MNIST(<span style=color:#e6db74>&#34;data&#34;</span>, download<span style=color:#f92672>=</span>True, train<span style=color:#f92672>=</span>True, transform<span style=color:#f92672>=</span>transform)
+train_loader <span style=color:#f92672>=</span> DataLoader(trainset, batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>128</span>, shuffle<span style=color:#f92672>=</span>True)
+
+<span style=color:#75715e># Download and load the test data</span>
+validationset <span style=color:#f92672>=</span> MNIST(<span style=color:#e6db74>&#34;data&#34;</span>, train<span style=color:#f92672>=</span>False, transform<span style=color:#f92672>=</span>transform)
+val_loader <span style=color:#f92672>=</span> DataLoader(validationset, batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>, shuffle<span style=color:#f92672>=</span>False)
+
+<span style=color:#75715e># Define a class of CNN model (as you want)</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Net</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Net, self)<span style=color:#f92672>.</span>__init__()
+        self<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+        self<span style=color:#f92672>.</span>conv2 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>20</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+        self<span style=color:#f92672>.</span>conv2_drop <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Dropout2d()
+        self<span style=color:#f92672>.</span>fc1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>320</span>, <span style=color:#ae81ff>50</span>)
+        self<span style=color:#f92672>.</span>fc2 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>10</span>)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        x <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>relu(F<span style=color:#f92672>.</span>max_pool2d(self<span style=color:#f92672>.</span>conv1(x), <span style=color:#ae81ff>2</span>))
+        x <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>relu(F<span style=color:#f92672>.</span>max_pool2d(self<span style=color:#f92672>.</span>conv2_drop(self<span style=color:#f92672>.</span>conv2(x)), <span style=color:#ae81ff>2</span>))
+        x <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>320</span>)
+        x <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>relu(self<span style=color:#f92672>.</span>fc1(x))
+        x <span style=color:#f92672>=</span> F<span style=color:#f92672>.</span>dropout(x, training<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>training)
+        x <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>fc2(x)
+        <span style=color:#66d9ef>return</span> F<span style=color:#f92672>.</span>log_softmax(x, dim<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>)
+
+device <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;cuda&#34;</span>
+
+<span style=color:#75715e># Define a model on move it on CUDA device</span>
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+
+<span style=color:#75715e># Define a NLL loss</span>
+criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>NLLLoss()
+
+<span style=color:#75715e># Define a SGD optimizer</span>
+optimizer <span style=color:#f92672>=</span> SGD(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.01</span>, momentum<span style=color:#f92672>=</span><span style=color:#ae81ff>0.8</span>)
+</code></pre></td></tr></table></div></div><p>The above code is pure PyTorch and is typically user-defined and is required for any pipeline.</p><h3 id=trainer-and-evaluators-setup>Trainer and evaluator&rsquo;s setup</h3><p><code>model</code>&rsquo;s trainer is an engine that loops multiple times over the training dataset and updates model parameters. Let&rsquo;s see how we define such a trainer using PyTorch-Ignite. To do this, PyTorch-Ignite introduces the generic class <a href=https://pytorch.org/ignite/concepts.html#engine><code>Engine</code></a> that is an abstraction that loops over the provided data, executes a processing function and returns a result. The only argument needed to construct the trainer is a <code>train_step</code> function.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Engine
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>train_step</span>(engine, batch):
+    x, y <span style=color:#f92672>=</span> batch
+    x <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>to(device)
+    y <span style=color:#f92672>=</span> y<span style=color:#f92672>.</span>to(device)
+
+    model<span style=color:#f92672>.</span>train()
+    y_pred <span style=color:#f92672>=</span> model(x)
+    loss <span style=color:#f92672>=</span> criterion(y_pred, y)
+
+    optimizer<span style=color:#f92672>.</span>zero_grad()
+    loss<span style=color:#f92672>.</span>backward()
+    optimizer<span style=color:#f92672>.</span>step()
+
+    <span style=color:#66d9ef>return</span> loss
+
+<span style=color:#75715e># Define a trainer engine</span>
+trainer <span style=color:#f92672>=</span> Engine(train_step)
+</code></pre></td></tr></table></div></div><p>Please note that <code>train_step</code> function must accept <code>engine</code> and <code>batch</code> arguments. In the example above, <code>engine</code> is not used inside <code>train_step</code>, but we can easily imagine a use-case where we would like to fetch certain information like current iteration, epoch or custom variables from the engine.</p><p>Similarly, model evaluation can be done with an engine that runs a single time over the validation dataset and computes metrics.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>validation_step</span>(engine, batch):
+    model<span style=color:#f92672>.</span>eval()
+    <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+        x, y <span style=color:#f92672>=</span> batch[<span style=color:#ae81ff>0</span>], batch[<span style=color:#ae81ff>1</span>]
+        x <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#34;cuda&#34;</span>)
+        y <span style=color:#f92672>=</span> y<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#34;cuda&#34;</span>)
+
+        y_pred <span style=color:#f92672>=</span> model(x)
+
+        <span style=color:#66d9ef>return</span> y_pred, y
+
+evaluator <span style=color:#f92672>=</span> Engine(validation_step)
+</code></pre></td></tr></table></div></div><p>This allows the construction of training logic from the simplest to the most complicated scenarios.</p><p>The type of output of the process functions (i.e. <code>loss</code> or <code>y_pred, y</code> in the above examples) is not restricted. These functions can return everything the user wants. Output is set to an engine&rsquo;s internal object <code>engine.state.output</code> and can be used further for any type of processing.</p><h3 id=events-and-handers>Events and Handers</h3><p>To improve the engine’s flexibility, a configurable event system is introduced to facilitate the interaction on each step of the run. Namely, <code>Engine</code> allows to add handlers on various <a href=https://pytorch.org/ignite/concepts.html#events-and-handlers><code>Events</code></a> that are triggered during the run. When an event is triggered, attached handlers (named functions, lambdas, class functions) are executed. Here is a schema for when built-in events are triggered by default:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>fire_event(Events<span style=color:#f92672>.</span>STARTED)
+<span style=color:#66d9ef>while</span> epoch <span style=color:#f92672>&lt;</span> max_epochs:
+    fire_event(Events<span style=color:#f92672>.</span>EPOCH_STARTED)
+    <span style=color:#75715e># run once on data</span>
+    <span style=color:#66d9ef>for</span> batch <span style=color:#f92672>in</span> data:
+        fire_event(Events<span style=color:#f92672>.</span>ITERATION_STARTED)
+
+        output <span style=color:#f92672>=</span> process_function(batch)
+
+        fire_event(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED)
+    fire_event(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+fire_event(Events<span style=color:#f92672>.</span>COMPLETED)
+</code></pre></td></tr></table></div></div><p>Note that each engine (i.e. <code>trainer</code> and <code>evaluator</code>) has its own event system which allows to define its own engine&rsquo;s process logic.</p><p>Using <code>Events</code> and handlers, it is possible to completely customize the engine&rsquo;s runs in a very intuitive way:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Events
+
+<span style=color:#75715e># Show a message when the training begins</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>STARTED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>start_message</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Start training!&#34;</span>)
+
+<span style=color:#75715e># Handler can be want you want, here a lambda !</span>
+trainer<span style=color:#f92672>.</span>add_event_handler(
+    Events<span style=color:#f92672>.</span>COMPLETED,
+    <span style=color:#66d9ef>lambda</span> _: <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Training completed!&#34;</span>)
+)
+
+<span style=color:#75715e># Run evaluator on val_loader every trainer&#39;s epoch completed</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_validation</span>():
+    evaluator<span style=color:#f92672>.</span>run(val_loader)
+</code></pre></td></tr></table></div></div><p>In the code above, the <code>run_validation</code> function is attached to the <code>trainer</code> and will be triggered at each completed epoch to launch <code>model</code>&rsquo;s validation with <code>evaluator</code>. This shows that engines can be embedded to create complex pipelines.</p><p>Handlers offer unparalleled flexibility compared to callbacks as they can be any function: e.g., a lambda, a simple function, a class method, etc. Thus, we do not require to inherit from an interface and override its abstract methods which could unnecessarily bulk up your code and its complexity.</p><p>The possibilities of customization are endless as PyTorch-Ignite allows you to get hold of your application workflow. As mentioned before, there is no magic nor fully automatated things in PyTorch-Ignite.</p><h3 id=model-evaluation-metrics>Model evaluation metrics</h3><p>Metrics are another nice example of what the handlers for PyTorch-Ignite are and how to use them. In our example, we use the built-in metrics <code>Accuracy</code> and <code>Loss</code>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy, Loss
+
+<span style=color:#75715e># Accuracy and loss metrics are defined</span>
+val_metrics <span style=color:#f92672>=</span> {
+  <span style=color:#e6db74>&#34;accuracy&#34;</span>: Accuracy(),
+  <span style=color:#e6db74>&#34;loss&#34;</span>: Loss(criterion)
+}
+
+<span style=color:#75715e># Attach metrics to the evaluator</span>
+<span style=color:#66d9ef>for</span> name, metric <span style=color:#f92672>in</span> val_metrics<span style=color:#f92672>.</span>items():
+    metric<span style=color:#f92672>.</span>attach(evaluator, name)
+</code></pre></td></tr></table></div></div><p>PyTorch-Ignite metrics can be elegantly combined with each other.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Precision, Recall
+
+<span style=color:#75715e># Build F1 score</span>
+precision <span style=color:#f92672>=</span> Precision(average<span style=color:#f92672>=</span>False)
+recall <span style=color:#f92672>=</span> Recall(average<span style=color:#f92672>=</span>False)
+F1 <span style=color:#f92672>=</span> (precision <span style=color:#f92672>*</span> recall <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>/</span> (precision <span style=color:#f92672>+</span> recall))<span style=color:#f92672>.</span>mean()
+
+<span style=color:#75715e># and attach it to evaluator</span>
+F1<span style=color:#f92672>.</span>attach(evaluator, <span style=color:#e6db74>&#34;f1&#34;</span>)
+</code></pre></td></tr></table></div></div><p>To make general things even easier, <a href=https://pytorch.org/ignite/engine.html#ignite-engine>helper methods</a> are available for the creation of a supervised <code>Engine</code> as above. Thus, let&rsquo;s define another evaluator applied to the training dataset in this way.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> create_supervised_evaluator
+
+<span style=color:#75715e># Define another evaluator with default validation function and attach metrics</span>
+train_evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>val_metrics, device<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;cuda&#34;</span>)
+
+<span style=color:#75715e># Run train_evaluator on train_loader every trainer&#39;s epoch completed</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_train_validation</span>():
+    train_evaluator<span style=color:#f92672>.</span>run(train_loader)
+</code></pre></td></tr></table></div></div><p>The reason why we want to have two separate evaluators (<code>evaluator</code> and <code>train_evaluator</code>) is that they can have different attached handlers and logic to perform. For example, if we would like store the best model defined by the validation metric value, this role is delegated to <code>evaluator</code> which computes metrics over the validation dataset.</p><h3 id=common-training-handlers>Common training handlers</h3><p>From now on, we have <code>trainer</code> which will call evaluators <code>evaluator</code> and <code>train_evaluator</code> at every completed epoch. Thus, each evaluator will run and compute corresponding metrics. In addition, it would be very helpful to have a display of the results that shows those metrics.</p><p>Using the customization potential of the engine&rsquo;s system, we can add simple handlers for this logging purpose:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#a6e22e>@evaluator.on</span>(Events<span style=color:#f92672>.</span>COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_validation_results</span>():
+    metrics <span style=color:#f92672>=</span> evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Validation Results - Epoch: {}  Avg accuracy: {:.2f} Avg loss: {:.2f} Avg F1: {:.2f}&#34;</span>
+          <span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch, metrics[<span style=color:#e6db74>&#34;accuracy&#34;</span>], metrics[<span style=color:#e6db74>&#34;loss&#34;</span>], metrics[<span style=color:#e6db74>&#34;f1&#34;</span>]))
+
+<span style=color:#a6e22e>@train_evaluator.on</span>(Events<span style=color:#f92672>.</span>COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_train_results</span>():
+    metrics <span style=color:#f92672>=</span> train_evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;  Training Results - Epoch: {}  Avg accuracy: {:.2f} Avg loss: {:.2f}&#34;</span>
+          <span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch, metrics[<span style=color:#e6db74>&#34;accuracy&#34;</span>], metrics[<span style=color:#e6db74>&#34;loss&#34;</span>]))
+</code></pre></td></tr></table></div></div><p>Here we attached <code>log_validation_results</code> and <code>log_train_results</code> handlers on <code>Events.COMPLETED</code> since <code>evaluator</code> and <code>train_evaluator</code> will run a single epoch over the validation datasets.</p><p>Let&rsquo;s see how to add some others helpful features to our application.</p><ul><li>PyTorch-Ignite provides a <a href=https://pytorch.org/ignite/contrib/handlers.html#tqdm-logger><code>ProgressBar</code></a> handler to show an engine&rsquo;s progression.</li></ul><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> ProgressBar
+
+ProgressBar()<span style=color:#f92672>.</span>attach(trainer, output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> x: {<span style=color:#e6db74>&#39;batch loss&#39;</span>: x})
+</code></pre></td></tr></table></div></div><ul><li><a href=https://pytorch.org/ignite/handlers.html#ignite.handlers.ModelCheckpoint><code>ModelCheckpoint</code></a> handler can be used to periodically save objects which have an attribute <code>state_dict</code>.</li></ul><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.handlers <span style=color:#f92672>import</span> ModelCheckpoint, global_step_from_engine
+
+<span style=color:#75715e># Score function to select relevant metric, here f1</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>score_function</span>(engine):
+    <span style=color:#66d9ef>return</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics[<span style=color:#e6db74>&#34;f1&#34;</span>]
+
+<span style=color:#75715e># Checkpoint to store n_saved best models wrt score function</span>
+model_checkpoint <span style=color:#f92672>=</span> ModelCheckpoint(
+    <span style=color:#e6db74>&#34;quick-start-mnist-output&#34;</span>,
+    n_saved<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>,
+    filename_prefix<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;best&#34;</span>,
+    score_function<span style=color:#f92672>=</span>score_function,
+    score_name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;f1&#34;</span>,
+    global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer),
+)
+
+<span style=color:#75715e># Save the model (if relevant) every epoch completed of evaluator</span>
+evaluator<span style=color:#f92672>.</span>add_event_handler(Events<span style=color:#f92672>.</span>COMPLETED, model_checkpoint, {<span style=color:#e6db74>&#34;model&#34;</span>: model})
+</code></pre></td></tr></table></div></div><ul><li>PyTorch-Ignite provides wrappers to modern tools to track experiments. For example, <a href=https://pytorch.org/ignite/contrib/handlers.html#ignite.contrib.handlers.tensorboard_logger.TensorboardLogger><code>TensorBoardLogger</code></a> handler allows to log metric results, model&rsquo;s and optimizer&rsquo;s parameters, gradients, and more during the training and validation for TensorBoard.</li></ul><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> TensorboardLogger
+
+<span style=color:#75715e># Define a Tensorboard logger</span>
+tb_logger <span style=color:#f92672>=</span> TensorboardLogger(log_dir<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;quick-start-mnist-output&#34;</span>)
+
+<span style=color:#75715e># Attach handler to plot trainer&#39;s loss every 100 iterations</span>
+tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+    trainer,
+    event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>),
+    tag<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;training&#34;</span>,
+    output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> loss: {<span style=color:#e6db74>&#34;batchloss&#34;</span>: loss},
+)
+
+<span style=color:#75715e># Attach handler to dump evaluator&#39;s metrics every epoch completed</span>
+<span style=color:#66d9ef>for</span> tag, evaluator <span style=color:#f92672>in</span> [(<span style=color:#e6db74>&#34;training&#34;</span>, train_evaluator), (<span style=color:#e6db74>&#34;validation&#34;</span>, evaluator)]:
+    tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+        evaluator,
+        event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>EPOCH_COMPLETED,
+        tag<span style=color:#f92672>=</span>tag,
+        metric_names<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;all&#34;</span>,
+        global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer),
+    )
+</code></pre></td></tr></table></div></div><p>It is possible to extend the use of the TensorBoard logger very simply by integrating user-defined functions. For example, here is how to display images and predictions during training:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+
+<span style=color:#75715e># Store predictions and scores using matplotlib</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>predictions_gt_images_handler</span>(engine, logger, <span style=color:#f92672>*</span>args, <span style=color:#f92672>**</span>kwargs):
+    x, _ <span style=color:#f92672>=</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>batch
+    y_pred, y <span style=color:#f92672>=</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>output
+    <span style=color:#75715e># y_pred is log softmax value</span>
+    num_x <span style=color:#f92672>=</span> num_y <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span>
+    le <span style=color:#f92672>=</span> num_x <span style=color:#f92672>*</span> num_y
+    probs, preds <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>max(torch<span style=color:#f92672>.</span>exp(y_pred[:le]), dim<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+    fig <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>figure(figsize<span style=color:#f92672>=</span>(<span style=color:#ae81ff>20</span>, <span style=color:#ae81ff>20</span>))
+    <span style=color:#66d9ef>for</span> idx <span style=color:#f92672>in</span> range(le):
+        ax <span style=color:#f92672>=</span> fig<span style=color:#f92672>.</span>add_subplot(num_x, num_y, idx <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>, xticks<span style=color:#f92672>=</span>[], yticks<span style=color:#f92672>=</span>[])
+        ax<span style=color:#f92672>.</span>imshow(x[idx]<span style=color:#f92672>.</span>squeeze(), cmap<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Greys&#34;</span>)
+        ax<span style=color:#f92672>.</span>set_title(<span style=color:#e6db74>&#34;{0} {1:.1f}% (label: {2})&#34;</span><span style=color:#f92672>.</span>format(
+            preds[idx],
+            probs[idx] <span style=color:#f92672>*</span> <span style=color:#ae81ff>100.0</span>,
+            y[idx]),
+            color<span style=color:#f92672>=</span>(<span style=color:#e6db74>&#34;green&#34;</span> <span style=color:#66d9ef>if</span> preds[idx] <span style=color:#f92672>==</span> y[idx] <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;red&#34;</span>)
+        )
+    logger<span style=color:#f92672>.</span>writer<span style=color:#f92672>.</span>add_figure(<span style=color:#e6db74>&#39;predictions vs actuals&#39;</span>, figure<span style=color:#f92672>=</span>fig, global_step<span style=color:#f92672>=</span>trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch)
+
+<span style=color:#75715e># Attach custom function to evaluator at first iteration</span>
+tb_logger<span style=color:#f92672>.</span>attach(
+    evaluator,
+    log_handler<span style=color:#f92672>=</span>predictions_gt_images_handler,
+    event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(once<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>),
+)
+</code></pre></td></tr></table></div></div><p>All that is left to do now is to run the <code>trainer</code> on data from <code>train_loader</code> for a number of epochs.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+
+<span style=color:#75715e># Once everything is done, let&#39;s close the logger</span>
+tb_logger<span style=color:#f92672>.</span>close()
+</code></pre></td></tr></table></div></div><pre><code>Start training!
+
+Validation Results - Epoch: 1  Avg accuracy: 0.94 Avg loss: 0.20 Avg F1: 0.94
+  Training Results - Epoch: 1  Avg accuracy: 0.94 Avg loss: 0.21
+
+Validation Results - Epoch: 2  Avg accuracy: 0.96 Avg loss: 0.12 Avg F1: 0.96
+  Training Results - Epoch: 2  Avg accuracy: 0.96 Avg loss: 0.13
+
+Validation Results - Epoch: 3  Avg accuracy: 0.97 Avg loss: 0.10 Avg F1: 0.97
+  Training Results - Epoch: 3  Avg accuracy: 0.97 Avg loss: 0.10
+
+Validation Results - Epoch: 4  Avg accuracy: 0.98 Avg loss: 0.07 Avg F1: 0.98
+  Training Results - Epoch: 4  Avg accuracy: 0.97 Avg loss: 0.09
+
+Validation Results - Epoch: 5  Avg accuracy: 0.98 Avg loss: 0.07 Avg F1: 0.98
+  Training Results - Epoch: 5  Avg accuracy: 0.98 Avg loss: 0.08
+Training completed!
+</code></pre><p>We can inspect results using <code>tensorboard</code>. We can observe two tabs &ldquo;Scalars&rdquo; and &ldquo;Images&rdquo;.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>%</span>load_ext tensorboard
+
+<span style=color:#f92672>%</span>tensorboard <span style=color:#f92672>--</span>logdir<span style=color:#f92672>=.</span>
+</code></pre></td></tr></table></div></div><table><thead><tr><th style=text-align:center><img src=https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/images/pytorch-ignite/mnist-tb-scalars.png alt=mnist-tb-scalars></th><th style=text-align:center><img src=https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/images/pytorch-ignite/mnist-tb-images.png alt=mnist-tb-images></th></tr></thead></table><h3 id=5-takeaways>5 takeaways</h3><ul><li><p>Almost any training logic can be coded as a <code>train_step</code> method and a trainer built using this method.</p></li><li><p>The essence of the library is the <strong><code>Engine</code></strong> class that loops a given number of times over a dataset and executes a processing function.</p></li><li><p>A highly customizable <strong>event system</strong> simplifies interaction with the engine on each step of the run.</p></li><li><p>PyTorch-Ignite provides a set of built-in handlers and metrics for common tasks.</p></li><li><p>PyTorch-Ignite is easy to extend.</p></li></ul><h2 id=advanced-features>Advanced features</h2><p>In this section we would like to present some advanced features of PyTorch-Ignite for experienced users. We will cover events, handlers and metrics in more detail, as well as distributed computations on GPUs and TPUs. Feel free to skip this section now and come back later if you are a beginner.</p><h3 id=power-of-events--handlers>Power of Events & Handlers</h3><p>We have seen throughout the quick-start example that events and handlers are perfect to execute any number of functions whenever you wish. In addition to that we provide several ways to extend it even more by</p><ul><li><p>Built-in events filtering</p></li><li><p>Stacking events to share the action</p></li><li><p>Adding custom events to go beyond built-in standard events</p></li></ul><p>Let&rsquo;s look at these features in more detail.</p><h4 id=built-in-events-filtering>Built-in events filtering</h4><p>Users can simply filter out events to skip triggering the handler. Let&rsquo;s create a dummy trainer:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Engine, Events
+
+trainer <span style=color:#f92672>=</span> Engine(<span style=color:#66d9ef>lambda</span> e, batch: None)
+</code></pre></td></tr></table></div></div><p>Let&rsquo;s consider a use-case where we would like to train a model and periodically run its validation on several development datasets, e.g. <code>devset1</code> and <code>devset2</code>:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># We run the validation on devset1 every 5 epochs</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_validation1</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Epoch {}: Validation on devset 1&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch))
+    <span style=color:#75715e># evaluator.run(devset1)  # commented out for demo purposes</span>
+
+<span style=color:#75715e># We run another validation on devset2 every 10 epochs</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_validation2</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Epoch {}: Validation on devset 2&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch))
+    <span style=color:#75715e># evaluator.run(devset2)  # commented out for demo purposes</span>
+
+train_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>]
+trainer<span style=color:#f92672>.</span>run(train_data, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>)
+</code></pre></td></tr></table></div></div><pre><code>Epoch 5: Validation on devset 1
+Epoch 10: Validation on devset 1
+Epoch 10: Validation on devset 2
+Epoch 15: Validation on devset 1
+Epoch 20: Validation on devset 1
+Epoch 20: Validation on devset 2
+Epoch 25: Validation on devset 1
+Epoch 30: Validation on devset 1
+Epoch 30: Validation on devset 2
+Epoch 35: Validation on devset 1
+Epoch 40: Validation on devset 1
+Epoch 40: Validation on devset 2
+Epoch 45: Validation on devset 1
+Epoch 50: Validation on devset 1
+Epoch 50: Validation on devset 2
+</code></pre><p>Let&rsquo;s now consider another situation where we would like to make a single change once we reach a certain epoch or iteration. For example, let&rsquo;s change the training dataset on the 5-th epoch from low resolution images to high resolution images:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>train_step</span>(e, batch):
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Epoch {} - {} : batch={}&#34;</span><span style=color:#f92672>.</span>format(e<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch, e<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>iteration, batch))
+
+trainer <span style=color:#f92672>=</span> Engine(train_step)
+
+small_res_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, ]
+high_res_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>11</span>, <span style=color:#ae81ff>12</span>]
+
+<span style=color:#75715e># We run the following handler once on 5-th epoch started</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_STARTED(once<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>change_train_dataset</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Epoch {}: Change training dataset&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch))
+    trainer<span style=color:#f92672>.</span>set_data(high_res_data)
+
+trainer<span style=color:#f92672>.</span>run(small_res_data, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+</code></pre></td></tr></table></div></div><pre><code>Epoch 1 - 1 : batch=0
+Epoch 1 - 2 : batch=1
+Epoch 1 - 3 : batch=2
+Epoch 2 - 4 : batch=0
+Epoch 2 - 5 : batch=1
+Epoch 2 - 6 : batch=2
+Epoch 3 - 7 : batch=0
+Epoch 3 - 8 : batch=1
+Epoch 3 - 9 : batch=2
+Epoch 4 - 10 : batch=0
+Epoch 4 - 11 : batch=1
+Epoch 4 - 12 : batch=2
+Epoch 5: Change training dataset
+Epoch 5 - 13 : batch=10
+Epoch 5 - 14 : batch=11
+Epoch 5 - 15 : batch=12
+Epoch 6 - 16 : batch=10
+Epoch 6 - 17 : batch=11
+Epoch 6 - 18 : batch=12
+Epoch 7 - 19 : batch=10
+Epoch 7 - 20 : batch=11
+Epoch 7 - 21 : batch=12
+Epoch 8 - 22 : batch=10
+Epoch 8 - 23 : batch=11
+Epoch 8 - 24 : batch=12
+Epoch 9 - 25 : batch=10
+Epoch 9 - 26 : batch=11
+Epoch 9 - 27 : batch=12
+Epoch 10 - 28 : batch=10
+Epoch 10 - 29 : batch=11
+Epoch 10 - 30 : batch=12
+</code></pre><p>Let&rsquo;s now consider another situation where we would like to trigger a handler with completely custom logic. For example, we would like to dump model gradients if the training loss satisfies a certain condition:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># Let&#39;s predefine for simplicity training losses</span>
+train_losses <span style=color:#f92672>=</span> [<span style=color:#ae81ff>2.0</span>, <span style=color:#ae81ff>1.9</span>, <span style=color:#ae81ff>1.7</span>, <span style=color:#ae81ff>1.5</span>, <span style=color:#ae81ff>1.6</span>, <span style=color:#ae81ff>1.2</span>, <span style=color:#ae81ff>0.9</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.7</span>, <span style=color:#ae81ff>0.4</span>, <span style=color:#ae81ff>0.2</span>, <span style=color:#ae81ff>0.1</span>, <span style=color:#ae81ff>0.1</span>, <span style=color:#ae81ff>0.01</span>]
+
+trainer <span style=color:#f92672>=</span> Engine(<span style=color:#66d9ef>lambda</span> e, batch: train_losses[e<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>iteration <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>])
+
+<span style=color:#75715e># We define our custom logic when to execute a handler</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>custom_event_filter</span>(trainer, event):
+    <span style=color:#66d9ef>if</span> <span style=color:#ae81ff>0.1</span> <span style=color:#f92672>&lt;</span> trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>output <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1.0</span>:
+        <span style=color:#66d9ef>return</span> True
+    <span style=color:#66d9ef>return</span> False
+
+<span style=color:#75715e># We run the following handler every iteration completed under our custom_event_filter condition:</span>
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(event_filter<span style=color:#f92672>=</span>custom_event_filter))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dump_model_grads</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;{} - loss={}: dump model grads&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>iteration, trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>output))
+
+train_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>, ]
+trainer<span style=color:#f92672>.</span>run(train_data, max_epochs<span style=color:#f92672>=</span>len(train_losses))
+</code></pre></td></tr></table></div></div><pre><code>7 - loss=0.9: dump model grads
+8 - loss=0.8: dump model grads
+10 - loss=0.8: dump model grads
+11 - loss=0.7: dump model grads
+12 - loss=0.4: dump model grads
+13 - loss=0.2: dump model grads
+</code></pre><h4 id=stack-events-to-share-the-action>Stack events to share the action</h4><p>A user can trigger the same handler on events of differen types. For example, let&rsquo;s run a handler for model&rsquo;s validation every 3 epochs and when the training is completed:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>trainer <span style=color:#f92672>=</span> Engine(<span style=color:#66d9ef>lambda</span> e, batch: None)
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>) <span style=color:#f92672>|</span> Events<span style=color:#f92672>.</span>COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_validation</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;Epoch {} - event={}: Validation&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>epoch, trainer<span style=color:#f92672>.</span>last_event_name))
+    <span style=color:#75715e># evaluator.run(devset)</span>
+
+train_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>]
+trainer<span style=color:#f92672>.</span>run(train_data, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>20</span>)
+</code></pre></td></tr></table></div></div><pre><code>Epoch 3 - event=epoch_completed: Validation
+Epoch 6 - event=epoch_completed: Validation
+Epoch 9 - event=epoch_completed: Validation
+Epoch 12 - event=epoch_completed: Validation
+Epoch 15 - event=epoch_completed: Validation
+Epoch 18 - event=epoch_completed: Validation
+Epoch 20 - event=completed: Validation
+</code></pre><h4 id=add-custom-events>Add custom events</h4><p>A user can add their own events to go beyond built-in standard events. For example, let&rsquo;s define new events related to backward and optimizer step calls. This can help us to attach specific handlers on these events in a configurable manner.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> EventEnum
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BackpropEvents</span>(EventEnum):
+    BACKWARD_STARTED <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;backward_started&#39;</span>
+    BACKWARD_COMPLETED <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;backward_completed&#39;</span>
+    OPTIM_STEP_COMPLETED <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;optim_step_completed&#39;</span>
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>update</span>(engine, batch):
+    <span style=color:#75715e># ...</span>
+    <span style=color:#75715e># loss = criterion(y_pred, y)</span>
+    engine<span style=color:#f92672>.</span>fire_event(BackpropEvents<span style=color:#f92672>.</span>BACKWARD_STARTED)
+    <span style=color:#75715e># loss.backward()</span>
+    engine<span style=color:#f92672>.</span>fire_event(BackpropEvents<span style=color:#f92672>.</span>BACKWARD_COMPLETED)
+    <span style=color:#75715e># optimizer.step()</span>
+    engine<span style=color:#f92672>.</span>fire_event(BackpropEvents<span style=color:#f92672>.</span>OPTIM_STEP_COMPLETED)
+    <span style=color:#75715e># ...</span>
+
+trainer <span style=color:#f92672>=</span> Engine(update)
+trainer<span style=color:#f92672>.</span>register_events(<span style=color:#f92672>*</span>BackpropEvents)
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>function_before_backprop</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;{} - before backprop&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>iteration))
+
+trainer<span style=color:#f92672>.</span>add_event_handler(BackpropEvents<span style=color:#f92672>.</span>BACKWARD_STARTED, function_before_backprop)
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>function_after_backprop</span>():
+    <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;{} - after backprop&#34;</span><span style=color:#f92672>.</span>format(trainer<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>iteration))
+
+trainer<span style=color:#f92672>.</span>add_event_handler(BackpropEvents<span style=color:#f92672>.</span>BACKWARD_COMPLETED, function_after_backprop)
+
+train_data <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>]
+trainer<span style=color:#f92672>.</span>run(train_data, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><pre><code>1 - before backprop
+1 - after backprop
+2 - before backprop
+2 - after backprop
+3 - before backprop
+3 - after backprop
+4 - before backprop
+4 - after backprop
+5 - before backprop
+5 - after backprop
+6 - before backprop
+6 - after backprop
+7 - before backprop
+7 - after backprop
+8 - before backprop
+8 - after backprop
+9 - before backprop
+9 - after backprop
+10 - before backprop
+10 - after backprop
+</code></pre><h3 id=out-of-the-box-metrics>Out-of-the-box metrics</h3><p>PyTorch-Ignite provides an ensemble of metrics dedicated to many Deep Learning tasks (classification, regression, segmentation, etc.). Most of these metrics provide a way to compute various quantities of interest in an online fashion without having to store the entire output history of a model.</p><ul><li>For classification : <code>Precision</code>, <code>Recall</code>, <code>Accuracy</code>, <code>ConfusionMatrix</code> and more!</li><li>For segmentation : <code>DiceCoefficient</code>, <code>IoU</code>, <code>mIOU</code> and more!</li><li>~20 regression metrics, e.g. MSE, MAE, MedianAbsoluteError, etc</li><li>Metrics that store the entire output history per epoch<ul><li>Possible to use with <code>scikit-learn</code> metrics, e.g. <code>EpochMetric</code>, <code>AveragePrecision</code>, <code>ROC_AUC</code>, etc</li></ul></li><li>Easily composable to assemble a custom metric</li><li>Easily extendable to <a href=https://pytorch.org/ignite/metrics.html#how-to-create-a-custom-metric>create custom metrics</a></li></ul><p>Complete lists of metrics provided by PyTorch-Ignite can be found <a href=https://pytorch.org/ignite/metrics.html#complete-list-of-metrics>here</a> for <code>ignite.metrics</code> and <a href=https://pytorch.org/ignite/contrib/metrics.html#ignite-contrib-metrics>here</a> for <code>ignite.contrib.metrics</code>.</p><p>Two kinds of public APIs are provided:</p><ul><li>metric is attached to <code>Engine</code></li><li>metric&rsquo;s <code>reset</code>, <code>update</code>, <code>compute</code> methods</li></ul><h4 id=more-on-the-reset-update-compute-public-api>More on the <code>reset</code>, <code>update</code>, <code>compute</code> public API</h4><p>Let&rsquo;s demonstrate this API on a simple example using the <code>Accuracy</code> metric. The idea behind this API is that we accumulate internally certain counters on each <code>update</code> call. The metric&rsquo;s value is computed on each <code>compute</code> call and counters are reset on each <code>reset</code> call.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy
+
+acc <span style=color:#f92672>=</span> Accuracy()
+
+<span style=color:#75715e># Start accumulation</span>
+acc<span style=color:#f92672>.</span>reset()
+
+y_target <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>,])
+<span style=color:#75715e># y_pred is logits computed by the model</span>
+y_pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([
+    [<span style=color:#ae81ff>10.0</span>, <span style=color:#ae81ff>0.1</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],  <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>2.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2.0</span>],  <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>4.0</span>],   <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>5.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],   <span style=color:#75715e># correct</span>
+])
+acc<span style=color:#f92672>.</span>update((y_pred, y_target))
+
+<span style=color:#75715e># Compute accuracy on 4 samples</span>
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;After 1st update, accuracy=&#34;</span>, acc<span style=color:#f92672>.</span>compute())
+
+y_target <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>2</span>])
+<span style=color:#75715e># y_pred is logits computed by the model</span>
+y_pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([
+    [<span style=color:#ae81ff>2.0</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],   <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2.0</span>],   <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>2.6</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>4.0</span>],   <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>3.0</span>, <span style=color:#ae81ff>2.0</span>],   <span style=color:#75715e># correct</span>
+])
+acc<span style=color:#f92672>.</span>update((y_pred, y_target))
+
+<span style=color:#75715e># Compute accuracy on 8 samples</span>
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;After 2nd update, accuracy=&#34;</span>, acc<span style=color:#f92672>.</span>compute())
+</code></pre></td></tr></table></div></div><pre><code>After 1st update, accuracy= 0.75
+After 2nd update, accuracy= 0.625
+</code></pre><h4 id=composable-metrics>Composable metrics</h4><p>Users can compose their own metrics with ease from existing ones using arithmetic operations or PyTorch methods. For example, an error metric defined as <code>100 * (1.0 - accuracy)</code> can be coded in a straightforward manner:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy
+
+acc <span style=color:#f92672>=</span> Accuracy()
+error <span style=color:#f92672>=</span> <span style=color:#ae81ff>100.0</span> <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> acc)
+
+<span style=color:#75715e># Start accumulation</span>
+acc<span style=color:#f92672>.</span>reset()
+
+y_target <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>1</span>,])
+<span style=color:#75715e># y_pred is logits computed by the model</span>
+y_pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([
+    [<span style=color:#ae81ff>10.0</span>, <span style=color:#ae81ff>0.1</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],  <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>2.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2.0</span>],  <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>4.0</span>],   <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>5.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],   <span style=color:#75715e># correct</span>
+])
+acc<span style=color:#f92672>.</span>update((y_pred, y_target))
+
+<span style=color:#75715e># Compute error on 4 samples</span>
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;After 1st update, error=&#34;</span>, error<span style=color:#f92672>.</span>compute())
+
+y_target <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>2</span>])
+<span style=color:#75715e># y_pred is logits computed by the model</span>
+y_pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tensor([
+    [<span style=color:#ae81ff>2.0</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>],   <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2.0</span>],   <span style=color:#75715e># incorrect</span>
+    [<span style=color:#ae81ff>2.6</span>, <span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>4.0</span>],   <span style=color:#75715e># correct</span>
+    [<span style=color:#ae81ff>1.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>3.0</span>, <span style=color:#ae81ff>2.0</span>],   <span style=color:#75715e># correct</span>
+])
+acc<span style=color:#f92672>.</span>update((y_pred, y_target))
+
+<span style=color:#75715e># Compute err on 8 samples</span>
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;After 2nd update, error=&#34;</span>, error<span style=color:#f92672>.</span>compute())
+</code></pre></td></tr></table></div></div><pre><code>After 1st update, error= 25.0
+After 2nd update, error= 37.5
+</code></pre><p>In case a custom metric can not be expressed as arithmetic operations of base metrics, please follow <a href=https://pytorch.org/ignite/metrics.html#how-to-create-a-custom-metric>this guide</a> to implement the custom metric.</p><h3 id=out-of-the-box-handlers>Out-of-the-box handlers</h3><p>PyTorch-Ignite provides various commonly used handlers to simplify application code:</p><ul><li>Common training handlers: <code>Checkpoint</code>, <code>EarlyStopping</code>, <code>Timer</code>, <code>TerminateOnNan</code></li><li>Optimizer&rsquo;s parameter scheduling (learning rate, momentum, etc.)<ul><li>concatenate schedulers, add warm-up, cyclical scheduling, piecewise-linear scheduling, and more! See <a href=https://pytorch.org/ignite/contrib/handlers.html#more-on-parameter-scheduling>examples</a>.</li></ul></li><li>Time profiling</li><li>Logging to experiment tracking systems:<ul><li>Tensorboard, Visdom, MLflow, Polyaxon, Neptune, Trains, etc.</li></ul></li></ul><p>Complete lists of handlers provided by PyTorch-Ignite can be found <a href=https://pytorch.org/ignite/handlers.html#complete-list-of-handlers>here</a> for <code>ignite.handlers</code> and <a href=https://pytorch.org/ignite/contrib/handlers.html#ignite-contrib-handlers>here</a> for <code>ignite.contrib.handlers</code>.</p><h4 id=common-training-handlers-1>Common training handlers</h4><p>With the out-of-the-box <a href=https://pytorch.org/ignite/handlers.html#ignite.handlers.Checkpoint><code>Checkpoint</code></a> handler, a user can easily save the training state or best models to the filesystem or a cloud.</p><p><a href=https://pytorch.org/ignite/handlers.html#ignite.handlers.EarlyStopping><code>EarlyStopping</code></a> and <a href=https://pytorch.org/ignite/handlers.html#ignite.handlers.TerminateOnNan><code>TerminateOnNan</code></a> helps to stop the training if overfitting or diverging.</p><p>All those things can be easily added to the trainer one by one or with <a href=https://pytorch.org/ignite/contrib/engines.html#module-ignite.contrib.engines.common>helper methods</a>.</p><p>Let&rsquo;s consider an example of using helper methods.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">58
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>import</span> torch.nn <span style=color:#f92672>as</span> nn
+<span style=color:#f92672>import</span> torch.optim <span style=color:#f92672>as</span> optim
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> create_supervised_trainer, create_supervised_evaluator, Events
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy
+<span style=color:#f92672>import</span> ignite.contrib.engines.common <span style=color:#f92672>as</span> common
+
+train_data <span style=color:#f92672>=</span> [[torch<span style=color:#f92672>.</span>rand(<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>4</span>), torch<span style=color:#f92672>.</span>randint(<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>5</span>, size<span style=color:#f92672>=</span>(<span style=color:#ae81ff>2</span>, ))] <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>10</span>)]
+val_data <span style=color:#f92672>=</span> [[torch<span style=color:#f92672>.</span>rand(<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>4</span>), torch<span style=color:#f92672>.</span>randint(<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>5</span>, size<span style=color:#f92672>=</span>(<span style=color:#ae81ff>2</span>, ))] <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>10</span>)]
+epoch_length <span style=color:#f92672>=</span> len(train_data)
+
+model <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>5</span>)
+optimizer <span style=color:#f92672>=</span> optim<span style=color:#f92672>.</span>SGD(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.01</span>)
+<span style=color:#75715e># step_size is expressed in iterations</span>
+lr_scheduler <span style=color:#f92672>=</span> optim<span style=color:#f92672>.</span>lr_scheduler<span style=color:#f92672>.</span>StepLR(optimizer, step_size<span style=color:#f92672>=</span>epoch_length, gamma<span style=color:#f92672>=</span><span style=color:#ae81ff>0.88</span>)
+
+<span style=color:#75715e># Let&#39;s define some dummy trainer and evaluator</span>
+trainer <span style=color:#f92672>=</span> create_supervised_trainer(model, optimizer, nn<span style=color:#f92672>.</span>CrossEntropyLoss())
+evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>{<span style=color:#e6db74>&#34;accuracy&#34;</span>: Accuracy()})
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_validation</span>():
+    evaluator<span style=color:#f92672>.</span>run(val_data)
+
+<span style=color:#75715e># training state to save</span>
+to_save <span style=color:#f92672>=</span> {
+    <span style=color:#e6db74>&#34;trainer&#34;</span>: trainer, <span style=color:#e6db74>&#34;model&#34;</span>: model,
+    <span style=color:#e6db74>&#34;optimizer&#34;</span>: optimizer, <span style=color:#e6db74>&#34;lr_scheduler&#34;</span>: lr_scheduler
+}
+metric_names <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#34;batch loss&#34;</span>, ]
+
+common<span style=color:#f92672>.</span>setup_common_training_handlers(
+    trainer<span style=color:#f92672>=</span>trainer,
+    to_save<span style=color:#f92672>=</span>to_save,
+    output_path<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;checkpoints&#34;</span>,
+    save_every_iters<span style=color:#f92672>=</span>epoch_length,
+    lr_scheduler<span style=color:#f92672>=</span>lr_scheduler,
+    output_names<span style=color:#f92672>=</span>metric_names,
+    with_pbars<span style=color:#f92672>=</span>True,
+)
+
+tb_logger <span style=color:#f92672>=</span> common<span style=color:#f92672>.</span>setup_tb_logging(<span style=color:#e6db74>&#34;tb_logs&#34;</span>, trainer, optimizer, evaluators<span style=color:#f92672>=</span>evaluator)
+
+common<span style=color:#f92672>.</span>save_best_model_by_val_score(
+    <span style=color:#e6db74>&#34;best_models&#34;</span>,
+    evaluator<span style=color:#f92672>=</span>evaluator,
+    model<span style=color:#f92672>=</span>model,
+    metric_name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;accuracy&#34;</span>,
+    n_saved<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>,
+    trainer<span style=color:#f92672>=</span>trainer,
+    tag<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;val&#34;</span>,
+)
+
+trainer<span style=color:#f92672>.</span>run(train_data, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+
+tb_logger<span style=color:#f92672>.</span>close()
+</code></pre></td></tr></table></div></div><pre><code>HBox(children=(FloatProgress(value=0.0, max=5.0), HTML(value='')))
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>ls -all <span style=color:#e6db74>&#34;checkpoints&#34;</span>
+ls -all <span style=color:#e6db74>&#34;best_models&#34;</span>
+ls -all <span style=color:#e6db74>&#34;tb_logs&#34;</span>
+</code></pre></td></tr></table></div></div><pre><code>total 12
+drwxr-xr-x 2 root root 4096 Aug 31 11:27 .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27 ..
+-rw------- 1 root root 1657 Aug 31 11:27 training_checkpoint_50.pt
+total 16
+drwxr-xr-x 2 root root 4096 Aug 31 11:27  .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27  ..
+-rw------- 1 root root 1145 Aug 31 11:27 'best_model_2_val_accuracy=0.3000.pt'
+-rw------- 1 root root 1145 Aug 31 11:27 'best_model_3_val_accuracy=0.3000.pt'
+total 12
+drwxr-xr-x 2 root root 4096 Aug 31 11:27 .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27 ..
+-rw-r--r-- 1 root root  325 Aug 31 11:27 events.out.tfevents.1598873224.3aa7adc24d3d.115.1
+</code></pre><p>In the above code, the <code>common.setup_common_training_handlers</code> method adds <code>TerminateOnNan</code>, adds a handler to use <code>lr_scheduler</code> (expressed in iterations), adds training state checkpointing, exposes <code>batch loss</code> output as exponential moving averaged metric for logging, and adds a progress bar to the trainer.</p><p>Next, the <code>common.setup_tb_logging</code> method returns a TensorBoard logger which is automatically configured to log trainer&rsquo;s metrics (i.e. <code>batch loss</code>), optimizer&rsquo;s learning rate and evaluator&rsquo;s metrics.</p><p>Finally, <code>common.save_best_model_by_val_score</code> sets up a handler to save the best two models according to the validation accuracy metric.</p><h3 id=distributed-and-xla-device-support>Distributed and XLA device support</h3><p>PyTorch offers a distributed communication package for writing and running parallel applications on multiple devices and machines.
+The native interface provides commonly used collective operations and allows to address multi-CPU and multi-GPU computations seamlessly using the <a href=https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html>torch <code>DistributedDataParallel</code></a> module and the well-known <code>mpi</code>, <code>gloo</code> and <code>nccl</code> backends.
+Recently, users can also run PyTorch on XLA devices, like TPUs, with the <code>torch_xla</code> package.</p><p>However, writing distributed training code working on GPUs and TPUs is not a trivial task due to some API specificities.
+The purpose of the PyTorch-Ignite <code>ignite.distributed</code> package introduced in version 0.4 is to unify the code for native <code>torch.distributed</code> API, <code>torch_xla</code> API on XLA devices and also supporting other distributed frameworks (e.g. Horovod).
+To make distributed configuration setup easier, the <a href=https://pytorch.org/ignite/distributed.html#ignite.distributed.launcher.Parallel><code>Parallel</code></a> context manager has been introduced:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> ignite.distributed <span style=color:#f92672>as</span> idist
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>training</span>(local_rank, config, <span style=color:#f92672>**</span>kwargs):
+    <span style=color:#66d9ef>print</span>(idist<span style=color:#f92672>.</span>get_rank(), <span style=color:#e6db74>&#39;: run with config:&#39;</span>, config, <span style=color:#e6db74>&#39;- backend=&#39;</span>, idist<span style=color:#f92672>.</span>backend())
+    <span style=color:#75715e># do the training ...</span>
+
+backend <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;gloo&#39;</span> <span style=color:#75715e># or &#34;nccl&#34; or &#34;xla-tpu&#34;</span>
+dist_configs <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#39;nproc_per_node&#39;</span>: <span style=color:#ae81ff>2</span>}
+<span style=color:#75715e># dist_configs[&#34;start_method&#34;] = &#34;fork&#34;  # If using Jupyter Notebook</span>
+config <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#39;c&#39;</span>: <span style=color:#ae81ff>12345</span>}
+
+<span style=color:#66d9ef>with</span> idist<span style=color:#f92672>.</span>Parallel(backend<span style=color:#f92672>=</span>backend, <span style=color:#f92672>**</span>dist_configs) <span style=color:#66d9ef>as</span> parallel:
+    parallel<span style=color:#f92672>.</span>run(training, config, a<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, b<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><pre><code>2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'gloo'
+2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes: 
+	nproc_per_node: 2
+	nnodes: 1
+	node_rank: 0
+2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Spawn function '&lt;function training at 0x7f32b8ac9d08&gt;' in 2 processes
+0 : run with config: {'c': 12345} - backend= gloo
+1 : run with config: {'c': 12345} - backend= gloo
+2020-08-31 11:27:09,959 ignite.distributed.launcher.Parallel INFO: End of run
+</code></pre><p>The above code with a single modification can run on a GPU, single-node multiple GPUs, single or multiple TPUs etc. It can be executed with the <code>torch.distributed.launch</code> tool or by Python and spawning the required number of processes. For more details, see <a href=https://pytorch.org/ignite/distributed.html>the documentation</a>.</p><p>In addition, methods like <code>auto_model()</code>, <code>auto_optim()</code> and <code>auto_dataloader()</code> help to adapt in a transparent way the provided model, optimizer and data loaders to an existing configuration:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># main.py</span>
+
+<span style=color:#f92672>import</span> ignite.distributed <span style=color:#f92672>as</span> idist
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>training</span>(local_rank, config, <span style=color:#f92672>**</span>kwargs):
+
+    <span style=color:#66d9ef>print</span>(idist<span style=color:#f92672>.</span>get_rank(), <span style=color:#e6db74>&#34;: run with config:&#34;</span>, config, <span style=color:#e6db74>&#34;- backend=&#34;</span>, idist<span style=color:#f92672>.</span>backend())
+
+    train_loader <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_dataloader(dataset, batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>32</span>, num_workers<span style=color:#f92672>=</span><span style=color:#ae81ff>12</span>, shuffle<span style=color:#f92672>=</span>True, <span style=color:#f92672>**</span>kwargs)
+    <span style=color:#75715e># batch size, num_workers and sampler are automatically adapted to existing configuration</span>
+    <span style=color:#75715e># ...</span>
+    model <span style=color:#f92672>=</span> resnet50()
+    optimizer <span style=color:#f92672>=</span> optim<span style=color:#f92672>.</span>SGD(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.01</span>)
+
+    <span style=color:#75715e># if training with Nvidia/Apex for Automatic Mixed Precision (AMP)</span>
+    <span style=color:#75715e># model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level)</span>
+
+    model <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_model(model)
+    <span style=color:#75715e># model is DDP or DP or just itself according to existing configuration</span>
+    <span style=color:#75715e># ...</span>
+    optimizer <span style=color:#f92672>=</span> idist<span style=color:#f92672>.</span>auto_optim(optimizer)
+    <span style=color:#75715e># optimizer is itself, except XLA configuration and overrides `step()` method.</span>
+    <span style=color:#75715e># User can safely call `optimizer.step()` (behind `xm.optimizer_step(optimizier)` is performed)</span>
+
+backend <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;nccl&#34;</span>  <span style=color:#75715e># torch native distributed configuration on multiple GPUs</span>
+<span style=color:#75715e># backend = &#34;xla-tpu&#34;  # XLA TPUs distributed configuration</span>
+<span style=color:#75715e># backend = None  # no distributed configuration</span>
+<span style=color:#66d9ef>with</span> idist<span style=color:#f92672>.</span>Parallel(backend<span style=color:#f92672>=</span>backend, <span style=color:#f92672>**</span>dist_configs) <span style=color:#66d9ef>as</span> parallel:
+    parallel<span style=color:#f92672>.</span>run(training, config, a<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, b<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><p>Please note that these <code>auto_*</code> methods are optional; a user is free use some of them and manually set up certain parts of the code if required. The advantage of this approach is that there is no under the hood inevitable objects' patching and overriding.</p><p>More details about distributed helpers provided by PyTorch-Ignite can be found in <a href=https://pytorch.org/ignite/distributed.html>the documentation</a>.
+A complete example of training on CIFAR10 can be found <a href=https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10>here</a>.</p><p>A detailed tutorial with distributed helpers is published <a href=https://pytorch-ignite.ai/posts/distributed-made-easy-with-ignite/>here</a>.</p><h2 id=projects-using-pytorch-ignite>Projects using PyTorch-Ignite</h2><p>There is a list of research papers with code, blog articles, tutorials, toolkits and other projects that are using PyTorch-Ignite. A detailed overview can be found <a href=https://github.com/pytorch/ignite#projects-using-ignite>here</a>.</p><p>To start your project using PyTorch-Ignite is simple and can require only to pass through this quick-start example and <a href=https://pytorch.org/ignite/concepts.html>library &ldquo;Concepts&rdquo;</a>.</p><p>In addition, PyTorch-Ignite also provides several tutorials:</p><ul><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextCNN.ipynb>Text Classification using Convolutional Neural Networks</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/VAE.ipynb>Variational Auto Encoders</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/FashionMNIST.ipynb>Convolutional Neural Networks for Classifying Fashion-MNIST Dataset</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/CycleGAN_with_nvidia_apex.ipynb>Training Cycle-GAN on Horses to Zebras with Nvidia/Apex</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/CycleGAN_with_torch_cuda_amp.ipynb>Another training Cycle-GAN on Horses to Zebras with Native Torch CUDA AMP</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/EfficientNet_Cifar100_finetuning.ipynb>Finetuning EfficientNet-B0 on CIFAR100</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar10_Ax_hyperparam_tuning.ipynb>Hyperparameters tuning with Ax</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/FastaiLRFinder_MNIST.ipynb>Basic example of LR finder on MNIST</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar100_bench_amp.ipynb>Benchmark mixed precision training on Cifar100: torch.cuda.amp vs nvidia/apex</a></li><li><a href=https://github.com/pytorch/ignite/blob/master/examples/notebooks/MNIST_on_TPU.ipynb>MNIST training on a single TPU</a></li><li><a href=https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10>CIFAR10 Training on multiple TPUs</a></li></ul><p>and examples:</p><ul><li><a href=https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10>cifar10</a> (single/multi-GPU, DDP, AMP, TPUs)</li><li><a href=https://github.com/pytorch/ignite/tree/master/examples/reinforcement_learning>basic RL</a></li><li><a href=https://github.com/pytorch/ignite/tree/master/examples/references>reproducible baselines for vision tasks:</a><ul><li>classification on ImageNet (single/multi-GPU, DDP, AMP)</li><li>semantic segmentation on Pascal VOC2012 (single/multi-GPU, DDP, AMP)</li></ul></li></ul><p>The package can be installed with pip or conda. More info and guides can be found <a href=https://github.com/pytorch/ignite#installation>here</a>.</p></div><div class=prev-n-next><div class=prev></div><div class=next><a href=/posts/distributed-made-easy-with-ignite/ class=link><span class=text>Distributed Training Made Easy with PyTorch-Ignite</span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify icon-next iconify--carbon" width="32" height="32" viewBox="0 0 32 32"><path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z" fill="currentcolor"/></svg></a></div></div></div></section><div id=backtotop><a href=#></a></div><div class=sidebar><div class=sidebar-header><div class=text>Posts</div></div><div class=inner><aside><ul><li><a href=/posts/gan-evaluation-with-fid-and-is/>GAN evaluation using FID and IS</a></li><li><a href=/posts/introducing-code-generator-v020/>Introducing PyTorch-Ignite's Code Generator v0.2.0</a></li><li><a href=/posts/distributed-made-easy-with-ignite/>Distributed Training Made Easy with PyTorch-Ignite</a></li><li><a href=/posts/introduction/ class=active>Introduction to PyTorch-Ignite</a><nav id=TableOfContents><ul><li><a href=#pytorch-ignite-what-and-why->PyTorch-Ignite: What and Why ?</a><ul><li><a href=#-pytorch--ignite->🔥 PyTorch + Ignite 🔥</a></li><li><a href=#about-the-design-of-pytorch-ignite>About the design of PyTorch-Ignite</a></li></ul></li><li><a href=#quick-start-example>Quick-start example</a><ul><li><a href=#common-pytorch-code>Common PyTorch code</a></li><li><a href=#trainer-and-evaluators-setup>Trainer and evaluator&rsquo;s setup</a></li><li><a href=#events-and-handers>Events and Handers</a></li><li><a href=#model-evaluation-metrics>Model evaluation metrics</a></li><li><a href=#common-training-handlers>Common training handlers</a></li><li><a href=#5-takeaways>5 takeaways</a></li></ul></li><li><a href=#advanced-features>Advanced features</a><ul><li><a href=#power-of-events--handlers>Power of Events & Handlers</a></li><li><a href=#out-of-the-box-metrics>Out-of-the-box metrics</a></li><li><a href=#out-of-the-box-handlers>Out-of-the-box handlers</a></li><li><a href=#distributed-and-xla-device-support>Distributed and XLA device support</a></li></ul></li><li><a href=#projects-using-pytorch-ignite>Projects using PyTorch-Ignite</a></li></ul></nav></li></ul></aside></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js></script><script src=/js/modernizr.min.48806575a40ede5e406c8278f3be521afb171e73d324994ced6b41306bdb230a.js></script><script src=/js/fresh.min.29a18383a93b919d639d60aca2437a08bec3ed15276e55dc1cb44a8ddd80bdc6.js></script><script src=/js/active-navbar.min.8067cab2f01a301954f5d28b2cb8cfa1ce10a23ea212f1c734c9b761503d5e0e.js></script><script src=/js/jquery.panelslider.min.js></script><link rel=stylesheet href=/css/copy-code.min.0032417fb3ddf66588bd7871ff6904ecb06695ccb2756f43792bbeec4b7da54f.css><script src=/js/copy-code.min.2597230d83cf7b0549c4a0d22b4e61a1b3fd86eaf05c491aa0b807c7803d9096.js></script><script src=/js/anchor.min.818717ad1ac9e378368b336d69c4a337a826937be38314c67bfca3669727e210.js></script></body></html>

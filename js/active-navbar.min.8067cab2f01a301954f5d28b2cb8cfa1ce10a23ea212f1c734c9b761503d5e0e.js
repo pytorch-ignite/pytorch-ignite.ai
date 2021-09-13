@@ -1,0 +1,1 @@
+function activeNavBar(){const a=location.pathname,b=document.getElementById('navbar-menu'),c=b.querySelectorAll('a.navbar-item');for(const b of c){const d=b.getAttribute('href');d&&a.search(d)>-1&&b.classList.add('active')}}activeNavBar()

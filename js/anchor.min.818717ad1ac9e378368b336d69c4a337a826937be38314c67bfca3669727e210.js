@@ -1,0 +1,1 @@
+document.querySelectorAll('h2, h3').forEach(b=>{const a=document.createElement('a');a.href='#'+b.id,a.className='header-anchor',a.innerText='#',a.setAttribute('aria-hidden',!0),b.prepend(a)})

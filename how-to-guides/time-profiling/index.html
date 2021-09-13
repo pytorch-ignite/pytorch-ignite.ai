@@ -1,0 +1,321 @@
+<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script><script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script><meta property="og:title" content="How to do time profiling"><meta property="og:description" content="Learn how to get the time breakdown for individual epochs during training, individual events, all handlers corresponding to an event, individual handlers, data loading and data processing using Engine&rsquo;s State, BasicTimeProfiler and HandlersTimeProfiler."><meta property="og:type" content="article"><meta property="og:url" content="https://pytorch-ignite.ai/how-to-guides/time-profiling/"><meta property="og:image" content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta property="article:section" content="how-to-guides"><meta property="article:modified_time" content="2021-08-31T19:53:05+06:30"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta name=twitter:title content="How to do time profiling"><meta name=twitter:description content="Learn how to get the time breakdown for individual epochs during training, individual events, all handlers corresponding to an event, individual handlers, data loading and data processing using Engine&rsquo;s State, BasicTimeProfiler and HandlersTimeProfiler."><meta name=description content="Learn how to get the time breakdown for individual epochs during training, individual events, all handlers corresponding to an event, individual handlers, data loading and data processing using Engine's State, BasicTimeProfiler and HandlersTimeProfiler."><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ee4c2c"><title>How to do time profiling | PyTorch-Ignite</title><link rel=stylesheet type=text/css href=/css/style.min.125203f72a92a60311cb74c041a2ee40c9a6af792496be325e393ab46013c90b.css integrity="sha256-ElID9yqSpgMRy3TAQaLuQMmmr3kklr4yXjk6tGATyQs="><link rel=stylesheet type=text/css href=/css/icons.css><link rel=stylesheet href=/css/custom.min.c8f188c4d411d4bd166d8bb069a1cf75538ea63eb0acc05b8a7ceab44e934224.css><link rel=stylesheet href=/css/sponsors.min.273831ae344a358d21cb7ddb8405ef325fe44a83b83e4d37c971b03189b642b1.css><link rel=stylesheet href=/css/features.min.e0e90cfae6f294d73e9cd004efadaf0185e51575d39356cc5b06d4e24e8cf5f4.css><link rel=icon type=image/svg+xml href=/images/logos/ignite_logomark.svg><link rel=stylesheet href=https://rsms.me/inter/inter.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css><link rel=stylesheet href=/css/tutorials.min.1f22b95d248e6143456ea9c18d5a0bce25e41ff3db05f7c70c090e73e25a2cdf.css></head><body><nav class="navbar is-fresh is-transparent no-shadow" role=navigation aria-label="main navigation"><div class=container><div class=navbar-brand><a class=navbar-item href=/><img src=/images/logos/ignite_logomark.svg alt width=112 height=28></a>
+<a class="navbar-item is-hidden-desktop is-hidden-tablet"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a><a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=navbar-menu><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a></div><div id=navbar-menu class="navbar-menu is-static"><div class=navbar-start><a class="navbar-item is-hidden-mobile"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a></div><div class=navbar-end><div class="navbar-item has-dropdown is-hoverable"><a class=navbar-link>Docs</a><div class=navbar-dropdown><a href=/tutorials/ class=navbar-item>Tutorials</a>
+<a href=/how-to-guides/ class=navbar-item>How to Guides</a>
+<a href=https://pytorch.org/ignite/engine.html class=navbar-item>API Reference</a></div></div><a href=https://github.com/pytorch/ignite class="navbar-item is-secondary">GitHub</a>
+<a href=/posts/ class="navbar-item is-secondary">Blog</a>
+<a href=/community/ class="navbar-item is-secondary">Community</a></div></div></div></nav><section class="section is-medium has-sidebar"><div class=downloads><a class=colab href=https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/how-to-guides/time-profiling.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/colab.svg alt="Google Colab Logo" width=30 height=30>
+<span>Run in Google Colab</span></a>
+<a class=notebook href=/examples/how-to-guides/time-profiling.ipynb target=_blank rel="noopener noreferrer" download=time-profiling.ipynb><img src=/images/logos/download.svg alt="Download Logo" width=20 height=20>
+<span>Download as Jupyter Notebook</span></a>
+<a class=source href=https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/how-to-guides/time-profiling.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/github.svg alt="GitHub Logo" width=20 height=20>
+<span>View on GitHub</span></a></div><div class="container sidebar-on"><div class=columns><div class="column is-centered-tablet-portrait"><h1 class="title tutorial-title">How to do time profiling</h1><h5 class="subtitle is-muted is-5"></h5></div></div><div class=tags><span class=tag><a href=/tags/time-profiling/>time-profiling</a></span>
+<span class=tag><a href=/tags/engine.state.times/>engine.state.times</a></span>
+<span class=tag><a href=/tags/basictimeprofiler/>BasicTimeProfiler</a></span>
+<span class=tag><a href=/tags/handlerstimeprofiler/>HandlersTimeProfiler</a></span></div><div class=content><p>This example demonstrates how you can get the time breakdown for:</p><ul><li>Individual epochs during training</li><li>Total training time</li><li>Individual <a href=https://pytorch.org/ignite/concepts.html#events-and-handlers><code>Events</code></a></li><li>All <a href=https://pytorch.org/ignite/concepts.html#handlers><code>Handlers</code></a> correspoding to an <code>Event</code></li><li>Individual <code>Handlers</code></li><li>Data loading and Data processing.</li></ul><p>In this example, we will be using a ResNet18 model on the MNIST dataset. The base code is the same as used in the <a href=https://pytorch-ignite.ai/tutorials/getting-started/>Getting Started Guide</a>.</p><h2 id=basic-setup>Basic Setup</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> pandas <span style=color:#f92672>as</span> pd
+
+<span style=color:#f92672>import</span> torch
+<span style=color:#f92672>from</span> torch <span style=color:#f92672>import</span> nn
+<span style=color:#f92672>from</span> torch.utils.data <span style=color:#f92672>import</span> DataLoader
+<span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> MNIST
+<span style=color:#f92672>from</span> torchvision.models <span style=color:#f92672>import</span> resnet18
+<span style=color:#f92672>from</span> torchvision.transforms <span style=color:#f92672>import</span> Compose, Normalize, ToTensor
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Events, create_supervised_trainer, create_supervised_evaluator
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy, Loss
+<span style=color:#f92672>from</span> ignite.handlers <span style=color:#f92672>import</span> Timer
+<span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> BasicTimeProfiler, HandlersTimeProfiler
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>device <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>device(<span style=color:#e6db74>&#34;cuda&#34;</span> <span style=color:#66d9ef>if</span> torch<span style=color:#f92672>.</span>cuda<span style=color:#f92672>.</span>is_available() <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;cpu&#34;</span>)
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Net</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Net, self)<span style=color:#f92672>.</span>__init__()
+
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> resnet18(num_classes<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+        self<span style=color:#f92672>.</span>model<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>64</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, padding<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>model(x)
+
+
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+
+data_transform <span style=color:#f92672>=</span> Compose([ToTensor(), Normalize((<span style=color:#ae81ff>0.1307</span>,), (<span style=color:#ae81ff>0.3081</span>,))])
+
+train_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>True),
+    batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>128</span>,
+    shuffle<span style=color:#f92672>=</span>True,
+)
+
+val_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>False),
+    batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>,
+    shuffle<span style=color:#f92672>=</span>False,
+)
+
+optimizer <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>optim<span style=color:#f92672>.</span>RMSprop(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.005</span>)
+criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>CrossEntropyLoss()
+</code></pre></td></tr></table></div></div><p>We attach two handlers to the <code>trainer</code> to print out the metrics (<a href=https://pytorch.org/ignite/generated/ignite.metrics.Accuracy.html#accuracy><code>Accuracy</code></a> and <a href=https://pytorch.org/ignite/generated/ignite.metrics.Loss.html#loss><code>Loss</code></a>) of the train and validation dataset at the end of every epoch.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer <span style=color:#f92672>=</span> create_supervised_trainer(model, optimizer, criterion, device<span style=color:#f92672>=</span>device)
+evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(
+    model, metrics<span style=color:#f92672>=</span>{<span style=color:#e6db74>&#34;accuracy&#34;</span>: Accuracy(), <span style=color:#e6db74>&#34;loss&#34;</span>: Loss(criterion)}, device<span style=color:#f92672>=</span>device
+)
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_results</span>(trainer):
+    evaluator<span style=color:#f92672>.</span>run(train_loader)
+    metrics <span style=color:#f92672>=</span> evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(
+        f<span style=color:#e6db74>&#34;Training Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>
+    )
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_validation_results</span>(trainer):
+    evaluator<span style=color:#f92672>.</span>run(val_loader)
+    metrics <span style=color:#f92672>=</span> evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(
+        f<span style=color:#e6db74>&#34;Validation Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>
+    )
+</code></pre></td></tr></table></div></div><h2 id=using-state-of-events>Using <code>State</code> of Events</h2><p>If we just want to print the time taken for every epoch and the total time for training we can simply use the <code>trainer</code>&rsquo;s <a href=https://pytorch.org/ignite/generated/ignite.engine.events.State.html#ignite.engine.events.State><code>State</code></a>. We attach two separate handlers fired when an epoch is completed and when the training is completed to log the time returned by <code>trainer.state.times</code>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_epoch_time</span>():
+    <span style=color:#66d9ef>print</span>(
+        f<span style=color:#e6db74>&#34;Epoch {trainer.state.epoch}, Time Taken : {trainer.state.times[&#39;EPOCH_COMPLETED&#39;]}&#34;</span>
+    )
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_total_time</span>():
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Total Time: {trainer.state.times[&#39;COMPLETED&#39;]}&#34;</span>)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><pre><code>Training Results - Epoch[1] Avg accuracy: 0.89 Avg loss: 0.31
+Validation Results - Epoch[1] Avg accuracy: 0.89 Avg loss: 0.31
+Epoch 1, Time Taken : 31.877371549606323
+Training Results - Epoch[2] Avg accuracy: 0.97 Avg loss: 0.09
+Validation Results - Epoch[2] Avg accuracy: 0.98 Avg loss: 0.09
+Epoch 2, Time Taken : 31.752297401428223
+Total Time: 94.78037142753601
+
+
+
+
+
+State:
+	iteration: 938
+	epoch: 2
+	epoch_length: 469
+	max_epochs: 2
+	output: 0.09705401211977005
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><h2 id=event-based-profiling-using-basictimeprofiler>Event-based profiling using <code>BasicTimeProfiler</code></h2><p>If we want more information such as the time taken by data processing, data loading and all pre-defined events, we can use <a href=https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#basictimeprofiler><code>BasicTimeProfiler()</code></a>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Attach basic profiler</span>
+basic_profiler <span style=color:#f92672>=</span> BasicTimeProfiler()
+basic_profiler<span style=color:#f92672>.</span>attach(trainer)
+
+trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><pre><code>Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.05
+Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.05
+Epoch 1, Time Taken : 32.675241470336914
+Training Results - Epoch[2] Avg accuracy: 0.95 Avg loss: 0.17
+Validation Results - Epoch[2] Avg accuracy: 0.94 Avg loss: 0.21
+Epoch 2, Time Taken : 32.5580837726593
+Total Time: 94.03342008590698
+
+
+
+
+
+State:
+	iteration: 938
+	epoch: 2
+	epoch_length: 469
+	max_epochs: 2
+	output: 0.044832438230514526
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><p>We can then obtain the results dictionary via <a href=https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#ignite.contrib.handlers.time_profilers.BasicTimeProfiler.get_results><code>get_results()</code></a> and pass it to <a href=https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#ignite.contrib.handlers.time_profilers.BasicTimeProfiler.print_results><code>print_results()</code></a> to get a nicely formatted output which contains total, minimum, maximum, mean and the standard deviation of the time taken.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>results <span style=color:#f92672>=</span> basic_profiler<span style=color:#f92672>.</span>get_results()
+basic_profiler<span style=color:#f92672>.</span>print_results(results);
+</code></pre></td></tr></table></div></div><pre><code> ----------------------------------------------------
+| Time profiling stats (in seconds):                 |
+ ----------------------------------------------------
+total  |  min/index  |  max/index  |  mean  |  std
+
+Processing function:
+49.06667 | 0.04429/468 | 0.05650/1 | 0.05231 | 0.00115
+
+Dataflow:
+16.07644 | 0.01181/467 | 0.03356/893 | 0.01714 | 0.00202
+
+Event handlers:
+28.81195
+
+- Events.STARTED: []
+0.00001
+
+- Events.EPOCH_STARTED: []
+0.00001 | 0.00000/1 | 0.00000/0 | 0.00000 | 0.00000
+
+- Events.ITERATION_STARTED: []
+0.00204 | 0.00000/815 | 0.00003/587 | 0.00000 | 0.00000
+
+- Events.ITERATION_COMPLETED: []
+0.00338 | 0.00000/524 | 0.00002/869 | 0.00000 | 0.00000
+
+- Events.EPOCH_COMPLETED: ['log_training_results', 'log_validation_results', 'log_epoch_time']
+28.79943 | 14.38091/1 | 14.41852/0 | 14.39971 | 0.02660
+
+- Events.COMPLETED: ['log_total_time']
+0.00010
+</code></pre><p><strong>Note</strong>: This approach does not get the time taken by an individual handler rather the sum of the time taken by all handlers corresponding to a pre-defined event.</p><h2 id=handler-based-profiling-using-handlerstimeprofiler>Handler-based profiling using <code>HandlersTimeProfiler</code></h2><p>We can overcome the above problem by using <a href=https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.HandlersTimeProfiler.html#handlerstimeprofiler><code>HandlersTimeProfiler</code></a> which gives us only the necessary information. We can also calculate the time taken by handlers attached to <a href=https://pytorch.org/ignite/concepts.html#custom-events><code>Custom Events</code></a>, which was not previously possible, via this.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Attach handlers profiler</span>
+handlers_profiler <span style=color:#f92672>=</span> HandlersTimeProfiler()
+handlers_profiler<span style=color:#f92672>.</span>attach(trainer)
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>)
+</code></pre></td></tr></table></div></div><pre><code>Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.03
+Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.03
+Epoch 1, Time Taken : 32.35053300857544
+Training Results - Epoch[2] Avg accuracy: 1.00 Avg loss: 0.01
+Validation Results - Epoch[2] Avg accuracy: 0.99 Avg loss: 0.02
+Epoch 2, Time Taken : 32.69846534729004
+Total Time: 95.0562059879303
+
+
+
+
+
+State:
+	iteration: 938
+	epoch: 2
+	epoch_length: 469
+	max_epochs: 2
+	output: 0.039033230394124985
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><p>We can print the results of the profiler in the same way as above. The output shows total, average and other details of execution time for each handler attached. It also shows the data processing and data loading times.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>results <span style=color:#f92672>=</span> handlers_profiler<span style=color:#f92672>.</span>get_results()
+handlers_profiler<span style=color:#f92672>.</span>print_results(results)
+</code></pre></td></tr></table></div></div><pre><code>---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
+Handler                                  Event Name                 Total(s)      Min(s)/IDX      Max(s)/IDX         Mean(s)          Std(s)  
+---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
+log_training_results                     EPOCH_COMPLETED            25.87275      12.36704/1      13.50571/0        12.93637         0.80516  
+log_validation_results                   EPOCH_COMPLETED             4.13239       1.94068/1       2.19171/0         2.06619          0.1775  
+log_epoch_time                           EPOCH_COMPLETED               6e-05         3e-05/1         3e-05/0           3e-05             0.0  
+BasicTimeProfiler._as_first_started      STARTED                      0.0006        0.0006/0        0.0006/0          0.0006            None  
+log_total_time                           COMPLETED                     3e-05         3e-05/0         3e-05/0           3e-05            None  
+---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
+Total                                                               30.00583                                                                  
+---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
+Processing took total 48.99836s [min/index: 0.04277s/468, max/index: 0.05485s/186, mean: 0.05224s, std: 0.00099s]
+Dataflow took total 15.97144s [min/index: 0.01286s/937, max/index: 0.02696s/824, mean: 0.01703s, std: 0.00197s]
+</code></pre><p>The profiling results obtained by <code>basic_profiler</code> and <code>handler_profiler</code> can be exported to a CSV file by using the <code>write_results()</code> method.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>basic_profiler<span style=color:#f92672>.</span>write_results(<span style=color:#e6db74>&#34;./basic_profile.csv&#34;</span>)
+handlers_profiler<span style=color:#f92672>.</span>write_results(<span style=color:#e6db74>&#34;./handlers_profile.csv&#34;</span>)
+</code></pre></td></tr></table></div></div><p>If we inspect the CSV file of <code>basic_profiler</code> we can see the depth of information stored for every iteration.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>basic_profile <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>read_csv(<span style=color:#e6db74>&#34;./basic_profile.csv&#34;</span>)
+basic_profile<span style=color:#f92672>.</span>head()
+</code></pre></td></tr></table></div></div><div><style scoped>.dataframe tbody tr th:only-of-type{vertical-align:middle}<pre><code>.dataframe tbody tr th{vertical-align:top}.dataframe thead th{text-align:right}</code></pre><p></style></p><table border=1 class=dataframe><thead><tr style=text-align:right><th></th><th>epoch</th><th>iteration</th><th>processing_stats</th><th>dataflow_stats</th><th>Event_STARTED</th><th>Event_COMPLETED</th><th>Event_EPOCH_STARTED</th><th>Event_EPOCH_COMPLETED</th><th>Event_ITERATION_STARTED</th><th>Event_ITERATION_COMPLETED</th><th>Event_GET_BATCH_STARTED</th><th>Event_GET_BATCH_COMPLETED</th></tr></thead><tbody><tr><th>0</th><td>1.0</td><td>1.0</td><td>0.052481</td><td>0.015301</td><td>0.000049</td><td>0.000086</td><td>0.000003</td><td>15.69749</td><td>0.000004</td><td>0.000006</td><td>0.000004</td><td>0.000008</td></tr><tr><th>1</th><td>1.0</td><td>2.0</td><td>0.053183</td><td>0.018409</td><td>0.000049</td><td>0.000086</td><td>0.000003</td><td>15.69749</td><td>0.000005</td><td>0.000011</td><td>0.000007</td><td>0.000008</td></tr><tr><th>2</th><td>1.0</td><td>3.0</td><td>0.051487</td><td>0.015797</td><td>0.000049</td><td>0.000086</td><td>0.000003</td><td>15.69749</td><td>0.000004</td><td>0.000008</td><td>0.000005</td><td>0.000008</td></tr><tr><th>3</th><td>1.0</td><td>4.0</td><td>0.052423</td><td>0.015652</td><td>0.000049</td><td>0.000086</td><td>0.000003</td><td>15.69749</td><td>0.000003</td><td>0.000007</td><td>0.000004</td><td>0.000007</td></tr><tr><th>4</th><td>1.0</td><td>5.0</td><td>0.052298</td><td>0.015005</td><td>0.000049</td><td>0.000086</td><td>0.000003</td><td>15.69749</td><td>0.000003</td><td>0.000006</td><td>0.000004</td><td>0.000006</td></tr></tbody></table></div><p>The <code>handlers_profile</code> CSV stores the details for whenever a handler was evoked which corresponds to the number of rows.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>handlers_profile <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>read_csv(<span style=color:#e6db74>&#34;./handlers_profile.csv&#34;</span>)
+handlers_profile<span style=color:#f92672>.</span>head()
+</code></pre></td></tr></table></div></div><div><style scoped>.dataframe tbody tr th:only-of-type{vertical-align:middle}<pre><code>.dataframe tbody tr th{vertical-align:top}.dataframe thead th{text-align:right}</code></pre><p></style></p><table border=1 class=dataframe><thead><tr style=text-align:right><th></th><th>#</th><th>processing_stats</th><th>dataflow_stats</th><th>log_training_results (EPOCH_COMPLETED)</th><th>log_validation_results (EPOCH_COMPLETED)</th><th>log_epoch_time (EPOCH_COMPLETED)</th><th>BasicTimeProfiler._as_first_started (STARTED)</th><th>log_total_time (COMPLETED)</th></tr></thead><tbody><tr><th>0</th><td>1.0</td><td>0.052516</td><td>0.024859</td><td>13.505706</td><td>2.191707</td><td>0.000034</td><td>0.000602</td><td>0.00003</td></tr><tr><th>1</th><td>2.0</td><td>0.053241</td><td>0.015263</td><td>12.367039</td><td>1.940679</td><td>0.000030</td><td>0.000000</td><td>0.00000</td></tr><tr><th>2</th><td>3.0</td><td>0.051531</td><td>0.018386</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.00000</td></tr><tr><th>3</th><td>4.0</td><td>0.052456</td><td>0.015774</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.00000</td></tr><tr><th>4</th><td>5.0</td><td>0.052331</td><td>0.015630</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.000000</td><td>0.00000</td></tr></tbody></table></div><h2 id=custom-profiling-using-timer>Custom profiling using Timer</h2><p>At the lowest level of abstraction, we provide <a href=https://pytorch.org/ignite/generated/ignite.handlers.timing.Timer.html#timer><code>Timer()</code></a> to calculate the time between any set of events. See its docstring for details.</p></div><div class=prev-n-next><div class=prev></div><div class=next><a href=/how-to-guides/fastai-lr-finder/ class=link><span class=text>How to use FastaiLRFinder with Ignite</span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify icon-next iconify--carbon" width="32" height="32" viewBox="0 0 32 32"><path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z" fill="currentcolor"/></svg></a></div></div></div></section><div id=backtotop><a href=#></a></div><div class=sidebar><div class=sidebar-header><div class=text>How-to-Guides</div></div><div class=inner><aside><ul><li><a href=/how-to-guides/gradient-accumulation/>How to effectively increase batch size on limited compute</a></li><li><a href=/how-to-guides/installation/>How to install PyTorch-Ignite</a></li><li><a href=/how-to-guides/data-iterator/>How to work with data iterators</a></li><li><a href=/how-to-guides/fastai-lr-finder/>How to use FastaiLRFinder with Ignite</a></li><li><a href=/how-to-guides/time-profiling/ class=active>How to do time profiling</a><nav id=TableOfContents><ul><li><a href=#basic-setup>Basic Setup</a></li><li><a href=#using-state-of-events>Using <code>State</code> of Events</a></li><li><a href=#event-based-profiling-using-basictimeprofiler>Event-based profiling using <code>BasicTimeProfiler</code></a></li><li><a href=#handler-based-profiling-using-handlerstimeprofiler>Handler-based profiling using <code>HandlersTimeProfiler</code></a></li><li><a href=#custom-profiling-using-timer>Custom profiling using Timer</a></li></ul></nav></li></ul></aside></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js></script><script src=/js/modernizr.min.48806575a40ede5e406c8278f3be521afb171e73d324994ced6b41306bdb230a.js></script><script src=/js/fresh.min.29a18383a93b919d639d60aca2437a08bec3ed15276e55dc1cb44a8ddd80bdc6.js></script><script src=/js/active-navbar.min.8067cab2f01a301954f5d28b2cb8cfa1ce10a23ea212f1c734c9b761503d5e0e.js></script><script src=/js/jquery.panelslider.min.js></script><link rel=stylesheet href=/css/copy-code.min.0032417fb3ddf66588bd7871ff6904ecb06695ccb2756f43792bbeec4b7da54f.css><script src=/js/copy-code.min.2597230d83cf7b0549c4a0d22b4e61a1b3fd86eaf05c491aa0b807c7803d9096.js></script><script src=/js/anchor.min.818717ad1ac9e378368b336d69c4a337a826937be38314c67bfca3669727e210.js></script></body></html>

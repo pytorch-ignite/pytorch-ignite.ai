@@ -1,0 +1,616 @@
+<!doctype html><html lang=en-us><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script><script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script><meta property="og:title" content="Getting Started"><meta property="og:description" content="Welcome to PyTorch-Ignite’s quick start guide that covers the
+essentials of getting a project up and running while walking through
+basic concepts of Ignite. In just a few lines of code, you can get your
+model trained and validated. The complete code can be found at the end
+of this guide."><meta property="og:type" content="article"><meta property="og:url" content="https://pytorch-ignite.ai/tutorials/getting-started/"><meta property="og:image" content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta property="article:section" content="tutorials"><meta property="article:published_time" content="2021-07-27T00:00:00+00:00"><meta property="article:modified_time" content="2021-09-05T16:57:02+02:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://pytorch-ignite.ai/images/logos/ignite_logo_feature.png"><meta name=twitter:title content="Getting Started"><meta name=twitter:description content="Welcome to PyTorch-Ignite’s quick start guide that covers the
+essentials of getting a project up and running while walking through
+basic concepts of Ignite. In just a few lines of code, you can get your
+model trained and validated. The complete code can be found at the end
+of this guide."><meta name=description content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently."><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=theme-color content="#ee4c2c"><title>Getting Started | PyTorch-Ignite</title><link rel=stylesheet type=text/css href=/css/style.min.125203f72a92a60311cb74c041a2ee40c9a6af792496be325e393ab46013c90b.css integrity="sha256-ElID9yqSpgMRy3TAQaLuQMmmr3kklr4yXjk6tGATyQs="><link rel=stylesheet type=text/css href=/css/icons.css><link rel=stylesheet href=/css/custom.min.c8f188c4d411d4bd166d8bb069a1cf75538ea63eb0acc05b8a7ceab44e934224.css><link rel=stylesheet href=/css/sponsors.min.273831ae344a358d21cb7ddb8405ef325fe44a83b83e4d37c971b03189b642b1.css><link rel=stylesheet href=/css/features.min.e0e90cfae6f294d73e9cd004efadaf0185e51575d39356cc5b06d4e24e8cf5f4.css><link rel=icon type=image/svg+xml href=/images/logos/ignite_logomark.svg><link rel=stylesheet href=https://rsms.me/inter/inter.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css><link rel=stylesheet href=/css/tutorials.min.1f22b95d248e6143456ea9c18d5a0bce25e41ff3db05f7c70c090e73e25a2cdf.css></head><body><nav class="navbar is-fresh is-transparent no-shadow" role=navigation aria-label="main navigation"><div class=container><div class=navbar-brand><a class=navbar-item href=/><img src=/images/logos/ignite_logomark.svg alt width=112 height=28></a>
+<a class="navbar-item is-hidden-desktop is-hidden-tablet"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a><a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=navbar-menu><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a></div><div id=navbar-menu class="navbar-menu is-static"><div class=navbar-start><a class="navbar-item is-hidden-mobile"><div id=menu-icon-wrapper class=menu-icon-wrapper style=visibility:visible><svg width="1e3" height="1e3"><path class="path1" d="M3e2 4e2H7e2c2e2.0 2e2 350-1e2 450A4e2 4e2.0 012e2 2e2L8e2 8e2"/><path class="path2" d="M3e2 5e2H7e2"/><path class="path3" d="M7e2 6e2H3e2c-2e2.0-2e2-4e2 1e2-450A4e2 380 0 112e2 8e2L8e2 2e2"/></svg><button id=menu-icon-trigger class=menu-icon-trigger></button></div></a></div><div class=navbar-end><div class="navbar-item has-dropdown is-hoverable"><a class=navbar-link>Docs</a><div class=navbar-dropdown><a href=/tutorials/ class=navbar-item>Tutorials</a>
+<a href=/how-to-guides/ class=navbar-item>How to Guides</a>
+<a href=https://pytorch.org/ignite/engine.html class=navbar-item>API Reference</a></div></div><a href=https://github.com/pytorch/ignite class="navbar-item is-secondary">GitHub</a>
+<a href=/posts/ class="navbar-item is-secondary">Blog</a>
+<a href=/community/ class="navbar-item is-secondary">Community</a></div></div></div></nav><section class="section is-medium has-sidebar"><div class=downloads><a class=colab href=https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/getting-started.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/colab.svg alt="Google Colab Logo" width=30 height=30>
+<span>Run in Google Colab</span></a>
+<a class=notebook href=/examples/getting-started.ipynb target=_blank rel="noopener noreferrer" download=getting-started.ipynb><img src=/images/logos/download.svg alt="Download Logo" width=20 height=20>
+<span>Download as Jupyter Notebook</span></a>
+<a class=source href=https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/examples/getting-started.ipynb target=_blank rel="noopener noreferrer"><img src=/images/logos/github.svg alt="GitHub Logo" width=20 height=20>
+<span>View on GitHub</span></a></div><div class="container sidebar-on"><div class=columns><div class="column is-centered-tablet-portrait"><h1 class="title tutorial-title">Getting Started</h1><h5 class="subtitle is-muted is-5"></h5></div></div><div class=tags><span class=tag><a href=/tags/pytorch-ignite/>PyTorch-Ignite</a></span></div><div class=content><p>Welcome to <strong>PyTorch-Ignite</strong>’s quick start guide that covers the
+essentials of getting a project up and running while walking through
+basic concepts of Ignite. In just a few lines of code, you can get your
+model trained and validated. The complete code can be found at the end
+of this guide.</p><h2 id=prerequisites>Prerequisites</h2><p>This tutorial assumes you are familiar with the:</p><ol><li>Basics of Python and deep learning</li><li>Structure of PyTorch code</li></ol><h2 id=installation>Installation</h2><p>From <code>pip</code></p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>pip install pytorch-ignite
+</code></pre></td></tr></table></div></div><p>From <code>conda</code></p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>conda install ignite -c pytorch
+</code></pre></td></tr></table></div></div><p>See <a href=https://pytorch-ignite.ai/how-to-guides/installation/>here</a> for other installation
+options.</p><h2 id=code>Code</h2><p>Import the following:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>from</span> torch <span style=color:#f92672>import</span> nn
+<span style=color:#f92672>from</span> torch.utils.data <span style=color:#f92672>import</span> DataLoader
+<span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> MNIST
+<span style=color:#f92672>from</span> torchvision.models <span style=color:#f92672>import</span> resnet18
+<span style=color:#f92672>from</span> torchvision.transforms <span style=color:#f92672>import</span> Compose, Normalize, ToTensor
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Engine, Events, create_supervised_trainer, create_supervised_evaluator
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy, Loss
+<span style=color:#f92672>from</span> ignite.handlers <span style=color:#f92672>import</span> ModelCheckpoint
+<span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> TensorboardLogger, global_step_from_engine
+</code></pre></td></tr></table></div></div><p>Speed things up by setting <a href=https://pytorch.org/docs/stable/tensor_attributes.html#torch.torch.device>device</a> to <code>cuda</code> if available else <code>cpu</code>.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>device <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>device(<span style=color:#e6db74>&#34;cuda&#34;</span> <span style=color:#66d9ef>if</span> torch<span style=color:#f92672>.</span>cuda<span style=color:#f92672>.</span>is_available() <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;cpu&#34;</span>)
+</code></pre></td></tr></table></div></div><p>Define a class of your model or use the predefined ResNet18 model (modified for MNIST) below, instantiate it and move it to device:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Net</span>(nn<span style=color:#f92672>.</span>Module):
+
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Net, self)<span style=color:#f92672>.</span>__init__()
+        
+        <span style=color:#75715e># Changed the output layer to output 10 classes instead of 1000 classes</span>
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> resnet18(num_classes<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+
+        <span style=color:#75715e># Changed the input layer to take grayscale images for MNIST instaed of RGB images</span>
+        self<span style=color:#f92672>.</span>model<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(
+            <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>64</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, padding<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False
+        )
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>model(x)
+
+
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+</code></pre></td></tr></table></div></div><p>Now let us define the training and validation datasets (as
+<a href=https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader>torch.utils.data.DataLoader</a>)
+and store them in <code>train_loader</code> and <code>val_loader</code> respectively. We have
+used the <a href=https://pytorch.org/vision/stable/datasets.html#mnist>MNIST</a>
+dataset for ease of understanding.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>data_transform <span style=color:#f92672>=</span> Compose([ToTensor(), Normalize((<span style=color:#ae81ff>0.1307</span>,), (<span style=color:#ae81ff>0.3081</span>,))])
+
+train_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>True), batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>128</span>, shuffle<span style=color:#f92672>=</span>True
+)
+
+val_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>False), batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>, shuffle<span style=color:#f92672>=</span>False
+)
+</code></pre></td></tr></table></div></div><p>Finally, we will specify the optimizer and the loss function:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>optimizer <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>optim<span style=color:#f92672>.</span>RMSprop(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.005</span>)
+criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>CrossEntropyLoss()
+</code></pre></td></tr></table></div></div><p>And we’re done with setting up the important parts of the project.
+PyTorch-Ignite will handle all other boilerplate code as we will see
+below. Next we have to define a trainer engine by passing our model,
+optimizer and loss function to
+<a href=https://pytorch.org/ignite/generated/ignite.engine.create_supervised_trainer.html><code>create_supervised_trainer</code></a>,
+and two evaluator engines by passing Ignite’s out-of-the-box
+<a href=https://pytorch.org/ignite/metrics.html#complete-list-of-metrics>metrics</a>
+and the model to
+<a href=https://pytorch.org/ignite/generated/ignite.engine.create_supervised_evaluator.html#create-supervised-evaluator><code>create_supervised_evaluator</code></a>. We have defined separate evaluator engines for training and validation because they will serve different functions as we will see later in this tutorial:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer <span style=color:#f92672>=</span> create_supervised_trainer(model, optimizer, criterion, device)
+
+val_metrics <span style=color:#f92672>=</span> {
+    <span style=color:#e6db74>&#34;accuracy&#34;</span>: Accuracy(),
+    <span style=color:#e6db74>&#34;loss&#34;</span>: Loss(criterion)
+}
+
+train_evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>val_metrics, device<span style=color:#f92672>=</span>device)
+val_evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>val_metrics, device<span style=color:#f92672>=</span>device)
+</code></pre></td></tr></table></div></div><p>The objects <code>trainer</code>, <code>train_evaluator</code> and <code>val_evaluator</code> are all instances of
+<a href=https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine><code>Engine</code></a> - the main component of Ignite, which is essentially an abstraction over
+the training or validation loop.</p><p>If you need more control over your training and validation loops, you
+can create custom <code>trainer</code>, <code>train_evaluator</code> and <code>val_evaluator</code> objects by wrapping the step
+logic in <code>Engine</code> :</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>train_step</span>(engine, batch):
+    model<span style=color:#f92672>.</span>train()
+    optimizer<span style=color:#f92672>.</span>zero_grad()
+    x, y <span style=color:#f92672>=</span> batch[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>to(device), batch[<span style=color:#ae81ff>1</span>]<span style=color:#f92672>.</span>to(device)
+    y_pred <span style=color:#f92672>=</span> model(x)
+    loss <span style=color:#f92672>=</span> criterion(y_pred, y)
+    loss<span style=color:#f92672>.</span>backward()
+    optimizer<span style=color:#f92672>.</span>step()
+    <span style=color:#66d9ef>return</span> loss<span style=color:#f92672>.</span>item()
+
+trainer <span style=color:#f92672>=</span> Engine(train_step)
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>validation_step</span>(engine, batch):
+    model<span style=color:#f92672>.</span>eval()
+    <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+        x, y <span style=color:#f92672>=</span> batch[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>to(device), batch[<span style=color:#ae81ff>1</span>]<span style=color:#f92672>.</span>to(device)
+        y_pred <span style=color:#f92672>=</span> model(x)
+        <span style=color:#66d9ef>return</span> y_pred, y
+
+train_evaluator <span style=color:#f92672>=</span> Engine(validation_step)
+val_evaluator <span style=color:#f92672>=</span> Engine(validation_step)
+
+<span style=color:#75715e># Attach metrics to the evaluators</span>
+<span style=color:#66d9ef>for</span> name, metric <span style=color:#f92672>in</span> val_metrics<span style=color:#f92672>.</span>items():
+    metric<span style=color:#f92672>.</span>attach(train_evaluator, name)
+
+<span style=color:#66d9ef>for</span> name, metric <span style=color:#f92672>in</span> val_metrics<span style=color:#f92672>.</span>items():
+    metric<span style=color:#f92672>.</span>attach(val_evaluator, name)
+</code></pre></td></tr></table></div></div><p>We can customize the code further by adding all kinds of event handlers.
+<code>Engine</code> allows adding handlers on various events that are triggered
+during the run. When an event is triggered, attached handlers
+(functions) are executed. Thus, for logging purposes we add a function
+to be executed at the end of every <code>log_interval</code>-th iteration:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># How many batches to wait before logging training status</span>
+log_interval <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span>log_interval))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_loss</span>(engine):
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Epoch[{engine.state.epoch}], Iter[{engine.state.iteration}] Loss: {engine.state.output:.2f}&#34;</span>)
+</code></pre></td></tr></table></div></div><p>or equivalently without the decorator but attaching the handler function
+to the <code>trainer</code> via
+<a href=https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.add_event_handler><code>add_event_handler</code></a></p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_loss</span>(engine):
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Epoch[{engine.state.epoch}], Iter[{engine.state.iteration}] Loss: {engine.state.output:.2f}&#34;</span>)
+
+trainer<span style=color:#f92672>.</span>add_event_handler(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED, log_training_loss)
+</code></pre></td></tr></table></div></div><p>After an epoch ends during training, we can compute the training and
+validation metrics by running <code>train_evaluator</code> on <code>train_loader</code> and <code>val_evaluator</code> on
+<code>val_loader</code> respectively. Hence we will attach two additional handlers to <code>trainer</code>
+when an epoch completes:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_results</span>(trainer):
+    train_evaluator<span style=color:#f92672>.</span>run(train_loader)
+    metrics <span style=color:#f92672>=</span> train_evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Training Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>)
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_validation_results</span>(trainer):
+    val_evaluator<span style=color:#f92672>.</span>run(val_loader)
+    metrics <span style=color:#f92672>=</span> val_evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Validation Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>)
+</code></pre></td></tr></table></div></div><p>We can use <a href=https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.ModelCheckpoint.html#modelcheckpoint><code>ModelCheckpoint()</code></a> as shown below to save the <code>n_saved</code> best models determined by a metric (here accuracy) after each epoch is completed. We attach <code>model_checkpoint</code> to <code>val_evaluator</code> because we want the two models with the highest accuracies on the validation dataset rather than the training dataset. This is why we defined two separate evaluators (<code>val_evaluator</code> and <code>train_evaluator</code>) before.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Score function to return current value of any metric we defined above in val_metrics</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>score_function</span>(engine):
+    <span style=color:#66d9ef>return</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics[<span style=color:#e6db74>&#34;accuracy&#34;</span>]
+
+<span style=color:#75715e># Checkpoint to store n_saved best models wrt score function</span>
+model_checkpoint <span style=color:#f92672>=</span> ModelCheckpoint(
+    <span style=color:#e6db74>&#34;checkpoint&#34;</span>,
+    n_saved<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>,
+    filename_prefix<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;best&#34;</span>,
+    score_function<span style=color:#f92672>=</span>score_function,
+    score_name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;accuracy&#34;</span>,
+    global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer), <span style=color:#75715e># helps fetch the trainer&#39;s state</span>
+)
+  
+<span style=color:#75715e># Save the model after every epoch of val_evaluator is completed</span>
+val_evaluator<span style=color:#f92672>.</span>add_event_handler(Events<span style=color:#f92672>.</span>COMPLETED, model_checkpoint, {<span style=color:#e6db74>&#34;model&#34;</span>: model})
+</code></pre></td></tr></table></div></div><p>We will use <a href=https://pytorch.org/ignite/generated/ignite.contrib.handlers.tensorboard_logger.html#ignite.contrib.handlers.tensorboard_logger.TensorboardLogger><code>TensorboardLogger()</code></a> to log trainer&rsquo;s loss, and training and validation metrics separately.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Define a Tensorboard logger</span>
+tb_logger <span style=color:#f92672>=</span> TensorboardLogger(log_dir<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tb-logger&#34;</span>)
+
+<span style=color:#75715e># Attach handler to plot trainer&#39;s loss every 100 iterations</span>
+tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+    trainer,
+    event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>),
+    tag<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;training&#34;</span>,
+    output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> loss: {<span style=color:#e6db74>&#34;batch_loss&#34;</span>: loss},
+)
+
+<span style=color:#75715e># Attach handler for plotting both evaluators&#39; metrics after every epoch completes</span>
+<span style=color:#66d9ef>for</span> tag, evaluator <span style=color:#f92672>in</span> [(<span style=color:#e6db74>&#34;training&#34;</span>, train_evaluator), (<span style=color:#e6db74>&#34;validation&#34;</span>, val_evaluator)]:
+    tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+        evaluator,
+        event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>EPOCH_COMPLETED,
+        tag<span style=color:#f92672>=</span>tag,
+        metric_names<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;all&#34;</span>,
+        global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer),
+    )
+</code></pre></td></tr></table></div></div><p>Finally, we start the engine on the training dataset and run it for 5
+epochs:</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+</code></pre></td></tr></table></div></div><pre><code>Epoch[1], Iter[100] Loss: 0.19
+Epoch[1], Iter[200] Loss: 0.13
+Epoch[1], Iter[300] Loss: 0.08
+Epoch[1], Iter[400] Loss: 0.11
+Training Results - Epoch[1] Avg accuracy: 0.97 Avg loss: 0.09
+Validation Results - Epoch[1] Avg accuracy: 0.97 Avg loss: 0.08
+Epoch[2], Iter[500] Loss: 0.07
+Epoch[2], Iter[600] Loss: 0.04
+Epoch[2], Iter[700] Loss: 0.09
+Epoch[2], Iter[800] Loss: 0.07
+Epoch[2], Iter[900] Loss: 0.16
+Training Results - Epoch[2] Avg accuracy: 0.93 Avg loss: 0.20
+Validation Results - Epoch[2] Avg accuracy: 0.93 Avg loss: 0.20
+Epoch[3], Iter[1000] Loss: 0.02
+Epoch[3], Iter[1100] Loss: 0.02
+Epoch[3], Iter[1200] Loss: 0.05
+Epoch[3], Iter[1300] Loss: 0.06
+Epoch[3], Iter[1400] Loss: 0.06
+Training Results - Epoch[3] Avg accuracy: 0.94 Avg loss: 0.20
+Validation Results - Epoch[3] Avg accuracy: 0.94 Avg loss: 0.23
+Epoch[4], Iter[1500] Loss: 0.08
+Epoch[4], Iter[1600] Loss: 0.02
+Epoch[4], Iter[1700] Loss: 0.08
+Epoch[4], Iter[1800] Loss: 0.07
+Training Results - Epoch[4] Avg accuracy: 0.98 Avg loss: 0.06
+Validation Results - Epoch[4] Avg accuracy: 0.98 Avg loss: 0.07
+Epoch[5], Iter[1900] Loss: 0.02
+Epoch[5], Iter[2000] Loss: 0.11
+Epoch[5], Iter[2100] Loss: 0.05
+Epoch[5], Iter[2200] Loss: 0.02
+Epoch[5], Iter[2300] Loss: 0.01
+Training Results - Epoch[5] Avg accuracy: 0.99 Avg loss: 0.02
+Validation Results - Epoch[5] Avg accuracy: 0.99 Avg loss: 0.03
+
+
+
+
+
+State:
+	iteration: 2345
+	epoch: 5
+	epoch_length: 469
+	max_epochs: 5
+	output: 0.005351857747882605
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># Let&#39;s close the logger and inspect our results</span>
+tb_logger<span style=color:#f92672>.</span>close()
+
+<span style=color:#f92672>%</span>load_ext tensorboard
+
+<span style=color:#f92672>%</span>tensorboard <span style=color:#f92672>--</span>logdir<span style=color:#f92672>=.</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># At last we can view our best models</span>
+<span style=color:#960050;background-color:#1e0010>!</span>ls checkpoints
+</code></pre></td></tr></table></div></div><pre><code>'best_model_4_accuracy=0.9856.pt'  'best_model_5_accuracy=0.9857.pt'
+</code></pre><h2 id=next-steps>Next Steps</h2><ol><li>Check out <a href=https://pytorch-ignite.ai/tutorials>tutorials</a> if you want to continue
+learning more about PyTorch-Ignite.</li><li>Head over to <a href=https://pytorch-ignite.ai/how-to-guides>how-to guides</a> if you’re looking
+for a specific solution.</li><li>If you want to set-up a PyTorch-Ignite project, visit <a href=https://code-generator.pytorch-ignite.ai/>Code
+Generator</a> to get a variety of
+easily customizable templates and out-of-the-box features.</li></ol><h2 id=complete-code>Complete Code</h2><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>from</span> torch <span style=color:#f92672>import</span> nn
+<span style=color:#f92672>from</span> torch.utils.data <span style=color:#f92672>import</span> DataLoader
+<span style=color:#f92672>from</span> torchvision.datasets <span style=color:#f92672>import</span> MNIST
+<span style=color:#f92672>from</span> torchvision.models <span style=color:#f92672>import</span> resnet18
+<span style=color:#f92672>from</span> torchvision.transforms <span style=color:#f92672>import</span> Compose, Normalize, ToTensor
+
+<span style=color:#f92672>from</span> ignite.engine <span style=color:#f92672>import</span> Engine, Events, create_supervised_trainer, create_supervised_evaluator
+<span style=color:#f92672>from</span> ignite.metrics <span style=color:#f92672>import</span> Accuracy, Loss
+<span style=color:#f92672>from</span> ignite.contrib.handlers <span style=color:#f92672>import</span> TensorboardLogger, global_step_from_engine
+
+device <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>device(<span style=color:#e6db74>&#34;cuda&#34;</span> <span style=color:#66d9ef>if</span> torch<span style=color:#f92672>.</span>cuda<span style=color:#f92672>.</span>is_available() <span style=color:#66d9ef>else</span> <span style=color:#e6db74>&#34;cpu&#34;</span>)
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Net</span>(nn<span style=color:#f92672>.</span>Module):
+
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Net, self)<span style=color:#f92672>.</span>__init__()
+    
+        self<span style=color:#f92672>.</span>model <span style=color:#f92672>=</span> resnet18(num_classes<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+
+        self<span style=color:#f92672>.</span>model<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>model<span style=color:#f92672>.</span>conv1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Conv2d(
+            <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>64</span>, kernel_size<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, padding<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, bias<span style=color:#f92672>=</span>False
+        )
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>model(x)
+
+
+model <span style=color:#f92672>=</span> Net()<span style=color:#f92672>.</span>to(device)
+
+data_transform <span style=color:#f92672>=</span> Compose([ToTensor(), Normalize((<span style=color:#ae81ff>0.1307</span>,), (<span style=color:#ae81ff>0.3081</span>,))])
+
+train_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>True), batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>128</span>, shuffle<span style=color:#f92672>=</span>True
+)
+
+val_loader <span style=color:#f92672>=</span> DataLoader(
+    MNIST(download<span style=color:#f92672>=</span>True, root<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;.&#34;</span>, transform<span style=color:#f92672>=</span>data_transform, train<span style=color:#f92672>=</span>False), batch_size<span style=color:#f92672>=</span><span style=color:#ae81ff>256</span>, shuffle<span style=color:#f92672>=</span>False
+)
+
+optimizer <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>optim<span style=color:#f92672>.</span>RMSprop(model<span style=color:#f92672>.</span>parameters(), lr<span style=color:#f92672>=</span><span style=color:#ae81ff>0.005</span>)
+criterion <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>CrossEntropyLoss()
+
+trainer <span style=color:#f92672>=</span> create_supervised_trainer(model, optimizer, criterion, device)
+
+val_metrics <span style=color:#f92672>=</span> {
+    <span style=color:#e6db74>&#34;accuracy&#34;</span>: Accuracy(),
+    <span style=color:#e6db74>&#34;loss&#34;</span>: Loss(criterion)
+}
+
+train_evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>val_metrics, device<span style=color:#f92672>=</span>device)
+val_evaluator <span style=color:#f92672>=</span> create_supervised_evaluator(model, metrics<span style=color:#f92672>=</span>val_metrics, device<span style=color:#f92672>=</span>device)
+
+log_interval <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span>log_interval))
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_loss</span>(engine):
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Epoch[{engine.state.epoch}], Iter[{engine.state.iteration}] Loss: {engine.state.output:.2f}&#34;</span>)
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_training_results</span>(trainer):
+    train_evaluator<span style=color:#f92672>.</span>run(train_loader)
+    metrics <span style=color:#f92672>=</span> train_evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Training Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>)
+
+
+<span style=color:#a6e22e>@trainer.on</span>(Events<span style=color:#f92672>.</span>EPOCH_COMPLETED)
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>log_validation_results</span>(trainer):
+    val_evaluator<span style=color:#f92672>.</span>run(val_loader)
+    metrics <span style=color:#f92672>=</span> val_evaluator<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics
+    <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#34;Validation Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics[&#39;accuracy&#39;]:.2f} Avg loss: {metrics[&#39;loss&#39;]:.2f}&#34;</span>)
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>score_function</span>(engine):
+    <span style=color:#66d9ef>return</span> engine<span style=color:#f92672>.</span>state<span style=color:#f92672>.</span>metrics[<span style=color:#e6db74>&#34;accuracy&#34;</span>]
+
+
+model_checkpoint <span style=color:#f92672>=</span> ModelCheckpoint(
+    <span style=color:#e6db74>&#34;checkpoint&#34;</span>,
+    n_saved<span style=color:#f92672>=</span><span style=color:#ae81ff>2</span>,
+    filename_prefix<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;best&#34;</span>,
+    score_function<span style=color:#f92672>=</span>score_function,
+    score_name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;accuracy&#34;</span>,
+    global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer),
+)
+  
+val_evaluator<span style=color:#f92672>.</span>add_event_handler(Events<span style=color:#f92672>.</span>COMPLETED, model_checkpoint, {<span style=color:#e6db74>&#34;model&#34;</span>: model})
+
+tb_logger <span style=color:#f92672>=</span> TensorboardLogger(log_dir<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tb-logger&#34;</span>)
+
+tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+    trainer,
+    event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>ITERATION_COMPLETED(every<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>),
+    tag<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;training&#34;</span>,
+    output_transform<span style=color:#f92672>=</span><span style=color:#66d9ef>lambda</span> loss: {<span style=color:#e6db74>&#34;batch_loss&#34;</span>: loss},
+)
+
+<span style=color:#66d9ef>for</span> tag, evaluator <span style=color:#f92672>in</span> [(<span style=color:#e6db74>&#34;training&#34;</span>, train_evaluator), (<span style=color:#e6db74>&#34;validation&#34;</span>, val_evaluator)]:
+    tb_logger<span style=color:#f92672>.</span>attach_output_handler(
+        evaluator,
+        event_name<span style=color:#f92672>=</span>Events<span style=color:#f92672>.</span>EPOCH_COMPLETED,
+        tag<span style=color:#f92672>=</span>tag,
+        metric_names<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;all&#34;</span>,
+        global_step_transform<span style=color:#f92672>=</span>global_step_from_engine(trainer),
+    )
+
+trainer<span style=color:#f92672>.</span>run(train_loader, max_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>)
+
+tb_logger<span style=color:#f92672>.</span>close()
+</code></pre></td></tr></table></div></div></div><div class=prev-n-next><div class=prev></div></div></div></section><div id=backtotop><a href=#></a></div><div class=sidebar><div class=sidebar-header><div class=text>Tutorials</div></div><div class=inner><aside><ul><li><a href=/tutorials/getting-started/ class=active>Getting Started</a><nav id=TableOfContents><ul><li><a href=#prerequisites>Prerequisites</a></li><li><a href=#installation>Installation</a></li><li><a href=#code>Code</a></li><li><a href=#next-steps>Next Steps</a></li><li><a href=#complete-code>Complete Code</a></li></ul></nav></li></ul></aside></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js></script><script src=/js/modernizr.min.48806575a40ede5e406c8278f3be521afb171e73d324994ced6b41306bdb230a.js></script><script src=/js/fresh.min.29a18383a93b919d639d60aca2437a08bec3ed15276e55dc1cb44a8ddd80bdc6.js></script><script src=/js/active-navbar.min.8067cab2f01a301954f5d28b2cb8cfa1ce10a23ea212f1c734c9b761503d5e0e.js></script><script src=/js/jquery.panelslider.min.js></script><link rel=stylesheet href=/css/copy-code.min.0032417fb3ddf66588bd7871ff6904ecb06695ccb2756f43792bbeec4b7da54f.css><script src=/js/copy-code.min.2597230d83cf7b0549c4a0d22b4e61a1b3fd86eaf05c491aa0b807c7803d9096.js></script><script src=/js/anchor.min.818717ad1ac9e378368b336d69c4a337a826937be38314c67bfca3669727e210.js></script></body></html>
