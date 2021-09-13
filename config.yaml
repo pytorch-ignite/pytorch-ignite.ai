@@ -5,7 +5,7 @@ theme: hugo-fresh
 publishdir: dist
 enableemoji: true
 enableGitInfo: true
-googleAnalytics: G-5FELLLFHCP # Put in your tracking code without quotes like this: UA-XXXXXX...
+googleAnalytics: G-NQNJSZEFB4 # Put in your tracking code without quotes like this: UA-XXXXXX...
 taxonomies:
   tag: tags
 
