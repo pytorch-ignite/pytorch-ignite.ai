@@ -1,6 +1,5 @@
 {{ define "main" }}
-<!-- This template apply to all other *.md except for _index.md -->
-<div class="grid gap-x-4 grid-cols-[20vw,1fr,20vw]">
+<div class="grid-cols-[250px,1fr,250px] lg:grid">
   {{ partial "SideBar.html" . }}
   {{ partial "ContentMain.html" . }}
   {{ partial "TOC.html" . }}

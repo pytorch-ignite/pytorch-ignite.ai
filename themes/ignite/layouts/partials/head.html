@@ -58,6 +58,7 @@
     const saved = localStorage.getItem('ignite-color-scheme')
     if (!saved ? window.matchMedia(`(prefers-color-scheme: dark)`).matches : saved === 'dark') {
       document.documentElement.classList.add('dark')
+      document.documentElement.dataset.theme = 'dark'
     }
   </script>
 </head>

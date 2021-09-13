@@ -35,7 +35,7 @@
       alt="PyTorch-Ignite logo"
       width="120"
       height="120"
-      class="h-full w-3/5 sm:row-span-2 <sm:w-4/5"
+      class="h-full w-4/5 sm:row-span-2 lg:w-3/5"
     />
     <h1
       class="
@@ -91,9 +91,9 @@
     py-12
     px-4
     gap-4
-    grid-cols-2
+    grid-cols-1
     items-center
-    <sm:grid-cols-1
+    lg:grid-cols-2
   "
 >
   {{ range $idx, $_ := $features }}
@@ -121,7 +121,7 @@
 
 <section class="mx-auto max-w-6xl py-12 px-4">
   <h2 class="text-3xl">Ecosystem</h2>
-  <div class="grid py-3 gap-4 grid-cols-3 <sm:grid-cols-1">
+  <div class="grid py-3 gap-4 sm:grid-cols-3">
     {{ range $ecosystem }}
     <a
       href="{{ .url }}"

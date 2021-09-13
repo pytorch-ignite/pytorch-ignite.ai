@@ -1,8 +1,19 @@
 :root {
   --c-primary: #ee4c2c;
   --c-secondary: #eaa700;
+  --docsearch-primary-color: var(--c-primary);
+  --docsearch-searchbox-focus-background: var(--docsearch-searchbox-background);
   --header-height: 55px;
   --aside-height: calc(100vh - var(--header-height));
+}
+.translate-x-0 {
+  --tw-translate-x: 0;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.\!block {
+  display: block !important;
 }
 .dark .prose a {
   color: var(--c-primary);
@@ -31,4 +42,18 @@
 }
 #TableOfContents a:hover {
   color: var(--c-primary);
+}
+.DocSearch-Button {
+  border-radius: 8px;
+  border: none;
+}
+.DocSearch-Button:active, .DocSearch-Button:focus, .DocSearch-Button:hover {
+  color: var(--c-primary);
+}
+.DocSearch-Button-Key {
+  background: none;
+  box-shadow: none;
+  top: 0;
+  padding-bottom: 0;
+  color: inherit;
 }

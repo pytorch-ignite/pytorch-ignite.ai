@@ -8,19 +8,16 @@ which include all common head tag and body end partial templates. -->
 {{ partial "head.html" . }}
 
 <body class="
-        bg-white
-        font-sans
-        text-blue-gray-600
-        antialiased
-        dark:bg-dark-700 dark:text-warm-gray-200
-      ">
-  {{ partial "NavBar.html" . }}
+      bg-white
+      font-sans
+      text-blue-gray-600
+      antialiased
+      dark:bg-dark-700 dark:text-warm-gray-200
+    ">
+  {{ partial "Header.html" . }}
   <!-- This is the kind of block scope that can be override by child layouts.
   Similar to Jinja template block. -->
-  {{ block "main" . }}
-  {{ end }}
-
-  {{ partial "body-end.html" . }}
+  {{ block "main" . }} {{ end }} {{ partial "body-end.html" . }}
 </body>
 
 </html>
