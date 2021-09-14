@@ -43,12 +43,12 @@ jobs:
       - name: Check tutorials
         run: |
           bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
-          diff -r content/tutorials tmp/tutorials --exclude=_index.md
+          diff -r src/tutorials tmp/tutorials --exclude=_index.md
 
       - name: Check how-to-guides
         run: |
           bash ./scripts/nb_to_md.sh static/examples/how-to-guides tmp/how-to-guides
-          diff -r content/how-to-guides tmp/how-to-guides --exclude=_index.md
+          diff -r src/how-to-guides tmp/how-to-guides --exclude=_index.md
 
   auto-pr:
     runs-on: ubuntu-latest
