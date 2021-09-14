@@ -17,7 +17,11 @@ which include all common head tag and body end partial templates. -->
   {{ partial "Header.html" . }}
   <!-- This is the kind of block scope that can be override by child layouts.
   Similar to Jinja template block. -->
-  {{ block "main" . }} {{ end }} {{ partial "body-end.html" . }}
+  <div class="relative">
+    {{ block "main" . }}
+    {{ end }}
+  </div>
+  {{ partial "body-end.html" . }}
 </body>
 
 </html>

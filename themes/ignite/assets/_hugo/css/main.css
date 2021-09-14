@@ -57,3 +57,16 @@
   padding-bottom: 0;
   color: inherit;
 }
+.highlight {
+  position: relative;
+}
+/* twitter tweets emojis */
+.Emoji {
+  /* these emoji needs to adjust with font size */
+  /* if changed */
+  width: 1rem;
+  height: 1rem;
+}
+#twitter-widget-0 {
+  display: none !important;
+}

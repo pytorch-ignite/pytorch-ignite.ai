@@ -11,7 +11,7 @@ async function highLightWithShiki() {
   for (const block of preBlocks) {
     const html = highligher.codeToHtml(
       block.textContent,
-      block.firstElementChild.getAttribute('data-lang') || 'text'
+      block.firstElementChild.getAttribute('data-lang') || 'text',
     )
     block.outerHTML = html
   }
