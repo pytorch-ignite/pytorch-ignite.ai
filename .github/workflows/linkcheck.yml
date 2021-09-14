@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: true # Fetch Hugo themes (true OR recursive)
+          submodules: recursive # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
       - name: Setup Hugo
@@ -26,4 +26,4 @@ jobs:
         run: bash scripts/build.sh
 
       - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest dist  -l 0
+      - run: ./bin/htmltest dist -l 0
