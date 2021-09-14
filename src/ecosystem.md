@@ -3,6 +3,8 @@ title: "Ecosystem"
 description: Ecosystem around PyTorch-Ignite
 ---
 
+# Ecosystem
+
 If your project implements a paper, represents other use-cases not covered in our official tutorials, Kaggle competition's code, or just your code presents interesting results and uses PyTorch-Ignite. We would like to add your project to this list, so please open an issue here: https://github.com/pytorch-ignite/pytorch-ignite.ai/issues with brief description of the project.
 
 The list below is unexhausted list of references that we are aware of.

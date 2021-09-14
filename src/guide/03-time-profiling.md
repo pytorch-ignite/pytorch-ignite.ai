@@ -1,5 +1,6 @@
 ---
 title: How to do time profiling
+weight: 3
 downloads: true
 sidebar: true
 summary: Learn how to get the time breakdown for individual epochs during training, individual events, all handlers corresponding to an event, individual handlers, data loading and data processing using Engine's State, BasicTimeProfiler and HandlersTimeProfiler.
@@ -9,6 +10,8 @@ tags:
   - BasicTimeProfiler
   - HandlersTimeProfiler
 ---
+# How to do time profiling
+
 This example demonstrates how you can get the time breakdown for:
 - Individual epochs during training
 - Total training time

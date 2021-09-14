@@ -1,6 +1,7 @@
 ---
 title: How to work with data iterators
 date: 2021-08-04
+weight: 6
 downloads: true
 sidebar: true
 tags:
@@ -8,6 +9,8 @@ tags:
   - infinite iterator
   - finite iterator
 ---
+# How to work with data iterators
+
 When the data provider for training or validation is an iterator
 (infinite or finite with known or unknown size), here are some basic
 examples of how to setup trainer or evaluator.

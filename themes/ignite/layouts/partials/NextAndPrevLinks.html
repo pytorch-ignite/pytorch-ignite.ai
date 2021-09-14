@@ -3,14 +3,14 @@
     {{ if .NextInSection }}
     <a href="{{ .NextInSection.RelPermalink }}" class="group">
       {{ partial "icons/ArrowLeft.html" . }}
-      <span class="overflow-hidden whitespace-nowrap overflow-ellipsis"></span>{{ .NextInSection.Title }}</span>
+      <span class="overflow-hidden"></span>{{ .NextInSection.Title }}</span>
     </a>
     {{ end }}
   </div>
   <div>
     {{ if .PrevInSection }}
     <a href="{{ .PrevInSection.RelPermalink }}" class="group float-right">
-      <span class="overflow-hidden whitespace-nowrap overflow-ellipsis">{{ .PrevInSection.Title }}</span>
+      <span class="overflow-hidden">{{ .PrevInSection.Title }}</span>
       {{ partial "icons/ArrowRight.html" . }}
     </a>
     {{ end }}

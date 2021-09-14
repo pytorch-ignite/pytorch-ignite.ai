@@ -1,5 +1,11 @@
 {{ if .Site.IsServer }}
   <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.11/dist/index.jsdelivr.iife.min.js"></script>
+  {{ $script := resources.Get "_hugo/js/embedHighlight.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
+  {{ $script := resources.Get "_hugo/js/embedCopyBtn.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
+  {{ $script := resources.Get "_hugo/js/fixTableOverflow.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
 
   <script type="module">
     // We are using ES6 module import feature to make it work

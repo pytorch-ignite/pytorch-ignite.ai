@@ -1,11 +1,8 @@
 ---
 title: GAN evaluation using FID and IS
 slug: gan-evaluation-with-FID-and-IS
-image: /_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png
-alt: GAN evaluation results using FID and IS
 date: 2021-08-11
 downloads: true
-sidebar: true
 tags:
   - GAN Evaluation
   - Inception Score
@@ -13,6 +10,8 @@ tags:
 ---
 
 # GAN evaluation using FID and IS
+
+![GAN evaluation results using FID and IS](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png)
 
 In this notebook, two `PyTorch-Ignite`'s metrics to evaluate _Generative Adversarial Networks_ (or GAN in short) are introduced :
 * **Frechet Inception Distance**, details can be found in [`Heusel et al. 2002`](https://arxiv.org/pdf/1706.08500.pdf)
