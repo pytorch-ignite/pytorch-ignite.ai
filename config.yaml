@@ -3,6 +3,7 @@ contentDir: src
 enableEmoji: true
 enableGitInfo: true
 enableRobotsTXT: true
+googleAnalytics: G-NQNJSZEFB4
 publishdir: dist
 theme: ignite
 title: PyTorch-Ignite
