@@ -1,53 +1,38 @@
-{{- $fileDir  := .File.Dir }}
-{{- $fileName := .File.BaseFileName }}
-{{- if eq $fileDir "tutorials/" -}}
-{{- $fileDir = "examples/" -}}
-{{- else if ne $fileDir "posts/" -}}
-{{- $fileDir = print "examples/" $fileDir -}}
-{{- end -}}
+{{ $fileDir  := .File.Dir }}
+{{ $fileName := .File.BaseFileName }}
+{{ if eq $fileDir "tutorials/" }}
+{{ $fileDir = "examples/" }}
+{{ else if ne $fileDir "blog/" }}
+{{ $fileDir = print "examples/" $fileDir }}
+{{ end }}
 
-<div class="downloads">
+<div class="flex flex-wrap pb-2 justify-center">
   <a
-    class="colab"
+    class="py-1 px-2"
     href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <img
-      src="/images/logos/colab.svg"
-      alt="Google Colab Logo"
-      width="30"
-      height="30"
-    />
+    {{ partial "icons/Colab.html" . }}
     <span>Run in Google Colab</span>
   </a>
   <a
-    class="notebook"
+    class="py-1 px-2"
     href="/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
     download="{{ $fileName }}.ipynb"
   >
-    <img
-      src="/images/logos/download.svg"
-      alt="Download Logo"
-      width="20"
-      height="20"
-    />
+    {{ partial "icons/Download.html" . }}
     <span>Download as Jupyter Notebook</span>
   </a>
   <a
-    class="source"
+    class="py-1 px-2"
     href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <img
-      src="/images/logos/github.svg"
-      alt="GitHub Logo"
-      width="20"
-      height="20"
-    />
+    {{ partial "icons/GitHub.html" . }}
     <span>View on GitHub</span>
   </a>
 </div>

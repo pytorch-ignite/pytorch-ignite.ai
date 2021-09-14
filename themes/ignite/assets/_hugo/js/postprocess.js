@@ -1,15 +1,22 @@
 // @ts-check
 
-// We are doing pre-highlighting with Shiki of the built html files
+// We are doing 
+// 1. pre-highlighting with Shiki of the built html files
 // so that we don't need to ship Shiki on client side.
 // In development, we are using Shiki from jsdelivr so
 // normal `hugo server` just works.
+// 2. We are embedding copy button to the code blocks
+// since it can be built statically before hand.
+// 3. We are also fixing long table overflow.
 // This is used in Netlify build.
 
 import * as fs from 'fs'
 import * as path from 'path'
 import { JSDOM } from 'jsdom'
-import { getHighlighter } from 'shiki'
+import shiki from 'shiki'
+import { highLightWithShiki } from './embedHighlight.js'
+import { embedCopyBtn } from './embedCopyBtn.js'
+import { fixTableOverflow } from './fixTableOverflow.js'
 
 function* walkDir(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true })
@@ -22,29 +29,17 @@ function* walkDir(dir) {
   }
 }
 
-async function preHighLightWithShiki(path) {
+async function postprocess(path) {
   try {
     for (const file of walkDir(path)) {
       const html = fs.readFileSync(file, { encoding: 'utf-8' })
-      const { document } = new JSDOM(html, { contentType: 'text/html' }).window
+      const { document, location } = new JSDOM(html, { contentType: 'text/html' }).window
 
-      // same code as in shiki.js
-      const highligher = await getHighlighter({
-        theme: 'one-dark-pro',
-        langs: ['py', 'shell'],
-      })
+      await highLightWithShiki(shiki, document)
+      embedCopyBtn(document, location)
+      fixTableOverflow(document)
 
-      const preBlocks = document.querySelectorAll('pre[style]')
-
-      for (const block of preBlocks) {
-        const html = highligher.codeToHtml(
-          block.textContent,
-          block.firstElementChild.getAttribute('data-lang') || 'text'
-        )
-        block.outerHTML = html
-      }
-
-      // update with Shiki highlighted html
+      // update the built html files
       fs.writeFileSync(
         file,
         '<!DOCTYPE html>' + document.documentElement.outerHTML,
@@ -57,4 +52,4 @@ async function preHighLightWithShiki(path) {
   }
 }
 
-preHighLightWithShiki('dist')
+postprocess('dist')

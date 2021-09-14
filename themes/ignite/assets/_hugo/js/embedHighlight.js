@@ -1,6 +1,7 @@
 // @ts-check
 // only used in development
-async function highLightWithShiki() {
+
+export async function highLightWithShiki(shiki, document = window.document) {
   const highligher = await shiki.getHighlighter({
     theme: 'one-dark-pro',
     langs: ['py', 'shell'],
@@ -16,5 +17,3 @@ async function highLightWithShiki() {
     block.outerHTML = html
   }
 }
-
-highLightWithShiki()

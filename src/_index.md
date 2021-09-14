@@ -1,5 +1,4 @@
 ---
-layout: front
 title: PyTorch-Ignite
 description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
 

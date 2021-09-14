@@ -12,9 +12,6 @@ markup:
     renderer:
       unsafe: true
 
-minify:
-  minifyOutput: false
-
 taxonomies:
   tag: tags
 
@@ -22,20 +19,30 @@ taxonomies:
 params:
   description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
   nav:
-    - title: Docs
-      sublinks:
-        - title: Tutorials
-          url: /tutorials/
-        - title: How to Guides
-          url: /how-to-guides/
-        - title: API Reference
-          url: https://pytorch.org/ignite/engine.html
-    - title: GitHub
-      url: https://github.com/pytorch/ignite
-    - title: Blog
-      url: /posts/
-    - title: Community
-      url: /community/
+    - text: Docs
+      children:
+        - text: Guide
+          link: /guide/
+        - text: Tutorials
+          link: /tutorials/
+        - text: Explanation
+          link: /explanation/
+        - text: API Reference
+          link: https://pytorch.org/ignite/engine.html
+    - text: Blog
+      link: /blog/
+    - text: Ecosystem
+      link: /ecosystem/
+    - text: About
+      children:
+        - text: Community
+          link: /about/community/
+        - text: Contribution Guide
+          link: /about/contribution-guide/
+        - text: Code of Conduct
+          link: /about/coc/
+    - text: GitHub
+      link: https://github.com/pytorch/ignite
 
   sidebar:
     - text: How-to Guides

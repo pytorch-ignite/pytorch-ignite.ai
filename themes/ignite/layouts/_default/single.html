@@ -1,7 +1,7 @@
 {{ define "main" }}
-<div class="grid-cols-[250px,1fr,250px] lg:grid">
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
   {{ partial "SideBar.html" . }}
-  {{ partial "ContentMain.html" . }}
+  {{ partial "MainContent.html" . }}
   {{ partial "TOC.html" . }}
 </div>
 {{ end }}

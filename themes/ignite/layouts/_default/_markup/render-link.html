@@ -4,7 +4,7 @@
 {{ $href := .Destination | safeURL }}
 {{ $target := ""}}
 {{ $rel := ""}}
-{{ if hasPrefix .Destination "https://" }}
+{{ if hasPrefix $href "https://" }}
 {{ $target = "_blank" }}
 {{ $rel = "noopener noreferrer" }}
 {{ end }}

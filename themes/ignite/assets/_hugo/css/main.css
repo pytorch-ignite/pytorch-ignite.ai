@@ -9,9 +9,6 @@
 .translate-x-0 {
   --tw-translate-x: 0;
 }
-.overflow-hidden {
-  overflow: hidden;
-}
 .\!block {
   display: block !important;
 }
@@ -38,7 +35,10 @@
   margin-left: 1rem;
 }
 #TableOfContents li {
-  padding: .5rem .25rem;
+  padding: .25rem;
+}
+#TableOfContents li > a {
+  display: block;
 }
 #TableOfContents a:hover {
   color: var(--c-primary);

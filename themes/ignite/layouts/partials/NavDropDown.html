@@ -1,7 +1,7 @@
 {{ $RelPermalink := .RelPermalink }}
 
 <div class="p-1 relative group lg:p-2">
-  <button id="dropDownBtn">{{ .title }}</button>
+  <button id="dropDownBtn">{{ .text }}</button>
   {{ partial "icons/ChevronRight.html" . }}
   <ul id="dropDownList" class="
       bg-white
@@ -15,13 +15,12 @@
       dark:bg-dark-700 dark:border-dark-200
       lg:group-hover:block
     ">
-    {{ range .sublinks }}
+    {{ range .children }}
     <li class="
         children:rounded-lg children:hover:bg-gray-200
         dark:children:hover:bg-dark-200
       ">
-      {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink"
-      $RelPermalink) }}
+      {{ partial "NavLink.html" (dict "link" .link "text" .text "RelPermalink" $RelPermalink) }}
     </li>
     {{ end }}
   </ul>

@@ -1,0 +1,39 @@
+{{ $tags := .Params.tags }}
+
+<main class="min-w-0 py-6 px-6">
+  <div class="relative prose prose-red">
+    {{ if .Params.downloads }}
+    {{ partial "Downloads.html" . }}
+    {{ end }}
+    {{ if and (.Date) (eq .Section "posts") }}
+    <div class="pb-2">
+      <time datetime="{{ time .Date }}">
+        <span class="sr-only">Published on</span>
+        {{ .Date.Format "January 2, 2006" }} –
+        {{ if gt .ReadingTime 1 }}
+        <span>{{ .ReadingTime }} mins</span>
+        {{ else }}
+        <span>{{ .ReadingTime }} min</span>
+        {{ end }}
+      </time>
+      <div class="float-right">
+        Last updated:
+        <time datetime="{{ time .Lastmod }}">{{ dateFormat "January 2, 2006" .Lastmod }}</time>
+      </div>
+    </div>
+    {{ end }}
+    {{ .Content }}
+    {{ if $tags }}
+    <div class="pb-2">
+      {{ range $tags }}
+      <span class="mx-2">
+        <a href="/tags/{{ . | urlize }}/">
+          #{{ . }}
+        </a>
+      </span>
+      {{ end }}
+    </div>
+    {{ end }}
+    {{ partial "NextAndPrevLinks.html" . }}
+  </div>
+</main>

@@ -1,5 +1,4 @@
-{{ define "main" }}
-<main class="mx-auto max-w-3xl py-12 px-6 prose prose-red">
+<main class="mx-auto max-w-4xl py-6 px-6 prose prose-red">
   {{ .Content }}
   <ul class="divide-y border-t dark:divide-dark-200 dark:border-dark-200">
     {{ range .Pages.ByDate.Reverse }}
@@ -17,7 +16,7 @@
         </time>
         {{ if .Params.image }}
         <img src="{{ .Params.image }}" alt="{{ .Params.alt }}" width="120" height="100%"
-          class="rounded-lg mx-auto w-4/5" />
+          class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
         {{ end }}
         {{ partial "Summary.html" . }}
         <a href="{{ .RelPermalink }}" class="group">Read More{{ partial "icons/ArrowRight.html" . }}</a>
@@ -26,4 +25,3 @@
     {{ end }}
   </ul>
 </main>
-{{ end }}

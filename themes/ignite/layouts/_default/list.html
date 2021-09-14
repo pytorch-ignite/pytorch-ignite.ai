@@ -1,17 +1,10 @@
 {{ define "main" }}
-<div class="grid-cols-[20vw,1fr] lg:grid">
+<div class="grid-cols-[1fr,3fr] lg:grid">
   {{ partial "SideBar.html" . }}
-  <div class="max-w-none py-12 px-6 prose prose-red">
-    {{ .Content }}
-    <div class="grid py-6 pr-6 gap-4 grid-cols-1 lg:grid-cols-3">
-      {{ range (.Paginate .Pages.ByWeight).Pages }}
-      <div class="rounded-lg bg-gray-200 p-4 dark:bg-dark-200">
-        <a href="{{ .RelPermalink }}">{{ .Weight }}. {{ .Title }}</a>
-        {{ partial "Summary.html" . }}
-      </div>
-      {{ end }}
-    </div>
-    {{ partial "Pagination.html" . }}
-  </div>
+  {{ if eq .Section "blog" }}
+    {{ partial "ListInnerBlog.html" . }}
+  {{ else }}
+    {{ partial "ListInnerDefault.html" . }}
+  {{ end }}
 </div>
 {{ end }}

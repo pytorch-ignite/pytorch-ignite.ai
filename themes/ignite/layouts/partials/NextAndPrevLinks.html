@@ -1,16 +1,16 @@
-<div class="border-t grid py-12 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
   <div>
     {{ if .NextInSection }}
     <a href="{{ .NextInSection.RelPermalink }}" class="group">
       {{ partial "icons/ArrowLeft.html" . }}
-      {{ .NextInSection.Title }}
+      <span class="overflow-hidden whitespace-nowrap overflow-ellipsis"></span>{{ .NextInSection.Title }}</span>
     </a>
     {{ end }}
   </div>
   <div>
     {{ if .PrevInSection }}
     <a href="{{ .PrevInSection.RelPermalink }}" class="group float-right">
-      {{ .PrevInSection.Title }}
+      <span class="overflow-hidden whitespace-nowrap overflow-ellipsis">{{ .PrevInSection.Title }}</span>
       {{ partial "icons/ArrowRight.html" . }}
     </a>
     {{ end }}

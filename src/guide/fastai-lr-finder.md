@@ -150,7 +150,7 @@ print("Suggested LR", lr_finder.lr_suggestion())
 
 
     
-![png](/images/notebooks/fastai-lr-finder_16_0.png)
+![png](/_images/fastai-lr-finder_16_0.png)
     
 
 

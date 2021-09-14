@@ -17,6 +17,8 @@ tags:
 
 # Introducing PyTorch-Ignite's Code Generator v0.2.0
 
+![code-generator-demo](https://raw.githubusercontent.com/pytorch-ignite/code-generator/main/src/assets/code-generator-demo.gif)
+
 Along with the [PyTorch-Ignite 0.4.5 release](https://github.com/pytorch/ignite/releases/tag/v0.4.5), we are excited to announce the new release of the web application for generating PyTorch-Ignite's training pipelines. This blog post is an overview of the key features and updates of the [Code Generator v0.2.0 project release](https://github.com/pytorch-ignite/code-generator/releases/tag/v0.2.0).
 
 <!--more-->
