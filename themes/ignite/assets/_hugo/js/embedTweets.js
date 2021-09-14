@@ -3,22 +3,26 @@
 async function embedTweet(iframe) {
   const tweets = []
 
-  iframe.contentWindow.document.querySelectorAll('ol.timeline-TweetList > li').forEach(function (t) {
-    const isRetweet = t.querySelector('.timeline-Tweet-retweetCredit')
-    const tweetAuthor = t.querySelector('.tweetAuthor-screenName').innerText
-    const inReplyTo = t.querySelector('.timeline-Tweet-inReplyTo')?.innerText
-    const tweetHTML = t.querySelector('p.timeline-tweet-text').innerHTML
-    const tweetStatus = t.querySelector('.timeline-Tweet').dataset.ClickToOpenTarget
-    tweets.push({
-      isRetweet,
-      tweetAuthor,
-      inReplyTo,
-      tweetHTML,
-      tweetStatus
-    })
-  })
+  iframe.contentWindow.document
+    .querySelectorAll('ol.timeline-TweetList > li')
+    .forEach(function (t) {
+      const isRetweet = t.querySelector('.timeline-Tweet-retweetCredit')
+      const tweetAuthor = t.querySelector('.tweetAuthor-screenName').innerText
+      let inReplyTo = t.querySelector('.timeline-Tweet-inReplyTo')
+      if (inReplyTo) {
+        inReplyTo = inReplyTo.innerText
+      }
+      const tweetHTML = t.querySelector('p.timeline-tweet-text').innerHTML
 
-  let tweetsWrapper = `<div class="grid gap-4 grid-cols-1 prose prose-red sm:grid-cols-3">`
+      tweets.push({
+        isRetweet,
+        tweetAuthor,
+        inReplyTo,
+        tweetHTML,
+      })
+    })
+
+  let tweetsWrapper = `<div class="grid gap-x-4 gap-y-6 prose prose-red sm:grid-cols-3">`
 
   for (const tweet of tweets) {
     let tweetWrapper = `<div>
@@ -55,23 +59,24 @@ async function embedTweet(iframe) {
     tweetsWrapper += tweetWrapper
   }
 
-  document.querySelector("div[data-target='twitter-timeline']").innerHTML = tweetsWrapper + `</div>`;
+  document.querySelector("div[data-target='twitter-timeline']").innerHTML =
+    tweetsWrapper + `</div>`
 }
 
-let count = 0;
+let count = 0
 const interval = setInterval(function () {
   const tweets = document.getElementById('twitter-tweets')
-  const iframe = document.getElementById("twitter-widget-0");
+  const iframe = document.getElementById('twitter-widget-0')
   if (iframe !== null) {
-    clearInterval(interval);
-    embedTweet(iframe);
+    clearInterval(interval)
+    embedTweet(iframe)
   }
 
   // cancel after 5 seconds
   if (count > 5) {
-    clearInterval(interval);
-    tweets.innerText = "Twitter widget could not be loaded.";
+    clearInterval(interval)
+    tweets.innerText = 'Twitter widget could not be loaded.'
   } else {
-    count += 1;
+    count += 1
   }
-}, 1000);
+}, 1000)

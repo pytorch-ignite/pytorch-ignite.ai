@@ -1,5 +1,4 @@
-// reference from
-// https://www.dannyguo.com/blog/how-to-add-copy-to-clipboard-buttons-to-code-blocks-in-hugo/
+// @ts-check
 
 function embedCopyBtn() {
   document.querySelectorAll('pre[style] > code').forEach((v) => {

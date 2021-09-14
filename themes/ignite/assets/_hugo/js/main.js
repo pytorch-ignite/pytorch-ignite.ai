@@ -82,10 +82,13 @@ function anchorScroll() {
 
 if (location.pathname === '/') {
   const featuredPost = document.getElementById('featured-post-link')
-  if (featuredPost.getAttribute('href') === 'https://github.com/pytorch/ignite/releases/latest') {
+  if (
+    featuredPost.getAttribute('href') ===
+    'https://github.com/pytorch/ignite/releases/latest'
+  ) {
     fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
-      .then(val => val.json())
-      .then(val => {
+      .then((val) => val.json())
+      .then((val) => {
         featuredPost.innerText = featuredPost.innerText + ' ' + val.tag_name
       })
   }
@@ -99,16 +102,19 @@ window.addEventListener('click', function (e) {
     const copyBtn = copyIt.closest('#copyBtn')
     const code = copyBtn.previousElementSibling
 
-    navigator.clipboard.writeText(code.innerText).then(function () {
-      e.target.blur()
-      copyDone.classList.toggle('hidden')
-      copyIt.classList.toggle('hidden')
-      setTimeout(() => {
+    navigator.clipboard
+      .writeText(code.innerText)
+      .then(function () {
+        e.target.blur()
         copyDone.classList.toggle('hidden')
         copyIt.classList.toggle('hidden')
-      }, 1500);
-    }).catch(function (reason) {
-      console.error(`${reason} Error copying code.`);
-    })
+        setTimeout(() => {
+          copyDone.classList.toggle('hidden')
+          copyIt.classList.toggle('hidden')
+        }, 1500)
+      })
+      .catch(function (reason) {
+        console.error(`${reason} Error copying code.`)
+      })
   }
 })
