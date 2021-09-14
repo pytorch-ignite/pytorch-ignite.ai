@@ -1,0 +1,40 @@
+{{ with .Paginator }}
+{{ $currentPageNb := .PageNumber }}
+{{ if gt .TotalPages 1 }}
+<div class="text-center">
+  {{ with .First }}
+  {{ if ne $currentPageNb .PageNumber }}
+  <div class="mx-2 inline-block">
+    <a href="{{ .URL }}" aria-label="Previous">&lt; Previous</a>
+  </div>
+  {{ end }}
+  {{ end }}
+
+  {{ with .Prev }}
+  <div class="mx-2 inline-block">
+    {{ $prev := sub $currentPageNb 1 }}
+    <a href="{{ .URL }}" aria-label="{{ $prev }}">{{ $prev }}</a>
+  </div>
+  {{ end }}
+
+  <div class="mx-2 inline-block">
+    <a href="{{ .URL }}" aria-label="Page {{ $currentPageNb }}">{{ $currentPageNb }}</a>
+  </div>
+
+  {{ with .Next }}
+  <div class="mx-2 inline-block">
+    {{ $next := add $currentPageNb 1 }}
+    <a href="{{ .URL }}" aria-label="{{ $next }}">{{ $next }}</a>
+  </div>
+  {{ end }}
+
+  {{ with .Last }}
+  {{ if ne $currentPageNb .PageNumber }}
+  <div class="mx-2 inline-block">
+    <a href="{{ .URL }}" aria-label="Next">Next &gt;</a>
+  </div>
+  {{ end }}
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}
