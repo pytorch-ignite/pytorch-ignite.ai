@@ -1,30 +1,67 @@
-{{- define "main" -}}
-<div class="section tags-section">
-  {{- if eq .Title "Tags" -}}
-  <h1 class="title">{{ .Title }}</h1>
-  {{- else -}}
-  <h1 class="title">Posts about {{ .Title }}</h1>
-  {{- end -}}
-  {{- if eq .Title "Tags" -}}
-  <ul class="list-disc list-inside">
-    {{ range .Data.Terms.ByCount }}
-    <li>
-      <a href="{{ .Page.RelPermalink }}" class="link">{{ .Page.Title }}</a>
-      <span class="count">{{ .Count }}</span>
-    </li>
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ define "main" }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $pages := "" }}
+
+<section class="mx-auto max-w-6xl py-12 px-6 prose prose-red">
+  <div>
+    {{ range .Site.Taxonomies.tags.ByCount }}
+    <a
+      href="{{ .Page.RelPermalink }}"
+      class="
+        rounded-lg
+        bg-gray-200
+        my-1
+        mx-2
+        px-2
+        inline-block
+        dark:bg-dark-400
+      "
+    >
+      {{ .Page.Title }} {{ .Count }}
+    </a>
     {{ end }}
-  </ul>
-  {{- else -}}
-  <ul class="list-disc list-inside">
-    {{ range .Pages.ByDate.Reverse }}
+  </div>
+
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ if eq .RelPermalink "/tags/" }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ $pages = .Site.RegularPages }}
+    {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ else }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ $pages = .Data.Pages }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ end }}
+
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ range $pages.ByDate.Reverse }}
+  <ul>
+    {{ if .Section }}
     <li>
+      {{ if .Date }}
       <span>{{ .Date.Format "2006-01-02" }} – </span>
-      <a href="{{ .RelPermalink }}">
-        {{ .Title }}
-      </a>
+      {{ end }}
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
     </li>
     {{ end }}
   </ul>
-  {{- end -}}
-</div>
-{{- end -}}
+  {{ end }}
+</section>
+{{ end }}
