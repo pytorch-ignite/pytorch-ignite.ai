@@ -77,6 +77,7 @@
     target="_blank"
     rel="noopener noreferrer"
     class="font-semibold text-xl text-white hover:underline"
+    id="featured-post-link"
   >
     {{ .title }}
   </a>
@@ -160,12 +161,12 @@
 </section>
 
 <section class="mx-auto max-w-6xl py-12 px-4">
-  <h2 class="text-3xl">Follow Us on Twitter</h2>
+  <h2 class="pb-4 text-3xl">Follow Us on Twitter</h2>
   <div
     class="twitter-tweets"
     id="twitter-tweets"
     data-target="twitter-timeline"
-  ></div>
+  >
   <a
     class="twitter-timeline"
     href="https://twitter.com/pytorch_ignite"
@@ -174,7 +175,8 @@
     data-tweet-limit="3"
     data-link-color="#e44c2c"
     data-dnt="true"
-  ></a>
+  >Loading Twitter Timeline...</a>
+  </div>
 </section>
 
 <section class="mx-auto text-center max-w-6xl py-12 px-4">
