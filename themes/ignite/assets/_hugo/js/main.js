@@ -58,7 +58,6 @@ function anchorScroll() {
               : document.querySelector(decodeURIComponent(hash))
             if (target) {
               const targetTop = target.offsetTop
-              console.log(targetTop, window.scrollY, window.innerHeight)
               // only smooth scroll if distance is smaller than screen height.
               if (
                 !smooth ||

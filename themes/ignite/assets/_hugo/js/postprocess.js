@@ -36,7 +36,9 @@ async function postprocess(path) {
       const { document, location } = new JSDOM(html, { contentType: 'text/html' }).window
 
       await highLightWithShiki(shiki, document)
-      embedCopyBtn(document, location)
+      if (file !== 'dist/index.html') {
+        embedCopyBtn(document, location)
+      }
       fixTableOverflow(document)
 
       // update the built html files

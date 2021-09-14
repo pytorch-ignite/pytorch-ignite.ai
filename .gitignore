@@ -10,3 +10,4 @@ dist
 node_modules
 tmp
 bin
+static/examples

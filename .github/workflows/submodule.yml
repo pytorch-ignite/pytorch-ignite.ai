@@ -68,8 +68,8 @@ jobs:
           pip install -r ./scripts/requirements.txt -Uqq
 
       - run: git submodule update --remote -- static/examples
-      - run: bash ./scripts/nb_to_md.sh static/examples content/tutorials
-      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides content/how-to-guides
+      - run: bash ./scripts/nb_to_md.sh static/examples src/tutorials
+      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/guide
 
       - uses: peter-evans/create-pull-request@v3
         with:
