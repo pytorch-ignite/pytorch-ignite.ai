@@ -1,7 +1,7 @@
 {{ $RelPermalink := .RelPermalink }}
 
 <div class="p-1 relative group lg:p-2">
-  <button id="dropDownBtn">{{ .text }}</button>
+  <button class="dropDownBtn" aria-label="Toggle Dropdown">{{ .text }}</button>
   {{ partial "icons/ChevronRight.html" . }}
   <ul id="dropDownList" class="
       bg-white

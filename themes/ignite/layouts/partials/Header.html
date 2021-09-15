@@ -17,7 +17,7 @@
     dark:border-b-dark-200
   ">
   {{ if not .IsHome }}
-  <button class="lg:hidden" id="sideBarBtn">
+  <button class="lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar">
     {{ partial "icons/MenuLeft.html" . }}
   </button>
   {{ end }}
