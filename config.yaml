@@ -14,6 +14,10 @@ markup:
     renderer:
       unsafe: true
 
+staticDir:
+  - static
+  - static/examples/how-to-guides/
+
 taxonomies:
   tag: tags
 

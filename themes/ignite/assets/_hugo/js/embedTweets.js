@@ -25,7 +25,7 @@ async function embedTweet(iframe) {
   let tweetsWrapper = `<div class="grid gap-x-4 gap-y-6 prose prose-red sm:grid-cols-3">`
 
   for (const tweet of tweets) {
-    let tweetWrapper = `<div>
+    let tweetWrapper = `<div class="border rounded-lg p-4 dark:border-dark-200">
     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
     role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
     <path
