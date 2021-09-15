@@ -16,6 +16,7 @@
     dark:bg-dark-700
     dark:border-b-dark-200
   ">
+  <div class="flex">
   {{ if not .IsHome }}
   <button class="lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar">
     {{ partial "icons/MenuLeft.html" . }}
@@ -25,6 +26,7 @@
     <img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite logo" width="50" height="50" class="h-40px w-full" loading="lazy" />
     <span class="sr-only">PyTorch-Ignite</span>
   </a>
+  </div>
   <div class="flex-grow"></div>
   <div class="hidden lg:block">
     {{ partial "NavBar.html" . }}

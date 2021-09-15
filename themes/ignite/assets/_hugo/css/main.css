@@ -67,3 +67,7 @@
 #twitter-widget-0 {
   display: none !important;
 }
+table {
+  border-collapse: collapse;
+  overflow-x: auto;
+}

@@ -23,7 +23,7 @@ function openDropDowns() {
       }
 
       window.addEventListener('click', function (e) {
-        if (e.target.id === 'dropDownBtn') {
+        if (e.target.className.includes && e.target.className.includes('dropDownBtn')) {
           const dropDownBtn = e.target
           const chevronRight = dropDownBtn.nextElementSibling
           const dropDownList = chevronRight.nextElementSibling
@@ -93,11 +93,11 @@ function fetchRelease() {
 
 function copyCode() {
   window.addEventListener('click', function (e) {
-    if (['copyBtn', 'copyIt', 'copyDone'].includes(e.target.id)) {
+    if (['copyIt', 'copyDone'].includes(e.target.id)) {
       e.preventDefault()
       const copyIt = e.target
       const copyDone = copyIt.nextElementSibling
-      const copyBtn = copyIt.closest('#copyBtn')
+      const copyBtn = copyIt.closest('.copyBtn')
       const code = copyBtn.previousElementSibling
 
       navigator.clipboard
