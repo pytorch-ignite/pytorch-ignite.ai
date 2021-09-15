@@ -1,4 +1,6 @@
-<aside class="text-sm px-4 lg:h-$aside-height lg:top-$header-height lg:p-4 lg:sticky lg:overflow-y-auto">
-  <h5 class="font-semibold prose prose-lg">On This Page</h5>
-  {{ .TableOfContents }}
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+  <div class="py-3 px-2">
+    <h5 class="font-semibold">Table of Contents</h5>
+    <div class="py-1 px-2">{{ .TableOfContents }}</div>
+  </div>
 </aside>

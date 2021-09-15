@@ -1,0 +1,38 @@
+{{ $fileDir  := .File.Dir }}
+{{ $fileName := .File.BaseFileName }}
+{{ if eq $fileDir "tutorials/" }}
+{{ $fileDir = "examples/" }}
+{{ else if ne $fileDir "blog/" }}
+{{ $fileDir = print "examples/" $fileDir }}
+{{ end }}
+
+<div class="flex flex-wrap pb-2 justify-center">
+  <a
+    class="py-1 px-2"
+    href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {{ partial "icons/Colab.html" . }}
+    <span>Run in Google Colab</span>
+  </a>
+  <a
+    class="py-1 px-2"
+    href="/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+    download="{{ $fileName }}.ipynb"
+  >
+    {{ partial "icons/Download.html" . }}
+    <span>Download as Jupyter Notebook</span>
+  </a>
+  <a
+    class="py-1 px-2"
+    href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {{ partial "icons/GitHub.html" . }}
+    <span>View on GitHub</span>
+  </a>
+</div>

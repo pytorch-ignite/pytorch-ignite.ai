@@ -6,8 +6,10 @@
 <!-- prettier-ignore -->
 */}}
 {{ $pages := "" }}
+<div class="grid-cols-[1fr,3fr] lg:grid">
+  {{ partial "SideBar.html" . }}
 
-<section class="mx-auto max-w-6xl py-12 px-6 prose prose-red">
+<section class="mx-auto max-w-6xl py-6 px-6 prose prose-red">
   <div>
     {{ range .Site.Taxonomies.tags.ByCount }}
     <a
@@ -64,4 +66,5 @@
   </ul>
   {{ end }}
 </section>
+</div>
 {{ end }}

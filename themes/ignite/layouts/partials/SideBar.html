@@ -1,34 +1,56 @@
+{{/*
+<!-- prettier-ignore -->
+*/}}
 {{ $active := "" }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
 {{ $url := .RelPermalink }}
 
 <aside
-  class="bg-white h-$aside-height top-$header-height p-4 transform z-10 fixed overflow-y-auto lg:sticky <lg:-translate-x-full <lg:w-64 dark:bg-dark-700"
-  id="sidebar">
-  <div class="lg:hidden">
-    {{ partial "NavBar.html" . }}
-  </div>
-  <hr class="lg:hidden">
-  <nav>
-    <ul>
+  class="
+    bg-white
+    h-$aside-height
+    top-$header-height
+    py-3
+    px-6
+    transform
+    z-10
+    fixed
+    overflow-y-auto
+    lg:sticky <lg:border-r
+    <lg:-translate-x-full
+    <lg:w-64
+    dark:bg-dark-700
+    dark:border-dark-200
+  "
+  id="sidebar"
+>
+  <div class="lg:hidden">{{ partial "NavBar.html" . }}</div>
+  <nav class="py-3 px-2">
+    <h5 class="font-semibold uppercase">{{ .Section }}</h5>
+    <ul class="px-2">
+
+      {{ range where .Site.RegularPages "Section" .Section }}
       <li class="py-1">
-        <h5 class="font-semibold uppercase">{{ .Section }}</h5>
-        <ul>
-          {{ range where .Site.RegularPages "Section" .Section }}
-          <li class="py-1">
-            {{ if eq $url .RelPermalink }}
-            {{ $active = "text-$c-primary" }}
-            {{ end }}
-            <a href="{{ .RelPermalink }}" class="{{ $active }} hover:text-$c-primary">{{ .Title }}</a>
-            {{ if $active }}
-            <div class="lg:hidden">
-              {{ .TableOfContents }}
-            </div>
-            {{ end }}
-            {{ $active = "" }}
-          </li>
-          {{ end }}
-        </ul>
+
+        {{/* <!-- prettier-ignore --> */}}
+        {{ if eq $url .RelPermalink }}
+          {{/* <!-- prettier-ignore --> */}}
+          {{ $active = "text-$c-primary" }}
+        {{/* <!-- prettier-ignore --> */}}
+        {{ end }}
+
+        <a
+          href="{{ .RelPermalink }}"
+          class="{{ $active }} hover:text-$c-primary py-1"
+          >{{ .Title }}</a
+        >
+        {{ if $active }}
+        <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+        {{ end }} {{ $active = "" }}
       </li>
+      {{ end }}
     </ul>
   </nav>
 </aside>

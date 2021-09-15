@@ -1,0 +1,14 @@
+<!-- extract h1 text content from markdown content -->
+<!-- this doesn't include h1 tag i.e. <h1> </h1> -->
+{{ $h1 := findRE "<h1.*?>(.|\n)+?</h1>" .Content 1 }}
+
+<!-- strip h1 tags -->
+{{ $h1 = replaceRE "</?h1.*?>" "" (index $h1 0) }}
+
+<!-- strip anchor tags -->
+{{ $h1 = replaceRE "</?a.*?>" "" $h1 }}
+
+<!-- strip whitespaces -->
+{{ $h1 = trim $h1 "\n\r" }}
+
+{{ return $h1 }}

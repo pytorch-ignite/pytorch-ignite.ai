@@ -2,10 +2,10 @@
 
 <nav class="place-content-center place-items-center block lg:flex">
   {{ range .Site.Params.nav }}
-  {{ if .sublinks }}
-  {{ partial "NavDropDown.html" (dict "sublinks" .sublinks "title" .title "RelPermalink" $RelPermalink) }}
+  {{ if .children }}
+  {{ partial "NavDropDown.html" (dict "children" .children "text" .text "RelPermalink" $RelPermalink) }}
   {{ else }}
-  {{ partial "NavLink.html" (dict "url" .url "title" .title "RelPermalink" $RelPermalink) }}
+  {{ partial "NavLink.html" (dict "link" .link "text" .text "RelPermalink" $RelPermalink) }}
   {{ end }}
   {{ end }}
 </nav>

@@ -7,6 +7,8 @@ tags:
   - PyTorch-Ignite
 ---
 
+# Getting Started
+
 Welcome to **PyTorch-Ignite**’s quick start guide that covers the
 essentials of getting a project up and running while walking through
 basic concepts of Ignite. In just a few lines of code, you can get your
