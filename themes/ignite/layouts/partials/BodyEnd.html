@@ -22,16 +22,15 @@
 
 {{ end }}
 
-{{ $script := resources.Get "_hugo/js/toggleDark.js" | fingerprint "md5" | minify }}
-<script src="{{ $script.RelPermalink }}" defer></script>
-
-{{ $script := resources.Get "_hugo/js/main.js" | fingerprint "md5" | minify }}
+{{ $toggleDark := resources.Get "_hugo/js/toggleDark.js" }}
+{{ $main := resources.Get "_hugo/js/main.js" }}
+{{ $script := slice $main $toggleDark | resources.Concat "_hugo/js/app.js" | fingerprint "md5" | minify }}
 <script src="{{ $script.RelPermalink }}" defer></script>
 
 {{ if .IsHome }}
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   {{ $script := resources.Get "_hugo/js/embedTweets.js" | fingerprint "md5" | minify }}
-  <script src="{{ $script.RelPermalink }}"></script>
+  <script defer src="{{ $script.RelPermalink }}"></script>
 {{ end }}
 
 <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>

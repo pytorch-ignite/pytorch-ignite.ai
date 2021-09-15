@@ -12,7 +12,7 @@
   },
   "prettier": {
     "semi": false,
-    "trailingComma": "all",
+    "trailingComma": "es5",
     "tabWidth": 2,
     "singleQuote": true
   }

@@ -3,7 +3,7 @@ title: PyTorch-Ignite
 description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
 
 actionText: Get Started
-actionLink: /tutorials/getting-started/
+actionLink: /getting-started/
 
 image: /_images/ignite_logo.svg
 

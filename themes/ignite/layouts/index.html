@@ -40,11 +40,11 @@
     />
     <h1
       class="
+        bg-gradient-to-br
         font-semibold
         text-2xl
         lg:text-3xl
         dark:bg-clip-text
-        dark:bg-gradient-to-br
         dark:from-red-500
         dark:to-amber-400
         dark:text-transparent
@@ -78,7 +78,7 @@
     href="{{ .link }}"
     target="_blank"
     rel="noopener noreferrer"
-    class="font-semibold text-xl text-white hover:underline"
+    class="font-semibold text-white lg:text-xl hover:underline"
     id="featured-post-link"
   >
     {{ .title }}
@@ -117,21 +117,6 @@
   {{ end }}
 </section>
 
-<!-- TODO -->
-<section class="bg-gray-200 text-center py-6 px-4 dark:bg-dark-400">
-  <div class="mx-auto max-w-6xl grid gap-4 sm:grid-cols-3">
-    {{ range $docs }}
-    <div>
-      <h2 class="font-semibold text-xl">{{ .title }}</h2>
-      <p class="py-2">{{ .text }}</p>
-      <a href="{{ .url }}" class="text-$c-primary group">
-        View {{ .title }} {{ partial "icons/ArrowRight.html" . }}
-      </a>
-    </div>
-    {{ end }}
-  </div>
-</section>
-
 <section class="mx-auto max-w-6xl py-6 px-4">
   <h2 class="text-xl uppercase lg:text-2xl">Ecosystem</h2>
   <div class="grid py-3 gap-4 sm:grid-cols-3">
@@ -143,13 +128,14 @@
       class="
         border
         rounded-lg
-        p-4
+        py-2
+        px-4
         group
         dark:border-dark-200 dark:shadow-red-500
         hover:shadow-xl
       "
     >
-      <p class="group-hover:text-$c-primary">{{ .title }}</p>
+      <p class="font-semibold py-3 group-hover:text-$c-primary">{{ .title }}</p>
       <p>{{ .text | markdownify }}</p>
     </a>
     {{ end }}
@@ -237,7 +223,9 @@
     </a>
     {{ end }}
   </div>
+  <span class="py-6 !block">
   BSD-3-Clause Licensed | Copyright &copy; {{ now.Format "2006" }}
   PyTorch-Ignite Contributors
+  </span>
 </footer>
 {{ end }}

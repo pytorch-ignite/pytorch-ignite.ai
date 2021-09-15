@@ -23,11 +23,9 @@ params:
     - text: Docs
       children:
         - text: Guide
-          link: /guide/
+          link: /guides/
         - text: Tutorials
           link: /tutorials/
-        - text: Explanation
-          link: /explanation/
         - text: API Reference
           link: https://pytorch.org/ignite/engine.html
     - text: Blog

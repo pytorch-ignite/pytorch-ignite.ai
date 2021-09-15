@@ -1,33 +1,40 @@
+const pathname = location.pathname
+
 function openSideBar() {
-  const sideBarBtn = document.getElementById('sideBarBtn')
-  const sidebar = document.getElementById('sidebar')
+  if (pathname !== '/') {
+    const sideBarBtn = document.getElementById('sideBarBtn')
+    const sidebar = document.getElementById('sidebar')
 
-  sideBarBtn.addEventListener('click', function () {
-    document.documentElement.classList.toggle('overflow-hidden')
-    sidebar.classList.toggle('translate-x-0')
-  })
-}
-
-openSideBar()
-
-function openDropDown() {
-  const matches = window.matchMedia('(max-width: 1024px)').matches
-
-  if (matches) {
-    const dropDownBtn = document.querySelector('#sidebar #dropDownBtn')
-    const dropDownList = document.querySelector('#sidebar #dropDownList')
-    const chevronRight = document.querySelector('#sidebar #chevronRight')
-    chevronRight.classList.toggle('rotate-90')
-
-    dropDownBtn.addEventListener('click', function () {
-      dropDownList.classList.toggle('!block')
-      chevronRight.classList.toggle('rotate-90')
+    sideBarBtn.addEventListener('click', function () {
+      document.documentElement.classList.toggle('overflow-hidden')
+      sidebar.classList.toggle('translate-x-0')
     })
   }
 }
 
-openDropDown()
-anchorScroll()
+function openDropDowns() {
+  if (pathname !== '/') {
+    const matches = window.matchMedia('(max-width: 1024px)').matches
+
+    if (matches) {
+      const chevronRights = document.querySelectorAll('#sidebar #chevronRight')
+      for (const chevronRight of chevronRights) {
+        chevronRight.classList.toggle('rotate-90')
+      }
+
+      window.addEventListener('click', function (e) {
+        if (e.target.id === 'dropDownBtn') {
+          const dropDownBtn = e.target
+          const chevronRight = dropDownBtn.nextElementSibling
+          const dropDownList = chevronRight.nextElementSibling
+
+          dropDownList.classList.toggle('!block')
+          chevronRight.classList.toggle('rotate-90')
+        }
+      })
+    }
+  }
+}
 
 function anchorScroll() {
   window.addEventListener('click', function (e) {
@@ -52,25 +59,14 @@ function anchorScroll() {
           e.preventDefault()
           if (hash && hash !== currentUrl.hash) {
             history.pushState(null, '', hash)
-            const smooth = link.classList.contains('header-anchor')
-            const target = link.classList.contains('header-anchor')
-              ? link
-              : document.querySelector(decodeURIComponent(hash))
+            const target = document.querySelector(decodeURIComponent(hash))
             if (target) {
               const targetTop = target.offsetTop
-              // only smooth scroll if distance is smaller than screen height.
-              if (
-                !smooth ||
-                Math.abs(targetTop - window.scrollY) > window.innerHeight
-              ) {
-                window.scrollTo(0, targetTop)
-              } else {
-                window.scrollTo({
-                  left: 0,
-                  top: targetTop,
-                  behavior: 'smooth',
-                })
-              }
+              window.scrollTo({
+                left: 0,
+                top: targetTop,
+                behavior: 'smooth',
+              })
             }
           }
         }
@@ -79,41 +75,52 @@ function anchorScroll() {
   })
 }
 
-if (location.pathname === '/') {
-  const featuredPost = document.getElementById('featured-post-link')
-  if (
-    featuredPost.getAttribute('href') ===
-    'https://github.com/pytorch/ignite/releases/latest'
-  ) {
-    fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
-      .then((val) => val.json())
-      .then((val) => {
-        featuredPost.innerText = featuredPost.innerText + ' ' + val.tag_name
-      })
+function fetchRelease() {
+  if (pathname === '/') {
+    const featuredPost = document.getElementById('featured-post-link')
+    if (
+      featuredPost.getAttribute('href') ===
+      'https://github.com/pytorch/ignite/releases/latest'
+    ) {
+      fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
+        .then((val) => val.json())
+        .then((val) => {
+          featuredPost.innerText = featuredPost.innerText + ' ' + val.tag_name
+        })
+    }
   }
 }
 
-window.addEventListener('click', function (e) {
-  if (['copyBtn', 'copyIt', 'copyDone'].includes(e.target.id)) {
-    e.preventDefault()
-    const copyIt = e.target
-    const copyDone = copyIt.nextElementSibling
-    const copyBtn = copyIt.closest('#copyBtn')
-    const code = copyBtn.previousElementSibling
+function copyCode() {
+  window.addEventListener('click', function (e) {
+    if (['copyBtn', 'copyIt', 'copyDone'].includes(e.target.id)) {
+      e.preventDefault()
+      const copyIt = e.target
+      const copyDone = copyIt.nextElementSibling
+      const copyBtn = copyIt.closest('#copyBtn')
+      const code = copyBtn.previousElementSibling
 
-    navigator.clipboard
-      .writeText(code.innerText)
-      .then(function () {
-        e.target.blur()
-        copyDone.classList.toggle('hidden')
-        copyIt.classList.toggle('hidden')
-        setTimeout(() => {
+      navigator.clipboard
+        .writeText(code.innerText)
+        .then(function () {
+          e.target.blur()
           copyDone.classList.toggle('hidden')
           copyIt.classList.toggle('hidden')
-        }, 1500)
-      })
-      .catch(function (reason) {
-        console.error(`${reason} Error copying code.`)
-      })
-  }
-})
+          setTimeout(() => {
+            copyDone.classList.toggle('hidden')
+            copyIt.classList.toggle('hidden')
+          }, 1500)
+        })
+        .catch(function (reason) {
+          console.error(`${reason} Error copying code.`)
+        })
+    }
+  })
+}
+
+
+openSideBar()
+openDropDowns()
+anchorScroll()
+fetchRelease()
+copyCode()

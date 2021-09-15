@@ -1,7 +1,10 @@
 // @ts-check
 // only used in dev
 
-export function embedCopyBtn(document = window.document, location = window.location) {
+export function embedCopyBtn(
+  document = window.document,
+  location = window.location
+) {
   if (location.pathname !== '/') {
     document.querySelectorAll('pre[style] > code').forEach((v) => {
       const button = document.createElement('button')

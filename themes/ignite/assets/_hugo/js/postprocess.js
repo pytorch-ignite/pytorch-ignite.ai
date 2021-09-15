@@ -1,6 +1,6 @@
 // @ts-check
 
-// We are doing 
+// We are doing
 // 1. pre-highlighting with Shiki of the built html files
 // so that we don't need to ship Shiki on client side.
 // In development, we are using Shiki from jsdelivr so
@@ -33,7 +33,9 @@ async function postprocess(path) {
   try {
     for (const file of walkDir(path)) {
       const html = fs.readFileSync(file, { encoding: 'utf-8' })
-      const { document, location } = new JSDOM(html, { contentType: 'text/html' }).window
+      const { document, location } = new JSDOM(html, {
+        contentType: 'text/html',
+      }).window
 
       await highLightWithShiki(shiki, document)
       if (file !== 'dist/index.html') {

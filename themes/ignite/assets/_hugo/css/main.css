@@ -9,9 +9,6 @@
 .translate-x-0 {
   --tw-translate-x: 0;
 }
-.\!block {
-  display: block !important;
-}
 .dark .prose a {
   color: var(--c-primary);
 }
