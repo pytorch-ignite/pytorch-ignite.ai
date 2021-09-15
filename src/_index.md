@@ -126,10 +126,10 @@ ecosystem:
 sponsors:
   - name: NumFOCUS
     url: https://numfocus.org
-    img: https://numfocus.org/wp-content/uploads/2017/07/NumFocus_LRG.png
+    img: /_images/NumFocus_LRG.png
   - name: Quansight Labs
     url: https://labs.quansight.org
-    img: https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/files/images/QuansightLabs_logo_V2.png
+    img: /_images/QuansightLabs_logo_V2.png
   - name: IFP Energies nouvelles
     url: https://www.ifpenergiesnouvelles.com/
     img: /_images/ifpen.jpg

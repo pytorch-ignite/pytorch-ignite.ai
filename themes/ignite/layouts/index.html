@@ -67,7 +67,8 @@
         dark:bg-dark-200
       "
     >
-      {{ .Params.actionText }} {{ partial "icons/ArrowRight.html" . }}
+      {{ .Params.actionText }}
+      {{ partial "icons/ArrowRight.html" . }}
     </a>
   </div>
 </section>
@@ -185,9 +186,8 @@
       target="_blank"
       rel="sponsored noopener"
       class="mx-4 inline-block align-middle"
-      loading="lazy"
     >
-      <img src="{{ .img }}" alt="{{ .name }}" width="160" />
+      <img src="{{ .img }}" alt="{{ .name }}" width="160" loading="lazy" height="100%"/>
     </a>
     {{ end }}
   </div>
