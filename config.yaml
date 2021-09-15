@@ -4,6 +4,7 @@ enableEmoji: true
 enableGitInfo: true
 googleAnalytics: G-NQNJSZEFB4 # Put in your tracking code without quotes like this: UA-XXXXXX...
 publishdir: dist
+title: PyTorch-Ignite
 theme: ignite
 taxonomies:
   tag: tags
