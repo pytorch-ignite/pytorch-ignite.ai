@@ -8,31 +8,31 @@
 
 <div class="flex flex-wrap pb-2 justify-center">
   <a
-    class="py-1 px-2"
+    class="flex py-1 px-2 items-center"
     href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
     {{ partial "icons/Colab.html" . }}
-    <span>Run in Google Colab</span>
+    <span class="ml-1">Run in Google Colab</span>
   </a>
   <a
-    class="py-1 px-2"
+    class="flex py-1 px-2 items-center"
     href="/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
     download="{{ $fileName }}.ipynb"
   >
     {{ partial "icons/Download.html" . }}
-    <span>Download as Jupyter Notebook</span>
+    <span class="ml-1">Download as Jupyter Notebook</span>
   </a>
   <a
-    class="py-1 px-2"
+    class="flex py-1 px-2 items-center"
     href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
     target="_blank"
     rel="noopener noreferrer"
   >
     {{ partial "icons/GitHub.html" . }}
-    <span>View on GitHub</span>
+    <span class="ml-1">View on GitHub</span>
   </a>
 </div>
