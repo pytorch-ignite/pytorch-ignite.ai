@@ -26,4 +26,4 @@ jobs:
         run: bash scripts/build.sh
 
       - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest dist -l 0
+      - run: ./bin/htmltest dist

@@ -55,7 +55,7 @@
   */}}
   {{ range $pages.ByDate.Reverse }}
   <ul>
-    {{ if or (eq .Section "blog") (eq .Section "guides") (eq .Section "tutorials") }}
+    {{ if in (slice "blog" "guides" "tutorials") .Section }}
     <li>
       {{ if .Date }}
       <span>{{ .Date.Format "2006-01-02" }} – </span>

@@ -6,6 +6,9 @@
   --header-height: 55px;
   --aside-height: calc(100vh - var(--header-height));
 }
+.text-\$c-primary {
+  color: var(--c-primary);
+}
 .translate-x-0 {
   --tw-translate-x: 0;
 }

@@ -1,3 +1,7 @@
+---
+title: Tutorials
+---
+
 # Tutorials
 
-Hands-on PyTorch-Ignite tutorials.
+End-to-end complete hands-on PyTorch-Ignite tutorials with interactive Google Colab Notebooks.
