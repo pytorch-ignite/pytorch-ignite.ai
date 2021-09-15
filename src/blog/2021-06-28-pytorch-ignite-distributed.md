@@ -227,7 +227,7 @@ python -m torch.distributed.launch --nproc_per_node 2 --use_env ignite_idist.py 
 horovodrun -np 4 -H hostname1:2,hostname2:2 python ignite_idist.py --backend horovod
 ```
 
-{{% tip NOTE %}}
+{{<tip NOTE>}}
 In order to run this example and to avoid the installation procedure, you can pull one of PyTorch-Ignite's [docker image with pre-installed Horovod](https://github.com/pytorch/ignite/blob/master/docker/hvd/Dockerfile.hvd-base). It will include Horovod with `gloo` controller and `nccl` support.
 
 ```bash
@@ -235,7 +235,7 @@ docker run --gpus all -it -v $PWD:/project pytorchignite/hvd-vision:latest /bin/
 cd project
 ```
 
-{{% /tip %}}
+{{</tip>}}
 
 #### With slurm
 
