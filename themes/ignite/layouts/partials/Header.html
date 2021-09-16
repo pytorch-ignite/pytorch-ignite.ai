@@ -16,15 +16,15 @@
     dark:bg-dark-700
     dark:border-b-dark-200
   ">
-  <div class="flex">
+  <div class="flex items-center">
   {{ if not .IsHome }}
-  <button class="lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar">
+  <button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar">
     {{ partial "icons/MenuLeft.html" . }}
   </button>
   {{ end }}
-  <a href="/">
-    <img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite logo" width="50" height="50" class="h-40px w-full" loading="lazy" />
-    <span class="sr-only">PyTorch-Ignite</span>
+  <a href="/" class="flex items-center">
+    <img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy" />
+    <span class="font-semibold">PyTorch-Ignite</span>
   </a>
   </div>
   <div class="flex-grow"></div>
