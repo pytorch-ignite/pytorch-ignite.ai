@@ -1,0 +1,58 @@
+name: Website Issue
+description: Report an issue with the https://pytorch.org website itself
+labels: ["bug: pending triage", "type: theme"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe website issue
+      description: |
+        A clear and concise description of what the website issue is. If you intend to submit a PR for this issue, tell us in the description. Thanks!
+      placeholder: Website issue description
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Step to reproduce the behavior.
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectation
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen. (Screenshots, videos, GIF also help)
+    validations:
+      required: true
+
+  - type: textarea
+    id: devices
+    attributes:
+      label: What browsers/OS are the issues happening on?
+      value: |
+        - OS: [e.g. iOS 15, macOS 11]
+        - Browsers: [e.g. Firefox 90, Chrome 92]
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any relevant additional information.
+    validations:
+      required: false
