@@ -46,22 +46,22 @@ Hugo and theme level configurations are defined in [config.yaml](./config.yaml).
 
 ## Available usages
 
-- Create markdown files with necessry frontmatter. You can reference from the exisiting files.
+- Create markdown files with necessary frontmatters. You can reference from the exisiting files.
 If custom slug url is desired, `slug` in frontmatter can be used.
 
 - New blog posts automatically get previous and next blog post links.
 
 - When creating new templates, take a look at `layouts/_default` and use available template parts inside `layouts/partials`.
 
-- We can also use [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/#readout) for `INFO`, `TIP`, `WARNING`, `DANGER`, and `DETAILS` admonitions.
-  Use it like `{{<>}}` and `{{</>}}`.
+- We can also use [Hugo shortcodes](https://gohugo.io/content-management/shortcodes/) for `INFO`, `TIP`, `WARNING`, `DANGER`, and `DETAILS` admonitions.
+  Use it like `{{<>}}` and `{{</>}}`. For example,
   ```sh
   {{<highlight go>}} A bunch of code here {{</highlight>}}
   ```
 
 For info:
 
-```sh
+```html
 {{<info>}}
 Some text
 {{</info>}}
@@ -69,7 +69,7 @@ Some text
 
 For tip:
 
-```sh
+```html
 {{<tip>}}
 Some text
 {{</tip>}}
@@ -77,7 +77,7 @@ Some text
 
 For warning:
 
-```sh
+```html
 {{<warning>}}
 Some text
 {{</warning>}}
@@ -85,7 +85,7 @@ Some text
 
 For danger:
 
-```sh
+```html
 {{<danger>}}
 Some text
 {{</danger>}}
@@ -93,7 +93,7 @@ Some text
 
 For details:
 
-```sh
+```html
 {{<details>}}
 Some text
 {{</details>}}
@@ -103,7 +103,7 @@ It also accept optional title. For example,
 
 For custom note title:
 
-```sh
+```html
 {{<tip "Engine's device NOTE">}}
 Some text
 {{</tip>}}
@@ -111,7 +111,7 @@ Some text
 
 ## Writing contents
 
-Contents are usually written in markdown files in the `blog` directory or in separate markdown files like [`ecosystem.md`](./src/ecosystem.md).
+Contents are usually written in markdown files in the `blog` directory or in separate markdown files like [`ecosystem.md`](./src/ecosystem.md) inside `src` folder.
 
 To write How-to-guides or tutorials, make a pull request to [examples repo](https://github.com/pytorch-ignite/examples). GitHub bot will update the files in this repo every 6 hours.
 
