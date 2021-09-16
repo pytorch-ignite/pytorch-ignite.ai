@@ -14,7 +14,7 @@ body:
       label: Describe documentation issue
       description: |
         A clear and concise description of what the documentation content issue is. If you intend to submit a PR for this issue, tell us in the description. Thanks!
-        Please note that the issues of the contents inside `guides` and `tutorials` must be reported to https://github.com/pytorch-ignite.ai.
+        **Please note that the issues of the contents inside `guides` and `tutorials` must be reported to https://github.com/pytorch-ignite/examples.**
       placeholder: Documentation issue description
     validations:
       required: true

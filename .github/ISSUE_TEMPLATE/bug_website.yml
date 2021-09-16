@@ -1,5 +1,5 @@
 name: Website Issue
-description: Report an issue with the https://pytorch.org website itself
+description: Report an issue with the https://pytorch-ignite.ai website itself
 labels: ["bug: pending triage", "type: theme"]
 
 body:
