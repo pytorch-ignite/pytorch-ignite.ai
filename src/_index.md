@@ -133,6 +133,9 @@ sponsors:
   - name: IFP Energies nouvelles
     url: https://www.ifpenergiesnouvelles.com/
     img: /_images/ifpen.jpg
+  - name: Amazon Web Services (AWS)
+    url: https://aws.amazon.com/
+    img: /_images/aws.svg
 
 footer:
   - name: GitHub
