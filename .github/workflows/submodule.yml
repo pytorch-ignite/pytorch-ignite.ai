@@ -42,14 +42,13 @@ jobs:
 
       - name: Check tutorials
         run: |
-          bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
           bash ./scripts/nb_to_md.sh static/examples/tutorials tmp/tutorials
           diff -r src/tutorials tmp/tutorials --exclude=_index.md
 
       - name: Check how-to-guides
         run: |
           bash ./scripts/nb_to_md.sh static/examples/how-to-guides tmp/how-to-guides
-          diff -r src/guides tmp/how-to-guides --exclude=_index.md
+          diff -r src/how-to-guides tmp/how-to-guides --exclude=_index.md
 
   auto-pr:
     runs-on: ubuntu-latest
@@ -69,8 +68,8 @@ jobs:
           pip install -r ./scripts/requirements.txt -Uqq
 
       - run: git submodule update --remote -- static/examples
-      - run: bash ./scripts/nb_to_md.sh static/examples src/tutorials
-      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/guides
+      - run: bash ./scripts/nb_to_md.sh static/examples/tutorials src/tutorials
+      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/how-to-guides
 
       - uses: peter-evans/create-pull-request@v3
         with:
