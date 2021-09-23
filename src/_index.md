@@ -132,7 +132,7 @@ sponsors:
     img: /_images/QuansightLabs_logo_V2.png
   - name: IFP Energies nouvelles
     url: https://www.ifpenergiesnouvelles.com/
-    img: /_images/ifpen.jpg
+    img: /_images/ifpen.png
   - name: Amazon Web Services (AWS)
     url: https://aws.amazon.com/
     img: /_images/aws.svg

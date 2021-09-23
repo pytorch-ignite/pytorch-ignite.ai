@@ -43,6 +43,7 @@ jobs:
       - name: Check tutorials
         run: |
           bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
+          bash ./scripts/nb_to_md.sh static/examples/tutorials tmp/tutorials
           diff -r src/tutorials tmp/tutorials --exclude=_index.md
 
       - name: Check how-to-guides
