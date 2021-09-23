@@ -1,13 +1,5 @@
 {{ $fileDir  := .File.Dir }}
 {{ $fileName := .File.BaseFileName }}
-{{ if eq $fileDir "tutorials/" }}
-{{ $fileDir = "examples/" }}
-{{ else if ne $fileDir "blog/" }}
-{{ if eq $fileDir "guides/" }}
-{{ $fileDir = "how-to-guides/" }}
-{{ end }}
-{{ $fileDir = print "examples/" $fileDir }}
-{{ end }}
 
 <div class="flex flex-wrap pb-2 justify-center">
   <a

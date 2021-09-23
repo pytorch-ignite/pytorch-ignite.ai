@@ -16,6 +16,7 @@ markup:
 
 staticDir:
   - static
+  - static/examples/
   - static/examples/how-to-guides/
 
 taxonomies:
@@ -27,8 +28,8 @@ params:
   nav:
     - text: Docs
       children:
-        - text: Guide
-          link: /guides/
+        - text: Guides
+          link: /how-to-guides/
         - text: Tutorials
           link: /tutorials/
         - text: API Reference

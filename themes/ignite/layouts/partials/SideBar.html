@@ -31,7 +31,7 @@
   <div class="border-b lg:hidden dark:border-dark-200">{{ partial "NavBar.html" . }}</div>
   <nav class="py-3 px-1">
     {{ range .Site.Sections }}
-      {{ if in (slice "tutorials" "guides") .Section }}
+      {{ if in (slice "tutorials" "how-to-guides") .Section }}
     <h5 class="font-semibold py-1 uppercase">{{ .Section }}</h5>
     <ul class="px-2">
       {{ range where .Site.RegularPages "Section" .Section }}
