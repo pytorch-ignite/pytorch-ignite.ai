@@ -75,7 +75,7 @@ We can enable logging with ClearML to track experiments as follows:
 !clearml-init
 ```
 
-Specify `with_clearml=True` in `config` below and monitor the experiment on the dashboard. 
+Specify `with_clearml=True` in `config` below and monitor the experiment on the dashboard. Refer to the end of this tutorial to see an example of such an experiment.
 
 ## Download Data
 
@@ -928,4 +928,9 @@ with idist.Parallel(backend=config["backend"], **spawn_kwargs) as parallel:
 
 ## Important Links
 
-Link to the complete code can be found [here](files/cifar10-distributed.py).
+1. Complete code can be found [here](files/cifar10-distributed.py).
+2. Example of the logs of a ClearML experiment run on this code:
+   - [With torch.distributed.launch](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution) 
+   - [With default internal spawning](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/c2b82ec98e8445f29044c94f7efc8215/output/execution)
+   - [On Jupyter](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/2fedd7447b114b36af7066cdb81fddae/output/execution)
+   - [On Colab with XLA](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/fbffb4d7f9324c57979a833a789df857/output/execution)
