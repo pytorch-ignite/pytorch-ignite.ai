@@ -35,11 +35,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
 <script>
-  docsearch({
-    container: '#docsearch',
-    apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
-    indexName: 'ignite',
-  })
+  fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
+    .then((val) => val.json())
+    .then((val) => {
+      docsearch({
+        container: '#docsearch',
+        apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
+        indexName: 'ignite',
+        searchParameters: {
+          facetFilters: [`version:${val.tag_name}`]
+        }
+      })
+    })
 </script>
 
 {{ if not .Site.IsServer }}
