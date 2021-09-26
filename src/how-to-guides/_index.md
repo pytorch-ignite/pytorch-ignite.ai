@@ -1,5 +1,6 @@
 ---
 title: Guides
+weight: 2
 ---
 
 # How-to Guides

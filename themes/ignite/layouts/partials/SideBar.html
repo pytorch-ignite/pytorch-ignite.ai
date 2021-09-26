@@ -30,31 +30,59 @@
 >
   <div class="border-b lg:hidden dark:border-dark-200">{{ partial "NavBar.html" . }}</div>
   <nav class="py-3 px-1">
-    {{ range .Site.Sections }}
-      {{ if in (slice "tutorials" "how-to-guides") .Section }}
-    <h5 class="font-semibold py-1 uppercase">{{ .Section }}</h5>
-    <ul class="px-2">
-      {{ range where .Site.RegularPages "Section" .Section }}
-      <li class="py-1">
+    {{ if eq .Section "blog" }}
+      <h5 class="font-semibold py-1 uppercase">{{ .Section }}</h5>
+      <ul class="px-2 pb-4">
+        {{ range where .Site.RegularPages "Section" .Section }}
+        <li class="py-1">
 
-        {{/* <!-- prettier-ignore --> */}}
-        {{ if eq $url .RelPermalink }}
           {{/* <!-- prettier-ignore --> */}}
-          {{ $active = "text-$c-primary" }}
-        {{/* <!-- prettier-ignore --> */}}
-        {{ end }}
+          {{ if eq $url .RelPermalink }}
+            {{/* <!-- prettier-ignore --> */}}
+            {{ $active = "text-$c-primary" }}
+          {{/* <!-- prettier-ignore --> */}}
+          {{ end }}
 
-        <a
-          href="{{ .RelPermalink }}"
-          class="{{ $active }} hover:text-$c-primary py-1"
-          >{{ .Title }}</a
-        >
-        {{ if $active }}
-        <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
-        {{ end }} {{ $active = "" }}
-      </li>
-      {{ end }}
-    </ul>
+          <a
+            href="{{ .RelPermalink }}"
+            class="{{ $active }} hover:text-$c-primary py-1"
+            >{{ .Title }}</a
+          >
+          {{ if $active }}
+          <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+          {{ end }}
+          {{ $active = "" }}
+        </li>
+        {{ end }}
+      </ul>
+    {{ else }}
+      {{ range .Site.Sections }}
+        {{ if in (slice "tutorials" "how-to-guides") .Section }}
+          <h5 class="font-semibold py-1 uppercase">{{ .Section }}</h5>
+          <ul class="px-2 pb-4">
+          {{ range where .Site.RegularPages "Section" .Section }}
+            <li class="py-1">
+
+            {{/* <!-- prettier-ignore --> */}}
+            {{ if eq $url .RelPermalink }}
+              {{/* <!-- prettier-ignore --> */}}
+              {{ $active = "text-$c-primary" }}
+            {{/* <!-- prettier-ignore --> */}}
+            {{ end }}
+
+            <a
+              href="{{ .RelPermalink }}"
+              class="{{ $active }} hover:text-$c-primary py-1"
+              >{{ .Title }}</a
+            >
+            {{ if $active }}
+              <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+            {{ end }}
+            {{ $active = "" }}
+            </li>
+          {{ end }}
+          </ul>
+        {{ end }}
       {{ end }}
     {{ end }}
   </nav>
