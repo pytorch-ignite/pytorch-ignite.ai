@@ -14,8 +14,8 @@ HUGO_ENV = "production"
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/*"
-  to = "https://pytorch-ignite.ai/:splat"
+  from = "https://pytorch-ignite.ai/posts/*"
+  to = "https://pytorch-ignite.ai/blog/:splat"
   status = 301
   force = true
 
