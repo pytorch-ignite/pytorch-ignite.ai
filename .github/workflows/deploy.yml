@@ -18,11 +18,15 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: "0.83.1"
+          hugo-version: "0.88.1"
           extended: true
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
       - name: Build
-        run: hugo --minify
+        run: bash scripts/build.sh
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
@@ -30,5 +34,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          commit_message: Deploy pytorch-ignite.ai
           force_orphan: true

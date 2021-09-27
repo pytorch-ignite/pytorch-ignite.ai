@@ -1,6 +1,19 @@
 {
+  "type": "module",
   "devDependencies": {
     "jsdom": "^17.0.0",
-    "shiki": "^0.9.8"
+    "prettier": "^2.4.0",
+    "shiki": "^0.9.11",
+    "windicss": "^3.1.7"
+  },
+  "scripts": {
+    "dev": "windicss -f windi.config.cjs -dto themes/ignite/assets/_hugo/css/style.css",
+    "build": "windicss -f windi.config.cjs -mto themes/ignite/assets/_hugo/css/style.css"
+  },
+  "prettier": {
+    "semi": false,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "singleQuote": true
   }
 }

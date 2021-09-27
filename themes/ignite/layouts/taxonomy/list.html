@@ -1,0 +1,70 @@
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ define "main" }}
+{{/*
+<!-- prettier-ignore -->
+*/}}
+{{ $pages := "" }}
+<div class="grid-cols-[1fr,3fr] lg:grid">
+  {{ partial "SideBar.html" . }}
+
+<section class="mx-auto max-w-6xl py-6 px-6 prose prose-red">
+  <div>
+    {{ range .Site.Taxonomies.tags.ByCount }}
+    <a
+      href="{{ .Page.RelPermalink }}"
+      class="
+        rounded-lg
+        bg-gray-200
+        my-1
+        mx-2
+        px-2
+        inline-block
+        dark:bg-dark-400
+      "
+    >
+      {{ .Page.Title }} {{ .Count }}
+    </a>
+    {{ end }}
+  </div>
+
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ if eq .RelPermalink "/tags/" }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ $pages = .Site.RegularPages }}
+    {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ else }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ $pages = .Data.Pages }}
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+    {{ end }}
+
+  {{/*
+  <!-- prettier-ignore -->
+  */}}
+  {{ range $pages.ByDate.Reverse }}
+  <ul>
+    {{ if in (slice "blog" "how-to-guides" "tutorials") .Section }}
+    <li>
+      {{ if .Date }}
+      <span>{{ .Date.Format "2006-01-02" }} – </span>
+      {{ end }}
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </li>
+    {{ end }}
+  </ul>
+  {{ end }}
+</section>
+</div>
+{{ end }}

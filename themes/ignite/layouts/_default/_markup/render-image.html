@@ -1,0 +1,8 @@
+{{ $src := .Destination | safeURL }}
+
+{{ if and (not (hasPrefix $src "https://")) (not (hasPrefix $src "/")) }}
+{{ $src = printf "/%s" $src }}
+{{ end }}
+
+<img src="{{ $src }}" alt="{{ .Text }}" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />

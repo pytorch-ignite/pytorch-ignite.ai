@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: true # Fetch Hugo themes (true OR recursive)
+          submodules: recursive # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
       - run: bash ./scripts/check_submodules.sh
@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: true # Fetch Hugo themes (true OR recursive)
+          submodules: recursive # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
       - uses: actions/setup-python@v2
@@ -42,13 +42,13 @@ jobs:
 
       - name: Check tutorials
         run: |
-          bash ./scripts/nb_to_md.sh static/examples tmp/tutorials
-          diff -r content/tutorials tmp/tutorials --exclude=_index.md
+          bash ./scripts/nb_to_md.sh static/examples/tutorials tmp/tutorials
+          diff -r src/tutorials tmp/tutorials --exclude=_index.md
 
       - name: Check how-to-guides
         run: |
           bash ./scripts/nb_to_md.sh static/examples/how-to-guides tmp/how-to-guides
-          diff -r content/how-to-guides tmp/how-to-guides --exclude=_index.md
+          diff -r src/how-to-guides tmp/how-to-guides --exclude=_index.md
 
   auto-pr:
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: true # Fetch Hugo themes (true OR recursive)
+          submodules: recursive # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
       - uses: actions/setup-python@v2
@@ -68,8 +68,8 @@ jobs:
           pip install -r ./scripts/requirements.txt -Uqq
 
       - run: git submodule update --remote -- static/examples
-      - run: bash ./scripts/nb_to_md.sh static/examples content/tutorials
-      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides content/how-to-guides
+      - run: bash ./scripts/nb_to_md.sh static/examples/tutorials src/tutorials
+      - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/how-to-guides
 
       - uses: peter-evans/create-pull-request@v3
         with:

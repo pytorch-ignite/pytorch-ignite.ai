@@ -1,7 +1,4 @@
-[submodule "themes/hugo-fresh"]
-	path = themes/hugo-fresh
-	url = https://github.com/StefMa/hugo-fresh
 [submodule "static/examples"]
-	path = static/examples
-	url = https://github.com/pytorch-ignite/examples
-	branch = main
+  path = static/examples
+  url = https://github.com/pytorch-ignite/examples
+  branch = main

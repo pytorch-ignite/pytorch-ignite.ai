@@ -1,0 +1,11 @@
+{{ $RelPermalink := .RelPermalink }}
+
+<nav class="place-content-center place-items-center block lg:flex">
+  {{ range .Site.Params.nav }}
+  {{ if .children }}
+  {{ partial "NavDropDown.html" (dict "children" .children "text" .text "RelPermalink" $RelPermalink) }}
+  {{ else }}
+  {{ partial "NavLink.html" (dict "link" .link "text" .text "RelPermalink" $RelPermalink) }}
+  {{ end }}
+  {{ end }}
+</nav>

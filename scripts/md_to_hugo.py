@@ -22,9 +22,8 @@ def main(dir: str):
                 file.read_text("utf-8")
                 .replace("<!-- ", "", 1)
                 .replace(" -->", "", 1)
-                .replace(str(path.cwd() / 'static/images/notebooks'), '/images/notebooks')
+                .replace(str(path.cwd() / 'static/_images'), '/_images')
             )
-            text = re.sub(r"(?:(?<=-{3}\n\n)|(?<=-{3}\n))\#{1} .*\n+", "", text, 1)
             file.write_text(text, "utf-8")
 
 

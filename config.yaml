@@ -1,86 +1,50 @@
 baseURL: https://pytorch-ignite.ai
-languageCode: en-us
-title: PyTorch-Ignite
-theme: hugo-fresh
-publishdir: dist
-enableemoji: true
+contentDir: src
+enableEmoji: true
 enableGitInfo: true
 googleAnalytics: G-NQNJSZEFB4 # Put in your tracking code without quotes like this: UA-XXXXXX...
+publishdir: dist
+title: PyTorch-Ignite
+theme: ignite
 taxonomies:
   tag: tags
 
 markup:
-  highlight:
-    lineNos: true
-    tabWidth: 4
-  tableOfContents:
-    endLevel: 3
-    ordered: false
-    startLevel: 2
   goldmark:
     renderer:
-      unsafe: true # Allows you to write raw html in your md files
+      unsafe: true
 
-# for customizing https://stefma.github.io/hugo-fresh/getstarted/
+staticDir:
+  - static
+  - static/examples/
+  - static/examples/how-to-guides/
+
+taxonomies:
+  tag: tags
+
+
 params:
-  images:
-    - images/logos/ignite_logo_feature.png
   description: High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.
-  navbarlogo:
-    # Logo (from static/images/logos/___)
-    image: logos/ignite_logomark.svg
-    link: /
-
-  navbar:
-    - title: Docs
-      sublinks:
-        - title: Tutorials
-          url: /tutorials/
-        - title: How to Guides
-          url: /how-to-guides/
-        - title: API Reference
-          url: https://pytorch.org/ignite/engine.html
-    - title: GitHub
-      url: https://github.com/pytorch/ignite
-    - title: Blog
-      url: /posts/
-    - title: Community
-      url: /community/
-
-  section2:
-    title: Ecosystem
-    features:
-      - title: Project MONAI
-        text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-        link: https://monai.io/
-      - title: Nussl
-        text: A flexible source separation library in Python
-        link: https://nussl.github.io/docs/
-      - title: Code-Generator
-        text: Application to generate your training scripts with PyTorch-Ignite.
-        link: https://code-generator.pytorch-ignite.ai
-
-  footer:
-    # Logo (from /images/logos/___)
-    logo: ignite_logomark.svg
-    socialmedia:
-      - link: https://github.com/pytorch/ignite
-        icon: github
-      - link: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
-        icon: facebook
-      - link: https://twitter.com/pytorch_ignite
-        icon: twitter
-      - link: https://dev.to/pytorch-ignite
-        icon: dev
-    quicklinks:
-      column1:
-        title: Resources
-        links:
-          - text: Tutorials
-            link: /tutorials/
-          - text: Docs
-            link: https://pytorch.org/ignite
-          - text: GitHub Discuss
-            link: https://github.com/pytorch/ignite/discussions
-          - text: Discord
-            link: https://discord.gg/djZtm3EmKj
+  nav:
+    - text: Docs
+      children:
+        - text: Guides
+          link: /how-to-guides/
+        - text: Tutorials
+          link: /tutorials/
+        - text: API Reference
+          link: https://pytorch.org/ignite/engine.html
+    - text: Blog
+      link: /blog/
+    - text: Ecosystem
+      link: /ecosystem/
+    - text: About
+      children:
+        - text: Community
+          link: /about/community/
+        - text: Contribution Guide
+          link: /about/contribution-guide/
+        - text: Code of Conduct
+          link: /about/coc/
+    - text: GitHub
+      link: https://github.com/pytorch/ignite

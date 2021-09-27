@@ -1,0 +1,10 @@
+<!-- strip h1 from summary and wrap the summary in p tag if necessary -->
+{{ $return := replaceRE "<h1.*?>(.|\n)+?</h1>" "" .Summary 1 }}
+
+{{ if and (not (hasPrefix $return "<p>")) (not (strings.HasSuffix $return "</p>")) }}
+  {{ $return = (printf "<p>%s</p>" $return) }}
+{{ end }}
+
+{{ $return = $return | safeHTML }}
+
+{{ return $return }}

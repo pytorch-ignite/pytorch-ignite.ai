@@ -1,0 +1,54 @@
+{{ if .Site.IsServer }}
+  <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.11/dist/index.jsdelivr.iife.min.js"></script>
+  {{ $script := resources.Get "_hugo/js/embedHighlight.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
+  {{ $script := resources.Get "_hugo/js/embedCopyBtn.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
+  {{ $script := resources.Get "_hugo/js/fixTableOverflow.js" }}
+  <script src="{{ $script.RelPermalink }}" type="module"></script>
+
+  <script type="module">
+    // We are using ES6 module import feature to make it work
+    // on both browsers and nodejs.
+    // https://javascript.info/modules-intro
+    // Modules are imported from Hugo server relative path.
+    import { highLightWithShiki } from '/_hugo/js/embedHighlight.js'
+    import { embedCopyBtn } from '/_hugo/js/embedCopyBtn.js'
+    import { fixTableOverflow } from '/_hugo/js/fixTableOverflow.js'
+    highLightWithShiki(shiki)
+    embedCopyBtn()
+    fixTableOverflow()
+  </script>
+
+{{ end }}
+
+{{ $toggleDark := resources.Get "_hugo/js/toggleDark.js" }}
+{{ $main := resources.Get "_hugo/js/main.js" }}
+{{ $script := slice $main $toggleDark | resources.Concat "_hugo/js/app.js" | fingerprint "md5" | minify }}
+<script src="{{ $script.RelPermalink }}" defer></script>
+
+{{ if .IsHome }}
+  <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  {{ $script := resources.Get "_hugo/js/embedTweets.js" | fingerprint "md5" | minify }}
+  <script defer src="{{ $script.RelPermalink }}"></script>
+{{ end }}
+
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>
+  fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
+    .then((val) => val.json())
+    .then((val) => {
+      docsearch({
+        container: '#docsearch',
+        apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
+        indexName: 'ignite',
+        searchParameters: {
+          facetFilters: [`version:${val.tag_name}`]
+        }
+      })
+    })
+</script>
+
+{{ if not .Site.IsServer }}
+{{ template "_internal/google_analytics.html" . }}
+{{ end }}

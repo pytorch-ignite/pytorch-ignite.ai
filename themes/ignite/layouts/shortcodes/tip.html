@@ -1,0 +1,11 @@
+<div
+  class="border rounded-lg bg-green-100 border-green-500 my-4 py-3 px-6 overflow-x-auto prose prose-red dark:bg-dark-400">
+  <p class="font-semibold">
+    {{- if .Get 0 -}}
+    {{ .Get 0 }}
+    {{- else -}}
+    TIP
+    {{- end -}}
+  </p>
+  <p>{{ .Inner | markdownify }}</p>
+</div>

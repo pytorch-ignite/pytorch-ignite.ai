@@ -1,0 +1,67 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ee4c2c" />
+  <meta name="keywords" content="pytorch, pytorch ignite, ignite, engine, events, handlers, metrics, website" />
+  <link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@pytorch_ignite" />
+  <meta name="twitter:creator" content="@pytorch_ignite" />
+  <meta name="twitter:image"
+    content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png" />
+  <meta name="twitter:image:alt" content="PyTorch-Ignite logo" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PyTorch-Ignite" />
+  <meta property="og:image"
+    content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png" />
+  <meta property="og:image:alt" content="PyTorch-Ignite logo" />
+
+  {{ if .Params.description }}
+    <meta name="description" content="{{ .Params.description }}" />
+    <meta property="og:description" content="{{ .Params.description }}" />
+    <meta name="twitter:description" content="{{ .Params.description }}" />
+  {{ else if .Params.summary }}
+    <meta name="description" content="{{ .Params.summary }}" />
+    <meta property="og:description" content="{{ .Params.summary }}" />
+    <meta name="twitter:description" content="{{ .Params.summary }}" />
+  {{ else if .Site.Params.Description }}
+    <meta name="description" content="{{ .Site.Params.Description }}" />
+    <meta property="og:description" content="{{ .Site.Params.Description }}" />
+    <meta name="twitter:description" content="{{ .Site.Params.Description }}" />
+  {{ end }}
+
+  {{/* <!-- prettier-ignore --> */}}
+  {{ $title := partial "H1TextContent.html" . }}
+  {{ if $title }}
+    <title>{{ $title }} | {{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ $title }} | {{ .Site.Title }}" />
+    <meta name="twitter:title" content="{{ $title }} | {{ .Site.Title }}" />
+  {{ else }}
+    <title>{{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Title }}" />
+    <meta name="twitter:title" content="{{ .Title }}" />
+  {{ end }}
+
+  <!-- css -->
+  <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css"
+    type="text/css" />
+
+  {{ $style := resources.Get "_hugo/css/style.css" | fingerprint "md5" | minify }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+
+  {{ $style := resources.Get "_hugo/css/main.css" | fingerprint "md5" | minify }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+
+  <script>
+    const saved = localStorage.getItem('ignite-color-scheme')
+    if (!saved ? window.matchMedia(`(prefers-color-scheme: dark)`).matches : saved === 'dark') {
+      document.documentElement.classList.add('dark')
+      document.documentElement.dataset.theme = 'dark'
+    }
+  </script>
+</head>

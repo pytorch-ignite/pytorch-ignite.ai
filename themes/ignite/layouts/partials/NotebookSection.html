@@ -1,0 +1,33 @@
+{{ $fileDir  := .File.Dir }}
+{{ $fileName := .File.BaseFileName }}
+
+<div class="flex flex-wrap pb-2 justify-center">
+  <a
+    class="flex py-1 px-2 items-center"
+    href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {{ partial "icons/Colab.html" . }}
+    <span class="ml-1">Run in Google Colab</span>
+  </a>
+  <a
+    class="flex py-1 px-2 items-center"
+    href="/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+    download="{{ $fileName }}.ipynb"
+  >
+    {{ partial "icons/Download.html" . }}
+    <span class="ml-1">Download as Jupyter Notebook</span>
+  </a>
+  <a
+    class="flex py-1 px-2 items-center"
+    href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/{{ $fileDir }}{{ $fileName }}.ipynb"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {{ partial "icons/GitHub.html" . }}
+    <span class="ml-1">View on GitHub</span>
+  </a>
+</div>

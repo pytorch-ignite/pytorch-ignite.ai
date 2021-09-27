@@ -1,14 +1,56 @@
 [build]
 publish = "dist"
-command = "npx pnpm i --frozen-lockfile --store=node_modules/.pnpm-store && hugo --gc --minify && node highlight.mjs"
+command = "bash scripts/build.sh"
 
 [build.environment]
 NODE_VERSION = "14"
-HUGO_VERSION = "0.83.1"
+HUGO_VERSION = "0.88.1"
 HUGO_ENV = "production"
 
 [[redirects]]
   from = "https://pytorch-ignite.netlify.app/*"
   to = "https://pytorch-ignite.ai/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/*"
+  to = "https://pytorch-ignite.ai/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/how-to-guides/installation/"
+  to = "https://pytorch-ignite.ai/how-to-guides/01-installation/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/how-to-guides/time-profiling/"
+  to = "https://pytorch-ignite.ai/how-to-guides/03-time-profiling/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/how-to-guides/fastai-lr-finder/"
+  to = "https://pytorch-ignite.ai/how-to-guides/04-fastai-lr-finder/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/how-to-guides/gradient-accumulation/"
+  to = "https://pytorch-ignite.ai/how-to-guides/05-gradient-accumulation/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/how-to-guides/data-iterator/"
+  to = "https://pytorch-ignite.ai/how-to-guides/06-data-iterator/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/community/"
+  to = "https://pytorch-ignite.ai/about/community/"
   status = 301
   force = true

@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="grid-cols-[1fr,3fr] lg:grid">
+  {{ partial "SideBar.html" . }}
+  {{ if eq .Section "blog" }}
+    {{ partial "ListInnerBlog.html" . }}
+  {{ else if eq .Title "Getting Started" }}
+    {{ partial "ListInnerGettingStarted.html" . }}
+  {{ else }}
+    {{ partial "ListInnerDefault.html" . }}
+  {{ end }}
+</div>
+{{ end }}

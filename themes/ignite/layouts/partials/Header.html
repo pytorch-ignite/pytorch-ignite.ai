@@ -1,0 +1,39 @@
+<header class="
+  bg-white
+  border-b
+    flex
+    h-$header-height
+    py-2
+    px-6
+    top-0
+    right-0
+    left-0
+    z-10
+    justify-between
+    items-center
+    sticky
+    <sm:px-4
+    dark:bg-dark-700
+    dark:border-b-dark-200
+  ">
+  <div class="flex items-center">
+  {{ if not .IsHome }}
+  <button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar">
+    {{ partial "icons/MenuLeft.html" . }}
+  </button>
+  {{ end }}
+  <a href="/" class="flex items-center">
+    <img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy" />
+    <span class="font-semibold">PyTorch-Ignite</span>
+  </a>
+  </div>
+  <div class="flex-grow"></div>
+  <div class="hidden lg:block">
+    {{ partial "NavBar.html" . }}
+  </div>
+  <button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2">
+    {{ partial "icons/Sun.html" . }}
+    {{ partial "icons/Moon.html" . }}
+  </button>
+  <div id="docsearch"></div>
+</header>
