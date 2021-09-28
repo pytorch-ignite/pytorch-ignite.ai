@@ -6,6 +6,7 @@
 <!-- prettier-ignore -->
 */}}
 {{ $url := .RelPermalink }}
+{{ $section := .Section }}
 
 <aside
   class="
@@ -58,7 +59,14 @@
     {{ else }}
       {{ range .Site.Sections }}
         {{ if in (slice "tutorials" "how-to-guides") .Section }}
-          <h5 class="font-semibold py-1 uppercase">{{ .Section }}</h5>
+          <h5 class="
+            font-semibold
+            py-1
+            uppercase
+            {{ if eq $section .Section }}active{{ end }}"
+            >
+              {{ .Section | title }}
+          </h5>
           <ul class="px-2 pb-4">
           {{ range where .Site.RegularPages "Section" .Section }}
             <li class="py-1">
