@@ -43,7 +43,7 @@
         apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
         indexName: 'ignite',
         searchParameters: {
-          facetFilters: [`version:${val.tag_name}`]
+          facetFilters: [[`version:${val.tag_name}`, 'tags:ignite-web']]
         }
       })
     })
