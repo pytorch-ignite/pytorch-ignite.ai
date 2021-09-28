@@ -928,7 +928,7 @@ with idist.Parallel(backend=config["backend"], **spawn_kwargs) as parallel:
 
 ## Important Links
 
-1. Complete code can be found [here](files/cifar10-distributed.py).
+1. Complete code can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/cifar10-distributed.py).
 2. Example of the logs of a ClearML experiment run on this code:
    - [With torch.distributed.launch](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution) 
    - [With default internal spawning](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/c2b82ec98e8445f29044c94f7efc8215/output/execution)
