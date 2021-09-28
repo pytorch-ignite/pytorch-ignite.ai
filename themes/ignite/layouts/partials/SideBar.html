@@ -32,7 +32,7 @@
   <div class="border-b lg:hidden dark:border-dark-200">{{ partial "NavBar.html" . }}</div>
   <nav class="py-3 px-1">
     {{ if eq .Section "blog" }}
-      <h5 class="font-semibold py-1 uppercase">{{ .Section | title }}</h5>
+      <h5 class="font-semibold py-1 uppercase active">{{ .Section | title }}</h5>
       <ul class="px-2 pb-4">
         {{ range where .Site.RegularPages "Section" .Section }}
         <li class="py-1">
