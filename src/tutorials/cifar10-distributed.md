@@ -623,7 +623,7 @@ This way is recommended since training is faster and easier to extend to multipl
 
 We can pass additional information to `Parallel` collectively as `spawn_kwargs` as we will see below.
 
-**Note:** It is recommended to run distributed code as scripts for ease of use, however we can also spawn processes in a Jupyter notebook (see end of tutorial). The complete code as a script can be found [here](files/cifar10-distributed.py). Choose one of the suggested ways below to run the script.
+**Note:** It is recommended to run distributed code as scripts for ease of use, however we can also spawn processes in a Jupyter notebook (see end of tutorial). The complete code as a script can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/cifar10-distributed.py). Choose one of the suggested ways below to run the script.
 
 ## Single Node, One or More GPUs
 
