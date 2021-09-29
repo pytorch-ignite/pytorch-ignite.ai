@@ -1,5 +1,6 @@
 ---
 title: Distributed Training on CPUs, GPUs or TPUs
+weight: 2
 date: 2021-09-18
 downloads: true
 sidebar: true

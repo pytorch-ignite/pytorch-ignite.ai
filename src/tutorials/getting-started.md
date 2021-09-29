@@ -1,5 +1,6 @@
 ---
 title: Getting Started
+weight: 1
 date: 2021-07-27
 downloads: true
 sidebar: true
