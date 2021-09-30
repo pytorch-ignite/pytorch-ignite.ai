@@ -136,6 +136,9 @@ sponsors:
   - name: Amazon Web Services (AWS)
     url: https://aws.amazon.com/
     img: /_images/aws.svg
+  - name: Agenium Space
+    url: https://agenium.com/en/subsidiary/agenium-space
+    img: /_images/agenium_space.png
 
 footer:
   - name: GitHub
