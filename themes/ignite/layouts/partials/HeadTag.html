@@ -57,6 +57,8 @@
   {{ $style := resources.Get "_hugo/css/main.css" | fingerprint "md5" | minify }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
+  <link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin />
+
   <script>
     const saved = localStorage.getItem('ignite-color-scheme')
     if (!saved ? window.matchMedia(`(prefers-color-scheme: dark)`).matches : saved === 'dark') {
