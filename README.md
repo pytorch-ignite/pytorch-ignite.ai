@@ -1,5 +1,7 @@
 # pytorch-ignite.ai
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/07834561-3160-4177-b8f7-69e9439a6e95/deploy-status)](https://app.netlify.com/sites/pytorch-ignite/deploys)
+
 This website is built with [Hugo](https://gohugo.io). You will need to install the extended version of Hugo 0.88.1.
 
 > Blog posts relating to PyTorch-Ignite are welcomed for pull requests.

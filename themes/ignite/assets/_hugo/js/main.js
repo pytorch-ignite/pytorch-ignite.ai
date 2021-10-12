@@ -6,7 +6,6 @@ function openSideBar() {
     const sidebar = document.getElementById('sidebar')
 
     sideBarBtn.addEventListener('click', function () {
-      document.documentElement.classList.toggle('overflow-hidden')
       sidebar.classList.toggle('translate-x-0')
     })
   }
