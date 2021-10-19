@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - submodule-update
   pull_request:
 
 # https://gohugo.io/hosting-and-deployment/hosting-on-github/#build-hugo-with-github-action
