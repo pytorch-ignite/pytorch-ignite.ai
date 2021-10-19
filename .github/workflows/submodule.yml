@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - submodule-update
-    branches-ignore:
-      - main
   pull_request:
     branches:
       - main
