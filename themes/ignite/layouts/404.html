@@ -1,0 +1,17 @@
+{{ define "main" }}
+  <div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+    {{ partial "SideBar.html" . }}
+    <main class="text-center min-w-0 py-6 px-6 prose prose-red">
+      <h1>
+        Page Not Found
+      </h1>
+      <p>
+        You found a dead link: <code>{{ .RelPermalink }}</code><br>
+        <span>
+          Please <a href="https://github.com/pytorch-ignite/pytorch-ignite.ai/issues/new/choose" target="_blank"
+            rel="noopener noreferrer">let us know</a> so we can fix it.
+        </span>
+      </p>
+    </main>
+  </div>
+{{ end }}
