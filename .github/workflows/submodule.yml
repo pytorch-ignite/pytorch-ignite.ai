@@ -68,6 +68,8 @@ jobs:
           pip install -r ./scripts/requirements.txt -Uqq
 
       - run: git submodule update --remote -- static/examples
+      - run: rm -rf src/how-to-guides/[0-9][0-9]-*.md
+      - run: rm -rf src/tutorials/**/[0-9][0-9]-*.md
       - run: bash ./scripts/nb_to_md.sh static/examples/tutorials src/tutorials
       - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/how-to-guides
 
