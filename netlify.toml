@@ -54,3 +54,21 @@ HUGO_ENV = "production"
   to = "https://pytorch-ignite.ai/about/community/"
   status = 301
   force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/tutorials/getting-started/"
+  to = "https://pytorch-ignite.ai/tutorials/beginner/01-getting-started/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/tutorials/cifar10-distributed/"
+  to = "https://pytorch-ignite.ai/tutorials/intermediate/01-cifar10-distributed/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://pytorch-ignite.ai/tutorials/transformers-text-classification/"
+  to = "https://pytorch-ignite.ai/tutorials/beginner/02-transformers-text-classification/"
+  status = 301
+  force = true
