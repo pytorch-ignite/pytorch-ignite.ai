@@ -2,7 +2,7 @@
 title: Transformers for Text Classification with IMDb Reviews
 date: 2021-09-18
 downloads: true
-sidebar: true
+weight: 2
 tags:
   - NLP
   - BERT
@@ -12,7 +12,7 @@ tags:
 ---
 # Transformers for Text Classification with IMDb Reviews
 
-In this tutorial we will fine tune a model from the Transformers library for text classification using PyTorch-Ignite. We will be following the [Fine-tuning a pretrained model](https://huggingface.co/transformers/training.html) tutorial for preprocessing text and defining the model, optimizer and dataloaders. Then we are going to use Ignite for:
+In this tutorial we will fine tune a model from the Transformers library for text classification using PyTorch-Ignite. We will be following the [Fine-tuning a pretrained model](https://huggingface.co/transformers/training.html) tutorial for preprocessing text and defining the model, optimizer and dataloaders. <!--more--> Then we are going to use Ignite for:
 * Training and evaluating the model
 * Computing metrics
 * Setting up experiments and monitoring the model

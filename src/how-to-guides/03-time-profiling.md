@@ -37,8 +37,7 @@ from torchvision.transforms import Compose, Normalize, ToTensor
 
 from ignite.engine import Events, create_supervised_trainer, create_supervised_evaluator
 from ignite.metrics import Accuracy, Loss
-from ignite.handlers import Timer
-from ignite.contrib.handlers import BasicTimeProfiler, HandlersTimeProfiler
+from ignite.handlers import Timer, BasicTimeProfiler, HandlersTimeProfiler
 ```
 
 
@@ -156,7 +155,7 @@ trainer.run(train_loader, max_epochs=2)
 
 ## Event-based profiling using `BasicTimeProfiler`
 
-If we want more information such as the time taken by data processing, data loading and all pre-defined events, we can use [`BasicTimeProfiler()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#basictimeprofiler).
+If we want more information such as the time taken by data processing, data loading and all pre-defined events, we can use [`BasicTimeProfiler()`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.BasicTimeProfiler.html#basictimeprofiler).
 
 
 ```python
@@ -193,7 +192,7 @@ trainer.run(train_loader, max_epochs=2)
 
 
 
-We can then obtain the results dictionary via [`get_results()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#ignite.contrib.handlers.time_profilers.BasicTimeProfiler.get_results) and pass it to [`print_results()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.BasicTimeProfiler.html#ignite.contrib.handlers.time_profilers.BasicTimeProfiler.print_results) to get a nicely formatted output which contains total, minimum, maximum, mean and the standard deviation of the time taken.
+We can then obtain the results dictionary via [`get_results()`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.BasicTimeProfiler.html#ignite.handlers.time_profilers.BasicTimeProfiler.get_results) and pass it to [`print_results()`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.BasicTimeProfiler.html#ignite.handlers.time_profilers.BasicTimeProfiler.print_results) to get a nicely formatted output which contains total, minimum, maximum, mean and the standard deviation of the time taken.
 
 
 ```python
@@ -240,7 +239,7 @@ basic_profiler.print_results(results);
 
 ## Handler-based profiling using `HandlersTimeProfiler`
 
-We can overcome the above problem by using [`HandlersTimeProfiler`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.time_profilers.HandlersTimeProfiler.html#handlerstimeprofiler) which gives us only the necessary information. We can also calculate the time taken by handlers attached to [`Custom Events`](https://pytorch.org/ignite/concepts.html#custom-events), which was not previously possible, via this.
+We can overcome the above problem by using [`HandlersTimeProfiler`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.HandlersTimeProfiler.html#handlerstimeprofiler) which gives us only the necessary information. We can also calculate the time taken by handlers attached to [`Custom Events`](https://pytorch.org/ignite/concepts.html#custom-events), which was not previously possible, via this.
 
 
 ```python
