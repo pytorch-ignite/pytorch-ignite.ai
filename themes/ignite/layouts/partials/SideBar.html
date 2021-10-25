@@ -7,6 +7,19 @@
 */}}
 {{ $url := .RelPermalink }}
 {{ $section := .Section }}
+{{ $beginner := slice }}
+{{ $intermediate := slice }}
+{{ $advanced := slice }}
+
+{{ range .Site.RegularPages.ByWeight }}
+  {{ if findRE "beginner" .RelPermalink }}
+    {{ $beginner = $beginner | append . }}
+  {{ else if findRE "intermediate" .RelPermalink }}
+    {{ $intermediate = $intermediate | append . }}
+  {{ else if findRE "advanced" .RelPermalink }}
+    {{ $advanced = $advanced | append . }}
+  {{ end }}
+{{ end }}
 
 <aside
   class="
@@ -23,7 +36,7 @@
     overflow-y-auto
     lg:sticky <lg:border-r
     <lg:-translate-x-full
-    <lg:w-64
+    <lg:w-75
     dark:bg-dark-700
     dark:border-dark-200
   "
@@ -68,27 +81,53 @@
               {{ .Section | title }}
           </h5>
           <ul class="px-2 pb-4">
-          {{ range where .Site.RegularPages "Section" .Section }}
-            <li class="py-1">
+            {{ if eq .Section "tutorials"}}
+              {{ range slice $beginner $intermediate $advanced }}
+                {{ range . }}
+                  <li class="py-1">
 
-            {{/* <!-- prettier-ignore --> */}}
-            {{ if eq $url .RelPermalink }}
-              {{/* <!-- prettier-ignore --> */}}
-              {{ $active = "text-$c-primary" }}
-            {{/* <!-- prettier-ignore --> */}}
-            {{ end }}
+                    {{/* <!-- prettier-ignore --> */}}
+                    {{ if eq $url .RelPermalink }}
+                      {{/* <!-- prettier-ignore --> */}}
+                      {{ $active = "text-$c-primary" }}
+                    {{/* <!-- prettier-ignore --> */}}
+                    {{ end }}
+        
+                    <a
+                      href="{{ .RelPermalink }}"
+                      class="{{ $active }} hover:text-$c-primary py-1"
+                      >{{ .Title }}</a
+                    >
+                    {{ if $active }}
+                      <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+                    {{ end }}
+                    {{ $active = "" }}
+                    </li>
+                {{ end }}
+              {{ end }}
+            {{ else }}
+              {{ range where .Site.RegularPages "Section" .Section }}
+                <li class="py-1">
 
-            <a
-              href="{{ .RelPermalink }}"
-              class="{{ $active }} hover:text-$c-primary py-1"
-              >{{ .Title }}</a
-            >
-            {{ if $active }}
-              <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+                {{/* <!-- prettier-ignore --> */}}
+                {{ if eq $url .RelPermalink }}
+                  {{/* <!-- prettier-ignore --> */}}
+                  {{ $active = "text-$c-primary" }}
+                {{/* <!-- prettier-ignore --> */}}
+                {{ end }}
+
+                <a
+                  href="{{ .RelPermalink }}"
+                  class="{{ $active }} hover:text-$c-primary py-1"
+                  >{{ .Title }}</a
+                >
+                {{ if $active }}
+                  <div class="text-sm px-2 lg:hidden">{{ .TableOfContents }}</div>
+                {{ end }}
+                {{ $active = "" }}
+                </li>
+              {{ end }}
             {{ end }}
-            {{ $active = "" }}
-            </li>
-          {{ end }}
           </ul>
         {{ end }}
       {{ end }}

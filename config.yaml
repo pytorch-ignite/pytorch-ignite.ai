@@ -6,6 +6,7 @@ googleAnalytics: G-NQNJSZEFB4 # Put in your tracking code without quotes like th
 publishdir: dist
 title: PyTorch-Ignite
 theme: ignite
+paginate: 9
 taxonomies:
   tag: tags
 
