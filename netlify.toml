@@ -14,61 +14,66 @@ HUGO_ENV = "production"
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/posts/*"
-  to = "https://pytorch-ignite.ai/blog/:splat"
+  from = "/posts/*"
+  to = "/blog/:splat"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/how-to-guides/installation/"
-  to = "https://pytorch-ignite.ai/how-to-guides/01-installation/"
+  from = "/how-to-guides/installation/"
+  to = "/how-to-guides/01-installation/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/how-to-guides/time-profiling/"
-  to = "https://pytorch-ignite.ai/how-to-guides/03-time-profiling/"
+  from = "/how-to-guides/time-profiling/"
+  to = "/how-to-guides/03-time-profiling/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/how-to-guides/fastai-lr-finder/"
-  to = "https://pytorch-ignite.ai/how-to-guides/04-fastai-lr-finder/"
+  from = "/how-to-guides/fastai-lr-finder/"
+  to = "/how-to-guides/04-fastai-lr-finder/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/how-to-guides/gradient-accumulation/"
-  to = "https://pytorch-ignite.ai/how-to-guides/05-gradient-accumulation/"
+  from = "/how-to-guides/gradient-accumulation/"
+  to = "/how-to-guides/05-gradient-accumulation/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/how-to-guides/data-iterator/"
-  to = "https://pytorch-ignite.ai/how-to-guides/06-data-iterator/"
+  from = "/how-to-guides/data-iterator/"
+  to = "/how-to-guides/06-data-iterator/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/community/"
-  to = "https://pytorch-ignite.ai/about/community/"
+  from = "/community/"
+  to = "/about/community/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/tutorials/getting-started/"
-  to = "https://pytorch-ignite.ai/tutorials/beginner/01-getting-started/"
+  from = "/tutorials/getting-started/"
+  to = "/tutorials/beginner/01-getting-started/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/tutorials/cifar10-distributed/"
-  to = "https://pytorch-ignite.ai/tutorials/intermediate/01-cifar10-distributed/"
+  from = "/tutorials/cifar10-distributed/"
+  to = "/tutorials/intermediate/01-cifar10-distributed/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "https://pytorch-ignite.ai/tutorials/transformers-text-classification/"
-  to = "https://pytorch-ignite.ai/tutorials/beginner/02-transformers-text-classification/"
+  from = "/tutorials/transformers-text-classification/"
+  to = "/tutorials/beginner/02-transformers-text-classification/"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
