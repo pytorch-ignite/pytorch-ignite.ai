@@ -42,8 +42,10 @@ jobs:
 
       - name: Check tutorials
         run: |
-          bash ./scripts/nb_to_md.sh static/examples/tutorials tmp/tutorials
-          diff -r src/tutorials tmp/tutorials --exclude=_index.md
+          bash ./scripts/nb_to_md.sh static/examples/tutorials/beginner src/tutorials/beginner
+          bash ./scripts/nb_to_md.sh static/examples/tutorials/intermediate src/tutorials/intermediate
+          diff -r src/tutorials/beginner tmp/tutorials/beginner --exclude=_index.md
+          diff -r src/tutorials/intermediate tmp/tutorials/intermediate --exclude=_index.md
 
       - name: Check how-to-guides
         run: |
