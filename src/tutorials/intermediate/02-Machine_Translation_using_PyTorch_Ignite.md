@@ -15,7 +15,7 @@ tags:
 
 This tutorial is a brief introduction on how you can train a machine translation model (or any other seq2seq model) using PyTorch Ignite. 
 This notebook uses Models, Dataset and Tokenizers from Huggingface, hence they can be easily replaced by other models from the 🤗 Hub.
-<!--more -->
+<!--more-->
 
 ## Required Dependencies
 
