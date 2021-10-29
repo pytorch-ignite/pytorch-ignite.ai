@@ -74,6 +74,12 @@ HUGO_ENV = "production"
   force = true
 
 [[redirects]]
+  from = "/chat"
+  to = "https://discord.gg/djZtm3EmKj"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404
