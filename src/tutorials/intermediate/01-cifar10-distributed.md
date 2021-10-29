@@ -623,7 +623,7 @@ This way is recommended since training is faster and easier to extend to multipl
 
 We can pass additional information to `Parallel` collectively as `spawn_kwargs` as we will see below.
 
-**Note:** It is recommended to run distributed code as scripts for ease of use, however we can also spawn processes in a Jupyter notebook (see end of tutorial). The complete code as a script can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/cifar10-distributed.py). Choose one of the suggested ways below to run the script.
+**Note:** It is recommended to run distributed code as scripts for ease of use, however we can also spawn processes in a Jupyter notebook (see end of tutorial). The complete code as a script can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/intermediate/cifar10-distributed.py). Choose one of the suggested ways below to run the script.
 
 ## Single Node, One or More GPUs
 
@@ -928,7 +928,7 @@ with idist.Parallel(backend=config["backend"], **spawn_kwargs) as parallel:
 
 ## Important Links
 
-1. Complete code can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/cifar10-distributed.py).
+1. Complete code can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/intermediate/cifar10-distributed.py).
 2. Example of the logs of a ClearML experiment run on this code:
    - [With torch.distributed.launch](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution) 
    - [With default internal spawning](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/c2b82ec98e8445f29044c94f7efc8215/output/execution)
