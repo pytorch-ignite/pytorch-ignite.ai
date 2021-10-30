@@ -150,5 +150,5 @@ footer:
   - name: DEV
     url: https://dev.to/pytorch-ignite
   - name: Discord
-    url: https://discord.gg/djZtm3EmKj
+    url: https://pytorch-ignite.ai/chat
 ---

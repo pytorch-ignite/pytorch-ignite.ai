@@ -17,7 +17,7 @@ PyTorch-Ignite is a community-driven open source project developed by a passiona
 
 ## Discord
 
-[Join us on Discord](https://discord.gg/djZtm3EmKj) with our community members to interact with members and maintainers, connect with Ignite users across the globe, and chat about anything.
+[Join us on Discord](https://pytorch-ignite.ai/chat) with our community members to interact with members and maintainers, connect with Ignite users across the globe, and chat about anything.
 
 ## Join the PyTorch-Ignite Community
 
@@ -66,7 +66,7 @@ The following people have been active contributors in the past, but are no longe
 
 We are looking for motivated contributors to become collaborators and help out with the project.
 We can start considering a candidate after several successfully merged GitHub pull requests.
-If you are interested, for more details, please, contact Victor (vfdev-5#4458) on [PyTorch-Ignite Discord](https://discord.gg/djZtm3EmKj).
+If you are interested, for more details, please, contact Victor (vfdev-5#4458) on [PyTorch-Ignite Discord](https://pytorch-ignite.ai/chat).
 
 ### Citing PyTorch-Ignite
 
