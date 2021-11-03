@@ -1,6 +1,6 @@
 ---
 title: Collective Communication with Ignite
-weight: 5
+weight: 1
 date: 2021-10-5
 downloads: true
 sidebar: true
@@ -36,7 +36,7 @@ import ignite.distributed as idist
 
 ## All Reduce
 
-![All Reduce Diagram](https://github.com/pytorch-ignite/examples/blob/add-collective-comm-nb/tutorials/assets/all-reduce.png?raw=1)
+![All Reduce Diagram](https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/all-reduce.png?raw=1)
 
 The [`all_reduce()`](https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.all_reduce) method is used to collect specified tensors from each process and make them available on every node then perform a specified operation (sum, product, min, max, etc) on them. Let's spawn 3 processes with ranks 0, 1 and 2 and define a `tensor` on all of them. If we performed `all_reduce` with the operation SUM on `tensor` then `tensor` on all ranks will be gathered, added and stored in `tensor` as shown below:
 
@@ -90,7 +90,7 @@ def average_gradients(model):
 
 ## All Gather
 
-![All Gather Diagram](https://github.com/pytorch-ignite/examples/blob/add-collective-comm-nb/tutorials/assets/all-gather.png?raw=1)
+![All Gather Diagram](https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/all-gather.png?raw=1)
 
 The [`all_gather()`](https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.all_gather) method is used when you just want to collect a tensor, number or string across all participating processes. As a basic example, suppose you have to collect all the different values stored in `num` on all ranks. You can achieve this by using `all_gather` as below:
 
@@ -133,7 +133,7 @@ def write_preds_to_file(predictions, filename):
 
 ## Broadcast
 
-![Broadcast Diagram](https://github.com/pytorch-ignite/examples/blob/add-collective-comm-nb/tutorials/assets/broadcast.png?raw=1)
+![Broadcast Diagram](https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/broadcast.png?raw=1)
 
 The [`broadcast()`](https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.broadcast) method copies a tensor, float or string from a source process to all the other processes. For example, you need to send a message from rank 0 to all other ranks. You can do this by creating the actual message on rank 0 and a placeholder on all other ranks, then broadcast the message mentioning a source rank. You can also use `safe_mode=True` in case the placeholder is not defined on all ranks. 
 
