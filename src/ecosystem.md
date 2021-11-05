@@ -35,6 +35,7 @@ The list below is unexhausted list of references that we are aware of.
 - [The role of disentanglement in generalisation](https://github.com/mmrl/disent-and-gen)
 - [A Probabilistic Programming Approach to Protein Structure Superposition](https://github.com/LysSanzMoreta/Theseus-PP)
 - [PadChest: A large chest x-ray image dataset with multi-label annotated reports](https://github.com/auriml/Rx-thorax-automatic-captioning)
+- [Causal-BALD: Deep Bayesian Active Learning of Outcomes to Infer Treatment-Effects from Observational Data](https://github.com/anndvision/causal-bald)
 
 ## Blog articles, tutorials, books
 
@@ -50,6 +51,7 @@ The list below is unexhausted list of references that we are aware of.
 - [Project MONAI - AI Toolkit for Healthcare Imaging](https://github.com/Project-MONAI/MONAI)
 - [DeepSeismic - Deep Learning for Seismic Imaging and Interpretation](https://github.com/microsoft/seismic-deeplearning)
 - [Nussl - a flexible, object-oriented Python audio source separation library](https://github.com/nussl/nussl)
+- [xFraud: Explainable Fraud Transaction Detection on Heterogeneous Graphs](https://github.com/eBay/xFraud)
 
 ## Others
 
