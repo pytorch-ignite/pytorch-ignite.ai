@@ -47,5 +47,7 @@ params:
           link: /about/contribution-guide/
         - text: Code of Conduct
           link: /about/coc/
+        - text: Talks
+          link: /talks/
     - text: GitHub
       link: https://github.com/pytorch/ignite
