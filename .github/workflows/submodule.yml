@@ -44,7 +44,7 @@ jobs:
           bash ./scripts/nb_to_md.sh static/examples/tutorials/advanced tmp/tutorials/advanced
           diff -r src/tutorials/beginner tmp/tutorials/beginner
           diff -r src/tutorials/intermediate tmp/tutorials/intermediate
-          diff -r src/tutorials/intermediate tmp/tutorials/advanced
+          diff -r src/tutorials/advanced tmp/tutorials/advanced
 
       - name: Check how-to-guides
         run: |
