@@ -2,9 +2,9 @@
   "type": "module",
   "devDependencies": {
     "jsdom": "18.0.1",
-    "prettier": "^2.4.0",
-    "shiki": "^0.9.11",
-    "windicss": "^3.1.7"
+    "prettier": "^2.4.1",
+    "shiki": "^0.9.12",
+    "windicss": "^3.2.1"
   },
   "scripts": {
     "dev": "windicss -f windi.config.cjs -dto themes/ignite/assets/_hugo/css/style.css",
