@@ -2,15 +2,15 @@ lockfileVersion: 5.3
 
 specifiers:
   jsdom: 18.1.0
-  prettier: ^2.4.0
-  shiki: ^0.9.11
-  windicss: ^3.1.7
+  prettier: ^2.4.1
+  shiki: ^0.9.12
+  windicss: ^3.2.1
 
 devDependencies:
   jsdom: 18.1.0
-  prettier: 2.4.0
-  shiki: 0.9.11
-  windicss: 3.1.7
+  prettier: 2.4.1
+  shiki: 0.9.12
+  windicss: 3.2.1
 
 packages:
 
@@ -315,8 +315,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier/2.4.0:
-    resolution: {integrity: sha512-DsEPLY1dE5HF3BxCRBmD4uYZ+5DCbvatnolqTqcxEgKVZnL2kUfyu7b8pPQ5+hTBkdhU9SLUmK0/pHb07RE4WQ==}
+  /prettier/2.4.1:
+    resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -341,8 +341,8 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /shiki/0.9.11:
-    resolution: {integrity: sha512-tjruNTLFhU0hruCPoJP0y+B9LKOmcqUhTpxn7pcJB3fa+04gFChuEmxmrUfOJ7ZO6Jd+HwMnDHgY3lv3Tqonuw==}
+  /shiki/0.9.12:
+    resolution: {integrity: sha512-VXcROdldv0/Qu0w2XvzU4IrvTeBNs/Kj/FCmtcEXGz7Tic/veQzliJj6tEiAgoKianhQstpYmbPDStHU5Opqcw==}
     dependencies:
       jsonc-parser: 3.0.0
       onigasm: 2.2.5
@@ -430,8 +430,8 @@ packages:
       webidl-conversions: 7.0.0
     dev: true
 
-  /windicss/3.1.7:
-    resolution: {integrity: sha512-Q/HQ9j+r2R0fdt85zAjccdo11kHWzQmpkuwIUQIO6PSypyDmBTfN14aAy4szLrpgo2woyuHM7Y+kir4IG4qnKQ==}
+  /windicss/3.2.1:
+    resolution: {integrity: sha512-LusrIrryBFHAPQ/OOTbS4EWWuzI6eGeJglI9nQ3kDBr1cqH69NWt8Z8q59f9kTkgptXroejmWfksWwqgHs8EVw==}
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
