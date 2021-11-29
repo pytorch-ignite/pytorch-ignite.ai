@@ -189,7 +189,7 @@ plt.show()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_20_0.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_27_0.png)
     
 
 
