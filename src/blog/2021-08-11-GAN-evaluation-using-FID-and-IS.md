@@ -775,7 +775,7 @@ plt.legend()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_74_1.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_93_1.png)
     
 
 
@@ -808,7 +808,7 @@ fig.tight_layout()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_76_0.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_95_0.png)
     
 
 
@@ -848,6 +848,6 @@ plt.imshow(np.transpose(vutils.make_grid(img_list[-1], padding=2, normalize=True
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_78_1.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png)
     
 
