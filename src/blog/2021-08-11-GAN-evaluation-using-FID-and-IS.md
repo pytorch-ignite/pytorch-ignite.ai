@@ -32,7 +32,7 @@ Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will
 
     Collecting pytorch-ignite
       Downloading pytorch_ignite-0.4.6-py3-none-any.whl (232 kB)
-    [K     |████████████████████████████████| 232 kB 8.1 MB/s 
+    [K     |████████████████████████████████| 232 kB 8.1 MB/s eta 0:00:01
     [?25hRequirement already satisfied: torch<2,>=1.3 in /usr/local/lib/python3.7/dist-packages (from pytorch-ignite) (1.9.0+cu102)
     Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from torch<2,>=1.3->pytorch-ignite) (3.7.4.3)
     Installing collected packages: pytorch-ignite
@@ -42,40 +42,15 @@ Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will
 
 ```python
 import torch
-torch.__version__
-```
-
-
-
-
-    '1.9.0+cu102'
-
-
-
-
-```python
 import torchvision
-torchvision.__version__
-```
-
-
-
-
-    '0.10.0+cu102'
-
-
-
-
-```python
 import ignite
-ignite.__version__
+
+print(*map(lambda m: ": ".join((m.__name__, m.__version__)), (torch, torchvision, ignite)), sep="\n")
 ```
 
-
-
-
-    '0.4.6'
-
+    torch: 1.9.0+cu102
+    torchvision: 0.10.0+cu102
+    ignite: 0.4.6
 
 
 ## Import Libraries
@@ -139,6 +114,8 @@ from torchvision.datasets import ImageFolder
 
 ```python
 !gdown --id 1O8LE-FpN79Diu6aCvppH5HwlcR5I--PX
+!mkdir data
+!unzip -qq img_align_celeba.zip -d data
 ```
 
     Downloading...
@@ -147,12 +124,6 @@ from torchvision.datasets import ImageFolder
     1.44GB [00:13, 107MB/s]
 
 
-
-```python
-!mkdir data
-!unzip -qq img_align_celeba.zip -d data
-```
-
 ### Dataset and transformation
 
 The image size considered in this tutorial is `64`. Note that increase this size implies to modify the GAN models.
@@ -160,10 +131,7 @@ The image size considered in this tutorial is `64`. Note that increase this size
 
 ```python
 image_size = 64
-```
 
-
-```python
 data_transform = transforms.Compose(
     [
         transforms.Resize(image_size),
@@ -172,24 +140,12 @@ data_transform = transforms.Compose(
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]
 )
-```
 
-
-```python
 train_dataset = ImageFolder(root="./data", transform=data_transform)
-```
-
-
-```python
 test_dataset = torch.utils.data.Subset(train_dataset, torch.arange(3000))
 ```
 
 ### DataLoading
-
-
-```python
-batch_size = 128
-```
 
 We wish to configure the dataloader to work in a disbtributed environment. Distributed Dataloading is support by Ignite as part of DDP support. This requires specific adjustments to the sequential case.
 
@@ -199,6 +155,8 @@ To handle this, `idist` provides an helper [`auto_dataloader`](https://pytorch.o
 
 
 ```python
+batch_size = 128
+
 train_dataloader = idist.auto_dataloader(
     train_dataset, 
     batch_size=batch_size, 
@@ -231,11 +189,13 @@ plt.show()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_27_0.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_20_0.png)
     
 
 
 ## Models for GAN
+
+### Generator
 
 The latent space dimension of input vectors for the generator is a key parameter of GAN.
 
@@ -243,8 +203,6 @@ The latent space dimension of input vectors for the generator is a key parameter
 ```python
 latent_dim = 100
 ```
-
-### Generator
 
 
 ```python
@@ -369,10 +327,6 @@ class Discriminator3x64x64(nn.Module):
 
 ```python
 netD = idist.auto_model(Discriminator3x64x64())
-```
-
-
-```python
 summary(netD, (3, 64, 64))
 ```
 
@@ -437,11 +391,11 @@ optimizerG = idist.auto_optim(
 
 Training in Ignite is based on three core components, namely, Engine, Events and Handlers. Let's briefly discuss each of them.
 
-*   **Engine** - The [Engine](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.engine.Engine.html#engine) can be considered somewhat similar to a training loop. It takes a `train_step` as an argument and runs it  over each batch of the dataset, emmiting events as it goes.
+*   **Engine** - The [Engine](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#engine) can be considered somewhat similar to a training loop. It takes a `train_step` as an argument and runs it  over each batch of the dataset, triggering events as it goes.
 
-*   **Events** - [Events](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.events.Events.html#events) are emmited by the Engine when it reaches a specific point in the run/training.
+*   **Events** - [Events](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) are emitted by the Engine when it reaches a specific point in the run/training.
 
-*   **Handlers** - These are [functions](https://pytorch.org/ignite/v0.4.5/handlers.html#ignite-handlers) which can be configured so that they are triggered when a certain Event is emmited by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics.
+*   **Handlers** - These are functions, which can be configured so that they are triggered when a certain Event is emitted by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics, see [ignite-handlers](https://pytorch.org/ignite/handlers.html#ignite-handlers).
 
 ### Training Step Function
 
@@ -451,10 +405,8 @@ A training step function will be run batch wise over the entire dataset by the e
 ```python
 real_label = 1
 fake_label = 0
-```
 
 
-```python
 def training_step(engine, data):
     # Set the models for training
     netG.train()
@@ -555,10 +507,8 @@ The `store_losses` handler is responsible for storing the generator and discrimi
 ```python
 G_losses = []
 D_losses = []
-```
 
 
-```python
 @trainer.on(Events.ITERATION_COMPLETED)
 def store_losses(engine):
     o = engine.state.output
@@ -571,10 +521,8 @@ The `store_images` handler is responsible for storing the images generated by th
 
 ```python
 img_list = []
-```
 
 
-```python
 @trainer.on(Events.ITERATION_COMPLETED(every=500))
 def store_images(engine):
     with torch.no_grad():
@@ -633,10 +581,8 @@ Although pytorch has a native interpolate function, `PIL` interpolation is used 
 
 ```python
 import PIL.Image as Image
-```
 
 
-```python
 def interpolate(batch):
     arr = []
     for img in batch:
@@ -644,10 +590,8 @@ def interpolate(batch):
         resized_img = pil_img.resize((299,299), Image.BILINEAR)
         arr.append(transforms.ToTensor()(resized_img))
     return torch.stack(arr)
-```
 
 
-```python
 def evaluation_step(engine, batch):
     with torch.no_grad():
         noise = torch.randn(batch_size, latent_dim, 1, 1, device=idist.device())
@@ -663,15 +607,7 @@ The `train_evaluator` engine will run the metric on the entire dataset every epo
 
 ```python
 evaluator = Engine(evaluation_step)
-```
-
-
-```python
 fid_metric.attach(evaluator, "fid")
-```
-
-
-```python
 is_metric.attach(evaluator, "is")
 ```
 
@@ -681,10 +617,8 @@ The following handler attached to the `trainer` engine triggered every epoch wil
 ```python
 fid_values = []
 is_values = []
-```
 
 
-```python
 @trainer.on(Events.EPOCH_COMPLETED)
 def log_training_results(engine):
     evaluator.run(test_dataloader,max_epochs=1)
@@ -705,10 +639,8 @@ The `RunningAverage` metric is used to keep track of the generator and discrimin
 
 ```python
 from ignite.metrics import RunningAverage
-```
 
 
-```python
 RunningAverage(output_transform=lambda x: x["Loss_G"]).attach(trainer, 'Loss_G')
 RunningAverage(output_transform=lambda x: x["Loss_D"]).attach(trainer, 'Loss_D')
 ```
@@ -722,15 +654,9 @@ Since the training process can take a lot of time and have a lot of iterations a
 
 ```python
 from ignite.contrib.handlers import ProgressBar
-```
 
 
-```python
 ProgressBar().attach(trainer, metric_names=['Loss_G','Loss_D'])
-```
-
-
-```python
 ProgressBar().attach(evaluator)
 ```
 
@@ -849,7 +775,7 @@ plt.legend()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_93_1.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_74_1.png)
     
 
 
@@ -882,7 +808,7 @@ fig.tight_layout()
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_95_0.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_76_0.png)
     
 
 
@@ -922,6 +848,6 @@ plt.imshow(np.transpose(vutils.make_grid(img_list[-1], padding=2, normalize=True
 
 
     
-![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png)
+![png](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_78_1.png)
     
 
