@@ -395,7 +395,7 @@ Training in Ignite is based on three core components, namely, Engine, Events and
 
 *   **Events** - [Events](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) are emitted by the Engine when it reaches a specific point in the run/training.
 
-*   **Handlers** - These are functions, which can be configured so that they are triggered when a certain Event is emitted by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics, see [ignite-handlers](https://pytorch.org/ignite/handlers.html#ignite-handlers).
+*   **Handlers** - Functions that can be triggered when a certain Event is emitted by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics, see [ignite-handlers](https://pytorch.org/ignite/handlers.html#ignite-handlers).
 
 #### Training Step Function
 
