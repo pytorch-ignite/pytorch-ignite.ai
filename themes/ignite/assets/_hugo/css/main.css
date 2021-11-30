@@ -91,3 +91,6 @@ table {
   border-collapse: collapse;
   overflow-x: auto;
 }
+video {
+  max-width: 100%;
+}
