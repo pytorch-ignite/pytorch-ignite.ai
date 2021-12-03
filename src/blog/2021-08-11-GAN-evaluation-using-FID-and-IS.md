@@ -9,7 +9,7 @@ tags:
   - Frechet Inception Distance
 ---
 
-# GAN Evaluation : the Frechet Inception Distance and Inception Score metrics
+## GAN Evaluation : the Frechet Inception Distance and Inception Score metrics
 
 ![GAN evaluation results using FID and IS](/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png)
 
@@ -22,7 +22,7 @@ See [here](https://pytorch.org/ignite/metrics.html#complete-list-of-metrics) for
 Most of the code here is from [DCGAN example](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html) in [pytorch/examples](https://github.com/pytorch/examples). In addition to the original tutorial, this notebook will use in-built GAN based metric in `ignite.metrics` to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in `ignite`.
 <!--more-->
 
-## Required Dependencies
+### Required Dependencies
 Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will be installed/imported here.
 
 
@@ -32,7 +32,7 @@ Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will
 
     Collecting pytorch-ignite
       Downloading pytorch_ignite-0.4.6-py3-none-any.whl (232 kB)
-    [K     |████████████████████████████████| 232 kB 8.1 MB/s 
+    [K     |████████████████████████████████| 232 kB 8.1 MB/s eta 0:00:01
     [?25hRequirement already satisfied: torch<2,>=1.3 in /usr/local/lib/python3.7/dist-packages (from pytorch-ignite) (1.9.0+cu102)
     Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from torch<2,>=1.3->pytorch-ignite) (3.7.4.3)
     Installing collected packages: pytorch-ignite
@@ -42,43 +42,18 @@ Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will
 
 ```python
 import torch
-torch.__version__
-```
-
-
-
-
-    '1.9.0+cu102'
-
-
-
-
-```python
 import torchvision
-torchvision.__version__
-```
-
-
-
-
-    '0.10.0+cu102'
-
-
-
-
-```python
 import ignite
-ignite.__version__
+
+print(*map(lambda m: ": ".join((m.__name__, m.__version__)), (torch, torchvision, ignite)), sep="\n")
 ```
 
+    torch: 1.9.0+cu102
+    torchvision: 0.10.0+cu102
+    ignite: 0.4.6
 
 
-
-    '0.4.6'
-
-
-
-## Import Libraries
+### Import Libraries
 
 Note: torchsummary is an optional dependency here.
 
@@ -103,7 +78,7 @@ from ignite.engine import Engine, Events
 import ignite.distributed as idist
 ```
 
-## Reproductibility and logging details
+### Reproductibility and logging details
 
 
 
@@ -126,7 +101,7 @@ ignite.utils.setup_logger(name="ignite.distributed.launcher.Parallel", level=log
 
 
 
-## Processing Data
+### Processing Data
 
 The [Large-scale CelebFaces Attributes (CelebA) Dataset](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) is used in this tutorial. The `torchvision` library provides a [dataset class](https://pytorch.org/vision/stable/datasets.html#celeba), However this implementation suffers from issues related to the download limitations of `gdrive`. Here, we define a custom `CelebA` [`Dataset`](https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset).
 
@@ -139,6 +114,8 @@ from torchvision.datasets import ImageFolder
 
 ```python
 !gdown --id 1O8LE-FpN79Diu6aCvppH5HwlcR5I--PX
+!mkdir data
+!unzip -qq img_align_celeba.zip -d data
 ```
 
     Downloading...
@@ -147,23 +124,14 @@ from torchvision.datasets import ImageFolder
     1.44GB [00:13, 107MB/s]
 
 
-
-```python
-!mkdir data
-!unzip -qq img_align_celeba.zip -d data
-```
-
-### Dataset and transformation
+#### Dataset and transformation
 
 The image size considered in this tutorial is `64`. Note that increase this size implies to modify the GAN models.
 
 
 ```python
 image_size = 64
-```
 
-
-```python
 data_transform = transforms.Compose(
     [
         transforms.Resize(image_size),
@@ -172,24 +140,12 @@ data_transform = transforms.Compose(
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]
 )
-```
 
-
-```python
 train_dataset = ImageFolder(root="./data", transform=data_transform)
-```
-
-
-```python
 test_dataset = torch.utils.data.Subset(train_dataset, torch.arange(3000))
 ```
 
-### DataLoading
-
-
-```python
-batch_size = 128
-```
+#### DataLoading
 
 We wish to configure the dataloader to work in a disbtributed environment. Distributed Dataloading is support by Ignite as part of DDP support. This requires specific adjustments to the sequential case.
 
@@ -199,6 +155,8 @@ To handle this, `idist` provides an helper [`auto_dataloader`](https://pytorch.o
 
 
 ```python
+batch_size = 128
+
 train_dataloader = idist.auto_dataloader(
     train_dataset, 
     batch_size=batch_size, 
@@ -235,7 +193,9 @@ plt.show()
     
 
 
-## Models for GAN
+### Models for GAN
+
+#### Generator
 
 The latent space dimension of input vectors for the generator is a key parameter of GAN.
 
@@ -243,8 +203,6 @@ The latent space dimension of input vectors for the generator is a key parameter
 ```python
 latent_dim = 100
 ```
-
-### Generator
 
 
 ```python
@@ -333,7 +291,7 @@ summary(netG, (latent_dim, 1, 1))
     ----------------------------------------------------------------
 
 
-### Discriminator
+#### Discriminator
 
 
 ```python
@@ -369,10 +327,6 @@ class Discriminator3x64x64(nn.Module):
 
 ```python
 netD = idist.auto_model(Discriminator3x64x64())
-```
-
-
-```python
 summary(netD, (3, 64, 64))
 ```
 
@@ -404,7 +358,7 @@ summary(netD, (3, 64, 64))
     ----------------------------------------------------------------
 
 
-## Optimizers
+### Optimizers
 
 The [Binary Cross Entropy Loss](https://pytorch.org/docs/stable/nn.html#torch.nn.BCELoss) is used in this tutorial.
 
@@ -433,17 +387,17 @@ optimizerG = idist.auto_optim(
 )
 ```
 
-## Ignite Training Concepts
+### Ignite Training Concepts
 
 Training in Ignite is based on three core components, namely, Engine, Events and Handlers. Let's briefly discuss each of them.
 
-*   **Engine** - The [Engine](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.engine.Engine.html#engine) can be considered somewhat similar to a training loop. It takes a `train_step` as an argument and runs it  over each batch of the dataset, emmiting events as it goes.
+*   **Engine** - The [Engine](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#engine) can be considered somewhat similar to a training loop. It takes a `train_step` as an argument and runs it  over each batch of the dataset, triggering events as it goes.
 
-*   **Events** - [Events](https://pytorch.org/ignite/v0.4.5/generated/ignite.engine.events.Events.html#events) are emmited by the Engine when it reaches a specific point in the run/training.
+*   **Events** - [Events](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) are emitted by the Engine when it reaches a specific point in the run/training.
 
-*   **Handlers** - These are [functions](https://pytorch.org/ignite/v0.4.5/handlers.html#ignite-handlers) which can be configured so that they are triggered when a certain Event is emmited by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics.
+*   **Handlers** - Functions that can be triggered when a certain Event is emitted by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics, see [ignite-handlers](https://pytorch.org/ignite/handlers.html#ignite-handlers).
 
-### Training Step Function
+#### Training Step Function
 
 A training step function will be run batch wise over the entire dataset by the engine. It contains the basic training steps, namely, running the model, propagating the loss backward and taking an optimizer step. We run the discriminator model on both real images and fake images generated by the Generator model. The function returns Generator and Discriminator Losses and the output generated by Generator and Discriminator.
 
@@ -451,10 +405,8 @@ A training step function will be run batch wise over the entire dataset by the e
 ```python
 real_label = 1
 fake_label = 0
-```
 
 
-```python
 def training_step(engine, data):
     # Set the models for training
     netG.train()
@@ -523,7 +475,7 @@ A `PyTorch-Ignite` engine `trainer` is defined using the above `training_step` f
 trainer = Engine(training_step)
 ```
 
-### Handlers
+#### Handlers
 In this section, the used `PyTorch-Ignite` handlers are introduced. These handlers will be responsible for printing out and storing important information such as losses and model predictions.
 
 Like the DCGAN paper, we will also randomly initialize all the model weights from a Normal Distribution with `mean=0`, `stdev=0.02`. The following `initialize_fn` function must be applied to the generator and discriminator models at the start of training.
@@ -555,10 +507,8 @@ The `store_losses` handler is responsible for storing the generator and discrimi
 ```python
 G_losses = []
 D_losses = []
-```
 
 
-```python
 @trainer.on(Events.ITERATION_COMPLETED)
 def store_losses(engine):
     o = engine.state.output
@@ -571,10 +521,8 @@ The `store_images` handler is responsible for storing the images generated by th
 
 ```python
 img_list = []
-```
 
 
-```python
 @trainer.on(Events.ITERATION_COMPLETED(every=500))
 def store_images(engine):
     with torch.no_grad():
@@ -582,7 +530,7 @@ def store_images(engine):
     img_list.append(fake)
 ```
 
-## Evaluation Metrics
+### Evaluation Metrics
 
 For this tutorial, we will be showcasing two GAN based metric, namely, Frechet Inception Distance (FID) and Inception Score (IS). 
 
@@ -624,7 +572,7 @@ is_metric = InceptionScore(device=idist.device(), output_transform=lambda x: x[0
 
 The argument `output_transform` is run on the value returned by the engine. Since `InceptionScore` takes only single image as input whereas two values are returned by the engine, the function `output_transform` is used. As the name suggests, `output_transform` function is applied to the engine's output before it is provided to the metric for evaluation, so using `lambda x: x[0]` will ensure the InceptionScore metric only gets the first value for evaluation.
 
-## Evaluators
+### Evaluators
 
 We define the function for the evaluation engine, namely, `evaluation_step`. Our dataset provides `64 x 64 x 3` images but both `IS` and `FID` metrics use the `Inceptionv3` model for evaluation which requires images of minimum size `299 x 299 x 3`, so the images from the dataset and the images generated by the generator model must be interpolated.
 
@@ -633,10 +581,8 @@ Although pytorch has a native interpolate function, `PIL` interpolation is used 
 
 ```python
 import PIL.Image as Image
-```
 
 
-```python
 def interpolate(batch):
     arr = []
     for img in batch:
@@ -644,10 +590,8 @@ def interpolate(batch):
         resized_img = pil_img.resize((299,299), Image.BILINEAR)
         arr.append(transforms.ToTensor()(resized_img))
     return torch.stack(arr)
-```
 
 
-```python
 def evaluation_step(engine, batch):
     with torch.no_grad():
         noise = torch.randn(batch_size, latent_dim, 1, 1, device=idist.device())
@@ -663,15 +607,7 @@ The `train_evaluator` engine will run the metric on the entire dataset every epo
 
 ```python
 evaluator = Engine(evaluation_step)
-```
-
-
-```python
 fid_metric.attach(evaluator, "fid")
-```
-
-
-```python
 is_metric.attach(evaluator, "is")
 ```
 
@@ -681,10 +617,8 @@ The following handler attached to the `trainer` engine triggered every epoch wil
 ```python
 fid_values = []
 is_values = []
-```
 
 
-```python
 @trainer.on(Events.EPOCH_COMPLETED)
 def log_training_results(engine):
     evaluator.run(test_dataloader,max_epochs=1)
@@ -698,22 +632,20 @@ def log_training_results(engine):
     print(f"*    IS : {is_score:4f}")
 ```
 
-## Loss metrics
+### Loss metrics
 
 The `RunningAverage` metric is used to keep track of the generator and discriminator Losses. Like the name suggests, `RunningAverage` keeps the track of average of all the values provided to it.
 
 
 ```python
 from ignite.metrics import RunningAverage
-```
 
 
-```python
 RunningAverage(output_transform=lambda x: x["Loss_G"]).attach(trainer, 'Loss_G')
 RunningAverage(output_transform=lambda x: x["Loss_D"]).attach(trainer, 'Loss_D')
 ```
 
-## Progress bars
+### Progress bars
 
 Since the training process can take a lot of time and have a lot of iterations and epochs, a `ProgressBar` handler is added to show progress to prevent all the training data from filling up our screen.
 
@@ -722,19 +654,13 @@ Since the training process can take a lot of time and have a lot of iterations a
 
 ```python
 from ignite.contrib.handlers import ProgressBar
-```
 
 
-```python
 ProgressBar().attach(trainer, metric_names=['Loss_G','Loss_D'])
-```
-
-
-```python
 ProgressBar().attach(evaluator)
 ```
 
-## Training
+### Training
 
 Finally, the `trainer` engine is run here. The helper method [`Parallel`](https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.launcher.Parallel.html#parallel) of `idist` will help setting up a distributed configuration to run the `trainer` engine. It supports  `nccl`, `gloo` and `mpi` native torch backends, `XLA` on `TPU` and `Horovod` distributed framework.
 
@@ -819,7 +745,7 @@ with idist.Parallel(backend='nccl') as parallel:
     *    IS : 2.544078
     
 
-## Inference
+### Inference
 
 Finally, let's check out the results. First, how the discriminator's and generator’s losses changed during training. Second, the `FID` and `IS` performance improvments of the model. And last, look a batch of real data next to a batch of fake data from the generator.
 
