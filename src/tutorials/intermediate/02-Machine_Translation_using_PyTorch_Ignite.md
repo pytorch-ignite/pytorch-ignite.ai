@@ -97,7 +97,7 @@ import ignite
 import ignite.distributed as idist
 from ignite.contrib.engines import common
 from ignite.engine import Engine, Events
-from ignite.handlers import Checkpoint, DiskSaver, global_step_from_engine
+from ignite.handlers import Checkpoint, global_step_from_engine
 from ignite.metrics import Bleu
 from ignite.utils import manual_seed, setup_logger
 
@@ -468,7 +468,7 @@ def log_basic_info(logger, config):
 
 
 def get_save_handler(config):
-    return DiskSaver(config["output_path_"], require_empty=False)
+    return config["output_path_"]
 ```
 
 ## Begin Training

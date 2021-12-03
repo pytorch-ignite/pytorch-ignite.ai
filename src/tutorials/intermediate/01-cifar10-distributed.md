@@ -142,7 +142,7 @@ import ignite.distributed as idist
 from ignite.contrib.engines import common
 from ignite.handlers import PiecewiseLinear
 from ignite.engine import Events, create_supervised_trainer, create_supervised_evaluator
-from ignite.handlers import Checkpoint, DiskSaver, global_step_from_engine
+from ignite.handlers import Checkpoint, global_step_from_engine
 from ignite.metrics import Accuracy, Loss
 from ignite.utils import manual_seed, setup_logger
 ```
@@ -279,10 +279,8 @@ def get_lr_scheduler(config, optimizer):
 
 ### Save Models
 
-We can create checkpoints using either of the two handlers:
-
-1. If specified `with-clearml=True`, we will save the models in ClearML's File Server using [`ClearMLSaver()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.clearml_logger.html#ignite.contrib.handlers.clearml_logger.ClearMLSaver).
-2. Else save the models to disk using [`DiskSaver()`](https://pytorch.org/ignite/generated/ignite.handlers.DiskSaver.html#ignite.handlers.DiskSaver).
+We can create checkpoints using either a handler (in case of ClearML) or by simply passing the path of the checkpoint file to `save_handler`:
+If specified `with-clearml=True`, we will save the models in ClearML's File Server using [`ClearMLSaver()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.clearml_logger.html#ignite.contrib.handlers.clearml_logger.ClearMLSaver).
 
 
 ```python
@@ -292,7 +290,7 @@ def get_save_handler(config):
 
         return ClearMLSaver(dirname=config["output_path"])
 
-    return DiskSaver(config["output_path"], require_empty=False)
+    return config["output_path"]
 ```
 
 ### Resume from Checkpoint
