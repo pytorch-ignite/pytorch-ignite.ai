@@ -183,7 +183,7 @@ we can smartly save the best `n_saved` models (depending on `evaluator.state.met
 
 
 ```python
-from ignite.handlers import Checkpoint, DiskSaver
+from ignite.handlers import Checkpoint
 
 checkpoint_every = 5
 checkpoint_dir = ...
@@ -191,7 +191,7 @@ checkpoint_dir = ...
 
 checkpointer = Checkpoint(
     to_save={'model': model, 'optimizer': optimizer, 'trainer': trainer},
-    save_handler=DiskSaver(checkpoint_dir, create_dir=True), n_saved=2
+    save_handler=checkpoint_dir, n_saved=2
 )
 trainer.add_event_handler(
     Events.EPOCH_COMPLETED(every=checkpoint_every), checkpointer
