@@ -33,6 +33,8 @@ params:
           link: /how-to-guides/
         - text: Tutorials
           link: /tutorials/
+        - text: Concepts
+          link: /concepts/
         - text: API Reference
           link: https://pytorch.org/ignite/engine.html
     - text: Blog
