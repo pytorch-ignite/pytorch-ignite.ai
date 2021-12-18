@@ -45,7 +45,7 @@ async function embedTweet(iframe) {
     }
 
     tweetWrapper += metadata + '</p>'
-    tweetWrapper += `<p>${tweet.tweetHTML}</p>`
+    tweetWrapper += `<p class="children:break-all">${tweet.tweetHTML}</p>`
     tweetWrapper += `
     <div>
       <a href="https://twitter.com/pytorch_ignite" target="_blank" rel="noopener noreferrer">
