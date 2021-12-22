@@ -111,6 +111,9 @@ docs:
   - title: How-to-Guides
     text: Find short to the point how-to tips, tricks and best practices
     url: /how-to-guides/
+  - title: Concepts
+    text: Understand the essence of the library in detail
+    url: /concepts/
 
 ecosystem:
   - title: Project MONAI
