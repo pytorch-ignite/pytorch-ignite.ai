@@ -51,5 +51,7 @@ params:
           link: /about/coc/
         - text: Talks
           link: /talks/
+        - text: Governance
+          link: /about/governance/
     - text: GitHub
       link: https://github.com/pytorch/ignite
