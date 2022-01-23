@@ -35,7 +35,7 @@ fire_event(Events.COMPLETED)
 
 At first, *"engine is started"* event is fired and all its event handlers are executed (we will see in the next paragraph how to add event handlers). Next, *while* loop is started and *"epoch is started"* event occurs, etc. Every time an event is fired, attached handlers are executed.
 
-Attaching an event handler is simple using method [`add_event_handler`]() or [`on`]() decorator:
+Attaching an event handler is simple using method [`add_event_handler`](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.add_event_handler) or [`on`](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.on) decorator:
 
 ```python
 trainer = Engine(update_model)
