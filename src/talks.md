@@ -7,6 +7,8 @@ description: Talks, Presentations, and Events of PyTorch-Ignite
 
 This page contains links on our previous presentations, slides and posters.
 
+- [PyData Riyadh Chapter 2022 Sprint slides](https://pytorch-ignite.github.io/pydata-riyadh-2022-slides/#/)
+
 - [PyData Global 2021 Sprint slides](https://pytorch-ignite.github.io/pydata-global2021-slides/)
 
 - [Python Bucaramanga Meetup](https://vfdev-5.github.io/pybucaramanga-pytorch-ignite-slides/)
