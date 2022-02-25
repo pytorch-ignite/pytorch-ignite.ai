@@ -53,6 +53,7 @@ The list below is unexhausted list of references that we are aware of.
 - [Nussl - a flexible, object-oriented Python audio source separation library](https://github.com/nussl/nussl)
 - [xFraud: Explainable Fraud Transaction Detection on Heterogeneous Graphs](https://github.com/eBay/xFraud)
 - [PyTorch Adapt - A fully featured and modular domain adaptation library](https://github.com/KevinMusgrave/pytorch-adapt)
+- [gnina-torch: PyTorch implementation of GNINA scoring function](https://github.com/RMeli/gnina-torch)
 
 ## Others
 
