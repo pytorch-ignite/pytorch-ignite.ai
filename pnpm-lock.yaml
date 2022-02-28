@@ -3,14 +3,14 @@ lockfileVersion: 5.3
 specifiers:
   jsdom: ^19.0.0
   prettier: ^2.5.1
-  shiki: ^0.10.0
-  windicss: ^3.4.3
+  shiki: ^0.10.1
+  windicss: ^3.5.0
 
 devDependencies:
   jsdom: 19.0.0
   prettier: 2.5.1
-  shiki: 0.10.0
-  windicss: 3.4.3
+  shiki: 0.10.1
+  windicss: 3.5.0
 
 packages:
 
@@ -329,8 +329,8 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /shiki/0.10.0:
-    resolution: {integrity: sha512-iczxaIYeBFHTFrQPb9DVy2SKgYxC4Wo7Iucm7C17cCh2Ge/refnvHscUOxM85u57MfLoNOtjoEFUWt9gBexblA==}
+  /shiki/0.10.1:
+    resolution: {integrity: sha512-VsY7QJVzU51j5o1+DguUd+6vmCmZ5v/6gYu4vyYAhzjuNQU6P/vmSy4uQaOhvje031qQMiW0d2BwgMH52vqMng==}
     dependencies:
       jsonc-parser: 3.0.0
       vscode-oniguruma: 1.6.1
@@ -422,8 +422,8 @@ packages:
       webidl-conversions: 7.0.0
     dev: true
 
-  /windicss/3.4.3:
-    resolution: {integrity: sha512-UnugThsvEgy8RsPm4/B5DYMCAqvZzD6yWU7Anh+f07t5RSJ8zvmAylGLbXrHPJEmCKzo2Mf+fOUvISH7IJqM3A==}
+  /windicss/3.5.0:
+    resolution: {integrity: sha512-+UNYm2Zy4TM2uLiz6bqY2a69LavMqGbILFIwuGhPEJ/uqsPT3kCGSaWlhMw/weIaFOkm1K1cEzZ015Y8pp8N1A==}
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
