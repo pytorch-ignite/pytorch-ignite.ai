@@ -42,6 +42,18 @@ from ignite.handlers import Timer, BasicTimeProfiler, HandlersTimeProfiler
 
 
 ```python
+torch.cuda.is_available()
+```
+
+
+
+
+    True
+
+
+
+
+```python
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -127,13 +139,13 @@ def log_total_time():
 trainer.run(train_loader, max_epochs=2)
 ```
 
-    Training Results - Epoch[1] Avg accuracy: 0.89 Avg loss: 0.31
-    Validation Results - Epoch[1] Avg accuracy: 0.89 Avg loss: 0.31
-    Epoch 1, Time Taken : 31.877371549606323
-    Training Results - Epoch[2] Avg accuracy: 0.97 Avg loss: 0.09
-    Validation Results - Epoch[2] Avg accuracy: 0.98 Avg loss: 0.09
-    Epoch 2, Time Taken : 31.752297401428223
-    Total Time: 94.78037142753601
+    Training Results - Epoch[1] Avg accuracy: 0.97 Avg loss: 0.11
+    Validation Results - Epoch[1] Avg accuracy: 0.97 Avg loss: 0.10
+    Epoch 1, Time Taken : 31.281248569488525
+    Training Results - Epoch[2] Avg accuracy: 0.99 Avg loss: 0.05
+    Validation Results - Epoch[2] Avg accuracy: 0.98 Avg loss: 0.05
+    Epoch 2, Time Taken : 30.54600954055786
+    Total Time: 107.31757092475891
 
 
 
@@ -144,7 +156,7 @@ trainer.run(train_loader, max_epochs=2)
     	epoch: 2
     	epoch_length: 469
     	max_epochs: 2
-    	output: 0.09705401211977005
+    	output: 0.013461492024362087
     	batch: <class 'list'>
     	metrics: <class 'dict'>
     	dataloader: <class 'torch.utils.data.dataloader.DataLoader'>
@@ -166,13 +178,13 @@ basic_profiler.attach(trainer)
 trainer.run(train_loader, max_epochs=2)
 ```
 
-    Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.05
-    Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.05
-    Epoch 1, Time Taken : 32.675241470336914
-    Training Results - Epoch[2] Avg accuracy: 0.95 Avg loss: 0.17
-    Validation Results - Epoch[2] Avg accuracy: 0.94 Avg loss: 0.21
-    Epoch 2, Time Taken : 32.5580837726593
-    Total Time: 94.03342008590698
+    Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.04
+    Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.04
+    Epoch 1, Time Taken : 30.6413791179657
+    Training Results - Epoch[2] Avg accuracy: 0.97 Avg loss: 0.10
+    Validation Results - Epoch[2] Avg accuracy: 0.97 Avg loss: 0.11
+    Epoch 2, Time Taken : 30.38310170173645
+    Total Time: 106.3881447315216
 
 
 
@@ -183,7 +195,7 @@ trainer.run(train_loader, max_epochs=2)
     	epoch: 2
     	epoch_length: 469
     	max_epochs: 2
-    	output: 0.044832438230514526
+    	output: 0.0808301642537117
     	batch: <class 'list'>
     	metrics: <class 'dict'>
     	dataloader: <class 'torch.utils.data.dataloader.DataLoader'>
@@ -207,31 +219,31 @@ basic_profiler.print_results(results);
     total  |  min/index  |  max/index  |  mean  |  std
     
     Processing function:
-    49.06667 | 0.04429/468 | 0.05650/1 | 0.05231 | 0.00115
+    28.62366 | 0.02439/937 | 0.05147/0 | 0.03052 | 0.00191
     
     Dataflow:
-    16.07644 | 0.01181/467 | 0.03356/893 | 0.01714 | 0.00202
+    32.23854 | 0.02618/936 | 0.15481/937 | 0.03437 | 0.00455
     
     Event handlers:
-    28.81195
+    45.38009
     
     - Events.STARTED: []
     0.00001
     
     - Events.EPOCH_STARTED: []
-    0.00001 | 0.00000/1 | 0.00000/0 | 0.00000 | 0.00000
+    0.00001 | 0.00000/0 | 0.00000/1 | 0.00000 | 0.00000
     
     - Events.ITERATION_STARTED: []
-    0.00204 | 0.00000/815 | 0.00003/587 | 0.00000 | 0.00000
+    0.00246 | 0.00000/351 | 0.00003/609 | 0.00000 | 0.00000
     
     - Events.ITERATION_COMPLETED: []
-    0.00338 | 0.00000/524 | 0.00002/869 | 0.00000 | 0.00000
+    0.00556 | 0.00000/12 | 0.00002/653 | 0.00001 | 0.00000
     
     - Events.EPOCH_COMPLETED: ['log_training_results', 'log_validation_results', 'log_epoch_time']
-    28.79943 | 14.38091/1 | 14.41852/0 | 14.39971 | 0.02660
+    45.36316 | 22.66037/1 | 22.70279/0 | 22.68158 | 0.02999
     
     - Events.COMPLETED: ['log_total_time']
-    0.00010
+    0.00004
     
 
 
@@ -253,13 +265,13 @@ handlers_profiler.attach(trainer)
 trainer.run(train_loader, max_epochs=2)
 ```
 
-    Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.03
+    Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.02
     Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.03
-    Epoch 1, Time Taken : 32.35053300857544
+    Epoch 1, Time Taken : 30.685564279556274
     Training Results - Epoch[2] Avg accuracy: 1.00 Avg loss: 0.01
-    Validation Results - Epoch[2] Avg accuracy: 0.99 Avg loss: 0.02
-    Epoch 2, Time Taken : 32.69846534729004
-    Total Time: 95.0562059879303
+    Validation Results - Epoch[2] Avg accuracy: 0.99 Avg loss: 0.03
+    Epoch 2, Time Taken : 30.860342502593994
+    Total Time: 107.25911617279053
 
 
 
@@ -270,7 +282,7 @@ trainer.run(train_loader, max_epochs=2)
     	epoch: 2
     	epoch_length: 469
     	max_epochs: 2
-    	output: 0.039033230394124985
+    	output: 0.005279005039483309
     	batch: <class 'list'>
     	metrics: <class 'dict'>
     	dataloader: <class 'torch.utils.data.dataloader.DataLoader'>
@@ -291,16 +303,16 @@ handlers_profiler.print_results(results)
     ---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
     Handler                                  Event Name                 Total(s)      Min(s)/IDX      Max(s)/IDX         Mean(s)          Std(s)  
     ---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
-    log_training_results                     EPOCH_COMPLETED            25.87275      12.36704/1      13.50571/0        12.93637         0.80516  
-    log_validation_results                   EPOCH_COMPLETED             4.13239       1.94068/1       2.19171/0         2.06619          0.1775  
-    log_epoch_time                           EPOCH_COMPLETED               6e-05         3e-05/1         3e-05/0           3e-05             0.0  
-    BasicTimeProfiler._as_first_started      STARTED                      0.0006        0.0006/0        0.0006/0          0.0006            None  
-    log_total_time                           COMPLETED                     3e-05         3e-05/0         3e-05/0           3e-05            None  
+    log_training_results                     EPOCH_COMPLETED            39.35234      19.31905/0      20.03329/1        19.67617         0.50504  
+    log_validation_results                   EPOCH_COMPLETED             6.35954       3.16563/0       3.19391/1         3.17977            0.02  
+    log_epoch_time                           EPOCH_COMPLETED               7e-05         3e-05/1         3e-05/0           3e-05             0.0  
+    BasicTimeProfiler._as_first_started      STARTED                     0.00034       0.00034/0       0.00034/0         0.00034            None  
+    log_total_time                           COMPLETED                     4e-05         4e-05/0         4e-05/0           4e-05            None  
     ---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
-    Total                                                               30.00583                                                                  
+    Total                                                               45.71233                                                                  
     ---------------------------------------  -------------------  --------------  --------------  --------------  --------------  --------------  
-    Processing took total 48.99836s [min/index: 0.04277s/468, max/index: 0.05485s/186, mean: 0.05224s, std: 0.00099s]
-    Dataflow took total 15.97144s [min/index: 0.01286s/937, max/index: 0.02696s/824, mean: 0.01703s, std: 0.00197s]
+    Processing took total 29.2974s [min/index: 0.0238s/468, max/index: 0.06095s/726, mean: 0.03123s, std: 0.00228s]
+    Dataflow took total 32.09461s [min/index: 0.02433s/468, max/index: 0.06684s/1, mean: 0.03422s, std: 0.00291s]
     
 
 
@@ -360,76 +372,76 @@ basic_profile.head()
       <th>0</th>
       <td>1.0</td>
       <td>1.0</td>
-      <td>0.052481</td>
-      <td>0.015301</td>
-      <td>0.000049</td>
-      <td>0.000086</td>
+      <td>0.037031</td>
+      <td>0.066874</td>
+      <td>0.000017</td>
+      <td>0.000084</td>
       <td>0.000003</td>
-      <td>15.69749</td>
-      <td>0.000004</td>
+      <td>22.484756</td>
+      <td>0.000005</td>
+      <td>0.000010</td>
       <td>0.000006</td>
-      <td>0.000004</td>
-      <td>0.000008</td>
+      <td>0.000013</td>
     </tr>
     <tr>
       <th>1</th>
       <td>1.0</td>
       <td>2.0</td>
-      <td>0.053183</td>
-      <td>0.018409</td>
-      <td>0.000049</td>
-      <td>0.000086</td>
+      <td>0.034586</td>
+      <td>0.039192</td>
+      <td>0.000017</td>
+      <td>0.000084</td>
       <td>0.000003</td>
-      <td>15.69749</td>
+      <td>22.484756</td>
       <td>0.000005</td>
       <td>0.000011</td>
-      <td>0.000007</td>
-      <td>0.000008</td>
+      <td>0.000006</td>
+      <td>0.000009</td>
     </tr>
     <tr>
       <th>2</th>
       <td>1.0</td>
       <td>3.0</td>
-      <td>0.051487</td>
-      <td>0.015797</td>
-      <td>0.000049</td>
-      <td>0.000086</td>
+      <td>0.033999</td>
+      <td>0.034169</td>
+      <td>0.000017</td>
+      <td>0.000084</td>
       <td>0.000003</td>
-      <td>15.69749</td>
-      <td>0.000004</td>
-      <td>0.000008</td>
+      <td>22.484756</td>
       <td>0.000005</td>
+      <td>0.000009</td>
+      <td>0.000012</td>
       <td>0.000008</td>
     </tr>
     <tr>
       <th>3</th>
       <td>1.0</td>
       <td>4.0</td>
-      <td>0.052423</td>
-      <td>0.015652</td>
-      <td>0.000049</td>
-      <td>0.000086</td>
+      <td>0.033792</td>
+      <td>0.034108</td>
+      <td>0.000017</td>
+      <td>0.000084</td>
       <td>0.000003</td>
-      <td>15.69749</td>
-      <td>0.000003</td>
-      <td>0.000007</td>
+      <td>22.484756</td>
       <td>0.000004</td>
-      <td>0.000007</td>
+      <td>0.000009</td>
+      <td>0.000005</td>
+      <td>0.000009</td>
     </tr>
     <tr>
       <th>4</th>
       <td>1.0</td>
       <td>5.0</td>
-      <td>0.052298</td>
-      <td>0.015005</td>
-      <td>0.000049</td>
-      <td>0.000086</td>
+      <td>0.033714</td>
+      <td>0.034156</td>
+      <td>0.000017</td>
+      <td>0.000084</td>
       <td>0.000003</td>
-      <td>15.69749</td>
-      <td>0.000003</td>
-      <td>0.000006</td>
+      <td>22.484756</td>
       <td>0.000004</td>
+      <td>0.000011</td>
       <td>0.000006</td>
+      <td>0.000008</td>
     </tr>
   </tbody>
 </table>
@@ -480,57 +492,57 @@ handlers_profile.head()
     <tr>
       <th>0</th>
       <td>1.0</td>
-      <td>0.052516</td>
-      <td>0.024859</td>
-      <td>13.505706</td>
-      <td>2.191707</td>
+      <td>0.037088</td>
+      <td>0.054261</td>
+      <td>19.319054</td>
+      <td>3.165631</td>
       <td>0.000034</td>
-      <td>0.000602</td>
-      <td>0.00003</td>
+      <td>0.000342</td>
+      <td>0.000036</td>
     </tr>
     <tr>
       <th>1</th>
       <td>2.0</td>
-      <td>0.053241</td>
-      <td>0.015263</td>
-      <td>12.367039</td>
-      <td>1.940679</td>
-      <td>0.000030</td>
+      <td>0.034641</td>
+      <td>0.066836</td>
+      <td>20.033289</td>
+      <td>3.193913</td>
+      <td>0.000032</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>2</th>
       <td>3.0</td>
-      <td>0.051531</td>
-      <td>0.018386</td>
+      <td>0.034053</td>
+      <td>0.039158</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>3</th>
       <td>4.0</td>
-      <td>0.052456</td>
-      <td>0.015774</td>
+      <td>0.033844</td>
+      <td>0.034130</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
       <th>4</th>
       <td>5.0</td>
-      <td>0.052331</td>
-      <td>0.015630</td>
+      <td>0.033771</td>
+      <td>0.034076</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>0.00000</td>
+      <td>0.000000</td>
     </tr>
   </tbody>
 </table>
@@ -541,3 +553,54 @@ handlers_profile.head()
 ## Custom profiling using Timer
 
 At the lowest level of abstraction, we provide [`Timer()`](https://pytorch.org/ignite/generated/ignite.handlers.timing.Timer.html#timer) to calculate the time between any set of events. See its docstring for details.
+
+### Elapsed Training Time
+
+[`Timer()`](https://pytorch.org/ignite/generated/ignite.handlers.timing.Timer.html#timer) can be used, for example, to compute elapsed training time during training.
+
+
+```python
+elapsed_time = Timer()
+
+elapsed_time.attach(
+    trainer,
+    start=Events.STARTED,         # Start timer at the beginning of training
+    resume=Events.EPOCH_STARTED,  # Resume timer at the beginning of each epoch
+    pause=Events.EPOCH_COMPLETED, # Pause timer at the end of each epoch
+    step=Events.EPOCH_COMPLETED,  # Step (update) timer at the end of each epoch
+)
+
+@trainer.on(Events.EPOCH_COMPLETED)
+def log_elapsed_time(trainer):
+    print(f"   Elapsed time: {elapsed_time.value()}")
+
+trainer.run(train_loader, max_epochs=2)
+```
+
+    Training Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.02
+    Validation Results - Epoch[1] Avg accuracy: 0.99 Avg loss: 0.04
+    Epoch 1, Time Taken : 30.887796878814697
+       Elapsed time: 53.353810481959954
+    Training Results - Epoch[2] Avg accuracy: 1.00 Avg loss: 0.01
+    Validation Results - Epoch[2] Avg accuracy: 0.99 Avg loss: 0.03
+    Epoch 2, Time Taken : 31.164958238601685
+       Elapsed time: 107.81696200894658
+    Total Time: 107.8185646533966
+
+
+
+
+
+    State:
+    	iteration: 938
+    	epoch: 2
+    	epoch_length: 469
+    	max_epochs: 2
+    	output: 0.00048420054372400045
+    	batch: <class 'list'>
+    	metrics: <class 'dict'>
+    	dataloader: <class 'torch.utils.data.dataloader.DataLoader'>
+    	seed: <class 'NoneType'>
+    	times: <class 'dict'>
+
+
