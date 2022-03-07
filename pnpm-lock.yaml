@@ -4,13 +4,13 @@ specifiers:
   jsdom: ^19.0.0
   prettier: ^2.5.1
   shiki: ^0.10.1
-  windicss: ^3.5.0
+  windicss: ^3.5.1
 
 devDependencies:
   jsdom: 19.0.0
   prettier: 2.5.1
   shiki: 0.10.1
-  windicss: 3.5.0
+  windicss: 3.5.1
 
 packages:
 
@@ -422,8 +422,8 @@ packages:
       webidl-conversions: 7.0.0
     dev: true
 
-  /windicss/3.5.0:
-    resolution: {integrity: sha512-+UNYm2Zy4TM2uLiz6bqY2a69LavMqGbILFIwuGhPEJ/uqsPT3kCGSaWlhMw/weIaFOkm1K1cEzZ015Y8pp8N1A==}
+  /windicss/3.5.1:
+    resolution: {integrity: sha512-E1hYZATcZFci/XhGS0sJAMRxULjnK+glNukE78Ku7xeb3jxgMY55fFOdIrav+GjQCsgR+IZxPq9/DwmO6eyc4Q==}
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
