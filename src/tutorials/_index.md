@@ -25,14 +25,13 @@ End-to-end complete hands-on PyTorch-Ignite tutorials with interactive Google Co
 - [Benchmark mixed precision training on Cifar100:
   torch.cuda.amp vs nvidia/apex](https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar100_bench_amp.ipynb)
 
-
 ### Reproducible Training Examples
 
 Inspired by [torchvision/references](https://github.com/pytorch/vision/tree/master/references),
 we provide several reproducible baselines for vision tasks:
 
-- [ImageNet](examples/references/classification/imagenet) - logs on Ignite Trains server coming soon ...
-- [Pascal VOC2012](examples/references/segmentation/pascal_voc2012) - logs on Ignite Trains server coming soon ...
+- [ImageNet](https://github.com/pytorch/ignite/tree/master/examples/references/classification/imagenet) - logs on Ignite Trains server coming soon ...
+- [Pascal VOC2012](https://github.com/pytorch/ignite/tree/master/examples/references/segmentation/pascal_voc2012) - logs on Ignite Trains server coming soon ...
 
 Features:
 
