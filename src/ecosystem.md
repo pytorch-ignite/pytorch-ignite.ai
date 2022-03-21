@@ -54,6 +54,7 @@ The list below is unexhausted list of references that we are aware of.
 - [xFraud: Explainable Fraud Transaction Detection on Heterogeneous Graphs](https://github.com/eBay/xFraud)
 - [PyTorch Adapt - A fully featured and modular domain adaptation library](https://github.com/KevinMusgrave/pytorch-adapt)
 - [gnina-torch: PyTorch implementation of GNINA scoring function](https://github.com/RMeli/gnina-torch)
+- [PyTorch-Ignite Code-generator: The easiest way to create your training scripts with PyTorch-Ignite](https://code-generator.pytorch-ignite.ai/)
 
 ## Others
 
