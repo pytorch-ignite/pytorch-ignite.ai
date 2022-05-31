@@ -56,13 +56,13 @@ features:
       import ignite.distributed as idist
 
       def training(local_rank, *args, **kwargs):
-          dataloder_train = idist.auto_dataloder(dataset, ...)
+          dataloder_train = idist.auto_dataloader(dataset, ...)
 
           model = ...
           model = idist.auto_model(model)
 
           optimizer = ...
-          optimizer = idist.auto_optimizer(optimizer)
+          optimizer = idist.auto_optim(optimizer)
 
       backend = 'nccl'  # or 'gloo', 'horovod', 'xla-tpu'
       with idist.Parallel(backend) as parallel:
