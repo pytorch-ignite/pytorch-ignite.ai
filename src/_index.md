@@ -34,8 +34,8 @@ features:
       trainer = Engine(lambda engine, batch: None)
 
       # model checkpoint handler
-      checkpoint = ModelChckpoint('/tmp/ckpts', 'training')
-      trainer.add_event_handler(Events.EPOCH_COMPLETED(every=2), handler, {'model': model})
+      checkpoint = ModelCheckpoint('/tmp/ckpts', 'training')
+      trainer.add_event_handler(Events.EPOCH_COMPLETED(every=2), checkpoint, {'model': model})
 
       # early stopping handler
       def score_function(engine):
@@ -43,7 +43,7 @@ features:
           return val_loss
       es = EarlyStopping(3, score_function, trainer)
       # Note: the handler is attached to an *Evaluator* (runs one epoch on validation dataset).
-      evaluator.add_event_handler(Events.COMPLETED, handler)
+      evaluator.add_event_handler(Events.COMPLETED, es)
 
       # Piecewise linear parameter scheduler
       scheduler = PiecewiseLinear(optimizer, 'lr', [(10, 0.5), (20, 0.45), (21, 0.3), (30, 0.1), (40, 0.1)])
@@ -56,13 +56,13 @@ features:
       import ignite.distributed as idist
 
       def training(local_rank, *args, **kwargs):
-          dataloder_train = idist.auto_dataloder(dataset, ...)
+          dataloder_train = idist.auto_dataloader(dataset, ...)
 
           model = ...
           model = idist.auto_model(model)
 
           optimizer = ...
-          optimizer = idist.auto_optimizer(optimizer)
+          optimizer = idist.auto_optim(optimizer)
 
       backend = 'nccl'  # or 'gloo', 'horovod', 'xla-tpu'
       with idist.Parallel(backend) as parallel:
