@@ -34,8 +34,8 @@ features:
       trainer = Engine(lambda engine, batch: None)
 
       # model checkpoint handler
-      checkpoint = ModelChckpoint('/tmp/ckpts', 'training')
-      trainer.add_event_handler(Events.EPOCH_COMPLETED(every=2), handler, {'model': model})
+      checkpoint = ModelCheckpoint('/tmp/ckpts', 'training')
+      trainer.add_event_handler(Events.EPOCH_COMPLETED(every=2), checkpoint, {'model': model})
 
       # early stopping handler
       def score_function(engine):
