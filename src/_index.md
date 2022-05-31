@@ -43,7 +43,7 @@ features:
           return val_loss
       es = EarlyStopping(3, score_function, trainer)
       # Note: the handler is attached to an *Evaluator* (runs one epoch on validation dataset).
-      evaluator.add_event_handler(Events.COMPLETED, handler)
+      evaluator.add_event_handler(Events.COMPLETED, es)
 
       # Piecewise linear parameter scheduler
       scheduler = PiecewiseLinear(optimizer, 'lr', [(10, 0.5), (20, 0.45), (21, 0.3), (30, 0.1), (40, 0.1)])
