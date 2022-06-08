@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>
+How to use FastaiLRFinder with Ignite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    How to use FastaiLRFinder with Ignite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    How to use FastaiLRFinder with Ignite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/how-to-guides/04-fastai-lr-finder/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase
+active">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="text-$c-primary hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#basic-setup">Basic Setup</a></li>
+<li><a href="#without-lr-finder">Without LR Finder</a></li>
+<li><a href="#with-lr-finder">With LR Finder</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="hover:text-$c-primary py-1">How to switch data provider during training</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/04-fastai-lr-finder.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/how-to-guides/04-fastai-lr-finder.ipynb" target="_blank" rel="noopener noreferrer" download="04-fastai-lr-finder.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/04-fastai-lr-finder.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h1 id="how-to-use-fastailrfinder-with-ignite">
+<a href="#how-to-use-fastailrfinder-with-ignite" class="header-anchor">
+How to use FastaiLRFinder with Ignite
+</a>
+</h1><p>This how-to guide demonstrates how we can leverage the
+<a href="https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html" target="_blank" rel="noopener noreferrer"><code>FastaiLRFinder</code></a> handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding.</p>
+<p>In this example, we will be using a
+<a href="https://pytorch.org/vision/stable/models.html#torchvision.models.resnet18" target="_blank" rel="noopener noreferrer">ResNet18</a> model on the
+<a href="https://pytorch.org/vision/stable/datasets.html#torchvision.datasets.MNIST" target="_blank" rel="noopener noreferrer">MNIST</a> dataset. The base code is the same as used in the
+<a href="https://pytorch-ignite.ai/tutorials/getting-started/" target="_blank" rel="noopener noreferrer">Getting Started Guide</a>.</p>
+<h2 id="basic-setup">
+<a href="#basic-setup" class="header-anchor">
+Basic Setup
+</a>
+</h2><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> nn</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torch.utils.data </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> DataLoader</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.datasets </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">MNIST</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.models </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> resnet18</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.transforms </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Compose, Normalize, ToTensor</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> create_supervised_trainer, create_supervised_evaluator</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy, Loss</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> FastaiLRFinder</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">device </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"cuda"</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> torch.cuda.</span><span style="color: #61AFEF">is_available</span><span style="color: #ABB2BF">() </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"cpu"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">Net</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">nn</span><span style="color: #ABB2BF">.</span><span style="color: #E5C07B">Module</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #56B6C2">super</span><span style="color: #ABB2BF">(Net, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">).</span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">resnet18</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">num_classes</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.model.conv1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">kernel_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">padding</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">forward</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Net</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">data_transform </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Compose</span><span style="color: #ABB2BF">([</span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">(), </span><span style="color: #61AFEF">Normalize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">0.1307</span><span style="color: #ABB2BF">,), (</span><span style="color: #D19A66">0.3081</span><span style="color: #ABB2BF">,))])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">DataLoader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">MNIST</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">download</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">root</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"."</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">data_transform, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">test_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">DataLoader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">MNIST</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">download</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">root</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"."</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">data_transform, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Net</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device)</span></span>
+<span class="line"><span style="color: #ABB2BF">optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.optim.</span><span style="color: #61AFEF">RMSprop</span><span style="color: #ABB2BF">(model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1e-06</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">criterion </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">CrossEntropyLoss</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>We will first train the model with a fixed learning rate (lr) of 1e-06 and inspect our results. Let’s save the initial state of the model and the optimizer to restore them later for comparision.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">init_model_state </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> model.</span><span style="color: #61AFEF">state_dict</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">init_opt_state </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> optimizer.</span><span style="color: #61AFEF">state_dict</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="without-lr-finder">
+<a href="#without-lr-finder" class="header-anchor">
+Without LR Finder
+</a>
+</h2><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_trainer</span><span style="color: #ABB2BF">(model, optimizer, criterion, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">device)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>State:
+	iteration: 1407
+	epoch: 3
+	epoch_length: 469
+	max_epochs: 3
+	output: 0.5554001927375793
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_evaluator</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    model, </span><span style="color: #E06C75; font-style: italic">metrics</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">{</span><span style="color: #98C379">"Accuracy"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">(), </span><span style="color: #98C379">"Loss"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Loss</span><span style="color: #ABB2BF">(criterion)}, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">device</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(test_loader)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(evaluator.state.metrics)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>{'Accuracy': 0.8655, 'Loss': 0.602867822265625}
+</code></pre>
+<p>Let’s see how we can achieve better results by using the
+<a href="https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html" target="_blank" rel="noopener noreferrer"><code>FastaiLRFinder</code></a> handler. But first, let’s restore the initial state of the model and optimizer so we can re-train them from scratch.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">model.</span><span style="color: #61AFEF">load_state_dict</span><span style="color: #ABB2BF">(init_model_state)</span></span>
+<span class="line"><span style="color: #ABB2BF">optimizer.</span><span style="color: #61AFEF">load_state_dict</span><span style="color: #ABB2BF">(init_opt_state)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="with-lr-finder">
+<a href="#with-lr-finder" class="header-anchor">
+With LR Finder
+</a>
+</h2><p>When attached to the <code>trainer</code>, this handler follows the same procedure used by
+<a href="https://docs.fast.ai/callback.schedule.html#LRFinder" target="_blank" rel="noopener noreferrer">fastai</a>. The model is trained for <code>num_iter</code> iterations while the learning rate is increased from <code>start_lr</code> (defaults to initial value specified by the optimizer, here 1e-06) to the upper bound called <code>end_lr</code>. This increase can be linear (<code>step_mode="linear"</code>) or exponential (<code>step_mode="exp"</code>). The default <code>step_mode</code> is exponential which is recommended for larger learning rate ranges while linear provides good results for small ranges.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">lr_finder </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">FastaiLRFinder</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># To restore the model's and optimizer's states after running the LR Finder</span></span>
+<span class="line"><span style="color: #ABB2BF">to_save </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: model, </span><span style="color: #98C379">"optimizer"</span><span style="color: #ABB2BF">: optimizer}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> lr_finder.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer, to_save, </span><span style="color: #E06C75; font-style: italic">end_lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1e-02</span><span style="color: #ABB2BF">) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> trainer_with_lr_finder:</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer_with_lr_finder.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Let’s plot how the learning rate changes within our specified range and print the suggested learning rate.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">lr_finder.</span><span style="color: #61AFEF">plot</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Suggested LR"</span><span style="color: #ABB2BF">, lr_finder.</span><span style="color: #61AFEF">lr_suggestion</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>
+<img src="/_images/04-fastai-lr-finder_16_0.png" alt="png" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<pre><code>Suggested LR 1.0148376909312998e-05
+</code></pre>
+<p>Now we will apply the suggested learning rate to the optimizer, and train the model again with optimal learning rate.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">lr_finder.</span><span style="color: #61AFEF">apply_suggested_lr</span><span style="color: #ABB2BF">(optimizer)</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(optimizer.param_groups[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">][</span><span style="color: #98C379">"lr"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>1.0148376909312998e-05
+</code></pre>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>State:
+	iteration: 1407
+	epoch: 3
+	epoch_length: 469
+	max_epochs: 3
+	output: 0.09644963592290878
+	batch: &lt;class 'list'&gt;
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'torch.utils.data.dataloader.DataLoader'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic"># Calculate the new metrics after using the optimal lr</span></span>
+<span class="line"><span style="color: #ABB2BF">evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(test_loader)</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(evaluator.state.metrics)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>{'Accuracy': 0.9715, 'Loss': 0.0908882568359375}
+</code></pre>
+<p>As we saw the accuracy increased and loss decreased on the test dataset when we trained our model for the same number of epochs with an optimal learning rate.</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/lr-finder/">
+#lr finder
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/how-to-guides/03-time-profiling/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>How to do time profiling
+</a>
+</div>
+<div>
+<a href="/how-to-guides/05-gradient-accumulation/" class="group float-right">
+<span class="overflow-hidden">How to effectively increase batch size on limited compute</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#basic-setup">Basic Setup</a></li>
+<li><a href="#without-lr-finder">Without LR Finder</a></li>
+<li><a href="#with-lr-finder">With LR Finder</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

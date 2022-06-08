@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="Example on how to switch data during training after some number of iterations">
+<meta property="og:description" content="Example on how to switch data during training after some number of iterations">
+<meta name="twitter:description" content="Example on how to switch data during training after some number of iterations">
+<title>
+How to switch data provider during training
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    How to switch data provider during training
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    How to switch data provider during training
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/how-to-guides/09-switch-data-training/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase
+active">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="text-$c-primary hover:text-$c-primary py-1">How to switch data provider during training</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#basic-setup">Basic Setup</a>
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#data-providers">Data Providers</a></li>
+</ul>
+</li>
+<li><a href="#create-dummy-trainer">Create dummy <code>trainer</code></a></li>
+<li><a href="#attach-handler-to-switch-data">Attach handler to switch data</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/09-switch-data-training.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/how-to-guides/09-switch-data-training.ipynb" target="_blank" rel="noopener noreferrer" download="09-switch-data-training.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/09-switch-data-training.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h1 id="how-to-switch-data-provider-during-training">
+<a href="#how-to-switch-data-provider-during-training" class="header-anchor">
+How to switch data provider during training
+</a>
+</h1><p>In this example, we will see how one can easily switch the data provider during the training using
+<a href="https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.set_data" target="_blank" rel="noopener noreferrer"><code>set_data()</code></a>.</p>
+<h2 id="basic-setup">
+<a href="#basic-setup" class="header-anchor">
+Basic Setup
+</a>
+</h2>
+<h3 id="required-dependencies">
+<a href="#required-dependencies" class="header-anchor">
+Required Dependencies
+</a>
+</h3><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install pytorch</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">ignite</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="import">
+<a href="#import" class="header-anchor">
+Import
+</a>
+</h3><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Engine, Events</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="data-providers">
+<a href="#data-providers" class="header-anchor">
+Data Providers
+</a>
+</h3><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">data1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">data2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">11</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">12</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">13</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="create-dummy-trainer">
+<a href="#create-dummy-trainer" class="header-anchor">
+Create dummy <code>trainer</code>
+</a>
+</h2><p>Let’s create a dummy <code>train_step</code> which will print the current iteration and batch of data.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">train_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Iter[</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">engine.state.iteration</span><span style="color: #D19A66">}</span><span style="color: #98C379">] Current datapoint = "</span><span style="color: #ABB2BF">, batch)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(train_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="attach-handler-to-switch-data">
+<a href="#attach-handler-to-switch-data" class="header-anchor">
+Attach handler to switch data
+</a>
+</h2><p>Now we have to decide when to switch the data provider. It can be after an epoch, iteration or something custom. Below, we are going to switch data after some specific iteration. And then we attach a handler to <code>trainer</code> that will be executed once after <code>switch_iteration</code> and use <code>set_data()</code> so that when:</p>
+<ul>
+<li>iteration &lt;= <code>switch_iteration</code>, batch is from <code>data1</code></li>
+<li>iteration &gt; <code>switch_iteration</code>, batch is from <code>data2</code></li>
+</ul>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">switch_iteration </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">5</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">ITERATION_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">once</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">switch_iteration</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">switch_dataloader</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"&lt;------- Switch Data -------&gt;"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer.</span><span style="color: #61AFEF">set_data</span><span style="color: #ABB2BF">(data2)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>And finally we run the <code>trainer</code> for some epochs.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(data1, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Iter[1] Current datapoint =  1
+Iter[2] Current datapoint =  2
+Iter[3] Current datapoint =  3
+Iter[4] Current datapoint =  1
+Iter[5] Current datapoint =  2
+&lt;------- Switch Data -------&gt;
+Iter[6] Current datapoint =  11
+Iter[7] Current datapoint =  12
+Iter[8] Current datapoint =  13
+Iter[9] Current datapoint =  11
+Iter[10] Current datapoint =  12
+Iter[11] Current datapoint =  13
+Iter[12] Current datapoint =  11
+Iter[13] Current datapoint =  12
+Iter[14] Current datapoint =  13
+Iter[15] Current datapoint =  11
+
+
+
+
+
+State:
+	iteration: 15
+	epoch: 5
+	epoch_length: 3
+	max_epochs: 5
+	output: &lt;class 'NoneType'&gt;
+	batch: 11
+	metrics: &lt;class 'dict'&gt;
+	dataloader: &lt;class 'list'&gt;
+	seed: &lt;class 'NoneType'&gt;
+	times: &lt;class 'dict'&gt;
+</code></pre>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/custom-events/">
+#custom events
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/how-to-guides/08-custom-events/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>How to create Custom Events based on Forward or Backward Pass
+</a>
+</div>
+<div>
+<a href="/how-to-guides/10-loggers/" class="group float-right">
+<span class="overflow-hidden">How to use Loggers</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#basic-setup">Basic Setup</a>
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#data-providers">Data Providers</a></li>
+</ul>
+</li>
+<li><a href="#create-dummy-trainer">Create dummy <code>trainer</code></a></li>
+<li><a href="#attach-handler-to-switch-data">Attach handler to switch data</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

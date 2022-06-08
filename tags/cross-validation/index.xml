@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cross validation on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/cross-validation/</link><description>Recent content in cross validation on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 21 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/cross-validation/index.xml" rel="self" type="application/rss+xml"/><item><title>How to do Cross Validation in Ignite</title><link>https://pytorch-ignite.ai/how-to-guides/07-cross-validation/</link><pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/how-to-guides/07-cross-validation/</guid><description>&lt;h1 id="how-to-do-cross-validation-in-ignite">
+&lt;a href="#how-to-do-cross-validation-in-ignite" class="header-anchor">
+How to do Cross Validation in Ignite
+&lt;/a>
+&lt;/h1>&lt;p>This how-to guide demonstrates how we can do Cross Validation using the k-fold technique with PyTorch-Ignite and save the best results.&lt;/p>
+&lt;p>Cross Validation is useful for tuning model parameters or when the available data is insufficient to properly test&lt;/p></description></item></channel></rss>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>gradient accumulation on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/gradient-accumulation/</link><description>Recent content in gradient accumulation on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 04 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/gradient-accumulation/index.xml" rel="self" type="application/rss+xml"/><item><title>How to effectively increase batch size on limited compute</title><link>https://pytorch-ignite.ai/how-to-guides/05-gradient-accumulation/</link><pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/how-to-guides/05-gradient-accumulation/</guid><description>&lt;h1 id="how-to-effectively-increase-batch-size-on-limited-compute">
+&lt;a href="#how-to-effectively-increase-batch-size-on-limited-compute" class="header-anchor">
+How to effectively increase batch size on limited compute
+&lt;/a>
+&lt;/h1>&lt;p>To effectively increase the batch size on limited GPU resources, follow
+this simple best practice.&lt;/p></description></item></channel></rss>

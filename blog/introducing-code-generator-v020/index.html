@@ -1,0 +1,435 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="Overview of the key features and updates of the Code Generator v0.2.0 project release">
+<meta property="og:description" content="Overview of the key features and updates of the Code Generator v0.2.0 project release">
+<meta name="twitter:description" content="Overview of the key features and updates of the Code Generator v0.2.0 project release">
+<title>
+Introducing PyTorch-Ignite&amp;rsquo;s Code Generator v0.2.0
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Introducing PyTorch-Ignite&amp;rsquo;s Code Generator v0.2.0
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Introducing PyTorch-Ignite&amp;rsquo;s Code Generator v0.2.0
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/introducing-code-generator-v020/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="text-$c-primary hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#deep-learning-as-a-routine">Deep Learning As a Routine</a></li>
+<li><a href="#ignite-your-training-pipelines">Ignite Your Training Pipelines</a>
+<ul>
+<li><a href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li><a href="#i-want-to-contribute">I Want To Contribute!</a></li>
+<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<h1 id="introducing-pytorch-ignites-code-generator-v020">
+<a href="#introducing-pytorch-ignites-code-generator-v020" class="header-anchor">
+Introducing PyTorch-Ignite’s Code Generator v0.2.0
+</a>
+</h1><p>
+<img src="https://raw.githubusercontent.com/pytorch-ignite/code-generator/main/src/assets/code-generator-demo.gif" alt="code-generator-demo GIF" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Along with the
+<a href="https://github.com/pytorch/ignite/releases/tag/v0.4.5" target="_blank" rel="noopener noreferrer">PyTorch-Ignite 0.4.5 release</a>, we are excited to announce the new release of the web application for generating PyTorch-Ignite’s training pipelines. This blog post is an overview of the key features and updates of the
+<a href="https://github.com/pytorch-ignite/code-generator/releases/tag/v0.2.0" target="_blank" rel="noopener noreferrer">Code Generator v0.2.0 project release</a>.</p>
+<h2 id="deep-learning-as-a-routine">
+<a href="#deep-learning-as-a-routine" class="header-anchor">
+Deep Learning As a Routine
+</a>
+</h2><p>In deep learning applications, neural networks are typically accompanied by code to preprocess the input and output data, visualize the results, define proper training and evaluation pipelines, and more. A significant part of this supporting code consists of reusable components, like data loaders, training loops, logging, and tracking. Therefore, deep learning practitioners usually organize their boilerplate codebases into collections of reusable components to speed up development.</p>
+<p>PyTorch-Ignite is one such practical solution, a high-level library from the PyTorch ecosystem for training neural networks designed to simplify workflow development while maintaining maximum control, flexibility, and reproducibility. PyTorch-Ignite feels like a natural extension to PyTorch.</p>
+<h2 id="ignite-your-training-pipelines">
+<a href="#ignite-your-training-pipelines" class="header-anchor">
+Ignite Your Training Pipelines
+</a>
+</h2><p>PyTorch-Ignite’s Code Generator is an open-source tool developed to boost your training pipeline’s scripts, carefully designed by PyTorch-Ignite’s contributors to promote PyTorch-Ignite’s best practices. The application has a user-friendly and intuitive web interface, simple enough for day-to-day use, and it is an excellent choice for quickly generating a custom templates for training PyTorch models.</p>
+<p>In this release, we are using a new application development stack to enhance the user experience tenfold. For UI, we switched to a JavaScript stack. The PyTorch and PyTorch-Ignite specific generated code remains the same.</p>
+<h3 id="getting-started">
+<a href="#getting-started" class="header-anchor">
+Getting Started
+</a>
+</h3><p>The best way to “ignite your training pipeline” is to visit Code Generator’s
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer">homepage</a> and select your task’s template by clicking on the “Getting Started” button.</p>
+<p>You can choose a template from a list of templates located on the left in the <strong>Templates</strong> tab. The app will start to render the template with the preconfigured default settings. You will see all the generated files with the rendered code on the right in different tabs as in a regular IDE. The current state of the configurations is reflected partially in the config YAML file.</p>
+<p>Currently, we offer four customizable templates for widely used deep learning tasks: Vision classification and segmentation, Text classification, and DCGAN.</p>
+<p>Start adjusting the code in the template by visiting different tabs on the left side:</p>
+<ul>
+<li><strong>Training</strong>: To turn on Distributed training</li>
+<li><strong>Handlers</strong>: To set up Checkpointing, Termination on NaNs, Early Stopping, etc</li>
+<li><strong>Loggers</strong>: To configure Logging</li>
+</ul>
+<p>Once you choose the appropriate settings, press the “Download” or “Open in Colab” button at the top to export generated code as a zip archive or a notebook, and follow any given additional steps. The resulting archive contains generated files bundled together. The <code>requirements.txt</code> file contains all the required dependencies, and the <code>README</code> contains all the necessary information for launching the script.</p>
+<p>You are now ready to add in your data and model and run the code!</p>
+<h2 id="i-want-to-contribute">
+<a href="#i-want-to-contribute" class="header-anchor">
+I Want To Contribute!
+</a>
+</h2><p>We encourage open source contributors from both frontend and data science communities to collaborate on the project. If you are interested, please visit the
+<a href="https://github.com/pytorch-ignite/code-generator/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribution Guide</a>. If you have any questions, do not hesitate to ask them on our
+<a href="https://pytorch-ignite.ai/chat" target="_blank" rel="noopener noreferrer">Discord</a>. Here are some
+<a href="https://github.com/pytorch-ignite/code-generator/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22" target="_blank" rel="noopener noreferrer">good first issues</a>.</p>
+<h2 id="next-steps">
+<a href="#next-steps" class="header-anchor">
+Next Steps
+</a>
+</h2><p>In future releases, we plan to extend our template store and add more features, for example, configuration systems, data loaders, datasets and models, optimizers, and schedulers. We will continue improving the app’s reliability and usability. To stay in touch, follow us on
+<a href="https://twitter.com/pytorch_ignite" target="_blank" rel="noopener noreferrer">Twitter</a> and
+<a href="https://facebook.com/PyTorch-Ignite-Community-105837321694508" target="_blank" rel="noopener noreferrer">Facebook</a>. We would love to get your feedback on the project.</p>
+<h2 id="acknowledgements">
+<a href="#acknowledgements" class="header-anchor">
+Acknowledgements
+</a>
+</h2><p>The development of this project is supported by a NumFOCUS Small Development Grant. We are very grateful to them for this support!</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/code-generator/">
+#Code Generator
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/deep-learning/">
+#Deep Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/machine-learning/">
+#Machine Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch-ignite/">
+#PyTorch-Ignite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch/">
+#PyTorch
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>GAN evaluation using FID and IS
+</a>
+</div>
+<div>
+<a href="/blog/distributed-made-easy-with-ignite/" class="group float-right">
+<span class="overflow-hidden">Distributed Training Made Easy with PyTorch-Ignite</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#deep-learning-as-a-routine">Deep Learning As a Routine</a></li>
+<li><a href="#ignite-your-training-pipelines">Ignite Your Training Pipelines</a>
+<ul>
+<li><a href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+<li><a href="#i-want-to-contribute">I Want To Contribute!</a></li>
+<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

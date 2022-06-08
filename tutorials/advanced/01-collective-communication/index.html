@@ -1,0 +1,643 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>
+Collective Communication with Ignite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Collective Communication with Ignite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Collective Communication with Ignite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/tutorials/advanced/01-collective-communication/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase
+active">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="text-$c-primary hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#imports">Imports</a></li>
+<li><a href="#all-reduce">All Reduce</a></li>
+<li><a href="#all-gather">All Gather</a></li>
+<li><a href="#broadcast">Broadcast</a></li>
+<li><a href="#barrier">Barrier</a></li>
+</ul>
+</nav></div>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="hover:text-$c-primary py-1">How to switch data provider during training</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/tutorials/advanced/01-collective-communication.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/tutorials/advanced/01-collective-communication.ipynb" target="_blank" rel="noopener noreferrer" download="01-collective-communication.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/tutorials/advanced/01-collective-communication.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h1 id="collective-communication-with-ignite">
+<a href="#collective-communication-with-ignite" class="header-anchor">
+Collective Communication with Ignite
+</a>
+</h1><p>In this tutorial, we will see how to use advanced distributed functions like <code>all_reduce()</code>, <code>all_gather()</code>, <code>broadcast()</code> and <code>barrier()</code>. We will discuss unique use cases for all of them and represent them visually.</p>
+<h2 id="required-dependencies">
+<a href="#required-dependencies" class="header-anchor">
+Required Dependencies
+</a>
+</h2><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install pytorch</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">ignite</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="imports">
+<a href="#imports" class="header-anchor">
+Imports
+</a>
+</h2><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.distributed </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> idist</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="all-reduce">
+<a href="#all-reduce" class="header-anchor">
+All Reduce
+</a>
+</h2><p>
+<img src="https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/all-reduce.png?raw=1" alt="All Reduce Diagram" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>The
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.all_reduce" target="_blank" rel="noopener noreferrer"><code>all_reduce()</code></a> method is used to collect specified tensors from each process and make them available on every node then perform a specified operation (sum, product, min, max, etc) on them. Let’s spawn 3 processes with ranks 0, 1 and 2 and define a <code>tensor</code> on all of them. If we performed <code>all_reduce</code> with the operation SUM on <code>tensor</code> then <code>tensor</code> on all ranks will be gathered, added and stored in <code>tensor</code> as shown below:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">all_reduce_example</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    tensor </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">arange</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">dtype</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">torch.int64) </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> local_rank</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, Initial value: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">tensor</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    idist.</span><span style="color: #61AFEF">all_reduce</span><span style="color: #ABB2BF">(tensor, </span><span style="color: #E06C75; font-style: italic">op</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"SUM"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, After performing all_reduce: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">tensor</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>We can use
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.spawn" target="_blank" rel="noopener noreferrer">idist.spawn</a> to spawn 3 processes (<code>nproc_per_node</code>) and execute the above function.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">spawn</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"gloo"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">fn</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">all_reduce_example, </span><span style="color: #E06C75; font-style: italic">args</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">nproc_per_node</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Rank 0, Initial value: tensor([1, 2])
+Rank 2, Initial value: tensor([5, 6])
+Rank 1, Initial value: tensor([3, 4])
+Rank 0, After performing all_reduce: tensor([ 9, 12])
+Rank 1, After performing all_reduce: tensor([ 9, 12])
+Rank 2, After performing all_reduce: tensor([ 9, 12])
+</code></pre>
+<p>Now let’s assume a more real world scenario - You need to find the average of all the gradients available on different processes.</p>
+<blockquote>
+<p>First, we get the number of GPUs available, with the get_world_size method. Then, for every model parameter, we do the following:</p>
+<ol>
+<li>Gather the gradients on each process</li>
+<li>Apply the sum operation on the gradients</li>
+<li>Divide by the world size to average them</li>
+</ol>
+<p>Finally, we can go on to update the model parameters using the averaged gradients!</p>
+<p>– <cite>
+<a href="https://towardsdatascience.com/distributed-deep-learning-101-introduction-ebfc1bcd59d9" target="_blank" rel="noopener noreferrer">Distributed Deep Learning 101: Introduction</a></cite></p>
+</blockquote>
+<p>You can get the number of GPUs (processes) available using another helper method
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.get_world_size" target="_blank" rel="noopener noreferrer"><code>idist.get_world_size()</code></a> and then use <code>all_reduce()</code> to collect the gradients and apply the SUM operation.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">average_gradients</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">model</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    num_processes </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_world_size</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> param </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        idist.</span><span style="color: #61AFEF">all_reduce</span><span style="color: #ABB2BF">(param.grad.data, </span><span style="color: #E06C75; font-style: italic">op</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"SUM"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        param.grad.data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> param.grad.data </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> num_processes</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="all-gather">
+<a href="#all-gather" class="header-anchor">
+All Gather
+</a>
+</h2><p>
+<img src="https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/all-gather.png?raw=1" alt="All Gather Diagram" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>The
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.all_gather" target="_blank" rel="noopener noreferrer"><code>all_gather()</code></a> method is used when you just want to collect a tensor, number or string across all participating processes. As a basic example, suppose you have to collect all the different values stored in <code>num</code> on all ranks. You can achieve this by using <code>all_gather</code> as below:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">all_gather_example</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    num </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, Initial value: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">num</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    all_nums </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">all_gather</span><span style="color: #ABB2BF">(num)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, After performing all_gather: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">all_nums</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">spawn</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"gloo"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">fn</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">all_gather_example, </span><span style="color: #E06C75; font-style: italic">args</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">nproc_per_node</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Rank 0, Initial value: 0.0
+Rank 2, Initial value: 4.0
+Rank 1, Initial value: 2.0
+Rank 2, After performing all_gather: [0.0, 2.0, 4.0]
+Rank 0, After performing all_gather: [0.0, 2.0, 4.0]
+Rank 1, After performing all_gather: [0.0, 2.0, 4.0]
+</code></pre>
+<p>Now let’s assume you need to gather the predicted values which are distributed across all the processes on the main process so you could store them to a file. Here is how you can do it:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">write_preds_to_file</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">predictions</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">filename</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    prediction_tensor </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">(predictions)</span></span>
+<span class="line"><span style="color: #ABB2BF">    prediction_tensor </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">all_gather</span><span style="color: #ABB2BF">(prediction_tensor)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">() </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        torch.</span><span style="color: #61AFEF">save</span><span style="color: #ABB2BF">(prediction_tensor, filename)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p><strong>Note:</strong> In the above example, only the main process required the gathered values and not all the processes. This can be also be done via the <code>gather()</code> method, however one of the backends
+<a href="https://pytorch.org/docs/stable/distributed.html" target="_blank" rel="noopener noreferrer"><code>nccl</code> does not support <code>gather()</code></a> hence we had to use <code>all_gather()</code>.</p>
+<h2 id="broadcast">
+<a href="#broadcast" class="header-anchor">
+Broadcast
+</a>
+</h2><p>
+<img src="https://github.com/pytorch-ignite/examples/blob/main/tutorials/assets/broadcast.png?raw=1" alt="Broadcast Diagram" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>The
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.broadcast" target="_blank" rel="noopener noreferrer"><code>broadcast()</code></a> method copies a tensor, float or string from a source process to all the other processes. For example, you need to send a message from rank 0 to all other ranks. You can do this by creating the actual message on rank 0 and a placeholder on all other ranks, then broadcast the message mentioning a source rank. You can also use <code>safe_mode=True</code> in case the placeholder is not defined on all ranks.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">broadcast_example</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    message </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD">f</span><span style="color: #98C379">"hello from rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, Initial value: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">message</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    message </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">broadcast</span><span style="color: #ABB2BF">(message, </span><span style="color: #E06C75; font-style: italic">src</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Rank </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">local_rank</span><span style="color: #D19A66">}</span><span style="color: #98C379">, After performing broadcast: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">message</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">spawn</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"gloo"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">fn</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">broadcast_example, </span><span style="color: #E06C75; font-style: italic">args</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">nproc_per_node</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Rank 1, Initial value: hello from rank 1
+Rank 2, Initial value: hello from rank 2
+Rank 0, Initial value: hello from rank 0
+Rank 2, After performing broadcast: hello from rank 0
+Rank 0, After performing broadcast: hello from rank 0
+Rank 1, After performing broadcast: hello from rank 0
+</code></pre>
+<p>For a real world use case, let’s assume you need to gather the predicted and actual values from all the processes on rank 0 for computing a metric and avoiding a memory error. You can do do this by first using <code>all_gather()</code>, then computing the metric and finally using <code>broadcast()</code> to share the result with all processes. <code>src</code> below refers to the rank of the source process.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">compute_metric</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">prediction_tensor</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">target_tensor</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    prediction_tensor </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">all_gather</span><span style="color: #ABB2BF">(prediction_tensor)</span></span>
+<span class="line"><span style="color: #ABB2BF">    target_tensor </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">all_gather</span><span style="color: #ABB2BF">(target_tensor)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    result </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0.0</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">() </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        result </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">compute_fn</span><span style="color: #ABB2BF">(prediction_tensor, target_tensor)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    result </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">broadcast</span><span style="color: #ABB2BF">(result, </span><span style="color: #E06C75; font-style: italic">src</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> result</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="barrier">
+<a href="#barrier" class="header-anchor">
+Barrier
+</a>
+</h2><p>The
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.barrier" target="_blank" rel="noopener noreferrer"><code>barrier()</code></a> method helps synchronize all processes. For example - while downloading data during training, we have to make sure only the main process (<code>rank = 0</code>) downloads the datasets to prevent the sub processes (<code>rank &gt; 0</code>) from downloading the same file to the same path at the same time. This way all sub processes get a copy of this already downloaded dataset. This is where we can utilize <code>barrier()</code> to make the sub processes wait until the main process downloads the datasets. Once that is done, all the subprocesses instantiate the datasets, while the main process waits. Finally, all the processes are synced up.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_datasets</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_local_rank</span><span style="color: #ABB2BF">() </span><span style="color: #56B6C2">&gt;</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        idist.</span><span style="color: #61AFEF">barrier</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_dataset, test_dataset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_train_test_datasets</span><span style="color: #ABB2BF">(config[</span><span style="color: #98C379">"data_path"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_local_rank</span><span style="color: #ABB2BF">() </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        idist.</span><span style="color: #61AFEF">barrier</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> train_dataset, test_dataset</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/idist/">
+#idist
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/all_gather/">
+#all_gather
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/all_reduce/">
+#all_reduce
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/broadcast/">
+#broadcast
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/barrier/">
+#barrier
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/tutorials/beginner/01-getting-started/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>Getting Started
+</a>
+</div>
+<div>
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="group float-right">
+<span class="overflow-hidden">Machine Translation using PyTorch Ignite</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#imports">Imports</a></li>
+<li><a href="#all-reduce">All Reduce</a></li>
+<li><a href="#all-gather">All Gather</a></li>
+<li><a href="#broadcast">Broadcast</a></li>
+<li><a href="#barrier">Barrier</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

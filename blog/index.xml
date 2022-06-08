@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/blog/</link><description>Recent content in Blog on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><atom:link href="https://pytorch-ignite.ai/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>GAN evaluation using FID and IS</title><link>https://pytorch-ignite.ai/blog/gan-evaluation-with-fid-and-is/</link><pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/gan-evaluation-with-fid-and-is/</guid><description>&lt;h2 id="gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics">
+&lt;a href="#gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics" class="header-anchor">
+GAN Evaluation : the Frechet Inception Distance and Inception Score metrics
+&lt;/a>
+&lt;/h2>&lt;p>
+&lt;img src="https://pytorch-ignite.ai/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png" alt="GAN evaluation results using FID and IS" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>In this notebook, two &lt;code>PyTorch-Ignite&lt;/code>&amp;rsquo;s metrics to evaluate &lt;em>Generative Adversarial Networks&lt;/em> (or GAN in short) are introduced :&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Frechet Inception Distance&lt;/strong>, details can be found in
+&lt;a href="https://arxiv.org/pdf/1706.08500.pdf" target="_blank" rel="noopener noreferrer">&lt;code>Heusel et al. 2002&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;strong>Inception Score&lt;/strong>, details can be found in
+&lt;a href="https://arxiv.org/pdf/1801.01973.pdf" target="_blank" rel="noopener noreferrer">&lt;code>Barratt et al. 2018&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>See
+&lt;a href="https://pytorch.org/ignite/metrics.html#complete-list-of-metrics" target="_blank" rel="noopener noreferrer">here&lt;/a> for more details about the implementation of the metrics in
+&lt;a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer">PyTorch-Ignite&lt;/a>.&lt;/p>
+&lt;p>Most of the code here is from
+&lt;a href="https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html" target="_blank" rel="noopener noreferrer">DCGAN example&lt;/a> in
+&lt;a href="https://github.com/pytorch/examples" target="_blank" rel="noopener noreferrer">pytorch/examples&lt;/a>. In addition to the original tutorial, this notebook will use in-built GAN based metric in &lt;code>ignite.metrics&lt;/code> to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in &lt;code>ignite&lt;/code>.&lt;/p></description></item><item><title>Introducing PyTorch-Ignite's Code Generator v0.2.0</title><link>https://pytorch-ignite.ai/blog/introducing-code-generator-v020/</link><pubDate>Fri, 16 Jul 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/introducing-code-generator-v020/</guid><description>&lt;h1 id="introducing-pytorch-ignites-code-generator-v020">
+&lt;a href="#introducing-pytorch-ignites-code-generator-v020" class="header-anchor">
+Introducing PyTorch-Ignite&amp;rsquo;s Code Generator v0.2.0
+&lt;/a>
+&lt;/h1>&lt;p>
+&lt;img src="https://raw.githubusercontent.com/pytorch-ignite/code-generator/main/src/assets/code-generator-demo.gif" alt="code-generator-demo GIF" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>Along with the
+&lt;a href="https://github.com/pytorch/ignite/releases/tag/v0.4.5" target="_blank" rel="noopener noreferrer">PyTorch-Ignite 0.4.5 release&lt;/a>, we are excited to announce the new release of the web application for generating PyTorch-Ignite&amp;rsquo;s training pipelines. This blog post is an overview of the key features and updates of the
+&lt;a href="https://github.com/pytorch-ignite/code-generator/releases/tag/v0.2.0" target="_blank" rel="noopener noreferrer">Code Generator v0.2.0 project release&lt;/a>.&lt;/p></description></item><item><title>Distributed Training Made Easy with PyTorch-Ignite</title><link>https://pytorch-ignite.ai/blog/distributed-made-easy-with-ignite/</link><pubDate>Mon, 28 Jun 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/distributed-made-easy-with-ignite/</guid><description>&lt;h1 id="distributed-training-made-easy-with-pytorch-ignite">
+&lt;a href="#distributed-training-made-easy-with-pytorch-ignite" class="header-anchor">
+Distributed Training Made Easy with PyTorch-Ignite
+&lt;/a>
+&lt;/h1>&lt;p>
+&lt;img src="https://pytorch-ignite.ai/_images/ignite_logo_mixed.svg" alt="PyTorch-Ignite logo" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>Writing
+&lt;a href="https://en.wikipedia.org/wiki/Agnostic_%28data%29" target="_blank" rel="noopener noreferrer">agnostic&lt;/a>
+&lt;a href="https://pytorch.org/tutorials/beginner/dist_overview.html" target="_blank" rel="noopener noreferrer">distributed code&lt;/a> that supports different platforms, hardware configurations (GPUs, TPUs) and communication frameworks is tedious. In this blog, we will discuss how
+&lt;a href="https://pytorch.org/ignite/" target="_blank" rel="noopener noreferrer">PyTorch-Ignite&lt;/a> solves this problem with minimal code change.&lt;/p></description></item><item><title>Introduction to PyTorch-Ignite</title><link>https://pytorch-ignite.ai/blog/introduction/</link><pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/introduction/</guid><description>&lt;h1 id="introduction-to-pytorch-ignite">
+&lt;a href="#introduction-to-pytorch-ignite" class="header-anchor">
+Introduction to PyTorch-Ignite
+&lt;/a>
+&lt;/h1>&lt;p>
+&lt;img src="https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png" alt="Ignite your PyTorch neural networks image" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.&lt;/p>
+&lt;p>Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.&lt;/p></description></item></channel></rss>

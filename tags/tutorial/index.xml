@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tutorial on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/tutorial/</link><description>Recent content in Tutorial on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 10 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/tutorial/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction to PyTorch-Ignite</title><link>https://pytorch-ignite.ai/blog/introduction/</link><pubDate>Thu, 10 Sep 2020 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/introduction/</guid><description>&lt;h1 id="introduction-to-pytorch-ignite">
+&lt;a href="#introduction-to-pytorch-ignite" class="header-anchor">
+Introduction to PyTorch-Ignite
+&lt;/a>
+&lt;/h1>&lt;p>
+&lt;img src="https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png" alt="Ignite your PyTorch neural networks image" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.&lt;/p>
+&lt;p>Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.&lt;/p></description></item></channel></rss>

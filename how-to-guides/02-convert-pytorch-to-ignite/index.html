@@ -1,0 +1,691 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>
+How to convert pure PyTorch code to Ignite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    How to convert pure PyTorch code to Ignite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    How to convert pure PyTorch code to Ignite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/how-to-guides/02-convert-pytorch-to-ignite/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase
+active">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="text-$c-primary hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#training-loop-to-trainer">Training Loop to <code>trainer</code></a></li>
+<li><a href="#validation-loop-to-evaluator">Validation Loop to <code>evaluator</code></a></li>
+<li><a href="#switch-to-built-in-metrics">Switch to built-in Metrics</a></li>
+<li><a href="#organizing-code-into-events-and-handlers">Organizing code into Events and Handlers</a>
+<ul>
+<li><a href="#running-evaluator">Running <code>evaluator</code></a></li>
+<li><a href="#logging-metrics">Logging metrics</a></li>
+<li><a href="#progress-bar">Progress Bar</a></li>
+<li><a href="#checkpointing">Checkpointing</a></li>
+</ul>
+</li>
+<li><a href="#run-for-a-number-of-epochs">Run for a number of epochs</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="hover:text-$c-primary py-1">How to switch data provider during training</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/02-convert-pytorch-to-ignite.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/how-to-guides/02-convert-pytorch-to-ignite.ipynb" target="_blank" rel="noopener noreferrer" download="02-convert-pytorch-to-ignite.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/how-to-guides/02-convert-pytorch-to-ignite.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h1 id="how-to-convert-pure-pytorch-code-to-ignite">
+<a href="#how-to-convert-pure-pytorch-code-to-ignite" class="header-anchor">
+How to convert pure PyTorch code to Ignite
+</a>
+</h1><p>In this guide, we will show how PyTorch code components can be converted into compact and flexible PyTorch-Ignite code.</p>
+<p>
+<img src="/assets/convert-pytorch2ignite.gif" alt="Convert PyTorch to Ignite" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Since Ignite focuses on the training and validation pipeline, the code for models, datasets, optimizers, etc will remain user-defined and in pure PyTorch.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"><span style="color: #ABB2BF">train_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"><span style="color: #ABB2BF">val_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"><span style="color: #ABB2BF">optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"><span style="color: #ABB2BF">criterion </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="training-loop-to-trainer">
+<a href="#training-loop-to-trainer" class="header-anchor">
+Training Loop to <code>trainer</code>
+</a>
+</h2><p>A typical PyTorch training loop processes a single batch of data, passes it through the <code>model</code>, calculates <code>loss</code>, etc as below:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> batch </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> train_loader:</span></span>
+<span class="line"><span style="color: #ABB2BF">    model.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    inputs, targets </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    outputs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(inputs)</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(outputs, targets)</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>To convert the above code into Ignite we need to move the code or steps taken to process a single batch of data while training under a function (<code>train_step()</code> below). This function will take <code>engine</code> and <code>batch</code> (current batch of data) as arguments and can return any data (usually the loss) that can be accessed via <code>engine.state.output</code>. We pass this function to <code>Engine</code> which creates a <code>trainer</code> object.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Engine</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">train_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    model.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    inputs, targets </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    outputs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(inputs)</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(outputs, targets)</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> loss.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(train_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>There are other
+<a href="https://pytorch.org/ignite/engine.html#helper-methods-to-define-supervised-trainer-and-evaluator" target="_blank" rel="noopener noreferrer">helper methods</a> that directly create the <code>trainer</code> object without writing a custom function for some common use cases like
+<a href="https://pytorch.org/ignite/generated/ignite.engine.create_supervised_trainer.html#ignite.engine.create_supervised_trainer" target="_blank" rel="noopener noreferrer">supervised training</a> and
+<a href="https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.tbptt.create_supervised_tbptt_trainer" target="_blank" rel="noopener noreferrer">truncated backprop through time</a>.</p>
+<h2 id="validation-loop-to-evaluator">
+<a href="#validation-loop-to-evaluator" class="header-anchor">
+Validation Loop to <code>evaluator</code>
+</a>
+</h2><p>The validation loop typically makes predictions (<code>y_pred</code> below) on the <code>val_loader</code> batch by batch and uses them to calculate evaluation metrics (Accuracy, Intersection over Union, etc) as below:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">model.</span><span style="color: #61AFEF">eval</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">num_correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span></span>
+<span class="line"><span style="color: #ABB2BF">num_examples </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> batch </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> val_loader:</span></span>
+<span class="line"><span style="color: #ABB2BF">    x, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">eq</span><span style="color: #ABB2BF">(torch.</span><span style="color: #61AFEF">round</span><span style="color: #ABB2BF">(y_pred).</span><span style="color: #61AFEF">type</span><span style="color: #ABB2BF">(y.</span><span style="color: #61AFEF">type</span><span style="color: #ABB2BF">()), y).</span><span style="color: #61AFEF">view</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    num_correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">sum</span><span style="color: #ABB2BF">(correct).</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    num_examples </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> correct.shape[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Epoch: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">epoch</span><span style="color: #D19A66">}</span><span style="color: #98C379">,  Accuracy: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">num_correct </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> num_examples</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>We will convert this to Ignite in two steps by separating the validation and metrics logic.</p>
+<p>We will move the model evaluation logic under another function (<code>validation_step()</code> below) which receives the same parameters as <code>train_step()</code> and processes a single batch of data to return some output (usually the predicted and actual value which can be used to calculate metrics) stored in <code>engine.state.output</code>. Another instance (called <code>evaluator</code> below) of <code>Engine</code> is created by passing the <code>validation_step()</code> function.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">validation_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    model.</span><span style="color: #61AFEF">eval</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">no_grad</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        x, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch</span></span>
+<span class="line"><span style="color: #ABB2BF">        y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> y_pred, y</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span></span>
+<span class="line"><span style="color: #ABB2BF">evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(validation_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Similar to the training loop, there are
+<a href="https://pytorch.org/ignite/engine.html#helper-methods-to-define-supervised-trainer-and-evaluator" target="_blank" rel="noopener noreferrer">helper methods</a> to avoid writing this custom evaluation function like
+<a href="https://pytorch.org/ignite/generated/ignite.engine.create_supervised_evaluator.html#ignite.engine.create_supervised_evaluator" target="_blank" rel="noopener noreferrer"><code>create_supervised_evaluator</code></a>.</p>
+<p><strong>Note</strong>: You can create different evaluators for training, validation, and testing if they serve different purposes. A common practice is to have two separate evaluators for training and validation, since the results of the validation evaluator are helpful in determining the best model to save after training.</p>
+<h2 id="switch-to-built-in-metrics">
+<a href="#switch-to-built-in-metrics" class="header-anchor">
+Switch to built-in Metrics
+</a>
+</h2><p>Then we can replace the code for calculating metrics like accuracy and instead use several
+<a href="https://pytorch.org/ignite/metrics.html#complete-list-of-metrics" target="_blank" rel="noopener noreferrer">out-of-the-box metrics</a> that Ignite provides or write a custom one (refer
+<a href="https://pytorch.org/ignite/metrics.html#how-to-create-a-custom-metric" target="_blank" rel="noopener noreferrer">here</a>). The metrics will be computed using the <code>evaluator</code>’s output. Finally, we attach these metrics to the <code>evaluator</code> by providing a key name (“accuracy” below) so they can be accessed via <code>engine.state.metrics[key_name]</code>.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="organizing-code-into-events-and-handlers">
+<a href="#organizing-code-into-events-and-handlers" class="header-anchor">
+Organizing code into Events and Handlers
+</a>
+</h2><p>Next, we need to identify any code that is triggered when an event occurs. Examples of events can be the start of an iteration, completion of an epoch, or even the start of backprop. We already provide some predefined events (complete list
+<a href="https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#ignite.engine.events.Events" target="_blank" rel="noopener noreferrer">here</a>) however we can also create custom ones (refer
+<a href="https://pytorch.org/ignite/concepts.html#custom-events" target="_blank" rel="noopener noreferrer">here</a>). We move the event-specific code to different handlers (named functions, lambdas, class functions) which are attached to these events and executed whenever a specific event happens. Here are some common handlers:</p>
+<h3 id="running-evaluator">
+<a href="#running-evaluator" class="header-anchor">
+Running <code>evaluator</code>
+</a>
+</h3><p>We can convert the code that runs the <code>evaluator</code> on the training/validation/test dataset after <code>validate_every</code> epoch:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> epoch </span><span style="color: #56B6C2">%</span><span style="color: #ABB2BF"> validate_every </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Validation logic</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>by attaching a handler to a built-in event <code>EPOCH_COMPLETED</code> like:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Events</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">validate_every </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">10</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">validate_every</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(val_loader)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="logging-metrics">
+<a href="#logging-metrics" class="header-anchor">
+Logging metrics
+</a>
+</h3><p>Similarly, we can log the validation metrics in another handler or combine it with the above handler.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">validate_every</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> evaluator.state.metrics</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Epoch: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">trainer.state.epoch</span><span style="color: #D19A66">}</span><span style="color: #98C379">,  Accuracy: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">metrics[</span><span style="color: #98C379">'accuracy'</span><span style="color: #ABB2BF">]</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="progress-bar">
+<a href="#progress-bar" class="header-anchor">
+Progress Bar
+</a>
+</h3><p>We use a built-in wrapper around <code>tqdm</code> called
+<a href="https://pytorch.org/ignite/generated/ignite.contrib.handlers.tqdm_logger.html#module-ignite.contrib.handlers.tqdm_logger" target="_blank" rel="noopener noreferrer"><code>ProgressBar()</code></a>.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ProgressBar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">ProgressBar</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="checkpointing">
+<a href="#checkpointing" class="header-anchor">
+Checkpointing
+</a>
+</h3><p>Instead of saving all models after <code>checkpoint_every</code> epoch:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> epoch </span><span style="color: #56B6C2">%</span><span style="color: #ABB2BF"> checkpoint_every </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">checkpoint</span><span style="color: #ABB2BF">(model, optimizer, </span><span style="color: #98C379">"checkpoint_dir"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>we can smartly save the best <code>n_saved</code> models (depending on <code>evaluator.state.metrics</code>), and the state of <code>optimizer</code> and <code>trainer</code> via the built-in
+<a href="https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#checkpoint" target="_blank" rel="noopener noreferrer"><code>Checkpoint()</code></a>.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Checkpoint</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">checkpoint_every </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">5</span></span>
+<span class="line"><span style="color: #ABB2BF">checkpoint_dir </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">checkpointer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Checkpoint</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">to_save</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">{</span><span style="color: #98C379">'model'</span><span style="color: #ABB2BF">: model, </span><span style="color: #98C379">'optimizer'</span><span style="color: #ABB2BF">: optimizer, </span><span style="color: #98C379">'trainer'</span><span style="color: #ABB2BF">: trainer},</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">save_handler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">checkpoint_dir, </span><span style="color: #E06C75; font-style: italic">n_saved</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    Events.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">checkpoint_every), checkpointer</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="run-for-a-number-of-epochs">
+<a href="#run-for-a-number-of-epochs" class="header-anchor">
+Run for a number of epochs
+</a>
+</h2><p>Finally, instead of:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">max_epochs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> epoch </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">range</span><span style="color: #ABB2BF">(max_epochs):</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>we begin training on <code>train_loader</code> via:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader, max_epochs)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>An end-to-end example implementing the above principles can be found
+<a href="https://pytorch-ignite.ai/tutorials/getting-started/#complete-code" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/training-loop/">
+#training loop
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/validation-loop/">
+#validation loop
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/metrics/">
+#metrics
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/checkpoints/">
+#checkpoints
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/progress-bar/">
+#progress bar
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/logging/">
+#logging
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/how-to-guides/01-installation/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>How to install PyTorch-Ignite
+</a>
+</div>
+<div>
+<a href="/how-to-guides/03-time-profiling/" class="group float-right">
+<span class="overflow-hidden">How to do time profiling</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#training-loop-to-trainer">Training Loop to <code>trainer</code></a></li>
+<li><a href="#validation-loop-to-evaluator">Validation Loop to <code>evaluator</code></a></li>
+<li><a href="#switch-to-built-in-metrics">Switch to built-in Metrics</a></li>
+<li><a href="#organizing-code-into-events-and-handlers">Organizing code into Events and Handlers</a>
+<ul>
+<li><a href="#running-evaluator">Running <code>evaluator</code></a></li>
+<li><a href="#logging-metrics">Logging metrics</a></li>
+<li><a href="#progress-bar">Progress Bar</a></li>
+<li><a href="#checkpointing">Checkpointing</a></li>
+</ul>
+</li>
+<li><a href="#run-for-a-number-of-epochs">Run for a number of epochs</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

@@ -1,0 +1,906 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>PyTorch-Ignite</title>
+<meta property="og:title" content="conda">
+<meta name="twitter:title" content="conda">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/tags/conda/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,3fr] lg:grid">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="hover:text-$c-primary py-1">How to switch data provider during training</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<section class="mx-auto max-w-6xl py-6 px-6 prose prose-red">
+<div>
+<a href="/tags/pytorch-ignite/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+PyTorch-Ignite 4
+</a>
+<a href="/tags/deep-learning/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Deep Learning 3
+</a>
+<a href="/tags/machine-learning/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Machine Learning 3
+</a>
+<a href="/tags/pytorch/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+PyTorch 3
+</a>
+<a href="/tags/custom-events/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+custom events 2
+</a>
+<a href="/tags/nlp/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+NLP 2
+</a>
+<a href="/tags/transformers/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Transformers 2
+</a>
+<a href="/tags/all_gather/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+all_gather 1
+</a>
+<a href="/tags/all_reduce/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+all_reduce 1
+</a>
+<a href="/tags/barrier/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+barrier 1
+</a>
+<a href="/tags/basictimeprofiler/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+BasicTimeProfiler 1
+</a>
+<a href="/tags/beginner/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Beginner 1
+</a>
+<a href="/tags/bert/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+BERT 1
+</a>
+<a href="/tags/bleu-score/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Bleu Score 1
+</a>
+<a href="/tags/broadcast/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+broadcast 1
+</a>
+<a href="/tags/checkpoints/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+checkpoints 1
+</a>
+<a href="/tags/clearml/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+ClearML 1
+</a>
+<a href="/tags/code-generator/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Code Generator 1
+</a>
+<a href="/tags/conda/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+conda 1
+</a>
+<a href="/tags/cross-validation/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+cross validation 1
+</a>
+<a href="/tags/data-iterators/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+data iterators 1
+</a>
+<a href="/tags/distributed/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Distributed 1
+</a>
+<a href="/tags/docker-images/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+docker images 1
+</a>
+<a href="/tags/engine.state.times/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+engine.state.times 1
+</a>
+<a href="/tags/finite-iterator/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+finite iterator 1
+</a>
+<a href="/tags/frechet-inception-distance/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Frechet Inception Distance 1
+</a>
+<a href="/tags/gan-evaluation/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+GAN Evaluation 1
+</a>
+<a href="/tags/gradient-accumulation/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+gradient accumulation 1
+</a>
+<a href="/tags/handlerstimeprofiler/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+HandlersTimeProfiler 1
+</a>
+<a href="/tags/horovod/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Horovod 1
+</a>
+<a href="/tags/idist/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+idist 1
+</a>
+<a href="/tags/inception-score/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Inception Score 1
+</a>
+<a href="/tags/infinite-iterator/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+infinite iterator 1
+</a>
+<a href="/tags/installation/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+installation 1
+</a>
+<a href="/tags/intermediate/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+intermediate 1
+</a>
+<a href="/tags/jupyter-notebooks/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Jupyter Notebooks 1
+</a>
+<a href="/tags/load-checkpoint/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+load checkpoint 1
+</a>
+<a href="/tags/loggers/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+loggers 1
+</a>
+<a href="/tags/logging/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+logging 1
+</a>
+<a href="/tags/lr-finder/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+lr finder 1
+</a>
+<a href="/tags/machine-translation/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Machine Translation 1
+</a>
+<a href="/tags/metrics/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+metrics 1
+</a>
+<a href="/tags/multi-gpus-on-a-single-node/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+multi GPUs on a single node 1
+</a>
+<a href="/tags/multi-gpus-on-multiple-nodes/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+multi GPUs on multiple nodes 1
+</a>
+<a href="/tags/neural-networks/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Neural Networks 1
+</a>
+<a href="/tags/nightly/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+nightly 1
+</a>
+<a href="/tags/pip/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+pip 1
+</a>
+<a href="/tags/progress-bar/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+progress bar 1
+</a>
+<a href="/tags/python/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Python 1
+</a>
+<a href="/tags/pytorch-ddp/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+PyTorch DDP 1
+</a>
+<a href="/tags/pytorch-xla/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+PyTorch XLA 1
+</a>
+<a href="/tags/rl/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+RL 1
+</a>
+<a href="/tags/seq2seq-models/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+seq2seq models 1
+</a>
+<a href="/tags/slurm/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+SLURM 1
+</a>
+<a href="/tags/t5/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+T5 1
+</a>
+<a href="/tags/text/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Text 1
+</a>
+<a href="/tags/time-profiling/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+time-profiling 1
+</a>
+<a href="/tags/tpus-on-colab/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+TPUs on Colab 1
+</a>
+<a href="/tags/training-loop/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+training loop 1
+</a>
+<a href="/tags/tutorial/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+Tutorial 1
+</a>
+<a href="/tags/validation-loop/" class="rounded-lg
+bg-gray-200
+my-1
+mx-2
+px-2
+inline-block
+dark:bg-dark-400">
+validation loop 1
+</a>
+</div>
+<ul>
+<li>
+<span>2021-08-04 – </span>
+<a href="/how-to-guides/01-installation/">How to install PyTorch-Ignite</a>
+</li>
+</ul>
+</section>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

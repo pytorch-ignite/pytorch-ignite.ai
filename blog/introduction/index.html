@@ -1,0 +1,1539 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>
+Introduction to PyTorch-Ignite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Introduction to PyTorch-Ignite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Introduction to PyTorch-Ignite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" as="style">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@1.0.0-alpha.28/dist/style.min.css" type="text/css">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.54907dcf7878c4040744da7189de48a5.min.css">
+<link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/introduction/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="text-$c-primary hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#pytorch-ignite-what-and-why-">PyTorch-Ignite: What and Why ?</a>
+<ul>
+<li><a href="#-pytorch--ignite-">🔥 PyTorch + Ignite 🔥</a></li>
+<li><a href="#about-the-design-of-pytorch-ignite">About the design of PyTorch-Ignite</a></li>
+</ul>
+</li>
+<li><a href="#quick-start-example">Quick-start example</a>
+<ul>
+<li><a href="#common-pytorch-code">Common PyTorch code</a></li>
+<li><a href="#trainer-and-evaluators-setup">Trainer and evaluator’s setup</a></li>
+<li><a href="#events-and-handers">Events and Handers</a></li>
+<li><a href="#model-evaluation-metrics">Model evaluation metrics</a></li>
+<li><a href="#common-training-handlers">Common training handlers</a></li>
+<li><a href="#5-takeaways">5 takeaways</a></li>
+</ul>
+</li>
+<li><a href="#advanced-features">Advanced features</a>
+<ul>
+<li><a href="#power-of-events--handlers">Power of Events &amp; Handlers</a></li>
+<li><a href="#out-of-the-box-metrics">Out-of-the-box metrics</a></li>
+<li><a href="#out-of-the-box-handlers">Out-of-the-box handlers</a></li>
+<li><a href="#distributed-and-xla-device-support">Distributed and XLA device support</a></li>
+</ul>
+</li>
+<li><a href="#projects-using-pytorch-ignite">Projects using PyTorch-Ignite</a></li>
+</ul>
+</nav></div>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<h1 id="introduction-to-pytorch-ignite">
+<a href="#introduction-to-pytorch-ignite" class="header-anchor">
+Introduction to PyTorch-Ignite
+</a>
+</h1><p>
+<img src="https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png" alt="Ignite your PyTorch neural networks image" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.</p>
+<p>Throughout this tutorial, we will introduce the basic concepts of PyTorch-Ignite with the training and evaluation of a MNIST classifier as a beginner application case. We also assume that the reader is familiar with PyTorch.</p>
+<p>Crossposted from
+<a href="https://labs.quansight.org/blog/2020/09/pytorch-ignite/" target="_blank" rel="noopener noreferrer">https://labs.quansight.org/blog/2020/09/pytorch-ignite/</a></p>
+<h2 id="pytorch-ignite-what-and-why-">
+<a href="#pytorch-ignite-what-and-why-" class="header-anchor">
+PyTorch-Ignite: What and Why ?
+</a>
+</h2><p>PyTorch-Ignite is a high-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.</p>
+<p>PyTorch-Ignite is designed to be at the crossroads of high-level Plug &amp; Play features and under-the-hood expansion possibilities.
+PyTorch-Ignite aims to improve the deep learning community’s technical skills by promoting best practices.
+Things are not hidden behind a divine tool that does everything, but remain within the reach of users.</p>
+<p>PyTorch-Ignite takes a “Do-It-Yourself” approach as research is unpredictable and it is important to capture its requirements without blocking things.</p>
+<h3 id="-pytorch--ignite-">
+<a href="#-pytorch--ignite-" class="header-anchor">
+🔥 PyTorch + Ignite 🔥
+</a>
+</h3><p>PyTorch-Ignite wraps native PyTorch abstractions such as Modules, Optimizers, and DataLoaders in thin abstractions which allow your models to be separated from their training framework completely. This is achieved by a way of inverting control using an abstraction known as the <strong>Engine</strong>. The <strong>Engine</strong> is responsible for running an arbitrary function - typically a training or evaluation function - and emitting events along the way.</p>
+<p>A built-in event system represented by the <strong>Events</strong> class ensures <code>Engine</code>’s flexibility, thus facilitating interaction on each step of the run.
+With this approach users can completely customize the flow of events during the run.</p>
+<p>In summary, PyTorch-Ignite is</p>
+<ul>
+<li>Extremely simple engine and event system = Training loop abstraction</li>
+<li>Out-of-the-box metrics to easily evaluate models</li>
+<li>Built-in handlers to compose training pipelines, save artifacts and log parameters and metrics</li>
+</ul>
+<p>Additional benefits of using PyTorch-Ignite are</p>
+<ul>
+<li>Less code than pure PyTorch while ensuring maximum control and simplicity</li>
+<li>More modular code</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">PyTorch-Ignite</th>
+<th style="text-align:center">PyTorch</th>
+</tr>
+</thead>
+</table>
+<p>
+<img src="https://raw.githubusercontent.com/pytorch/ignite/master/assets/ignite_vs_bare_pytorch.png" alt="pytorch-ignite-vs-pytorch" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<h3 id="about-the-design-of-pytorch-ignite">
+<a href="#about-the-design-of-pytorch-ignite" class="header-anchor">
+About the design of PyTorch-Ignite
+</a>
+</h3><p>PyTorch-Ignite allows you to compose your application without being focused on a super multi-purpose object, but rather on weakly coupled components allowing advanced customization.</p>
+<p>The design of the library is guided by:</p>
+<ul>
+<li>Anticipating new software or use-cases to come in in the future without centralizing everything in a single class.</li>
+<li>Avoiding configurations with a ton of parameters that are complicated to manage and maintain.</li>
+<li>Providing tools targeted to maximizing cohesion and minimizing coupling.</li>
+<li>Keeping it simple.</li>
+</ul>
+<h2 id="quick-start-example">
+<a href="#quick-start-example" class="header-anchor">
+Quick-start example
+</a>
+</h2><p>In this section we will use PyTorch-Ignite to build and train a classifier of the well-known
+<a href="http://yann.lecun.com/exdb/mnist/" target="" rel="">MNIST</a> dataset. This simple example will introduce the principal concepts behind PyTorch-Ignite.</p>
+<p>For additional information and details about the API, please, refer to the project’s
+<a href="https://pytorch.org/ignite/" target="_blank" rel="noopener noreferrer">documentation</a>.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">pip install pytorch-ignite</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Collecting pytorch-ignite
+[?25l  Downloading https://files.pythonhosted.org/packages/c0/8e/08569347023611e40e62a14162024ca6238d42cb528b2302f84d662a2033/pytorch_ignite-0.4.1-py2.py3-none-any.whl (166kB)
+[K     |████████████████████████████████| 174kB 8.4MB/s eta 0:00:01
+[?25hRequirement already satisfied: torch&lt;2,&gt;=1.3 in /usr/local/lib/python3.6/dist-packages (from pytorch-ignite) (1.6.0+cu101)
+Requirement already satisfied: future in /usr/local/lib/python3.6/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (0.16.0)
+Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (1.18.5)
+Installing collected packages: pytorch-ignite
+Successfully installed pytorch-ignite-0.4.1
+</code></pre>
+<h3 id="common-pytorch-code">
+<a href="#common-pytorch-code" class="header-anchor">
+Common PyTorch code
+</a>
+</h3><p>First, we define our model, training and validation datasets, optimizer and loss function:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> os</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> nn</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn.functional </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> F</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torch.optim </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">SGD</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torch.utils.data </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> DataLoader</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.transforms </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Compose, ToTensor, Normalize</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.datasets </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">MNIST</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># transform to normalize the data</span></span>
+<span class="line"><span style="color: #ABB2BF">transform </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Compose</span><span style="color: #ABB2BF">([</span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">(), </span><span style="color: #61AFEF">Normalize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">0.1307</span><span style="color: #ABB2BF">,), (</span><span style="color: #D19A66">0.3081</span><span style="color: #ABB2BF">,))])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Download and load the training data</span></span>
+<span class="line"><span style="color: #ABB2BF">trainset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">MNIST</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"data"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">download</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">transform)</span></span>
+<span class="line"><span style="color: #ABB2BF">train_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">DataLoader</span><span style="color: #ABB2BF">(trainset, </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Download and load the test data</span></span>
+<span class="line"><span style="color: #ABB2BF">validationset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">MNIST</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"data"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">transform)</span></span>
+<span class="line"><span style="color: #ABB2BF">val_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">DataLoader</span><span style="color: #ABB2BF">(validationset, </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a class of CNN model (as you want)</span></span>
+<span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">Net</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">nn</span><span style="color: #ABB2BF">.</span><span style="color: #E5C07B">Module</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #56B6C2">super</span><span style="color: #ABB2BF">(Net, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">).</span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.conv1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">kernel_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.conv2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">20</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">kernel_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.conv2_drop </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Dropout2d</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.fc1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Linear</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">320</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">50</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.fc2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Linear</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">50</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">forward</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> F.</span><span style="color: #61AFEF">relu</span><span style="color: #ABB2BF">(F.</span><span style="color: #61AFEF">max_pool2d</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">conv1</span><span style="color: #ABB2BF">(x), </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> F.</span><span style="color: #61AFEF">relu</span><span style="color: #ABB2BF">(F.</span><span style="color: #61AFEF">max_pool2d</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">conv2_drop</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">conv2</span><span style="color: #ABB2BF">(x)), </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> x.</span><span style="color: #61AFEF">view</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">320</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> F.</span><span style="color: #61AFEF">relu</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">fc1</span><span style="color: #ABB2BF">(x))</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> F.</span><span style="color: #61AFEF">dropout</span><span style="color: #ABB2BF">(x, </span><span style="color: #E06C75; font-style: italic">training</span><span style="color: #56B6C2">=</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.training)</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">fc2</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> F.</span><span style="color: #61AFEF">log_softmax</span><span style="color: #ABB2BF">(x, </span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">device </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"cuda"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a model on move it on CUDA device</span></span>
+<span class="line"><span style="color: #ABB2BF">model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Net</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a NLL loss</span></span>
+<span class="line"><span style="color: #ABB2BF">criterion </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">NLLLoss</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a SGD optimizer</span></span>
+<span class="line"><span style="color: #ABB2BF">optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">SGD</span><span style="color: #ABB2BF">(model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.01</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">momentum</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.8</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The above code is pure PyTorch and is typically user-defined and is required for any pipeline.</p>
+<h3 id="trainer-and-evaluators-setup">
+<a href="#trainer-and-evaluators-setup" class="header-anchor">
+Trainer and evaluator’s setup
+</a>
+</h3><p><code>model</code>’s trainer is an engine that loops multiple times over the training dataset and updates model parameters. Let’s see how we define such a trainer using PyTorch-Ignite. To do this, PyTorch-Ignite introduces the generic class
+<a href="https://pytorch.org/ignite/concepts.html#engine" target="_blank" rel="noopener noreferrer"><code>Engine</code></a> that is an abstraction that loops over the provided data, executes a processing function and returns a result. The only argument needed to construct the trainer is a <code>train_step</code> function.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Engine</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">train_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    x, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> x.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device)</span></span>
+<span class="line"><span style="color: #ABB2BF">    y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> y.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    model.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(y_pred, y)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    loss.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> loss</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a trainer engine</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(train_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Please note that <code>train_step</code> function must accept <code>engine</code> and <code>batch</code> arguments. In the example above, <code>engine</code> is not used inside <code>train_step</code>, but we can easily imagine a use-case where we would like to fetch certain information like current iteration, epoch or custom variables from the engine.</p>
+<p>Similarly, model evaluation can be done with an engine that runs a single time over the validation dataset and computes metrics.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">validation_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    model.</span><span style="color: #61AFEF">eval</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">no_grad</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        x, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">], batch[</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> x.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"cuda"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> y.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"cuda"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> y_pred, y</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(validation_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>This allows the construction of training logic from the simplest to the most complicated scenarios.</p>
+<p>The type of output of the process functions (i.e. <code>loss</code> or <code>y_pred, y</code> in the above examples) is not restricted. These functions can return everything the user wants. Output is set to an engine’s internal object <code>engine.state.output</code> and can be used further for any type of processing.</p>
+<h3 id="events-and-handers">
+<a href="#events-and-handers" class="header-anchor">
+Events and Handers
+</a>
+</h3><p>To improve the engine’s flexibility, a configurable event system is introduced to facilitate the interaction on each step of the run. Namely, <code>Engine</code> allows to add handlers on various
+<a href="https://pytorch.org/ignite/concepts.html#events-and-handlers" target="_blank" rel="noopener noreferrer"><code>Events</code></a> that are triggered during the run. When an event is triggered, attached handlers (named functions, lambdas, class functions) are executed. Here is a schema for when built-in events are triggered by default:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">while</span><span style="color: #ABB2BF"> epoch </span><span style="color: #56B6C2">&lt;</span><span style="color: #ABB2BF"> max_epochs:</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">EPOCH_STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># run once on data</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> batch </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> data:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">ITERATION_STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        output </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">process_function</span><span style="color: #ABB2BF">(batch)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">ITERATION_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Note that each engine (i.e. <code>trainer</code> and <code>evaluator</code>) has its own event system which allows to define its own engine’s process logic.</p>
+<p>Using <code>Events</code> and handlers, it is possible to completely customize the engine’s runs in a very intuitive way:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Events</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Show a message when the training begins</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">start_message</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Start training!"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Handler can be want you want, here a lambda !</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">_</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Training completed!"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Run evaluator on val_loader every trainer's epoch completed</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(val_loader)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>In the code above, the <code>run_validation</code> function is attached to the <code>trainer</code> and will be triggered at each completed epoch to launch <code>model</code>’s validation with <code>evaluator</code>. This shows that engines can be embedded to create complex pipelines.</p>
+<p>Handlers offer unparalleled flexibility compared to callbacks as they can be any function: e.g., a lambda, a simple function, a class method, etc. Thus, we do not require to inherit from an interface and override its abstract methods which could unnecessarily bulk up your code and its complexity.</p>
+<p>The possibilities of customization are endless as PyTorch-Ignite allows you to get hold of your application workflow. As mentioned before, there is no magic nor fully automatated things in PyTorch-Ignite.</p>
+<h3 id="model-evaluation-metrics">
+<a href="#model-evaluation-metrics" class="header-anchor">
+Model evaluation metrics
+</a>
+</h3><p>Metrics are another nice example of what the handlers for PyTorch-Ignite are and how to use them. In our example, we use the built-in metrics <code>Accuracy</code> and <code>Loss</code>.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy, Loss</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Accuracy and loss metrics are defined</span></span>
+<span class="line"><span style="color: #ABB2BF">val_metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">  </span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">  </span><span style="color: #98C379">"loss"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Loss</span><span style="color: #ABB2BF">(criterion)</span></span>
+<span class="line"><span style="color: #ABB2BF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Attach metrics to the evaluator</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> name, metric </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> val_metrics.</span><span style="color: #61AFEF">items</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    metric.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, name)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>PyTorch-Ignite metrics can be elegantly combined with each other.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Precision, Recall</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Build F1 score</span></span>
+<span class="line"><span style="color: #ABB2BF">precision </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Precision</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">average</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">recall </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Recall</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">average</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">F1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> (precision </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> recall </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> (precision </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> recall)).</span><span style="color: #61AFEF">mean</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># and attach it to evaluator</span></span>
+<span class="line"><span style="color: #ABB2BF">F1.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"f1"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>To make general things even easier,
+<a href="https://pytorch.org/ignite/engine.html#ignite-engine" target="_blank" rel="noopener noreferrer">helper methods</a> are available for the creation of a supervised <code>Engine</code> as above. Thus, let’s define another evaluator applied to the training dataset in this way.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> create_supervised_evaluator</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define another evaluator with default validation function and attach metrics</span></span>
+<span class="line"><span style="color: #ABB2BF">train_evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_evaluator</span><span style="color: #ABB2BF">(model, </span><span style="color: #E06C75; font-style: italic">metrics</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">val_metrics, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"cuda"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Run train_evaluator on train_loader every trainer's epoch completed</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_train_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    train_evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The reason why we want to have two separate evaluators (<code>evaluator</code> and <code>train_evaluator</code>) is that they can have different attached handlers and logic to perform. For example, if we would like store the best model defined by the validation metric value, this role is delegated to <code>evaluator</code> which computes metrics over the validation dataset.</p>
+<h3 id="common-training-handlers">
+<a href="#common-training-handlers" class="header-anchor">
+Common training handlers
+</a>
+</h3><p>From now on, we have <code>trainer</code> which will call evaluators <code>evaluator</code> and <code>train_evaluator</code> at every completed epoch. Thus, each evaluator will run and compute corresponding metrics. In addition, it would be very helpful to have a display of the results that shows those metrics.</p>
+<p>Using the customization potential of the engine’s system, we can add simple handlers for this logging purpose:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #61AFEF">@evaluator</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_validation_results</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> evaluator.state.metrics</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Validation Results - Epoch: </span><span style="color: #D19A66">{}</span><span style="color: #98C379">  Avg accuracy: </span><span style="color: #D19A66">{</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379"> Avg loss: </span><span style="color: #D19A66">{</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379"> Avg F1: </span><span style="color: #D19A66">{</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">          .</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch, metrics[</span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">], metrics[</span><span style="color: #98C379">"loss"</span><span style="color: #ABB2BF">], metrics[</span><span style="color: #98C379">"f1"</span><span style="color: #ABB2BF">]))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@train_evaluator</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_train_results</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> train_evaluator.state.metrics</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"  Training Results - Epoch: </span><span style="color: #D19A66">{}</span><span style="color: #98C379">  Avg accuracy: </span><span style="color: #D19A66">{</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379"> Avg loss: </span><span style="color: #D19A66">{</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">          .</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch, metrics[</span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">], metrics[</span><span style="color: #98C379">"loss"</span><span style="color: #ABB2BF">]))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Here we attached <code>log_validation_results</code> and <code>log_train_results</code> handlers on <code>Events.COMPLETED</code> since <code>evaluator</code> and <code>train_evaluator</code> will run a single epoch over the validation datasets.</p>
+<p>Let’s see how to add some others helpful features to our application.</p>
+<ul>
+<li>PyTorch-Ignite provides a
+<a href="https://pytorch.org/ignite/contrib/handlers.html#tqdm-logger" target="_blank" rel="noopener noreferrer"><code>ProgressBar</code></a> handler to show an engine’s progression.</li>
+</ul>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ProgressBar</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">ProgressBar</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer, </span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">: {</span><span style="color: #98C379">'batch loss'</span><span style="color: #ABB2BF">: x})</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><ul>
+<li>
+<a href="https://pytorch.org/ignite/handlers.html#ignite.handlers.ModelCheckpoint" target="_blank" rel="noopener noreferrer"><code>ModelCheckpoint</code></a> handler can be used to periodically save objects which have an attribute <code>state_dict</code>.</li>
+</ul>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ModelCheckpoint, global_step_from_engine</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Score function to select relevant metric, here f1</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">score_function</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> engine.state.metrics[</span><span style="color: #98C379">"f1"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Checkpoint to store n_saved best models wrt score function</span></span>
+<span class="line"><span style="color: #ABB2BF">model_checkpoint </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">ModelCheckpoint</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"quick-start-mnist-output"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">n_saved</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">filename_prefix</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"best"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">score_function</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">score_function,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">score_name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"f1"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">global_step_transform</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">global_step_from_engine</span><span style="color: #ABB2BF">(trainer),</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Save the model (if relevant) every epoch completed of evaluator</span></span>
+<span class="line"><span style="color: #ABB2BF">evaluator.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">, model_checkpoint, {</span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: model})</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><ul>
+<li>PyTorch-Ignite provides wrappers to modern tools to track experiments. For example,
+<a href="https://pytorch.org/ignite/contrib/handlers.html#ignite.contrib.handlers.tensorboard_logger.TensorboardLogger" target="_blank" rel="noopener noreferrer"><code>TensorBoardLogger</code></a> handler allows to log metric results, model’s and optimizer’s parameters, gradients, and more during the training and validation for TensorBoard.</li>
+</ul>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> TensorboardLogger</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Define a Tensorboard logger</span></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">TensorboardLogger</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">log_dir</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"quick-start-mnist-output"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Attach handler to plot trainer's loss every 100 iterations</span></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger.</span><span style="color: #61AFEF">attach_output_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">event_name</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">Events.</span><span style="color: #61AFEF">ITERATION_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">100</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">tag</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"training"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">loss</span><span style="color: #ABB2BF">: {</span><span style="color: #98C379">"batchloss"</span><span style="color: #ABB2BF">: loss},</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Attach handler to dump evaluator's metrics every epoch completed</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> tag, evaluator </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> [(</span><span style="color: #98C379">"training"</span><span style="color: #ABB2BF">, train_evaluator), (</span><span style="color: #98C379">"validation"</span><span style="color: #ABB2BF">, evaluator)]:</span></span>
+<span class="line"><span style="color: #ABB2BF">    tb_logger.</span><span style="color: #61AFEF">attach_output_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        evaluator,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">event_name</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">Events.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">tag</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">tag,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">metric_names</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"all"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">global_step_transform</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">global_step_from_engine</span><span style="color: #ABB2BF">(trainer),</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>It is possible to extend the use of the TensorBoard logger very simply by integrating user-defined functions. For example, here is how to display images and predictions during training:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> matplotlib.pyplot </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> plt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Store predictions and scores using matplotlib</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">predictions_gt_images_handler</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">logger</span><span style="color: #ABB2BF">, *</span><span style="color: #D19A66; font-style: italic">args</span><span style="color: #ABB2BF">, **</span><span style="color: #D19A66; font-style: italic">kwargs</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    x, _ </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> engine.state.batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    y_pred, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> engine.state.output</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># y_pred is log softmax value</span></span>
+<span class="line"><span style="color: #ABB2BF">    num_x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> num_y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">8</span></span>
+<span class="line"><span style="color: #ABB2BF">    le </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> num_x </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> num_y</span></span>
+<span class="line"><span style="color: #ABB2BF">    probs, preds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">max</span><span style="color: #ABB2BF">(torch.</span><span style="color: #61AFEF">exp</span><span style="color: #ABB2BF">(y_pred[:le]), </span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    fig </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> plt.</span><span style="color: #61AFEF">figure</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">figsize</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">20</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">20</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> idx </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">range</span><span style="color: #ABB2BF">(le):</span></span>
+<span class="line"><span style="color: #ABB2BF">        ax </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> fig.</span><span style="color: #61AFEF">add_subplot</span><span style="color: #ABB2BF">(num_x, num_y, idx </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">xticks</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">[], </span><span style="color: #E06C75; font-style: italic">yticks</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">[])</span></span>
+<span class="line"><span style="color: #ABB2BF">        ax.</span><span style="color: #61AFEF">imshow</span><span style="color: #ABB2BF">(x[idx].</span><span style="color: #61AFEF">squeeze</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">cmap</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"Greys"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        ax.</span><span style="color: #61AFEF">set_title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #D19A66">{0}</span><span style="color: #98C379"> </span><span style="color: #D19A66">{1</span><span style="color: #C678DD">:.1f</span><span style="color: #D19A66">}</span><span style="color: #98C379">% (label: </span><span style="color: #D19A66">{2}</span><span style="color: #98C379">)"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            preds[idx],</span></span>
+<span class="line"><span style="color: #ABB2BF">            probs[idx] </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">100.0</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            y[idx]),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">color</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"green"</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> preds[idx] </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> y[idx] </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"red"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.writer.</span><span style="color: #61AFEF">add_figure</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'predictions vs actuals'</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">figure</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">fig, </span><span style="color: #E06C75; font-style: italic">global_step</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">trainer.state.epoch)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Attach custom function to evaluator at first iteration</span></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">log_handler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">predictions_gt_images_handler,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">event_name</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">Events.</span><span style="color: #61AFEF">ITERATION_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">once</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>All that is left to do now is to run the <code>trainer</code> on data from <code>train_loader</code> for a number of epochs.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Once everything is done, let's close the logger</span></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger.</span><span style="color: #61AFEF">close</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Start training!
+
+Validation Results - Epoch: 1  Avg accuracy: 0.94 Avg loss: 0.20 Avg F1: 0.94
+  Training Results - Epoch: 1  Avg accuracy: 0.94 Avg loss: 0.21
+
+Validation Results - Epoch: 2  Avg accuracy: 0.96 Avg loss: 0.12 Avg F1: 0.96
+  Training Results - Epoch: 2  Avg accuracy: 0.96 Avg loss: 0.13
+
+Validation Results - Epoch: 3  Avg accuracy: 0.97 Avg loss: 0.10 Avg F1: 0.97
+  Training Results - Epoch: 3  Avg accuracy: 0.97 Avg loss: 0.10
+
+Validation Results - Epoch: 4  Avg accuracy: 0.98 Avg loss: 0.07 Avg F1: 0.98
+  Training Results - Epoch: 4  Avg accuracy: 0.97 Avg loss: 0.09
+
+Validation Results - Epoch: 5  Avg accuracy: 0.98 Avg loss: 0.07 Avg F1: 0.98
+  Training Results - Epoch: 5  Avg accuracy: 0.98 Avg loss: 0.08
+Training completed!
+</code></pre>
+<p>We can inspect results using <code>tensorboard</code>. We can observe two tabs “Scalars” and “Images”.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #56B6C2">%</span><span style="color: #ABB2BF">load_ext tensorboard</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #56B6C2">%</span><span style="color: #ABB2BF">tensorboard </span><span style="color: #FFFFFF">--</span><span style="color: #ABB2BF">logdir</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">.</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><table>
+<thead>
+<tr>
+<th style="text-align:center">
+<img src="https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/images/pytorch-ignite/mnist-tb-scalars.png" alt="mnist-tb-scalars" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</th>
+<th style="text-align:center">
+<img src="https://raw.githubusercontent.com/Quansight-Labs/quansight-labs-site/master/images/pytorch-ignite/mnist-tb-images.png" alt="mnist-tb-images" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</th>
+</tr>
+</thead>
+</table>
+<h3 id="5-takeaways">
+<a href="#5-takeaways" class="header-anchor">
+5 takeaways
+</a>
+</h3><ul>
+<li>
+<p>Almost any training logic can be coded as a <code>train_step</code> method and a trainer built using this method.</p>
+</li>
+<li>
+<p>The essence of the library is the <strong><code>Engine</code></strong> class that loops a given number of times over a dataset and executes a processing function.</p>
+</li>
+<li>
+<p>A highly customizable <strong>event system</strong> simplifies interaction with the engine on each step of the run.</p>
+</li>
+<li>
+<p>PyTorch-Ignite provides a set of built-in handlers and metrics for common tasks.</p>
+</li>
+<li>
+<p>PyTorch-Ignite is easy to extend.</p>
+</li>
+</ul>
+<h2 id="advanced-features">
+<a href="#advanced-features" class="header-anchor">
+Advanced features
+</a>
+</h2><p>In this section we would like to present some advanced features of PyTorch-Ignite for experienced users. We will cover events, handlers and metrics in more detail, as well as distributed computations on GPUs and TPUs. Feel free to skip this section now and come back later if you are a beginner.</p>
+<h3 id="power-of-events--handlers">
+<a href="#power-of-events--handlers" class="header-anchor">
+Power of Events &amp; Handlers
+</a>
+</h3><p>We have seen throughout the quick-start example that events and handlers are perfect to execute any number of functions whenever you wish. In addition to that we provide several ways to extend it even more by</p>
+<ul>
+<li>
+<p>Built-in events filtering</p>
+</li>
+<li>
+<p>Stacking events to share the action</p>
+</li>
+<li>
+<p>Adding custom events to go beyond built-in standard events</p>
+</li>
+</ul>
+<p>Let’s look at these features in more detail.</p>
+<h4 id="built-in-events-filtering">
+<a href="#built-in-events-filtering" class="header-anchor">
+Built-in events filtering
+</a>
+</h4><p>Users can simply filter out events to skip triggering the handler. Let’s create a dummy trainer:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Engine, Events</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">e</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Let’s consider a use-case where we would like to train a model and periodically run its validation on several development datasets, e.g. <code>devset1</code> and <code>devset2</code>:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic"># We run the validation on devset1 every 5 epochs</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation1</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Epoch </span><span style="color: #D19A66">{}</span><span style="color: #98C379">: Validation on devset 1"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># evaluator.run(devset1)  # commented out for demo purposes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># We run another validation on devset2 every 10 epochs</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation2</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Epoch </span><span style="color: #D19A66">{}</span><span style="color: #98C379">: Validation on devset 2"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># evaluator.run(devset2)  # commented out for demo purposes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">50</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Epoch 5: Validation on devset 1
+Epoch 10: Validation on devset 1
+Epoch 10: Validation on devset 2
+Epoch 15: Validation on devset 1
+Epoch 20: Validation on devset 1
+Epoch 20: Validation on devset 2
+Epoch 25: Validation on devset 1
+Epoch 30: Validation on devset 1
+Epoch 30: Validation on devset 2
+Epoch 35: Validation on devset 1
+Epoch 40: Validation on devset 1
+Epoch 40: Validation on devset 2
+Epoch 45: Validation on devset 1
+Epoch 50: Validation on devset 1
+Epoch 50: Validation on devset 2
+</code></pre>
+<p>Let’s now consider another situation where we would like to make a single change once we reach a certain epoch or iteration. For example, let’s change the training dataset on the 5-th epoch from low resolution images to high resolution images:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">train_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">e</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Epoch </span><span style="color: #D19A66">{}</span><span style="color: #98C379"> - </span><span style="color: #D19A66">{}</span><span style="color: #98C379"> : batch=</span><span style="color: #D19A66">{}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(e.state.epoch, e.state.iteration, batch))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(train_step)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">small_res_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, ]</span></span>
+<span class="line"><span style="color: #ABB2BF">high_res_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">11</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">12</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># We run the following handler once on 5-th epoch started</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_STARTED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">once</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">change_train_dataset</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Epoch </span><span style="color: #D19A66">{}</span><span style="color: #98C379">: Change training dataset"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch))</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer.</span><span style="color: #61AFEF">set_data</span><span style="color: #ABB2BF">(high_res_data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(small_res_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Epoch 1 - 1 : batch=0
+Epoch 1 - 2 : batch=1
+Epoch 1 - 3 : batch=2
+Epoch 2 - 4 : batch=0
+Epoch 2 - 5 : batch=1
+Epoch 2 - 6 : batch=2
+Epoch 3 - 7 : batch=0
+Epoch 3 - 8 : batch=1
+Epoch 3 - 9 : batch=2
+Epoch 4 - 10 : batch=0
+Epoch 4 - 11 : batch=1
+Epoch 4 - 12 : batch=2
+Epoch 5: Change training dataset
+Epoch 5 - 13 : batch=10
+Epoch 5 - 14 : batch=11
+Epoch 5 - 15 : batch=12
+Epoch 6 - 16 : batch=10
+Epoch 6 - 17 : batch=11
+Epoch 6 - 18 : batch=12
+Epoch 7 - 19 : batch=10
+Epoch 7 - 20 : batch=11
+Epoch 7 - 21 : batch=12
+Epoch 8 - 22 : batch=10
+Epoch 8 - 23 : batch=11
+Epoch 8 - 24 : batch=12
+Epoch 9 - 25 : batch=10
+Epoch 9 - 26 : batch=11
+Epoch 9 - 27 : batch=12
+Epoch 10 - 28 : batch=10
+Epoch 10 - 29 : batch=11
+Epoch 10 - 30 : batch=12
+</code></pre>
+<p>Let’s now consider another situation where we would like to trigger a handler with completely custom logic. For example, we would like to dump model gradients if the training loss satisfies a certain condition:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic"># Let's predefine for simplicity training losses</span></span>
+<span class="line"><span style="color: #ABB2BF">train_losses </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.9</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.7</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.6</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.9</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.8</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.8</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.7</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.01</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">e</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">: train_losses[e.state.iteration </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># We define our custom logic when to execute a handler</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">custom_event_filter</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">trainer</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">event</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">&lt;</span><span style="color: #ABB2BF"> trainer.state.output </span><span style="color: #56B6C2">&lt;</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">True</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">False</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># We run the following handler every iteration completed under our custom_event_filter condition:</span></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">ITERATION_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">event_filter</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">custom_event_filter</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">dump_model_grads</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #D19A66">{}</span><span style="color: #98C379"> - loss=</span><span style="color: #D19A66">{}</span><span style="color: #98C379">: dump model grads"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.iteration, trainer.state.output))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, ]</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=len</span><span style="color: #ABB2BF">(train_losses))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>7 - loss=0.9: dump model grads
+8 - loss=0.8: dump model grads
+10 - loss=0.8: dump model grads
+11 - loss=0.7: dump model grads
+12 - loss=0.4: dump model grads
+13 - loss=0.2: dump model grads
+</code></pre>
+<h4 id="stack-events-to-share-the-action">
+<a href="#stack-events-to-share-the-action" class="header-anchor">
+Stack events to share the action
+</a>
+</h4><p>A user can trigger the same handler on events of differen types. For example, let’s run a handler for model’s validation every 3 epochs and when the training is completed:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">e</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">)</span><span style="color: #61AFEF"> </span><span style="color: #56B6C2">|</span><span style="color: #61AFEF"> Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Epoch </span><span style="color: #D19A66">{}</span><span style="color: #98C379"> - event=</span><span style="color: #D19A66">{}</span><span style="color: #98C379">: Validation"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.epoch, trainer.last_event_name))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># evaluator.run(devset)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">20</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Epoch 3 - event=epoch_completed: Validation
+Epoch 6 - event=epoch_completed: Validation
+Epoch 9 - event=epoch_completed: Validation
+Epoch 12 - event=epoch_completed: Validation
+Epoch 15 - event=epoch_completed: Validation
+Epoch 18 - event=epoch_completed: Validation
+Epoch 20 - event=completed: Validation
+</code></pre>
+<h4 id="add-custom-events">
+<a href="#add-custom-events" class="header-anchor">
+Add custom events
+</a>
+</h4><p>A user can add their own events to go beyond built-in standard events. For example, let’s define new events related to backward and optimizer step calls. This can help us to attach specific handlers on these events in a configurable manner.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> EventEnum</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">BackpropEvents</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">EventEnum</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #D19A66">BACKWARD_STARTED</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'backward_started'</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #D19A66">BACKWARD_COMPLETED</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'backward_completed'</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #D19A66">OPTIM_STEP_COMPLETED</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'optim_step_completed'</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># ...</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># loss = criterion(y_pred, y)</span></span>
+<span class="line"><span style="color: #ABB2BF">    engine.</span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(BackpropEvents.</span><span style="color: #D19A66">BACKWARD_STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># loss.backward()</span></span>
+<span class="line"><span style="color: #ABB2BF">    engine.</span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(BackpropEvents.</span><span style="color: #D19A66">BACKWARD_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># optimizer.step()</span></span>
+<span class="line"><span style="color: #ABB2BF">    engine.</span><span style="color: #61AFEF">fire_event</span><span style="color: #ABB2BF">(BackpropEvents.</span><span style="color: #D19A66">OPTIM_STEP_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(update)</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">register_events</span><span style="color: #ABB2BF">(*BackpropEvents)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">function_before_backprop</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #D19A66">{}</span><span style="color: #98C379"> - before backprop"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.iteration))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(BackpropEvents.</span><span style="color: #D19A66">BACKWARD_STARTED</span><span style="color: #ABB2BF">, function_before_backprop)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">function_after_backprop</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #D19A66">{}</span><span style="color: #98C379"> - after backprop"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">format</span><span style="color: #ABB2BF">(trainer.state.iteration))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(BackpropEvents.</span><span style="color: #D19A66">BACKWARD_COMPLETED</span><span style="color: #ABB2BF">, function_after_backprop)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>1 - before backprop
+1 - after backprop
+2 - before backprop
+2 - after backprop
+3 - before backprop
+3 - after backprop
+4 - before backprop
+4 - after backprop
+5 - before backprop
+5 - after backprop
+6 - before backprop
+6 - after backprop
+7 - before backprop
+7 - after backprop
+8 - before backprop
+8 - after backprop
+9 - before backprop
+9 - after backprop
+10 - before backprop
+10 - after backprop
+</code></pre>
+<h3 id="out-of-the-box-metrics">
+<a href="#out-of-the-box-metrics" class="header-anchor">
+Out-of-the-box metrics
+</a>
+</h3><p>PyTorch-Ignite provides an ensemble of metrics dedicated to many Deep Learning tasks (classification, regression, segmentation, etc.). Most of these metrics provide a way to compute various quantities of interest in an online fashion without having to store the entire output history of a model.</p>
+<ul>
+<li>For classification : <code>Precision</code>, <code>Recall</code>, <code>Accuracy</code>, <code>ConfusionMatrix</code> and more!</li>
+<li>For segmentation : <code>DiceCoefficient</code>, <code>IoU</code>, <code>mIOU</code> and more!</li>
+<li>~20 regression metrics, e.g. MSE, MAE, MedianAbsoluteError, etc</li>
+<li>Metrics that store the entire output history per epoch
+<ul>
+<li>Possible to use with <code>scikit-learn</code> metrics, e.g. <code>EpochMetric</code>, <code>AveragePrecision</code>, <code>ROC_AUC</code>, etc</li>
+</ul>
+</li>
+<li>Easily composable to assemble a custom metric</li>
+<li>Easily extendable to
+<a href="https://pytorch.org/ignite/metrics.html#how-to-create-a-custom-metric" target="_blank" rel="noopener noreferrer">create custom metrics</a></li>
+</ul>
+<p>Complete lists of metrics provided by PyTorch-Ignite can be found
+<a href="https://pytorch.org/ignite/metrics.html#complete-list-of-metrics" target="_blank" rel="noopener noreferrer">here</a> for <code>ignite.metrics</code> and
+<a href="https://pytorch.org/ignite/contrib/metrics.html#ignite-contrib-metrics" target="_blank" rel="noopener noreferrer">here</a> for <code>ignite.contrib.metrics</code>.</p>
+<p>Two kinds of public APIs are provided:</p>
+<ul>
+<li>metric is attached to <code>Engine</code></li>
+<li>metric’s <code>reset</code>, <code>update</code>, <code>compute</code> methods</li>
+</ul>
+<h4 id="more-on-the-reset-update-compute-public-api">
+<a href="#more-on-the-reset-update-compute-public-api" class="header-anchor">
+More on the <code>reset</code>, <code>update</code>, <code>compute</code> public API
+</a>
+</h4><p>Let’s demonstrate this API on a simple example using the <code>Accuracy</code> metric. The idea behind this API is that we accumulate internally certain counters on each <code>update</code> call. The metric’s value is computed on each <code>compute</code> call and counters are reset on each <code>reset</code> call.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">acc </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Start accumulation</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">reset</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">y_target </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,])</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># y_pred is logits computed by the model</span></span>
+<span class="line"><span style="color: #ABB2BF">y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">10.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],  </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],  </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">5.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">((y_pred, y_target))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Compute accuracy on 4 samples</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"After 1st update, accuracy="</span><span style="color: #ABB2BF">, acc.</span><span style="color: #61AFEF">compute</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">y_target </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># y_pred is logits computed by the model</span></span>
+<span class="line"><span style="color: #ABB2BF">y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.6</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">4.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">3.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">((y_pred, y_target))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Compute accuracy on 8 samples</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"After 2nd update, accuracy="</span><span style="color: #ABB2BF">, acc.</span><span style="color: #61AFEF">compute</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>After 1st update, accuracy= 0.75
+After 2nd update, accuracy= 0.625
+</code></pre>
+<h4 id="composable-metrics">
+<a href="#composable-metrics" class="header-anchor">
+Composable metrics
+</a>
+</h4><p>Users can compose their own metrics with ease from existing ones using arithmetic operations or PyTorch methods. For example, an error metric defined as <code>100 * (1.0 - accuracy)</code> can be coded in a straightforward manner:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">acc </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">error </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">100.0</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> (</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF"> acc)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Start accumulation</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">reset</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">y_target </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,])</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># y_pred is logits computed by the model</span></span>
+<span class="line"><span style="color: #ABB2BF">y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">10.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],  </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],  </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">5.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">((y_pred, y_target))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Compute error on 4 samples</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"After 1st update, error="</span><span style="color: #ABB2BF">, error.</span><span style="color: #61AFEF">compute</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">y_target </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># y_pred is logits computed by the model</span></span>
+<span class="line"><span style="color: #ABB2BF">y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">tensor</span><span style="color: #ABB2BF">([</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># incorrect</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">2.6</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">4.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">3.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2.0</span><span style="color: #ABB2BF">],   </span><span style="color: #7F848E; font-style: italic"># correct</span></span>
+<span class="line"><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">acc.</span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">((y_pred, y_target))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Compute err on 8 samples</span></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"After 2nd update, error="</span><span style="color: #ABB2BF">, error.</span><span style="color: #61AFEF">compute</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>After 1st update, error= 25.0
+After 2nd update, error= 37.5
+</code></pre>
+<p>In case a custom metric can not be expressed as arithmetic operations of base metrics, please follow
+<a href="https://pytorch.org/ignite/metrics.html#how-to-create-a-custom-metric" target="_blank" rel="noopener noreferrer">this guide</a> to implement the custom metric.</p>
+<h3 id="out-of-the-box-handlers">
+<a href="#out-of-the-box-handlers" class="header-anchor">
+Out-of-the-box handlers
+</a>
+</h3><p>PyTorch-Ignite provides various commonly used handlers to simplify application code:</p>
+<ul>
+<li>Common training handlers: <code>Checkpoint</code>, <code>EarlyStopping</code>, <code>Timer</code>, <code>TerminateOnNan</code></li>
+<li>Optimizer’s parameter scheduling (learning rate, momentum, etc.)
+<ul>
+<li>concatenate schedulers, add warm-up, cyclical scheduling, piecewise-linear scheduling, and more! See
+<a href="https://pytorch.org/ignite/contrib/handlers.html#more-on-parameter-scheduling" target="_blank" rel="noopener noreferrer">examples</a>.</li>
+</ul>
+</li>
+<li>Time profiling</li>
+<li>Logging to experiment tracking systems:
+<ul>
+<li>Tensorboard, Visdom, MLflow, Polyaxon, Neptune, Trains, etc.</li>
+</ul>
+</li>
+</ul>
+<p>Complete lists of handlers provided by PyTorch-Ignite can be found
+<a href="https://pytorch.org/ignite/handlers.html#complete-list-of-handlers" target="_blank" rel="noopener noreferrer">here</a> for <code>ignite.handlers</code> and
+<a href="https://pytorch.org/ignite/contrib/handlers.html#ignite-contrib-handlers" target="_blank" rel="noopener noreferrer">here</a> for <code>ignite.contrib.handlers</code>.</p>
+<h4 id="common-training-handlers-1">
+<a href="#common-training-handlers-1" class="header-anchor">
+Common training handlers
+</a>
+</h4><p>With the out-of-the-box
+<a href="https://pytorch.org/ignite/handlers.html#ignite.handlers.Checkpoint" target="_blank" rel="noopener noreferrer"><code>Checkpoint</code></a> handler, a user can easily save the training state or best models to the filesystem or a cloud.</p>
+<p>
+<a href="https://pytorch.org/ignite/handlers.html#ignite.handlers.EarlyStopping" target="_blank" rel="noopener noreferrer"><code>EarlyStopping</code></a> and
+<a href="https://pytorch.org/ignite/handlers.html#ignite.handlers.TerminateOnNan" target="_blank" rel="noopener noreferrer"><code>TerminateOnNan</code></a> helps to stop the training if overfitting or diverging.</p>
+<p>All those things can be easily added to the trainer one by one or with
+<a href="https://pytorch.org/ignite/contrib/engines.html#module-ignite.contrib.engines.common" target="_blank" rel="noopener noreferrer">helper methods</a>.</p>
+<p>Let’s consider an example of using helper methods.</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> nn</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.optim </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> optim</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> create_supervised_trainer, create_supervised_evaluator, Events</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.contrib.engines.common </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> common</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [[torch.</span><span style="color: #61AFEF">rand</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">), torch.</span><span style="color: #61AFEF">randint</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, ))] </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> _ </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">range</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">)]</span></span>
+<span class="line"><span style="color: #ABB2BF">val_data </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [[torch.</span><span style="color: #61AFEF">rand</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">), torch.</span><span style="color: #61AFEF">randint</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, ))] </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> _ </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">range</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">)]</span></span>
+<span class="line"><span style="color: #ABB2BF">epoch_length </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">len</span><span style="color: #ABB2BF">(train_data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Linear</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> optim.</span><span style="color: #61AFEF">SGD</span><span style="color: #ABB2BF">(model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.01</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># step_size is expressed in iterations</span></span>
+<span class="line"><span style="color: #ABB2BF">lr_scheduler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> optim.lr_scheduler.</span><span style="color: #61AFEF">StepLR</span><span style="color: #ABB2BF">(optimizer, </span><span style="color: #E06C75; font-style: italic">step_size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">epoch_length, </span><span style="color: #E06C75; font-style: italic">gamma</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.88</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Let's define some dummy trainer and evaluator</span></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_trainer</span><span style="color: #ABB2BF">(model, optimizer, nn.</span><span style="color: #61AFEF">CrossEntropyLoss</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_evaluator</span><span style="color: #ABB2BF">(model, </span><span style="color: #E06C75; font-style: italic">metrics</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">{</span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">()})</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(val_data)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># training state to save</span></span>
+<span class="line"><span style="color: #ABB2BF">to_save </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"trainer"</span><span style="color: #ABB2BF">: trainer, </span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: model,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"optimizer"</span><span style="color: #ABB2BF">: optimizer, </span><span style="color: #98C379">"lr_scheduler"</span><span style="color: #ABB2BF">: lr_scheduler</span></span>
+<span class="line"><span style="color: #ABB2BF">}</span></span>
+<span class="line"><span style="color: #ABB2BF">metric_names </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #98C379">"batch loss"</span><span style="color: #ABB2BF">, ]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">common.</span><span style="color: #61AFEF">setup_common_training_handlers</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">trainer</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">trainer,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">to_save</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">to_save,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">output_path</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"checkpoints"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">save_every_iters</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">epoch_length,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">lr_scheduler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">lr_scheduler,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">output_names</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">metric_names,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">with_pbars</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> common.</span><span style="color: #61AFEF">setup_tb_logging</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"tb_logs"</span><span style="color: #ABB2BF">, trainer, optimizer, </span><span style="color: #E06C75; font-style: italic">evaluators</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">evaluator)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">common.</span><span style="color: #61AFEF">save_best_model_by_val_score</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"best_models"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">evaluator</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">evaluator,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">model</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">model,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">metric_name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"accuracy"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">n_saved</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">trainer</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">trainer,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">tag</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"val"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_data, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">tb_logger.</span><span style="color: #61AFEF">close</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>HBox(children=(FloatProgress(value=0.0, max=5.0), HTML(value='')))
+</code></pre>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">ls -all </span><span style="color: #98C379">"checkpoints"</span></span>
+<span class="line"><span style="color: #ABB2BF">ls -all </span><span style="color: #98C379">"best_models"</span></span>
+<span class="line"><span style="color: #ABB2BF">ls -all </span><span style="color: #98C379">"tb_logs"</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>total 12
+drwxr-xr-x 2 root root 4096 Aug 31 11:27 .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27 ..
+-rw------- 1 root root 1657 Aug 31 11:27 training_checkpoint_50.pt
+total 16
+drwxr-xr-x 2 root root 4096 Aug 31 11:27  .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27  ..
+-rw------- 1 root root 1145 Aug 31 11:27 'best_model_2_val_accuracy=0.3000.pt'
+-rw------- 1 root root 1145 Aug 31 11:27 'best_model_3_val_accuracy=0.3000.pt'
+total 12
+drwxr-xr-x 2 root root 4096 Aug 31 11:27 .
+drwxr-xr-x 1 root root 4096 Aug 31 11:27 ..
+-rw-r--r-- 1 root root  325 Aug 31 11:27 events.out.tfevents.1598873224.3aa7adc24d3d.115.1
+</code></pre>
+<p>In the above code, the <code>common.setup_common_training_handlers</code> method adds <code>TerminateOnNan</code>, adds a handler to use <code>lr_scheduler</code> (expressed in iterations), adds training state checkpointing, exposes <code>batch loss</code> output as exponential moving averaged metric for logging, and adds a progress bar to the trainer.</p>
+<p>Next, the <code>common.setup_tb_logging</code> method returns a TensorBoard logger which is automatically configured to log trainer’s metrics (i.e. <code>batch loss</code>), optimizer’s learning rate and evaluator’s metrics.</p>
+<p>Finally, <code>common.save_best_model_by_val_score</code> sets up a handler to save the best two models according to the validation accuracy metric.</p>
+<h3 id="distributed-and-xla-device-support">
+<a href="#distributed-and-xla-device-support" class="header-anchor">
+Distributed and XLA device support
+</a>
+</h3><p>PyTorch offers a distributed communication package for writing and running parallel applications on multiple devices and machines.
+The native interface provides commonly used collective operations and allows to address multi-CPU and multi-GPU computations seamlessly using the
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html" target="_blank" rel="noopener noreferrer">torch <code>DistributedDataParallel</code></a> module and the well-known <code>mpi</code>, <code>gloo</code> and <code>nccl</code> backends.
+Recently, users can also run PyTorch on XLA devices, like TPUs, with the <code>torch_xla</code> package.</p>
+<p>However, writing distributed training code working on GPUs and TPUs is not a trivial task due to some API specificities.
+The purpose of the PyTorch-Ignite <code>ignite.distributed</code> package introduced in version 0.4 is to unify the code for native <code>torch.distributed</code> API, <code>torch_xla</code> API on XLA devices and also supporting other distributed frameworks (e.g. Horovod).
+To make distributed configuration setup easier, the
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.launcher.Parallel" target="_blank" rel="noopener noreferrer"><code>Parallel</code></a> context manager has been introduced:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.distributed </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> idist</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">training</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">, **</span><span style="color: #D19A66; font-style: italic">kwargs</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">(), </span><span style="color: #98C379">': run with config:'</span><span style="color: #ABB2BF">, config, </span><span style="color: #98C379">'- backend='</span><span style="color: #ABB2BF">, idist.</span><span style="color: #61AFEF">backend</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># do the training ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">backend </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'gloo'</span><span style="color: #ABB2BF"> </span><span style="color: #7F848E; font-style: italic"># or "nccl" or "xla-tpu"</span></span>
+<span class="line"><span style="color: #ABB2BF">dist_configs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span><span style="color: #98C379">'nproc_per_node'</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">}</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># dist_configs["start_method"] = "fork"  # If using Jupyter Notebook</span></span>
+<span class="line"><span style="color: #ABB2BF">config </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span><span style="color: #98C379">'c'</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">12345</span><span style="color: #ABB2BF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">backend, **dist_configs) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config, </span><span style="color: #E06C75; font-style: italic">a</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">b</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'gloo'
+2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes: 
+	nproc_per_node: 2
+	nnodes: 1
+	node_rank: 0
+2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Spawn function '&lt;function training at 0x7f32b8ac9d08&gt;' in 2 processes
+0 : run with config: {'c': 12345} - backend= gloo
+1 : run with config: {'c': 12345} - backend= gloo
+2020-08-31 11:27:09,959 ignite.distributed.launcher.Parallel INFO: End of run
+</code></pre>
+<p>The above code with a single modification can run on a GPU, single-node multiple GPUs, single or multiple TPUs etc. It can be executed with the <code>torch.distributed.launch</code> tool or by Python and spawning the required number of processes. For more details, see
+<a href="https://pytorch.org/ignite/distributed.html" target="_blank" rel="noopener noreferrer">the documentation</a>.</p>
+<p>In addition, methods like <code>auto_model()</code>, <code>auto_optim()</code> and <code>auto_dataloader()</code> help to adapt in a transparent way the provided model, optimizer and data loaders to an existing configuration:</p>
+<div class="highlight"><pre class="shiki" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic"># main.py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.distributed </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> idist</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">training</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">, **</span><span style="color: #D19A66; font-style: italic">kwargs</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">(), </span><span style="color: #98C379">": run with config:"</span><span style="color: #ABB2BF">, config, </span><span style="color: #98C379">"- backend="</span><span style="color: #ABB2BF">, idist.</span><span style="color: #61AFEF">backend</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_dataloader</span><span style="color: #ABB2BF">(dataset, </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">32</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">num_workers</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">12</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, **kwargs)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># batch size, num_workers and sampler are automatically adapted to existing configuration</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># ...</span></span>
+<span class="line"><span style="color: #ABB2BF">    model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">resnet50</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> optim.</span><span style="color: #61AFEF">SGD</span><span style="color: #ABB2BF">(model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.01</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># if training with Nvidia/Apex for Automatic Mixed Precision (AMP)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_model</span><span style="color: #ABB2BF">(model)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># model is DDP or DP or just itself according to existing configuration</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># ...</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_optim</span><span style="color: #ABB2BF">(optimizer)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># optimizer is itself, except XLA configuration and overrides `step()` method.</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># User can safely call `optimizer.step()` (behind `xm.optimizer_step(optimizier)` is performed)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">backend </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"nccl"</span><span style="color: #ABB2BF">  </span><span style="color: #7F848E; font-style: italic"># torch native distributed configuration on multiple GPUs</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># backend = "xla-tpu"  # XLA TPUs distributed configuration</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># backend = None  # no distributed configuration</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">backend, **dist_configs) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config, </span><span style="color: #E06C75; font-style: italic">a</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">b</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Please note that these <code>auto_*</code> methods are optional; a user is free use some of them and manually set up certain parts of the code if required. The advantage of this approach is that there is no under the hood inevitable objects' patching and overriding.</p>
+<p>More details about distributed helpers provided by PyTorch-Ignite can be found in
+<a href="https://pytorch.org/ignite/distributed.html" target="_blank" rel="noopener noreferrer">the documentation</a>.
+A complete example of training on CIFAR10 can be found
+<a href="https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p>A detailed tutorial with distributed helpers is published
+<a href="https://pytorch-ignite.ai/posts/distributed-made-easy-with-ignite/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h2 id="projects-using-pytorch-ignite">
+<a href="#projects-using-pytorch-ignite" class="header-anchor">
+Projects using PyTorch-Ignite
+</a>
+</h2><p>There is a list of research papers with code, blog articles, tutorials, toolkits and other projects that are using PyTorch-Ignite. A detailed overview can be found
+<a href="https://github.com/pytorch/ignite#projects-using-ignite" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p>To start your project using PyTorch-Ignite is simple and can require only to pass through this quick-start example and
+<a href="https://pytorch.org/ignite/concepts.html" target="_blank" rel="noopener noreferrer">library “Concepts”</a>.</p>
+<p>In addition, PyTorch-Ignite also provides several tutorials:</p>
+<ul>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextCNN.ipynb" target="_blank" rel="noopener noreferrer">Text Classification using Convolutional Neural Networks</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/VAE.ipynb" target="_blank" rel="noopener noreferrer">Variational Auto Encoders</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/FashionMNIST.ipynb" target="_blank" rel="noopener noreferrer">Convolutional Neural Networks for Classifying Fashion-MNIST Dataset</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/CycleGAN_with_nvidia_apex.ipynb" target="_blank" rel="noopener noreferrer">Training Cycle-GAN on Horses to Zebras with Nvidia/Apex</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/CycleGAN_with_torch_cuda_amp.ipynb" target="_blank" rel="noopener noreferrer">Another training Cycle-GAN on Horses to Zebras with Native Torch CUDA AMP</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/EfficientNet_Cifar100_finetuning.ipynb" target="_blank" rel="noopener noreferrer">Finetuning EfficientNet-B0 on CIFAR100</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar10_Ax_hyperparam_tuning.ipynb" target="_blank" rel="noopener noreferrer">Hyperparameters tuning with Ax</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/FastaiLRFinder_MNIST.ipynb" target="_blank" rel="noopener noreferrer">Basic example of LR finder on MNIST</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar100_bench_amp.ipynb" target="_blank" rel="noopener noreferrer">Benchmark mixed precision training on Cifar100: torch.cuda.amp vs nvidia/apex</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/blob/master/examples/notebooks/MNIST_on_TPU.ipynb" target="_blank" rel="noopener noreferrer">MNIST training on a single TPU</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10" target="_blank" rel="noopener noreferrer">CIFAR10 Training on multiple TPUs</a></li>
+</ul>
+<p>and examples:</p>
+<ul>
+<li>
+<a href="https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10" target="_blank" rel="noopener noreferrer">cifar10</a> (single/multi-GPU, DDP, AMP, TPUs)</li>
+<li>
+<a href="https://github.com/pytorch/ignite/tree/master/examples/reinforcement_learning" target="_blank" rel="noopener noreferrer">basic RL</a></li>
+<li>
+<a href="https://github.com/pytorch/ignite/tree/master/examples/references" target="_blank" rel="noopener noreferrer">reproducible baselines for vision tasks:</a>
+<ul>
+<li>classification on ImageNet (single/multi-GPU, DDP, AMP)</li>
+<li>semantic segmentation on Pascal VOC2012 (single/multi-GPU, DDP, AMP)</li>
+</ul>
+</li>
+</ul>
+<p>The package can be installed with pip or conda. More info and guides can be found
+<a href="https://github.com/pytorch/ignite#installation" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/deep-learning/">
+#Deep Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/machine-learning/">
+#Machine Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/neural-networks/">
+#Neural Networks
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/python/">
+#Python
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch/">
+#PyTorch
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch-ignite/">
+#PyTorch-Ignite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/tutorial/">
+#Tutorial
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/blog/distributed-made-easy-with-ignite/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>Distributed Training Made Easy with PyTorch-Ignite
+</a>
+</div>
+<div>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#pytorch-ignite-what-and-why-">PyTorch-Ignite: What and Why ?</a>
+<ul>
+<li><a href="#-pytorch--ignite-">🔥 PyTorch + Ignite 🔥</a></li>
+<li><a href="#about-the-design-of-pytorch-ignite">About the design of PyTorch-Ignite</a></li>
+</ul>
+</li>
+<li><a href="#quick-start-example">Quick-start example</a>
+<ul>
+<li><a href="#common-pytorch-code">Common PyTorch code</a></li>
+<li><a href="#trainer-and-evaluators-setup">Trainer and evaluator’s setup</a></li>
+<li><a href="#events-and-handers">Events and Handers</a></li>
+<li><a href="#model-evaluation-metrics">Model evaluation metrics</a></li>
+<li><a href="#common-training-handlers">Common training handlers</a></li>
+<li><a href="#5-takeaways">5 takeaways</a></li>
+</ul>
+</li>
+<li><a href="#advanced-features">Advanced features</a>
+<ul>
+<li><a href="#power-of-events--handlers">Power of Events &amp; Handlers</a></li>
+<li><a href="#out-of-the-box-metrics">Out-of-the-box metrics</a></li>
+<li><a href="#out-of-the-box-handlers">Out-of-the-box handlers</a></li>
+<li><a href="#distributed-and-xla-device-support">Distributed and XLA device support</a></li>
+</ul>
+</li>
+<li><a href="#projects-using-pytorch-ignite">Projects using PyTorch-Ignite</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',apiKey:'19a7a7a75d87608d6f42c722ed1e293f',indexName:'ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:ignite-web']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>
