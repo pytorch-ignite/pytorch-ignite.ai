@@ -52,7 +52,7 @@ The following people are currently core contributors to PyTorch-Ignite’s devel
 
 - Victor Fomin [@vfdev-5](https://github.com/vfdev-5)
 - Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
-- Taras Savchyn [@trsvchn](https://github.com/trsvchn)
+- Sadra [@sadra-barikbin](https://github.com/sadra-barikbin)
 
 ### Emeritus Core Developers
 
@@ -61,6 +61,7 @@ The following people have been active contributors in the past, but are no longe
 - Alykhan Tejani [@alykhantejani](https://github.com/alykhantejani)
 - Jason Kriss [@jasonkriss](https://github.com/jasonkriss)
 - Anmol Joshi [@anmolsjoshi](https://github.com/anmolsjoshi)
+- Taras Savchyn [@trsvchn](https://github.com/trsvchn)
 
 ### Join Core Team
 
