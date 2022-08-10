@@ -52,7 +52,7 @@ The following people are currently core contributors to PyTorch-Ignite’s devel
 
 - Victor Fomin [@vfdev-5](https://github.com/vfdev-5)
 - Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
-- Sadra [@sadra-barikbin](https://github.com/sadra-barikbin)
+- Sadrodin Barikbin [@sadra-barikbin](https://github.com/sadra-barikbin)
 
 ### Emeritus Core Developers
 
