@@ -67,12 +67,18 @@ pre, code {
 .DocSearch-Button:active, .DocSearch-Button:focus, .DocSearch-Button:hover {
   color: var(--c-primary);
 }
+.DocSearch-Button-Container, .DocSearch-Button-Keys {
+  display: flex;
+  align-items: center;
+}
 .DocSearch-Button-Key {
   background: none;
   box-shadow: none;
   top: 0;
   padding-bottom: 0;
   color: inherit;
+  font-size: 1rem;
+  font-family: inherit;
 }
 .highlight {
   position: relative;
