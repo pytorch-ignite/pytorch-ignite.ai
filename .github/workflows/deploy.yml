@@ -22,8 +22,7 @@ jobs:
           extended: true
 
       - uses: actions/setup-node@v3
-        with:
-          node-version: 14
+      - uses: pnpm/action-setup@v2
 
       - name: Build
         run: bash scripts/build.sh
