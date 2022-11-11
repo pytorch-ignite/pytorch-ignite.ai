@@ -31,4 +31,4 @@ jobs:
         run: bash scripts/build.sh
 
       - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest -l0 dist
+      - run: ./bin/htmltest dist -c .htmltest.yml
