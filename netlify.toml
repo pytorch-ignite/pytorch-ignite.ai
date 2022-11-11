@@ -1,5 +1,5 @@
 [build.environment]
-NODE_VERSION = "16"
+NODE_VERSION = "18"
 HUGO_VERSION = "0.88.1"
 HUGO_ENV = "production"
 
