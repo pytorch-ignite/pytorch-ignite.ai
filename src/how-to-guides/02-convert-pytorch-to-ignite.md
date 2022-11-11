@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to convert pure PyTorch code to Ignite
 weight: 2
 downloads: true
@@ -10,7 +10,7 @@ tags:
   - checkpoints
   - progress bar
   - logging
----
+--- -->
 # How to convert pure PyTorch code to Ignite 
 
 In this guide, we will show how PyTorch code components can be converted into compact and flexible PyTorch-Ignite code. 

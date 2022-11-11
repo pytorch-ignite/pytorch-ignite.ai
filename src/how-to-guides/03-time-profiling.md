@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to do time profiling
 weight: 3
 downloads: true
@@ -9,7 +9,7 @@ tags:
   - engine.state.times
   - BasicTimeProfiler
   - HandlersTimeProfiler
----
+--- -->
 # How to do time profiling
 
 This example demonstrates how you can get the time breakdown for:

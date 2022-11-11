@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to work with data iterators
 date: 2021-08-04
 weight: 6
@@ -8,7 +8,7 @@ tags:
   - data iterators
   - infinite iterator
   - finite iterator
----
+--- -->
 # How to work with data iterators
 
 When the data provider for training or validation is an iterator

@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to use FastaiLRFinder with Ignite
 date: 2021-08-02
 weight: 4
@@ -6,7 +6,7 @@ downloads: true
 sidebar: true
 tags:
   - lr finder
----
+--- -->
 
 # How to use FastaiLRFinder with Ignite
 
@@ -153,7 +153,7 @@ print("Suggested LR", lr_finder.lr_suggestion())
 
 
     
-![png](/_images/04-fastai-lr-finder_16_0.png)
+![png](/workspaces/pytorch-ignite.ai/static/_images/04-fastai-lr-finder_16_0.png)
     
 
 

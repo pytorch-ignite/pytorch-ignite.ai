@@ -129,7 +129,7 @@ def write_preds_to_file(predictions, filename):
         torch.save(prediction_tensor, filename)
 ```
 
-**Note:** In the above example, only the main process required the gathered values and not all the processes. This can be also be done via the `gather()` method, however one of the backends [`nccl` does not support `gather()`](https://pytorch.org/docs/stable/distributed.html) hence we had to use `all_gather()`.
+**Note:** In the above example, only the main process required the gathered values and not all the processes. This can also be done via the `gather()` method.
 
 ## Broadcast
 

@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to effectively increase batch size on limited compute
 date: 2021-08-04
 weight: 5
@@ -6,7 +6,7 @@ downloads: true
 sidebar: true
 tags:
   - gradient accumulation
----
+--- -->
 # How to effectively increase batch size on limited compute
 
 To effectively increase the batch size on limited GPU resources, follow

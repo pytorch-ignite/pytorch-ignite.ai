@@ -1,4 +1,4 @@
----
+<!-- ---
 title: How to install PyTorch-Ignite
 date: 2021-08-04
 weight: 1
@@ -11,7 +11,7 @@ tags:
   - docker images
   - conda
   - nightly
----
+--- -->
 # How to install PyTorch-Ignite
 
 From [pip](https://pypi.org/project/pytorch-ignite/):
