@@ -1,10 +1,10 @@
 {
   "type": "module",
   "devDependencies": {
-    "jsdom": "^20.0.1",
-    "prettier": "^2.6.2",
-    "shiki": "^0.10.1",
-    "windicss": "^3.5.4"
+    "jsdom": "^20.0.2",
+    "prettier": "^2.7.1",
+    "shiki": "^0.11.1",
+    "windicss": "^3.5.6"
   },
   "scripts": {
     "dev": "windicss -f windi.config.cjs -dto themes/ignite/assets/_hugo/css/style.css",
