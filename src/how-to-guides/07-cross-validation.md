@@ -25,7 +25,7 @@ In this example, we will be using a [ResNet18](https://pytorch.org/vision/stable
 
     Collecting pytorch-ignite
       Downloading pytorch_ignite-0.4.6-py3-none-any.whl (232 kB)
-    [K     |████████████████████████████████| 232 kB 13.3 MB/s 
+    [K     |████████████████████████████████| 232 kB 13.3 MB/s eta 0:00:01
     [?25hRequirement already satisfied: torch<2,>=1.3 in /usr/local/lib/python3.7/dist-packages (from pytorch-ignite) (1.9.0+cu102)
     Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from torch<2,>=1.3->pytorch-ignite) (3.7.4.3)
     Installing collected packages: pytorch-ignite
