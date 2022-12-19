@@ -109,7 +109,7 @@ warnings.filterwarnings("ignore")
 
 ### Preparing data
 
-We will be using the [new_commentary](https://github.com/huggingface/datasets/blob/master/datasets/news_commentary/news_commentary.py) data (English - German) from the 🤗 Hub for this example.
+We will be using the [new_commentary](https://huggingface.co/datasets/news_commentary/blob/main/news_commentary.py) data (English - German) from the 🤗 Hub for this example.
 
 
 ```python

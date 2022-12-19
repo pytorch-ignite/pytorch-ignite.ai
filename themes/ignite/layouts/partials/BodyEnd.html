@@ -1,5 +1,5 @@
 {{ if .Site.IsServer }}
-  <script src="https://cdn.jsdelivr.net/npm/shiki@0.9.11/dist/index.jsdelivr.iife.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/shiki@0.10.1/dist/index.jsdelivr.iife.min.js"></script>
   {{ $script := resources.Get "_hugo/js/embedHighlight.js" }}
   <script src="{{ $script.RelPermalink }}" type="module"></script>
   {{ $script := resources.Get "_hugo/js/embedCopyBtn.js" }}
@@ -33,13 +33,14 @@
   <script defer src="{{ $script.RelPermalink }}"></script>
 {{ end }}
 
-<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@1.0.0-alpha.28/dist/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3.3.0/dist/umd/index.min.js"></script>
 <script>
   fetch('https://api.github.com/repos/pytorch/ignite/releases/latest')
     .then((val) => val.json())
     .then((val) => {
       docsearch({
         container: '#docsearch',
+        appId: 'BH4D9OD16A',
         apiKey: '19a7a7a75d87608d6f42c722ed1e293f',
         indexName: 'ignite',
         searchParameters: {

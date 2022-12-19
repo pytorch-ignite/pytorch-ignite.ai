@@ -22,8 +22,13 @@ jobs:
           hugo-version: "0.88.1"
           extended: true
 
+      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
       - name: Build
         run: bash scripts/build.sh
 
       - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest dist
+      - run: ./bin/htmltest dist -c .htmltest.yml
