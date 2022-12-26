@@ -38,20 +38,19 @@ Since then, several releases have appeared following a ~5 month cycle, with a th
 
 ### Governance
 
-PyTorch-Ignite is a [NumFOCUS Affiliated Project](https://numfocus.org/sponsored-projects/affiliated-projects) and 
-open-source community effort. 
-The Project's affiliation to [PyTorch organization](https://github.com/pytorch) is due in large part to historical reasons and it 
+PyTorch-Ignite is a [NumFOCUS Affiliated Project](https://numfocus.org/sponsored-projects/affiliated-projects) and
+open-source community effort.
+The Project's affiliation to [PyTorch organization](https://github.com/pytorch) is due in large part to historical reasons and it
 has the same implication to the project's governance as the other community projects from the
 [PyTorch Ecosystem](https://pytorch.org/ecosystem/).
 
 The decision making process and governance structure of the project is described in the [governance document](https://pytorch.org/ignite/master/governance.html).
 
-### Authors
+### Maintainers
 
 The following people are currently core contributors to PyTorch-Ignite’s development and maintenance:
 
 - Victor Fomin [@vfdev-5](https://github.com/vfdev-5)
-- Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
 - Sadrodin Barikbin [@sadra-barikbin](https://github.com/sadra-barikbin)
 
 ### Emeritus Core Developers
@@ -62,6 +61,7 @@ The following people have been active contributors in the past, but are no longe
 - Jason Kriss [@jasonkriss](https://github.com/jasonkriss)
 - Anmol Joshi [@anmolsjoshi](https://github.com/anmolsjoshi)
 - Taras Savchyn [@trsvchn](https://github.com/trsvchn)
+- Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
 
 ### Join Core Team
 
