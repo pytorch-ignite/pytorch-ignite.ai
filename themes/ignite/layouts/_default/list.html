@@ -5,6 +5,8 @@
     {{ partial "ListInnerBlog.html" . }}
   {{ else if eq .Title "Getting Started" }}
     {{ partial "ListInnerGettingStarted.html" . }}
+  {{ else if eq .Title "Tutorials" }}
+    {{ partial "ListInnerTutorials.html" . }}
   {{ else }}
     {{ partial "ListInnerDefault.html" . }}
   {{ end }}
