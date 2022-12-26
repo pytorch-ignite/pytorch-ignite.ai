@@ -29,9 +29,7 @@ Please checkout [Contribution Guidelines](https://github.com/pytorch/ignite/blob
 
 ### History
 
-This project was started by Alykhan Tejani [@alykhantejani](https://github.com/alykhantejani),
-Francisco Massa [@fmassa](https://github.com/fmassa) and Joost van Amersfoort [@y0ast](https://github.com/y0ast)
-in the end of 2017 and was highly inspired by [torchnet](https://github.com/pytorch/tnt).
+This project was started by Alykhan Tejani, Francisco Massa and Joost van Amersfoort in the end of 2017 and was highly inspired by [torchnet](https://github.com/pytorch/tnt).
 
 In 2018, the project core team had grown and the first public release was published in June 2018.
 Since then, several releases have appeared following a ~5 month cycle, with a thriving international community leading the development.
@@ -44,7 +42,7 @@ The Project's affiliation to [PyTorch organization](https://github.com/pytorch) 
 has the same implication to the project's governance as the other community projects from the
 [PyTorch Ecosystem](https://pytorch.org/ecosystem/).
 
-The decision making process and governance structure of the project is described in the [governance document](https://pytorch.org/ignite/master/governance.html).
+The decision making process and governance structure of the project is described in the [governance document](/about/governance/).
 
 ### Maintainers
 
@@ -93,8 +91,7 @@ We especially appreciate amazing work of Isabela Presedo-Floyd [@isabela-pf](htt
 its [elaboration](https://github.com/pytorch/ignite/issues/1221) and [guidelines](https://github.com/pytorch/ignite/blob/master/assets/logo/ignite_logo_guidelines.md).
 Our new logos can be found [here](https://github.com/pytorch/ignite/tree/master/assets/logo).
 
-We are also grateful to Soumith Chintala [@soumith](https://github.com/soumith), Joe Spisak [@jspisak](https://github.com/jspisak)
-from Facebook for their help and to [PyTorch group](https://github.com/pytorch) for infrastructure support
+We are also grateful to Soumith Chintala, Joe Spisak from Meta for their help and to [PyTorch org](https://github.com/pytorch) for infrastructure support
 (GPU CI and hosting of conda releases and our documentation).
 
 In particular, Victor Fomin [@vfdev-5](https://github.com/vfdev-5) acknowledges [Magellium](https://www.magellium.com/)
