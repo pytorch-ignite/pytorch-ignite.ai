@@ -698,7 +698,7 @@ PyTorch-Ignite provides an ensemble of metrics dedicated to many Deep Learning t
 
 - For classification : `Precision`, `Recall`, `Accuracy`, `ConfusionMatrix` and more!
 - For segmentation : `DiceCoefficient`, `IoU`, `mIOU` and more!
-- ~20 regression metrics, e.g. MSE, MAE, MedianAbsoluteError, etc 
+- ~20 regression metrics, e.g. MSE, MAE, MedianAbsoluteError, etc
 - Metrics that store the entire output history per epoch
   - Possible to use with `scikit-learn` metrics, e.g. `EpochMetric`, `AveragePrecision`, `ROC_AUC`, etc
 - Easily composable to assemble a custom metric
@@ -942,7 +942,7 @@ with idist.Parallel(backend=backend, **dist_configs) as parallel:
 ```
 
     2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'gloo'
-    2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes: 
+    2020-08-31 11:27:07,128 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes:
     	nproc_per_node: 2
     	nnodes: 1
     	node_rank: 0
@@ -951,7 +951,7 @@ with idist.Parallel(backend=backend, **dist_configs) as parallel:
     1 : run with config: {'c': 12345} - backend= gloo
     2020-08-31 11:27:09,959 ignite.distributed.launcher.Parallel INFO: End of run
 
-The above code with a single modification can run on a GPU, single-node multiple GPUs, single or multiple TPUs etc. It can be executed with the `torch.distributed.launch` tool or by Python and spawning the required number of processes. For more details, see [the documentation](https://pytorch.org/ignite/distributed.html).
+The above code with a single modification can run on a GPU, single-node multiple GPUs, single or multiple TPUs etc. It can be executed with the `torchrun` or by Python and spawning the required number of processes. For more details, see [the documentation](https://pytorch.org/ignite/distributed.html).
 
 In addition, methods like `auto_model()`, `auto_optim()` and `auto_dataloader()` help to adapt in a transparent way the provided model, optimizer and data loaders to an existing configuration:
 

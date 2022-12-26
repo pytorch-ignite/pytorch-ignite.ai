@@ -53,7 +53,7 @@ Then we will also cover several ways of spawning processes via torch native `tor
 
 - [`torch.multiprocessing.spawn`](https://pytorch.org/docs/stable/multiprocessing.html#torch.multiprocessing.spawn)
 
-- [`torch.distributed.launch`](https://pytorch.org/docs/stable/distributed.html#launch-utility)
+- [`torchrun`](https://pytorch.org/docs/stable/elastic/run.html#launcher-api)
 
 - [`horovodrun`](https://horovod.readthedocs.io/en/stable/running_include.html)
 
@@ -183,7 +183,7 @@ dist.destroy_process_group()
 PyTorch-Ignite's `idist` also unifies the distributed codes launching method and makes the distributed configuration setup easier with the
 [ignite.distributed.launcher.Parallel (idist Parallel)](https://pytorch.org/ignite/distributed.html#ignite.distributed.launcher.Parallel) context manager.
 
-This context manager has the capability to either spawn `nproc_per_node` (passed as a script argument) child processes and initialize a processing group according to the provided backend or use tools like `torch.distributed.launch`, `slurm`, `horovodrun` by initializing the processing group given the `backend` argument only
+This context manager has the capability to either spawn `nproc_per_node` (passed as a script argument) child processes and initialize a processing group according to the provided backend or use tools like `torchrun`, `slurm`, `horovodrun` by initializing the processing group given the `backend` argument only
 in a general way.
 
 ### With `torch.multiprocessing.spawn`
@@ -212,13 +212,13 @@ python -u ignite_idist.py --backend xla-tpu --nproc_per_node 8 --batch_size 32
 PyTorch-Ignite's `idist Parallel` context manager is also compatible
 with multiple distributed launchers.
 
-#### With torch.distributed.launch
+#### With `torchrun`
 
-Here we are using the `torch.distributed.launch` script in order to
+Here we are using the `torchrun` script in order to
 spawn the processes:
 
 ```bash
-python -m torch.distributed.launch --nproc_per_node 2 --use_env ignite_idist.py --backend gloo
+torchrun --nproc_per_node 2 ignite_idist.py --backend gloo
 ```
 
 #### With horovodrun
