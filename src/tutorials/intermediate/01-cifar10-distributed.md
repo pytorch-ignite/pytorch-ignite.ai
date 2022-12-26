@@ -615,7 +615,7 @@ with idist.Parallel(backend=backend, nproc_per_node=nproc_per_node) as parallel:
 This way uses `torch.multiprocessing.spawn` and is the default way to spawn processes. However, this way is slower due to initialization overhead. 
 
 or
-> Only initialize a processing group given the backend (useful with tools like torch.distributed.launch, horovodrun, etc).
+> Only initialize a processing group given the backend (useful with tools like `torchrun`, `horovodrun`, etc).
 
 This way is recommended since training is faster and easier to extend to multiple scripts.
 
@@ -643,10 +643,10 @@ if __name__ == "__main__":
 
 Then we can run the script (e.g. for 2 GPUs) as:
 
-### Run with `torch.distributed.launch` (Recommended)
+### Run with `torchrun` (Recommended)
 
 ```
-python -u -m torch.distributed.launch --nproc_per_node=2 --use_env main.py run --backend="nccl"
+torchrun --nproc_per_node=2 main.py run --backend="nccl"
 ```
 
 
@@ -685,27 +685,27 @@ if __name__ == "__main__":
 
 The only change is how we run the script. We need to provide the IP address of the master node and its port along with the node rank. For example, for 2 nodes (`nnodes`) and 2 GPUs (`nproc_per_node`), we can:
 
-### Run with `torch.distributed.launch` (Recommended)
+### Run with `torchrun` (Recommended)
 
 On node 0 (master node):
 
 ```
-python -u -m torch.distributed.launch \
+torchrun \
     --nnodes=2 \
     --nproc_per_node=2 \
     --node_rank=0 \
-    --master_addr=master --master_port=2222 --use_env \
+    --master_addr=master --master_port=2222 \
     main.py run --backend="nccl"
 ```
 
 On node 1 (worker node):
 
 ```
-python -u -m torch.distributed.launch \
+torchrun \
     --nnodes=2 \
     --nproc_per_node=2 \
     --node_rank=1 \
-    --master_addr=master --master_port=2222 --use_env \
+    --master_addr=master --master_port=2222 \
     main.py run --backend="nccl"
 ```
 
@@ -928,7 +928,7 @@ with idist.Parallel(backend=config["backend"], **spawn_kwargs) as parallel:
 
 1. Complete code can be found [here](https://github.com/pytorch-ignite/examples/blob/main/tutorials/intermediate/cifar10-distributed.py).
 2. Example of the logs of a ClearML experiment run on this code:
-   - [With torch.distributed.launch](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution) 
+   - [With torchrun](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution) 
    - [With default internal spawning](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/c2b82ec98e8445f29044c94f7efc8215/output/execution)
    - [On Jupyter](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/2fedd7447b114b36af7066cdb81fddae/output/execution)
    - [On Colab with XLA](https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/fbffb4d7f9324c57979a833a789df857/output/execution)
