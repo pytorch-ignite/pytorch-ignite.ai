@@ -2,7 +2,7 @@
   "type": "module",
   "devDependencies": {
     "jsdom": "^21.0.0",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.2",
     "shiki": "^0.12.1",
     "windicss": "^3.5.6"
   },
