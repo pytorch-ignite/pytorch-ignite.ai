@@ -146,7 +146,7 @@ trainer.run(infinite_iterator(4))
 
 Same code can be used for validating models.
 
-### Finite iterator with unknown length
+## Finite iterator with unknown length
 
 Let's use a finite data iterator but with unknown length (for user). In
 case of training, we would like to perform several passes over the
@@ -312,7 +312,7 @@ evaluator.run(data_iter)
 
 
 
-### Finite iterator with known length
+## Finite iterator with known length
 
 Let's use a finite data iterator with known size for training or validation. If we need to restart the data iterator, we can do this either as in case of unknown size by attaching the restart handler on `@trainer.on(Events.DATALOADER_STOP_ITERATION)`, but here we will do this explicitly on iteration:
 
