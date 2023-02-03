@@ -1,5 +1,5 @@
 ---
-title: Distributed Training Made Easy with PyTorch-Ignite
+title: Sangho's Internship at Quansight with PyTorch-Ignite project
 slug: pytorch-ignite-during-quansight-internship
 description: PyTorch-Ignite project during internship at Quansight
 date: 2023-02-03
@@ -8,10 +8,8 @@ tags:
   - Machine Learning
   - PyTorch-Ignite
   - PyTorch
-  - Horovod
-  - SLURM
-  - PyTorch XLA
-  - PyTorch DDP
+  - Internship
+  - Metrics
   - Distributed
 ---
 
