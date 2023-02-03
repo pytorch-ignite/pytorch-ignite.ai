@@ -15,8 +15,13 @@ tags:
   - Distributed
 ---
 
-Hey, I'm [Sangho Lee], a master's student from Seoul National University.
+Crossposted from https://labs.quansight.org/blog/sangho-internship-blogpost
+
+Hey, I'm Sangho Lee, a master's student from Seoul National University.
 I have participated in the [PyTorch-Ignite](https://pytorch-ignite.ai/) project internship at Quansight Labs, working on test code improvements and features for distributed computations.
+
+<!--more-->
+
 The first part of my contributions is improvements to the test code for metric computation in Distributed Data Parallel (DDP) configuration.
 Then I worked on adding the `group` argument to the `all_reduce` and `all_gather` methods in [`ignite.distributed`](https://pytorch.org/ignite/distributed.html) module.
 
