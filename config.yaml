@@ -55,3 +55,5 @@ params:
           link: /about/governance/
     - text: GitHub
       link: https://github.com/pytorch/ignite
+    - text: Playground
+      link: https://mybinder.org/v2/gh/pytorch-ignite/playground/HEAD?labpath=index.ipynb
