@@ -87,7 +87,11 @@ If you use PyTorch-Ignite in a scientific publication, we would appreciate citat
 We gratefully acknowledge the contributions of [all open-source developers](https://github.com/pytorch/ignite/graphs/contributors)
 who helped get this project off of the ground and supported the project.
 
-We especially appreciate amazing work of Isabela Presedo-Floyd [@isabela-pf](https://github.com/isabela-pf)  on project's logo,
+Special thanks and shout-out to Jeff Yang [@ydcjeff](https://github.com/ydcjeff) for creating this beatiful website for the project!
+
+Great work was done by Jeff Yang [@ydcjeff](https://github.com/ydcjeff) and Taras Savchyn [@trsvchn](https://github.com/trsvchn) on [PyTorch-Ignite Code-Generator app](https://code-generator.pytorch-ignite.ai/), thanks a lot!
+
+We especially appreciate amazing work of Isabela Presedo-Floyd [@isabela-pf](https://github.com/isabela-pf) on project's logo,
 its [elaboration](https://github.com/pytorch/ignite/issues/1221) and [guidelines](https://github.com/pytorch/ignite/blob/master/assets/logo/ignite_logo_guidelines.md).
 Our new logos can be found [here](https://github.com/pytorch/ignite/tree/master/assets/logo).
 
