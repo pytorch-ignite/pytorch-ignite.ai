@@ -56,4 +56,6 @@ params:
     - text: GitHub
       link: https://github.com/pytorch/ignite
     - text: Playground
-      link: https://mybinder.org/v2/gh/pytorch-ignite/playground/HEAD?labpath=index.ipynb
+      link: https://pytorch-ignite.ai/playground
+    - text: Code-Generator
+      link: https://code-generator.pytorch-ignite.ai/
