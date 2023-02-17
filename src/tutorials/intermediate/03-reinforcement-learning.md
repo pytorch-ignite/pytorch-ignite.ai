@@ -42,7 +42,7 @@ The problem is considered solved when the average reward is greater than `reward
 
 
 ```python
-!pip install gym pytorch-ignite
+!pip install gymnasium pytorch-ignite
 ```
 
 ### On Colab
@@ -53,12 +53,14 @@ We need additional dependencies to render the environment on Google Colab.
 ```python
 !apt-get install -y xvfb python-opengl
 !pip install pyvirtualdisplay
+!pip install --upgrade pygame moviepy
 ```
 
 ## Imports
 
 
 ```python
+from collections import deque
 import numpy as np
 import torch
 import torch.nn as nn
@@ -68,8 +70,8 @@ from torch.distributions import Categorical
 
 from ignite.engine import Engine, Events
 
-import gym
-from gym.wrappers import Monitor
+import gymnasium as gym
+from gymnasium.wrappers import RecordVideo
 
 import glob
 import io
@@ -98,7 +100,7 @@ Let's load our environment first.
 
 
 ```python
-env = gym.make("CartPole-v0")
+env = gym.make("CartPole-v0", render_mode="rgb_array")
 ```
 
 ### On Colab
@@ -123,26 +125,11 @@ Below we have a utility function to enable video recording of the gym environmen
 
 ```python
 def wrap_env(env):
-  env = Monitor(env, './video', force=True)
+  env = RecordVideo(env, './video', disable_logger=True)
   return env
 
 env = wrap_env(env)
 ```
-
-### Set the seed
-
-
-```python
-env.seed(seed_val)
-torch.manual_seed(seed_val)
-```
-
-
-
-
-    <torch._C.Generator at 0x7f76fa684730>
-
-
 
 ## Model
 
@@ -156,13 +143,16 @@ class Policy(nn.Module):
     def __init__(self):
         super(Policy, self).__init__()
         self.affine1 = nn.Linear(4, 128)
+        self.dropout = nn.Dropout(p=0.6)
         self.affine2 = nn.Linear(128, 2)
 
         self.saved_log_probs = []
         self.rewards = []
 
     def forward(self, x):
-        x = F.relu(self.affine1(x))
+        x = self.affine1(x)
+        x = self.dropout(x)
+        x = F.relu(x)
         action_scores = self.affine2(x)
         return F.softmax(action_scores, dim=1)
 ```
@@ -172,10 +162,10 @@ And then we initialize our model, optimizer, epsilon and timesteps.
 
 
 ```python
-model = Policy()
-optimizer = optim.Adam(model.parameters(), lr=1e-2)
+policy = Policy()
+optimizer = optim.Adam(policy.parameters(), lr=1e-2)
 eps = np.finfo(np.float32).eps.item()
-timesteps = list(range(10000))
+timesteps = range(10000)
 ```
 
 ## Create Trainer
@@ -188,12 +178,13 @@ Ignite's [`Engine`](https://pytorch.org/ignite/concepts.html#engine) allows user
 ```python
 def run_single_timestep(engine, timestep):
     observation = engine.state.observation
-    action = select_action(model, observation)
-    engine.state.observation, reward, done, _ = env.step(action)
+    action = select_action(policy, observation)
+    engine.state.observation, reward, done, _, _ = env.step(action)
     if render:
         env.render()
 
-    model.rewards.append(reward)
+    policy.rewards.append(reward)
+    engine.state.ep_reward += reward
 
     if done:
         engine.terminate_epoch()
@@ -206,12 +197,12 @@ Next we need to select an action to take. After we get a list of probabilities, 
 
 
 ```python
-def select_action(model, observation):
+def select_action(policy, observation):
     state = torch.from_numpy(observation).float().unsqueeze(0)
-    probs = model(state)
+    probs = policy(state)
     m = Categorical(probs)
     action = m.sample()
-    model.saved_log_probs.append(m.log_prob(action))
+    policy.saved_log_probs.append(m.log_prob(action))
     return action.item()
 ```
 
@@ -219,27 +210,27 @@ We initialize a list to save policy loss and true returns of the rewards returne
 
 
 ```python
-def finish_episode(model, optimizer, gamma, eps):
+def finish_episode(policy, optimizer, gamma):
     R = 0
     policy_loss = []
-    rewards = []
-    for r in model.rewards[::-1]:
+    returns = deque()
+    for r in policy.rewards[::-1]:
         R = r + gamma * R
-        rewards.insert(0, R)
-
-    rewards = torch.tensor(rewards)
-    rewards = (rewards - rewards.mean()) / (rewards.std() + eps)
+        returns.appendleft(R)
     
-    for log_prob, reward in zip(model.saved_log_probs, rewards):
-        policy_loss.append(-log_prob * reward)
+    returns = torch.tensor(returns)
+    returns = (returns - returns.mean()) / (returns.std() + eps)
+
+    for log_prob, R in zip(policy.saved_log_probs, returns):
+        policy_loss.append(-log_prob * R)
 
     optimizer.zero_grad()
     policy_loss = torch.cat(policy_loss).sum()
     policy_loss.backward()
     optimizer.step()
 
-    del model.rewards[:]
-    del model.saved_log_probs[:]
+    del policy.rewards[:]
+    del policy.saved_log_probs[:]
 ```
 
 ## Attach handlers to run on specific events
@@ -256,9 +247,7 @@ Before training begins, we initialize the reward in `trainer`'s state.
 
 
 ```python
-@trainer.on(Events.STARTED)
-def initialize(engine):
-    engine.state.running_reward = 10
+trainer.state.running_reward = 10
 ```
 
 When an episode begins, we have to reset the environment's state.
@@ -266,8 +255,10 @@ When an episode begins, we have to reset the environment's state.
 
 ```python
 @trainer.on(EPISODE_STARTED)
-def reset_environment_state(engine):
-    engine.state.observation = env.reset()
+def reset_environment_state():
+    torch.manual_seed(seed_val + trainer.state.epoch)
+    trainer.state.observation, _ = env.reset(seed=seed_val + trainer.state.epoch)
+    trainer.state.ep_reward = 0
 ```
 
 When an episode finishes, we update the running reward and perform backpropogation by calling `finish_episode()`.
@@ -275,10 +266,9 @@ When an episode finishes, we update the running reward and perform backpropogati
 
 ```python
 @trainer.on(EPISODE_COMPLETED)
-def update_model(engine):
-    t = engine.state.timestep
-    engine.state.running_reward = engine.state.running_reward * 0.99 + t * 0.01
-    finish_episode(model, optimizer, gamma, eps)
+def update_model():
+    trainer.state.running_reward = 0.05 * trainer.state.ep_reward + (1 - 0.05) * trainer.state.running_reward
+    finish_episode(policy, optimizer, gamma)
 ```
 
 After that, every 100 (`log_interval`) episodes, we log the results.
@@ -286,11 +276,11 @@ After that, every 100 (`log_interval`) episodes, we log the results.
 
 ```python
 @trainer.on(EPISODE_COMPLETED(every=log_interval))
-def log_episode(engine):
-    i_episode = engine.state.epoch
+def log_episode():
+    i_episode = trainer.state.epoch
     print(
-        f"Episode {i_episode}\tLast length: {engine.state.timestep:5d}"
-        f"\tAverage length: {engine.state.running_reward:.2f}"
+        f"Episode {i_episode}\tLast reward: {trainer.state.ep_reward:.2f}"
+        f"\tAverage length: {trainer.state.running_reward:.2f}"
     )
 ```
 
@@ -299,14 +289,14 @@ And finally, we check if our running reward has crossed the threshold so that we
 
 ```python
 @trainer.on(EPISODE_COMPLETED)
-def should_finish_training(engine):
-    running_reward = engine.state.running_reward
+def should_finish_training():
+    running_reward = trainer.state.running_reward
     if running_reward > env.spec.reward_threshold:
         print(
             f"Solved! Running reward is now {running_reward} and "
-            f"the last episode runs to {engine.state.timestep} time steps!"
+            f"the last episode runs to {trainer.state.timestep} time steps!"
         )
-        engine.should_terminate = True
+        trainer.should_terminate = True
 ```
 
 ## Run Trainer
@@ -385,7 +375,7 @@ Finally, we can view our saved video.
 mp4list = glob.glob('video/*.mp4')
 
 if len(mp4list) > 0:
-    mp4 = mp4list[0]
+    mp4 = mp4list[-1]  # pick the last video
     video = io.open(mp4, 'r+b').read()
     encoded = base64.b64encode(video)
     ipythondisplay.display(HTML(data='''<video alt="test" autoplay 
