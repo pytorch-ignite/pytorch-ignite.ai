@@ -56,6 +56,6 @@ params:
     - text: GitHub
       link: https://github.com/pytorch/ignite
     - text: Playground
-      link: /playground
+      link: https://pytorch-ignite.ai/playground
     - text: Code-Generator
       link: https://code-generator.pytorch-ignite.ai/
