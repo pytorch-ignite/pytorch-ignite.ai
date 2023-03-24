@@ -170,7 +170,7 @@ timesteps = range(10000)
 
 ## Create Trainer
 
-Ignite's [`Engine`](https://pytorch.org/ignite/concepts.html#engine) allows users to define a `process_function` to run one episode. We select an action from the policy, then take the action through `step()` and finally increment our reward. If the problem is solved, we terminate training and save the `timestep`.
+Ignite's [`Engine`](https://pytorch-ignite.ai/concepts/01-engine/) allows users to define a `process_function` to run one episode. We select an action from the policy, then take the action through `step()` and finally increment our reward. If the problem is solved, we terminate training and save the `timestep`.
 
 > An episode is an instance of a game (or life of a game). If the game ends or life decreases, the episode ends. Step, on the other hand, is the time or some discrete value which increases monotonically in an episode. With each change in the state of the game, the value of step increases until the game ends.
 

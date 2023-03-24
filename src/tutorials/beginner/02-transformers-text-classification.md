@@ -135,7 +135,7 @@ model.to(device)
 
 ## Create Trainer
 
-Ignite's [`Engine`](https://pytorch.org/ignite/concepts.html#engine) allows users to define a `process_function` to process a given batch of data. This function is applied to all the batches of the dataset. This is a general class that can be applied to train and validate models. A `process_function` has two parameters `engine` and `batch`.
+Ignite's [`Engine`](https://pytorch-ignite.ai/concepts/01-engine/) allows users to define a `process_function` to process a given batch of data. This function is applied to all the batches of the dataset. This is a general class that can be applied to train and validate models. A `process_function` has two parameters `engine` and `batch`.
 
 The code for processing a batch of training data in the tutorial is as follows:
 
@@ -192,7 +192,7 @@ trainer = Engine(train_step)
 
 The `lr_scheduler` we defined perviously was a handler. 
 
-[Handlers](https://pytorch.org/ignite/concepts.html#handlers) can be any type of function (lambda functions, class methods, etc). On top of that, Ignite provides several built-in handlers to reduce redundant code. We attach these handlers to engine which is triggered at a specific [event](https://pytorch.org/ignite/concepts.html#events-and-handlers). These events can be anything like the start of an iteration or the end of an epoch. [Here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) is a complete list of built-in events.
+[Handlers](https://pytorch-ignite.ai/concepts/02-events-and-handlers/#handlers) can be any type of function (lambda functions, class methods, etc). On top of that, Ignite provides several built-in handlers to reduce redundant code. We attach these handlers to engine which is triggered at a specific [event](https://pytorch-ignite.ai/concepts/02-events-and-handlers/). These events can be anything like the start of an iteration or the end of an epoch. [Here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) is a complete list of built-in events.
 
 Therefore, we will attach the `lr_scheduler` (handler) to the `trainer` (`engine`) via [`add_event_handler()`](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.add_event_handler) so it can be triggered at `Events.ITERATION_STARTED` (start of an iteration) automatically.
 
@@ -256,7 +256,7 @@ for batch in eval_dataloader:
 
 Finally, we return the predictions and the actual labels so that we can compute the metrics.
 
-You will notice that we did not compute the metrics in `evaluate_step()`. This is because Ignite provides built-in [metrics](https://pytorch.org/ignite/concepts.html#metrics) which we can later attach to the engine.
+You will notice that we did not compute the metrics in `evaluate_step()`. This is because Ignite provides built-in [metrics](https://pytorch-ignite.ai/concepts/04-metrics/) which we can later attach to the engine.
 
 **Note:** Ignite suggests attaching metrics to evaluators and not trainers because during the training the model parameters are constantly changing and it is best to evaluate model on a stationary model. This information is important as there is a difference in the functions for training and evaluating. Training returns a single scalar loss. Evaluating returns `y_pred` and `y` as that output is used to calculate metrics per batch for the entire dataset.
 
