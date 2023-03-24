@@ -15,8 +15,8 @@ tags:
 This example demonstrates how you can get the time breakdown for:
 - Individual epochs during training
 - Total training time
-- Individual [`Events`](https://pytorch.org/ignite/concepts.html#events-and-handlers)
-- All [`Handlers`](https://pytorch.org/ignite/concepts.html#handlers) correspoding to an `Event`
+- Individual [`Events`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#events)
+- All [`Handlers`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#handlers) correspoding to an `Event`
 - Individual `Handlers`
 - Data loading and Data processing.
 
@@ -251,7 +251,7 @@ basic_profiler.print_results(results);
 
 ## Handler-based profiling using `HandlersTimeProfiler`
 
-We can overcome the above problem by using [`HandlersTimeProfiler`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.HandlersTimeProfiler.html#handlerstimeprofiler) which gives us only the necessary information. We can also calculate the time taken by handlers attached to [`Custom Events`](https://pytorch.org/ignite/concepts.html#custom-events), which was not previously possible, via this.
+We can overcome the above problem by using [`HandlersTimeProfiler`](https://pytorch.org/ignite/generated/ignite.handlers.time_profilers.HandlersTimeProfiler.html#handlerstimeprofiler) which gives us only the necessary information. We can also calculate the time taken by handlers attached to [`Custom Events`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#custom-events), which was not previously possible, via this.
 
 
 ```python

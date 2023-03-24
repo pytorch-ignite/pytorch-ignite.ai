@@ -122,7 +122,7 @@ Accuracy().attach(evaluator, "accuracy")
 
 ## Organizing code into Events and Handlers
 
-Next, we need to identify any code that is triggered when an event occurs. Examples of events can be the start of an iteration, completion of an epoch, or even the start of backprop. We already provide some predefined events (complete list [here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#ignite.engine.events.Events)) however we can also create custom ones (refer [here](https://pytorch.org/ignite/concepts.html#custom-events)). We move the event-specific code to different handlers (named functions, lambdas, class functions) which are attached to these events and executed whenever a specific event happens. Here are some common handlers:
+Next, we need to identify any code that is triggered when an event occurs. Examples of events can be the start of an iteration, completion of an epoch, or even the start of backprop. We already provide some predefined events (complete list [here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#ignite.engine.events.Events)) however we can also create custom ones (refer [here](httpshttps://pytorch-ignite.ai/concepts/02-events-and-handlers/#custom-events). We move the event-specific code to different handlers (named functions, lambdas, class functions) which are attached to these events and executed whenever a specific event happens. Here are some common handlers:
 
 ### Running `evaluator`
 

@@ -9,7 +9,7 @@ tags:
 ---
 # How to create Custom Events based on Forward or Backward Pass
 
-This guide demonstrates how you can create [custom events](https://pytorch.org/ignite/concepts.html#custom-events) that depend on the loss calculated and backward pass.
+This guide demonstrates how you can create [custom events](https://pytorch-ignite.ai/concepts/02-events-and-handlers#custom-events) that depend on the loss calculated and backward pass.
 
 In this example, we will be using a ResNet18 model on the MNIST dataset. The base code is the same as used in the [Getting Started Guide](https://pytorch-ignite.ai/tutorials/getting-started/).
 
