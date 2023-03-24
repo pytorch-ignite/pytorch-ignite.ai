@@ -148,7 +148,7 @@ The above code is pure PyTorch and is typically user-defined and is required for
 
 ### Trainer and evaluator's setup
 
-`model`'s trainer is an engine that loops multiple times over the training dataset and updates model parameters. Let's see how we define such a trainer using PyTorch-Ignite. To do this, PyTorch-Ignite introduces the generic class [`Engine`](https://pytorch.org/ignite/concepts.html#engine) that is an abstraction that loops over the provided data, executes a processing function and returns a result. The only argument needed to construct the trainer is a `train_step` function.
+`model`'s trainer is an engine that loops multiple times over the training dataset and updates model parameters. Let's see how we define such a trainer using PyTorch-Ignite. To do this, PyTorch-Ignite introduces the generic class [`Engine`](https://pytorch-ignite.ai/concepts/01-engine/) that is an abstraction that loops over the provided data, executes a processing function and returns a result. The only argument needed to construct the trainer is a `train_step` function.
 
 ```py
 from ignite.engine import Engine
@@ -197,7 +197,7 @@ The type of output of the process functions (i.e. `loss` or `y_pred, y` in the a
 
 ### Events and Handers
 
-To improve the engine’s flexibility, a configurable event system is introduced to facilitate the interaction on each step of the run. Namely, `Engine` allows to add handlers on various [`Events`](https://pytorch.org/ignite/concepts.html#events-and-handlers) that are triggered during the run. When an event is triggered, attached handlers (named functions, lambdas, class functions) are executed. Here is a schema for when built-in events are triggered by default:
+To improve the engine’s flexibility, a configurable event system is introduced to facilitate the interaction on each step of the run. Namely, `Engine` allows to add handlers on various [`Events`](https://pytorch-ignite.ai/concepts/02-events-and-handlers/) that are triggered during the run. When an event is triggered, attached handlers (named functions, lambdas, class functions) are executed. Here is a schema for when built-in events are triggered by default:
 
 ```py
 fire_event(Events.STARTED)
@@ -998,7 +998,7 @@ A detailed tutorial with distributed helpers is published [here](https://pytorch
 
 There is a list of research papers with code, blog articles, tutorials, toolkits and other projects that are using PyTorch-Ignite. A detailed overview can be found [here](https://github.com/pytorch/ignite#projects-using-ignite).
 
-To start your project using PyTorch-Ignite is simple and can require only to pass through this quick-start example and [library "Concepts"](https://pytorch.org/ignite/concepts.html).
+To start your project using PyTorch-Ignite is simple and can require only to pass through this quick-start example and [library "Concepts"](https://pytorch-ignite.ai/concepts/).
 
 In addition, PyTorch-Ignite also provides several tutorials:
 
