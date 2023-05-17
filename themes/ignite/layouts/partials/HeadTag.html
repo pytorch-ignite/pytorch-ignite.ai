@@ -47,9 +47,7 @@
   <!-- css -->
   <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3.3.0/dist/style.min.css" as="style" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3.3.0/dist/style.min.css"
-    type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/></pre></li>
 
   {{ $style := resources.Get "_hugo/css/style.css" | fingerprint "md5" | minify }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
@@ -57,7 +55,7 @@
   {{ $style := resources.Get "_hugo/css/main.css" | fingerprint "md5" | minify }}
   <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
-  <link rel="preconnect" href="https://BH4D9OD16A-dsn.algolia.net" crossorigin data-proofer-ignore/>
+  <link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin data-proofer-ignore/>
   <link rel="canonical" href="{{ .Permalink }}"/>
 
   <script>
