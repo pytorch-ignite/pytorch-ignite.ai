@@ -11,3 +11,4 @@ node_modules
 tmp
 bin
 .hugo_build.lock
+.pnpm-store/
