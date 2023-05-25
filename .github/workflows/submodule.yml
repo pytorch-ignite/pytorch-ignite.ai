@@ -77,7 +77,7 @@ jobs:
       - run: bash ./scripts/nb_to_md.sh static/examples/tutorials/advanced src/tutorials/advanced
       - run: bash ./scripts/nb_to_md.sh static/examples/how-to-guides src/how-to-guides
 
-      - uses: peter-evans/create-pull-request@v4
+      - uses: peter-evans/create-pull-request@v5
         with:
           title: '[automated] Submodule update'
           body: This is an automated pull request.
