@@ -77,7 +77,7 @@ HUGO_ENV = "production"
 
 [[redirects]]
   from = "/playground"
-  to = "https://mybinder.org/v2/gh/pytorch-ignite/playground/HEAD?labpath=index.ipynb"
+  to = "https://colab.research.google.com/github/pytorch-ignite/playground/blob/main/index.ipynb"
   status = 301
   force = true
 
