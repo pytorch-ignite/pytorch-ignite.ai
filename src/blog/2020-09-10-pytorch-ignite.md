@@ -990,7 +990,7 @@ with idist.Parallel(backend=backend, **dist_configs) as parallel:
 Please note that these `auto_*` methods are optional; a user is free use some of them and manually set up certain parts of the code if required. The advantage of this approach is that there is no under the hood inevitable objects' patching and overriding.
 
 More details about distributed helpers provided by PyTorch-Ignite can be found in [the documentation](https://pytorch.org/ignite/distributed.html).
-A complete example of training on CIFAR10 can be found [here](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10).
+A complete example of training on CIFAR10 can be found [here](https://github.com/pytorch/ignite/tree/master/examples/cifar10).
 
 A detailed tutorial with distributed helpers is published [here](https://pytorch-ignite.ai/posts/distributed-made-easy-with-ignite/).
 
@@ -1012,11 +1012,11 @@ In addition, PyTorch-Ignite also provides several tutorials:
 - [Basic example of LR finder on MNIST](https://github.com/pytorch/ignite/blob/master/examples/notebooks/FastaiLRFinder_MNIST.ipynb)
 - [Benchmark mixed precision training on Cifar100: torch.cuda.amp vs nvidia/apex](https://github.com/pytorch/ignite/blob/master/examples/notebooks/Cifar100_bench_amp.ipynb)
 - [MNIST training on a single TPU](https://github.com/pytorch/ignite/blob/master/examples/notebooks/MNIST_on_TPU.ipynb)
-- [CIFAR10 Training on multiple TPUs](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10)
+- [CIFAR10 Training on multiple TPUs](https://github.com/pytorch/ignite/tree/master/examples/cifar10)
 
 and examples:
 
-- [cifar10](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10) (single/multi-GPU, DDP, AMP, TPUs)
+- [cifar10](https://github.com/pytorch/ignite/tree/master/examples/cifar10) (single/multi-GPU, DDP, AMP, TPUs)
 - [basic RL](https://github.com/pytorch/ignite/tree/master/examples/reinforcement_learning)
 - [reproducible baselines for vision tasks:](https://github.com/pytorch/ignite/tree/master/examples/references)
   - classification on ImageNet (single/multi-GPU, DDP, AMP)

@@ -145,7 +145,7 @@ The code snippets below highlight the API's specificities of each of the distrib
 
 PyTorch-Ignite's unified code snippet can be run with the standard PyTorch backends like `gloo` and `nccl` and also with Horovod and XLA for TPU devices. Note that the code is less verbose, however, the user still has full control of the training loop.
 
-The following examples are introductory. For a more robust, production-grade example that uses PyTorch-Ignite, refer [here](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10).
+The following examples are introductory. For a more robust, production-grade example that uses PyTorch-Ignite, refer [here](https://github.com/pytorch/ignite/tree/master/examples/cifar10).
 
 The complete source code of these experiments can be found [here](https://github.com/pytorch-ignite/idist-snippets).
 
@@ -285,7 +285,7 @@ while maintaining control and simplicity.
   with distributed data parallel: native pytorch, pytorch-ignite,
   slurm.
 
-- [CIFAR10 example](https://github.com/pytorch/ignite/tree/master/examples/contrib/cifar10)
+- [CIFAR10 example](https://github.com/pytorch/ignite/tree/master/examples/cifar10)
   of distributed training on CIFAR10 with muliple configurations: 1 or
   multiple GPUs, multiple nodes and GPUs, TPUs.
 
