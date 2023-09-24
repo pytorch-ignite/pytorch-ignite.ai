@@ -79,7 +79,7 @@ class Net(nn.Module):
         # Changed the output layer to output 10 classes instead of 1000 classes
         self.model = resnet18(num_classes=10)
 
-        # Changed the input layer to take grayscale images for MNIST instaed of RGB images
+        # Changed the input layer to take grayscale images for MNIST instead of RGB images
         self.model.conv1 = nn.Conv2d(
             1, 64, kernel_size=3, padding=1, bias=False
         )
