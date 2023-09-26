@@ -37,7 +37,7 @@ manual_seed(42)
 
 ## Basic Setup
 
-Next we will follow the tutorial and load up our dataset and tokenizer to prepocess the data.
+Next we will follow the tutorial and load up our dataset and tokenizer to preprocess the data.
 
 ### Data Preprocessing
 
@@ -161,7 +161,7 @@ Therefore we will define a `process_function` (called `train_step` below) to do 
 * Perform backward pass using loss to calculate gradients for the model parameters.
 * Optimize model parameters using gradients and optimizer.
 
-Finally, we choose to return the `loss` so we can utilize it for futher processing.
+Finally, we choose to return the `loss` so we can utilize it for further processing.
 
 You will also notice that we do not update the `lr_scheduler` and `progress_bar` in `train_step`. This is because Ignite automatically takes care of it as we will see later in this tutorial.
 
@@ -190,9 +190,9 @@ from ignite.engine import Engine
 trainer = Engine(train_step)
 ```
 
-The `lr_scheduler` we defined perviously was a handler. 
+The `lr_scheduler` we defined previously was a handler. 
 
-[Handlers](https://pytorch-ignite.ai/concepts/02-events-and-handlers/#handlers) can be any type of function (lambda functions, class methods, etc). On top of that, Ignite provides several built-in handlers to reduce redundant code. We attach these handlers to engine which is triggered at a specific [event](https://pytorch-ignite.ai/concepts/02-events-and-handlers/). These events can be anything like the start of an iteration or the end of an epoch. [Here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) is a complete list of built-in events.
+[Handlers](https://pytorch-ignite.ai/concepts/02-events-and-handlers/#handlers) can be any type of function (lambda functions, class methods, etc.). On top of that, Ignite provides several built-in handlers to reduce redundant code. We attach these handlers to engine which is triggered at a specific [event](https://pytorch-ignite.ai/concepts/02-events-and-handlers/). These events can be anything like the start of an iteration or the end of an epoch. [Here](https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events) is a complete list of built-in events.
 
 Therefore, we will attach the `lr_scheduler` (handler) to the `trainer` (`engine`) via [`add_event_handler()`](https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#ignite.engine.engine.Engine.add_event_handler) so it can be triggered at `Events.ITERATION_STARTED` (start of an iteration) automatically.
 
@@ -333,7 +333,7 @@ trainer.add_event_handler(Events.EPOCH_COMPLETED, log_validation_results)
 
 ## Early Stopping
 
-Now we'll setup a [`EarlyStopping`](https://pytorch.org/ignite/generated/ignite.handlers.early_stopping.EarlyStopping.html#earlystopping) handler for the training process. `EarlyStopping` requires a score_function that allows the user to define whatever criteria to stop trainig. In this case, if the loss of the validation set does not decrease in 2 epochs (`patience`), the training process will stop early.  
+Now we'll setup a [`EarlyStopping`](https://pytorch.org/ignite/generated/ignite.handlers.early_stopping.EarlyStopping.html#earlystopping) handler for the training process. `EarlyStopping` requires a score_function that allows the user to define whatever criteria to stop training. In this case, if the loss of the validation set does not decrease in 2 epochs (`patience`), the training process will stop early.  
 
 
 ```python
