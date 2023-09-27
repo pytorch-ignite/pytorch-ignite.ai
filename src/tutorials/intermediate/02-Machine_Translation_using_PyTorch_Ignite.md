@@ -40,7 +40,7 @@ This notebook uses Models, Dataset and Tokenizers from Huggingface, hence they c
 ## Common Configuration
 We maintain a config dictionary which can be extended or changed to store parameters required during training. We can refer back to this code when we will use these parameters later.
 
-In this example we are using ``t5-small``, which has 60M parameters. The way t5 models work is they taske an input with the a task-specific prefix. This prefix (like "Translate English to German") will let our model know which task it needs to perform. For more details refer to the original paper [here](https://arxiv.org/abs/1910.10683).
+In this example we are using ``t5-small``, which has 60M parameters. The way t5 models work is they take an input with a task-specific prefix. This prefix (like "Translate English to German") will let our model know which task it needs to perform. For more details refer to the original paper [here](https://arxiv.org/abs/1910.10683).
 
 
 Here we train on less number of iterations per step and on a limited dataset, this can be modified using the ``train_dataset_length`` and ``epoch_length`` config.
@@ -254,7 +254,7 @@ The forward pass is wrapped in the autocast context manager for mixed precision 
 Gradient accumulation is implemented as batch size of 1 would lead to noisy updates otherwise. Check the ``accumulation_steps`` variable in config to define the number of steps to accumulate the gradient. 
 
 #### Trainer Handlers
-Handlers can be defined and attached directly to the trainer engine. Here we also make use of a special function : `setup_common_training_handlers` which has a lot of the commonly used, useful handlers (like `save_every_iters`, `clear_cuda_cache` etc) already defined. To know more about this function, refer to the docs [here](https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.common.setup_common_training_handlers). 
+Handlers can be defined and attached directly to the trainer engine. Here we also make use of a special function : `setup_common_training_handlers` which has a lot of the commonly used, useful handlers (like `save_every_iters`, `clear_cuda_cache`, etc) already defined. To know more about this function, refer to the docs [here](https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.common.setup_common_training_handlers). 
 
 
 ```python

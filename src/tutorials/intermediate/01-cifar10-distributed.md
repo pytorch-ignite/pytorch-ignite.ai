@@ -31,7 +31,7 @@ The type of distributed training we will use is called data parallelism in which
 >
 > -- <cite>[Distributed Deep Learning 101: Introduction](https://towardsdatascience.com/distributed-deep-learning-101-introduction-ebfc1bcd59d9)</cite>
 
-PyTorch provides a [torch.nn.parallel.DistributedDataParallel](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) API for this task however the implementation that supports different backends + configurations is tedious. In this example, we will see how to can enable data distributed training which is adaptable to various backends in just a few lines of code alongwith:
+PyTorch provides a [torch.nn.parallel.DistributedDataParallel](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) API for this task however the implementation that supports different backends + configurations is tedious. In this example, we will see how to enable data distributed training which is adaptable to various backends in just a few lines of code alongwith:
 * Computing training and validation metrics
 * Setup logging (and connecting with ClearML)
 * Saving the best model weights
@@ -229,7 +229,7 @@ def get_model(config):
 
 ### Optimizer
 
-Then we can setup the optimizer using hyperameters from `config` and pass it through [`auto_optim()`](https://pytorch.org/ignite/generated/ignite.distributed.auto.auto_optim.html#ignite.distributed.auto.auto_optim).
+Then we can setup the optimizer using hyperparameters from `config` and pass it through [`auto_optim()`](https://pytorch.org/ignite/generated/ignite.distributed.auto.auto_optim.html#ignite.distributed.auto.auto_optim).
 
 
 ```python
@@ -651,7 +651,7 @@ torchrun --nproc_per_node=2 main.py run --backend="nccl"
 
 
 
-### Run with internal spawining (`torch.multiprocessing.spawn`)
+### Run with internal spawning (`torch.multiprocessing.spawn`)
 
 ```
 python -u main.py run --backend="nccl" --nproc_per_node=2
