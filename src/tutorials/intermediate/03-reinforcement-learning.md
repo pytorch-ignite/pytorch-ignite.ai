@@ -83,7 +83,7 @@ from pyvirtualdisplay import Display
 
 ## Configurable Parameters
 
-We will use there values later in the tutorial at appropriate places.
+We will use these values later in the tutorial at appropriate places.
 
 
 ```python
@@ -133,7 +133,7 @@ env = wrap_env(env)
 
 ## Model
 
-We are going to utilize the reinforce algorithm in which our agent will use episode samples from starting state to goal state directly from the environment. Our model has two linear layers with 4 in features and 2 out features for 4 state variables and 2 actions respectively. We also define an action buffer as `saved_log_probs` and a rewards one. We also have an intermediate ReLU layer through which the outputs of the 1st layer are passed to receive the score for each action taken. Finally, we return a list of probabilities for each of these actions.
+We are going to utilize the reinforce algorithm in which our agent will use episode samples from starting state to goal state directly from the environment. Our model has two linear layers with 4 in features and 2 out features for 4 state variables and 2 actions respectively. We also define an action buffer as `saved_log_probs` and `rewards`. We also have an intermediate ReLU layer through which the outputs of the 1st layer are passed to receive the score for each action taken. Finally, we return a list of probabilities for each of these actions.
 
 
 
@@ -261,7 +261,7 @@ def reset_environment_state():
     trainer.state.ep_reward = 0
 ```
 
-When an episode finishes, we update the running reward and perform backpropogation by calling `finish_episode()`.
+When an episode finishes, we update the running reward and perform backpropagation by calling `finish_episode()`.
 
 
 ```python
