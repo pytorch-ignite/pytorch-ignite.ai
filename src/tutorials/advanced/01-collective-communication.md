@@ -160,7 +160,7 @@ idist.spawn(backend="gloo", fn=broadcast_example, args=(), nproc_per_node=3)
     Rank 1, After performing broadcast: hello from rank 0
 
 
-For a real world use case, let's assume you need to gather the predicted and actual values from all the processes on rank 0 for computing a metric and avoiding a memory error. You can do do this by first using `all_gather()`, then computing the metric and finally using `broadcast()` to share the result with all processes. `src` below refers to the rank of the source process.
+For a real world use case, let's assume you need to gather the predicted and actual values from all the processes on rank 0 for computing a metric and avoiding a memory error. You can do this by first using `all_gather()`, then computing the metric and finally using `broadcast()` to share the result with all processes. `src` below refers to the rank of the source process.
 
 
 ```python
