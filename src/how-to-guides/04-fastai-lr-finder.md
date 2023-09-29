@@ -72,7 +72,7 @@ optimizer = torch.optim.RMSprop(model.parameters(), lr=1e-06)
 criterion = nn.CrossEntropyLoss()
 ```
 
-We will first train the model with a fixed learning rate (lr) of 1e-06 and inspect our results. Let's save the initial state of the model and the optimizer to restore them later for comparision.
+We will first train the model with a fixed learning rate (lr) of 1e-06 and inspect our results. Let's save the initial state of the model and the optimizer to restore them later for comparison.
 
 
 ```python

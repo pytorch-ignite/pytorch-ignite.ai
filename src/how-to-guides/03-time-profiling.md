@@ -16,7 +16,7 @@ This example demonstrates how you can get the time breakdown for:
 - Individual epochs during training
 - Total training time
 - Individual [`Events`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#events)
-- All [`Handlers`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#handlers) correspoding to an `Event`
+- All [`Handlers`](https://pytorch-ignite.ai/concepts/02-events-and-handlers#handlers) corresponding to an `Event`
 - Individual `Handlers`
 - Data loading and Data processing.
 
