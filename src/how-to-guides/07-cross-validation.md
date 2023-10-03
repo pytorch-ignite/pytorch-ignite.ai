@@ -193,7 +193,7 @@ Let's concatenate both the datasets so that we can divide them into folds later.
 dataset = ConcatDataset([train_dataset, test_dataset])
 ```
 
-We will split the dataset into three folds for training and, consequently, three folds for valitation.
+We will split the dataset into three folds for training and, consequently, three folds for validation.
 
 
 ```python
