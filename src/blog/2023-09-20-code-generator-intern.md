@@ -16,7 +16,7 @@ tags:
 
 ![The Code-Generator and Nebari](/_images/2023-09-20-code-generator-intern/hero-feature-image.png)
 
-To the readers, I am Aryan Gupta(@[guptaaryan16](https://github.com/guptaaryan16/)), an EE Junior at IIT Roorkee, and this summer, I had a chance to work on PyTorch-Ignite’s Code-Generator project, a tailor-made web application to help machine learning researchers and enthusiasts and also keeping in mind the growing Kaggle community.
+To the readers, I am Aryan Gupta([@guptaaryan16](https://github.com/guptaaryan16/)), an EE Junior at IIT Roorkee, and this summer, I had a chance to work on PyTorch-Ignite’s Code-Generator project, a tailor-made web application to help machine learning researchers and enthusiasts and also keeping in mind the growing Kaggle community.
 
 Crossposted from https://labs.quansight.org/blog
 
@@ -152,7 +152,7 @@ Also, this experience increased my learning and helped me improve the quality of
 
 ## Acknowledgements
 
-In this section, I would like to thank my mentor, @[vfdev-5](https://github.com/vfdev-5), and other members of the PyTorch-Ignite community for helping me in this internship. Also, I would like to thank the people at [Quansight-Labs](https://quansight.com/) for providing me with such a great opportunity, especially @[rgommers](https://github.com/rgommers), @[trallard](https://github.com/trallard), @[melissawm](https://github.com/melissawm), and others for their invaluable guidance and time during this internship.
+In this section, I would like to thank my mentor, [@vfdev-5](https://github.com/vfdev-5), and other members of the PyTorch-Ignite community for helping me in this internship. Also, I would like to thank the people at [Quansight-Labs](https://quansight.com/) for providing me with such a great opportunity, especially [@rgommers](https://github.com/rgommers), [@trallard](https://github.com/trallard), [@melissawm](https://github.com/melissawm), and others for their invaluable guidance and time during this internship.
 
 ## References
 
