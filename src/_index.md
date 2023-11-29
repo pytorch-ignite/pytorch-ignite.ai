@@ -133,9 +133,6 @@ sponsors:
   - name: Quansight Labs
     url: https://labs.quansight.org
     img: /_images/QuansightLabs_logo_V2.png
-  - name: IFP Energies nouvelles
-    url: https://www.ifpenergiesnouvelles.com/
-    img: /_images/ifpen.png
   - name: Amazon Web Services (AWS)
     url: https://aws.amazon.com/
     img: /_images/aws.svg
@@ -148,8 +145,6 @@ footer:
     url: https://github.com/pytorch/ignite
   - name: Twitter
     url: https://twitter.com/pytorch_ignite
-  - name: Facebook
-    url: https://www.facebook.com/PyTorch-Ignite-Community-105837321694508
   - name: DEV
     url: https://dev.to/pytorch-ignite
   - name: Discord
