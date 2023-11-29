@@ -66,6 +66,6 @@ The list below is unexhausted list of references that we are aware of.
 - [Logging with ChainerUI](https://chainerui.readthedocs.io/en/latest/reference/module.html#external-library-support)
 - [FixMatch experiments in PyTorch and Ignite (CTA dataaug policy)](https://github.com/vfdev-5/FixMatch-pytorch)
 - [Kaggle Birdcall Identification Competition: 1st place solution](https://github.com/ryanwongsa/kaggle-birdsong-recognition)
-- [Logging with Aim - An open-source experiment tracker](https://aimstack.readthedocs.io/en/latest/apps/experiment_tracker/pytorch_ignite_tracker.html)
+- [Logging with Aim - An open-source experiment tracker](https://aimstack.readthedocs.io/en/latest/quick_start/integrations.html#integration-with-pytorch-ignite)
 
 See other projects at ["Used by"](https://github.com/pytorch/ignite/network/dependents?package_id=UGFja2FnZS02NzI5ODEwNA%3D%3D).
