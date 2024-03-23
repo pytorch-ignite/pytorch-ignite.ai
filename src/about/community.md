@@ -49,7 +49,6 @@ The decision making process and governance structure of the project is described
 The following people are currently core contributors to PyTorch-Ignite’s development and maintenance:
 
 - Victor Fomin [@vfdev-5](https://github.com/vfdev-5)
-- Sadrodin Barikbin [@sadra-barikbin](https://github.com/sadra-barikbin)
 
 ### Emeritus Core Developers
 
@@ -60,6 +59,7 @@ The following people have been active contributors in the past, but are no longe
 - Anmol Joshi [@anmolsjoshi](https://github.com/anmolsjoshi)
 - Taras Savchyn [@trsvchn](https://github.com/trsvchn)
 - Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
+- Sadrodin Barikbin [@sadra-barikbin](https://github.com/sadra-barikbin)
 
 ### Join Core Team
 
