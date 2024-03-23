@@ -1,0 +1,1269 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>PyTorch-Ignite</title>
+<meta property="og:title" content="GAN evaluation using FID and IS">
+<meta name="twitter:title" content="GAN evaluation using FID and IS">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.9acd436c5609f4c6f7c0a9a9c6536f57.min.css">
+<link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/gan-evaluation-with-fid-and-is/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/integrations-with-code-generator-during-quansight-intern/" class="hover:text-$c-primary py-1">Bridging Data Science Tools with PyTorch-Ignite's Code-Generator and Nebari</a>
+</li>
+<li class="py-1">
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="hover:text-$c-primary py-1">Sangho's Internship at Quansight with PyTorch-Ignite project</a>
+</li>
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="text-$c-primary hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics">GAN Evaluation : the Frechet Inception Distance and Inception Score metrics</a>
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#import-libraries">Import Libraries</a></li>
+<li><a href="#reproductibility-and-logging-details">Reproductibility and logging details</a></li>
+<li><a href="#processing-data">Processing Data</a></li>
+<li><a href="#models-for-gan">Models for GAN</a></li>
+<li><a href="#optimizers">Optimizers</a></li>
+<li><a href="#ignite-training-concepts">Ignite Training Concepts</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#evaluators">Evaluators</a></li>
+<li><a href="#loss-metrics">Loss metrics</a></li>
+<li><a href="#progress-bars">Progress bars</a></li>
+<li><a href="#training">Training</a></li>
+<li><a href="#inference">Inference</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/blog/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/blog/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb" target="_blank" rel="noopener noreferrer" download="2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/blog/2021-08-11-GAN-evaluation-using-FID-and-IS.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h2 id="gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics">
+<a href="#gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics" class="header-anchor">
+GAN Evaluation : the Frechet Inception Distance and Inception Score metrics
+</a>
+</h2><p>
+<img src="/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png" alt="GAN evaluation results using FID and IS" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>In this notebook, two <code>PyTorch-Ignite</code>’s metrics to evaluate <em>Generative Adversarial Networks</em> (or GAN in short) are introduced :</p>
+<ul>
+<li><strong>Frechet Inception Distance</strong>, details can be found in
+<a href="https://arxiv.org/pdf/1706.08500.pdf" target="_blank" rel="noopener noreferrer"><code>Heusel et al. 2002</code></a></li>
+<li><strong>Inception Score</strong>, details can be found in
+<a href="https://arxiv.org/pdf/1801.01973.pdf" target="_blank" rel="noopener noreferrer"><code>Barratt et al. 2018</code></a></li>
+</ul>
+<p>See
+<a href="https://pytorch.org/ignite/metrics.html#complete-list-of-metrics" target="_blank" rel="noopener noreferrer">here</a> for more details about the implementation of the metrics in
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer">PyTorch-Ignite</a>.</p>
+<p>Most of the code here is from
+<a href="https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html" target="_blank" rel="noopener noreferrer">DCGAN example</a> in
+<a href="https://github.com/pytorch/examples" target="_blank" rel="noopener noreferrer">pytorch/examples</a>. In addition to the original tutorial, this notebook will use in-built GAN based metric in <code>ignite.metrics</code> to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in <code>ignite</code>.</p>
+<h3 id="required-dependencies">
+<a href="#required-dependencies" class="header-anchor">
+Required Dependencies
+</a>
+</h3><p>Pytorch, Torchvision and Pytorch-Ignite are the required dependencies. They will be installed/imported here.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install pytorch</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">ignite</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Collecting pytorch-ignite
+  Downloading pytorch_ignite-0.4.6-py3-none-any.whl (232 kB)
+[K     |████████████████████████████████| 232 kB 8.1 MB/s eta 0:00:01
+[?25hRequirement already satisfied: torch&lt;2,&gt;=1.3 in /usr/local/lib/python3.7/dist-packages (from pytorch-ignite) (1.9.0+cu102)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.7/dist-packages (from torch&lt;2,&gt;=1.3-&gt;pytorch-ignite) (3.7.4.3)
+Installing collected packages: pytorch-ignite
+Successfully installed pytorch-ignite-0.4.6
+</code></pre>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torchvision</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(*</span><span style="color: #56B6C2">map</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">m</span><span style="color: #ABB2BF">: </span><span style="color: #98C379">": "</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">join</span><span style="color: #ABB2BF">((m.</span><span style="color: #E06C75">__name__</span><span style="color: #ABB2BF">, m.</span><span style="color: #E06C75">__version__</span><span style="color: #ABB2BF">)), (torch, torchvision, ignite)), </span><span style="color: #E06C75; font-style: italic">sep</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>torch: 1.9.0+cu102
+torchvision: 0.10.0+cu102
+ignite: 0.4.6
+</code></pre>
+<h3 id="import-libraries">
+<a href="#import-libraries" class="header-anchor">
+Import Libraries
+</a>
+</h3><p>Note: torchsummary is an optional dependency here.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> os</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> logging</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> matplotlib.pyplot </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> plt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> numpy </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> np</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchsummary </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> summary</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> nn</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.optim </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> optim</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torchvision.transforms </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> transforms</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torchvision.utils </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> vutils</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Engine, Events</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.distributed </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> idist</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="reproductibility-and-logging-details">
+<a href="#reproductibility-and-logging-details" class="header-anchor">
+Reproductibility and logging details
+</a>
+</h3><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">ignite.utils.</span><span style="color: #61AFEF">manual_seed</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">999</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Optionally, the <code>logging</code> level <code>logging.WARNING</code> is used in internal <code>ignite</code> submodules in order to avoid internal messages.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">ignite.utils.</span><span style="color: #61AFEF">setup_logger</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"ignite.distributed.auto.auto_dataloader"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">level</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">logging.</span><span style="color: #D19A66">WARNING</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">ignite.utils.</span><span style="color: #61AFEF">setup_logger</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"ignite.distributed.launcher.Parallel"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">level</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">logging.</span><span style="color: #D19A66">WARNING</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>&lt;Logger ignite.distributed.launcher.Parallel (WARNING)&gt;
+</code></pre>
+<h3 id="processing-data">
+<a href="#processing-data" class="header-anchor">
+Processing Data
+</a>
+</h3><p>The
+<a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html" target="" rel="">Large-scale CelebFaces Attributes (CelebA) Dataset</a> is used in this tutorial. The <code>torchvision</code> library provides a
+<a href="https://pytorch.org/vision/stable/datasets.html#celeba" target="_blank" rel="noopener noreferrer">dataset class</a>, However this implementation suffers from issues related to the download limitations of <code>gdrive</code>. Here, we define a custom <code>CelebA</code>
+<a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" target="_blank" rel="noopener noreferrer"><code>Dataset</code></a>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.datasets </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ImageFolder</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">gdown </span><span style="color: #FFFFFF">--</span><span style="color: #56B6C2">id</span><span style="color: #ABB2BF"> </span><span style="color: #FFFFFF">1O8LE</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">FpN79Diu6aCvppH5HwlcR5I</span><span style="color: #FFFFFF">--</span><span style="color: #D19A66">PX</span></span>
+<span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">mkdir data</span></span>
+<span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">unzip </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">qq img_align_celeba.zip </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">d data</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Downloading...
+From: https://drive.google.com/uc?id=1O8LE-FpN79Diu6aCvppH5HwlcR5I--PX
+To: /content/img_align_celeba.zip
+1.44GB [00:13, 107MB/s]
+</code></pre>
+<h4 id="dataset-and-transformation">
+<a href="#dataset-and-transformation" class="header-anchor">
+Dataset and transformation
+</a>
+</h4><p>The image size considered in this tutorial is <code>64</code>. Note that increase this size implies to modify the GAN models.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">image_size </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">64</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">data_transform </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> transforms.</span><span style="color: #61AFEF">Compose</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    [</span></span>
+<span class="line"><span style="color: #ABB2BF">        transforms.</span><span style="color: #61AFEF">Resize</span><span style="color: #ABB2BF">(image_size),</span></span>
+<span class="line"><span style="color: #ABB2BF">        transforms.</span><span style="color: #61AFEF">CenterCrop</span><span style="color: #ABB2BF">(image_size),</span></span>
+<span class="line"><span style="color: #ABB2BF">        transforms.</span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        transforms.</span><span style="color: #61AFEF">Normalize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">), (</span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">)),</span></span>
+<span class="line"><span style="color: #ABB2BF">    ]</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_dataset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">ImageFolder</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">root</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"./data"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">data_transform)</span></span>
+<span class="line"><span style="color: #ABB2BF">test_dataset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.utils.data.</span><span style="color: #61AFEF">Subset</span><span style="color: #ABB2BF">(train_dataset, torch.</span><span style="color: #61AFEF">arange</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">3000</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h4 id="dataloading">
+<a href="#dataloading" class="header-anchor">
+DataLoading
+</a>
+</h4><p>We wish to configure the dataloader to work in a disbtributed environment. Distributed Dataloading is support by Ignite as part of DDP support. This requires specific adjustments to the sequential case.</p>
+<p>To handle this, <code>idist</code> provides an helper
+<a href="https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_dataloader.html#auto-dataloader" target="_blank" rel="noopener noreferrer"><code>auto_dataloader</code></a> which automatically distributes the data over the processes.</p>
+<p><strong>Note</strong>: Distributed dataloading is described in
+<a href="https://pytorch.org/tutorials/intermediate/ddp_tutorial.html" target="_blank" rel="noopener noreferrer">Distributed Data Parallel (DDP)</a> tutorial if you wish to learn more.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">batch_size </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">128</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">train_dataloader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_dataloader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    train_dataset, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">batch_size, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">num_workers</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">drop_last</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">test_dataloader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_dataloader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    test_dataset, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">batch_size, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">num_workers</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">, </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">drop_last</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Let’s explore the data.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">real_batch </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">next</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">iter</span><span style="color: #ABB2BF">(train_dataloader))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">figure</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">figsize</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">8</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">8</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">axis</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"off"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Training Images"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">imshow</span><span style="color: #ABB2BF">(np.</span><span style="color: #61AFEF">transpose</span><span style="color: #ABB2BF">(vutils.</span><span style="color: #61AFEF">make_grid</span><span style="color: #ABB2BF">(real_batch[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">][:</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">], </span><span style="color: #E06C75; font-style: italic">padding</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">normalize</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">).</span><span style="color: #61AFEF">cpu</span><span style="color: #ABB2BF">(),(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)))</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">show</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>
+<img src="/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_27_0.png" alt="png" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<h3 id="models-for-gan">
+<a href="#models-for-gan" class="header-anchor">
+Models for GAN
+</a>
+</h3>
+<h4 id="generator">
+<a href="#generator" class="header-anchor">
+Generator
+</a>
+</h4><p>The latent space dimension of input vectors for the generator is a key parameter of GAN.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">latent_dim </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">100</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">Generator3x64x64</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">nn</span><span style="color: #ABB2BF">.</span><span style="color: #E5C07B">Module</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">latent_dim</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #56B6C2">super</span><span style="color: #ABB2BF">(Generator3x64x64, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">).</span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Sequential</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ConvTranspose2d</span><span style="color: #ABB2BF">(latent_dim, </span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 512 x 4 x 4</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ConvTranspose2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 256 x 8 x 8</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ConvTranspose2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 128 x 16 x 16</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ConvTranspose2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 64 x 32 x 32</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">ConvTranspose2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Tanh</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># final state size. 3 x 64 x 64</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">forward</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> x</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>As for dataloading, distributed models requires some specifics that <code>idist</code> adresses providing the
+<a href="https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_model.html#auto-model" target="_blank" rel="noopener noreferrer"><code>auto_model</code></a> helper.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">netG </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_model</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Generator3x64x64</span><span style="color: #ABB2BF">(latent_dim))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Note that the model is automatically moved to the best device detected by <code>idist</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>device(type='cuda')
+</code></pre>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #61AFEF">summary</span><span style="color: #ABB2BF">(netG, (latent_dim, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+   ConvTranspose2d-1            [-1, 512, 4, 4]         819,200
+       BatchNorm2d-2            [-1, 512, 4, 4]           1,024
+              ReLU-3            [-1, 512, 4, 4]               0
+   ConvTranspose2d-4            [-1, 256, 8, 8]       2,097,152
+       BatchNorm2d-5            [-1, 256, 8, 8]             512
+              ReLU-6            [-1, 256, 8, 8]               0
+   ConvTranspose2d-7          [-1, 128, 16, 16]         524,288
+       BatchNorm2d-8          [-1, 128, 16, 16]             256
+              ReLU-9          [-1, 128, 16, 16]               0
+  ConvTranspose2d-10           [-1, 64, 32, 32]         131,072
+      BatchNorm2d-11           [-1, 64, 32, 32]             128
+             ReLU-12           [-1, 64, 32, 32]               0
+  ConvTranspose2d-13            [-1, 3, 64, 64]           3,072
+             Tanh-14            [-1, 3, 64, 64]               0
+================================================================
+Total params: 3,576,704
+Trainable params: 3,576,704
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.00
+Forward/backward pass size (MB): 3.00
+Params size (MB): 13.64
+Estimated Total Size (MB): 16.64
+----------------------------------------------------------------
+</code></pre>
+<h4 id="discriminator">
+<a href="#discriminator" class="header-anchor">
+Discriminator
+</a>
+</h4><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">Discriminator3x64x64</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">nn</span><span style="color: #ABB2BF">.</span><span style="color: #E5C07B">Module</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #56B6C2">super</span><span style="color: #ABB2BF">(Discriminator3x64x64, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">).</span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Sequential</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># input is 3 x 64 x 64</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">LeakyReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">inplace</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 64 x 32 x 32</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">LeakyReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">inplace</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 128 x 16 x 16</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">LeakyReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">inplace</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 256 x 8 x 8</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">256</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">BatchNorm2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">LeakyReLU</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">inplace</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #7F848E; font-style: italic"># state size. 512 x 4 x 4</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Conv2d</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">bias</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            nn.</span><span style="color: #61AFEF">Sigmoid</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">forward</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> x</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">netD </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_model</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Discriminator3x64x64</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #61AFEF">summary</span><span style="color: #ABB2BF">(netD, (</span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>----------------------------------------------------------------
+        Layer (type)               Output Shape         Param #
+================================================================
+            Conv2d-1           [-1, 64, 32, 32]           3,072
+         LeakyReLU-2           [-1, 64, 32, 32]               0
+            Conv2d-3          [-1, 128, 16, 16]         131,072
+       BatchNorm2d-4          [-1, 128, 16, 16]             256
+         LeakyReLU-5          [-1, 128, 16, 16]               0
+            Conv2d-6            [-1, 256, 8, 8]         524,288
+       BatchNorm2d-7            [-1, 256, 8, 8]             512
+         LeakyReLU-8            [-1, 256, 8, 8]               0
+            Conv2d-9            [-1, 512, 4, 4]       2,097,152
+      BatchNorm2d-10            [-1, 512, 4, 4]           1,024
+        LeakyReLU-11            [-1, 512, 4, 4]               0
+           Conv2d-12              [-1, 1, 1, 1]           8,192
+          Sigmoid-13              [-1, 1, 1, 1]               0
+================================================================
+Total params: 2,765,568
+Trainable params: 2,765,568
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.05
+Forward/backward pass size (MB): 2.31
+Params size (MB): 10.55
+Estimated Total Size (MB): 12.91
+----------------------------------------------------------------
+</code></pre>
+<h3 id="optimizers">
+<a href="#optimizers" class="header-anchor">
+Optimizers
+</a>
+</h3><p>The
+<a href="https://pytorch.org/docs/stable/nn.html#torch.nn.BCELoss" target="_blank" rel="noopener noreferrer">Binary Cross Entropy Loss</a> is used in this tutorial.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">criterion </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">BCELoss</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>A batch of <code>64</code> fixed samples will be used for generating images from throughout the training. This will allow a qualitative evaluation throughout the training progress.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">fixed_noise </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">randn</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, latent_dim, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Finally, two separate optimizers are set up, one for the generator, and one for the discriminator. Yet, another helper method
+<a href="https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.auto.auto_optim.html#auto-optim" target="_blank" rel="noopener noreferrer"><code>auto_optim</code></a> provided by <code>idist</code> will help to adapt optimizer for distributed configurations.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">optimizerD </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_optim</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    optim.</span><span style="color: #61AFEF">Adam</span><span style="color: #ABB2BF">(netD.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.0002</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">betas</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.999</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">optimizerG </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_optim</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    optim.</span><span style="color: #61AFEF">Adam</span><span style="color: #ABB2BF">(netG.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.0002</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">betas</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0.5</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.999</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="ignite-training-concepts">
+<a href="#ignite-training-concepts" class="header-anchor">
+Ignite Training Concepts
+</a>
+</h3><p>Training in Ignite is based on three core components, namely, Engine, Events and Handlers. Let’s briefly discuss each of them.</p>
+<ul>
+<li>
+<p><strong>Engine</strong> - The
+<a href="https://pytorch.org/ignite/generated/ignite.engine.engine.Engine.html#engine" target="_blank" rel="noopener noreferrer">Engine</a> can be considered somewhat similar to a training loop. It takes a <code>train_step</code> as an argument and runs it over each batch of the dataset, triggering events as it goes.</p>
+</li>
+<li>
+<p><strong>Events</strong> -
+<a href="https://pytorch.org/ignite/generated/ignite.engine.events.Events.html#events" target="_blank" rel="noopener noreferrer">Events</a> are emitted by the Engine when it reaches a specific point in the run/training.</p>
+</li>
+<li>
+<p><strong>Handlers</strong> - Functions that can be triggered when a certain Event is emitted by the Engine. Ignite has a long list of pre defined Handlers such as checkpoint, early stopping, logging and built-in metrics, see
+<a href="https://pytorch.org/ignite/handlers.html#ignite-handlers" target="_blank" rel="noopener noreferrer">ignite-handlers</a>.</p>
+</li>
+</ul>
+<h4 id="training-step-function">
+<a href="#training-step-function" class="header-anchor">
+Training Step Function
+</a>
+</h4><p>A training step function will be run batch wise over the entire dataset by the engine. It contains the basic training steps, namely, running the model, propagating the loss backward and taking an optimizer step. We run the discriminator model on both real images and fake images generated by the Generator model. The function returns Generator and Discriminator Losses and the output generated by Generator and Discriminator.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">real_label </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1</span></span>
+<span class="line"><span style="color: #ABB2BF">fake_label </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">training_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">data</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Set the models for training</span></span>
+<span class="line"><span style="color: #ABB2BF">    netG.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    netD.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">############################</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">###########################</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">## Train with all-real batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    netD.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Format batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    real </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> data[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">].</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">    b_size </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> real.</span><span style="color: #61AFEF">size</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    label </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">full</span><span style="color: #ABB2BF">((b_size,), real_label, </span><span style="color: #E06C75; font-style: italic">dtype</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">torch.float, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Forward pass real batch through D</span></span>
+<span class="line"><span style="color: #ABB2BF">    output1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netD</span><span style="color: #ABB2BF">(real).</span><span style="color: #61AFEF">view</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate loss on all-real batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    errD_real </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(output1, label)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate gradients for D in backward pass</span></span>
+<span class="line"><span style="color: #ABB2BF">    errD_real.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">## Train with all-fake batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Generate batch of latent vectors</span></span>
+<span class="line"><span style="color: #ABB2BF">    noise </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">randn</span><span style="color: #ABB2BF">(b_size, latent_dim, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Generate fake image batch with G</span></span>
+<span class="line"><span style="color: #ABB2BF">    fake </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netG</span><span style="color: #ABB2BF">(noise)</span></span>
+<span class="line"><span style="color: #ABB2BF">    label.</span><span style="color: #61AFEF">fill_</span><span style="color: #ABB2BF">(fake_label)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Classify all fake batch with D</span></span>
+<span class="line"><span style="color: #ABB2BF">    output2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netD</span><span style="color: #ABB2BF">(fake.</span><span style="color: #61AFEF">detach</span><span style="color: #ABB2BF">()).</span><span style="color: #61AFEF">view</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate D's loss on the all-fake batch</span></span>
+<span class="line"><span style="color: #ABB2BF">    errD_fake </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(output2, label)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate the gradients for this batch, accumulated (summed) with previous gradients</span></span>
+<span class="line"><span style="color: #ABB2BF">    errD_fake.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Compute error of D as sum over the fake and the real batches</span></span>
+<span class="line"><span style="color: #ABB2BF">    errD </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> errD_real </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> errD_fake</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Update D</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizerD.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">############################</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># (2) Update G network: maximize log(D(G(z)))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic">###########################</span></span>
+<span class="line"><span style="color: #ABB2BF">    netG.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    label.</span><span style="color: #61AFEF">fill_</span><span style="color: #ABB2BF">(real_label)  </span><span style="color: #7F848E; font-style: italic"># fake labels are real for generator cost</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Since we just updated D, perform another forward pass of all-fake batch through D</span></span>
+<span class="line"><span style="color: #ABB2BF">    output3 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netD</span><span style="color: #ABB2BF">(fake).</span><span style="color: #61AFEF">view</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate G's loss based on this output</span></span>
+<span class="line"><span style="color: #ABB2BF">    errG </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(output3, label)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Calculate gradients for G</span></span>
+<span class="line"><span style="color: #ABB2BF">    errG.</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Update G</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizerG.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"Loss_G"</span><span style="color: #ABB2BF"> : errG.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"Loss_D"</span><span style="color: #ABB2BF"> : errD.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"D_x"</span><span style="color: #ABB2BF">: output1.</span><span style="color: #61AFEF">mean</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"D_G_z1"</span><span style="color: #ABB2BF">: output2.</span><span style="color: #61AFEF">mean</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"D_G_z2"</span><span style="color: #ABB2BF">: output3.</span><span style="color: #61AFEF">mean</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">    }</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>A <code>PyTorch-Ignite</code> engine <code>trainer</code> is defined using the above <code>training_step</code> function.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(training_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h4 id="handlers">
+<a href="#handlers" class="header-anchor">
+Handlers
+</a>
+</h4><p>In this section, the used <code>PyTorch-Ignite</code> handlers are introduced. These handlers will be responsible for printing out and storing important information such as losses and model predictions.</p>
+<p>Like the DCGAN paper, we will also randomly initialize all the model weights from a Normal Distribution with <code>mean=0</code>, <code>stdev=0.02</code>. The following <code>initialize_fn</code> function must be applied to the generator and discriminator models at the start of training.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">initialize_fn</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">m</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    classname </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> m.</span><span style="color: #E06C75">__class__</span><span style="color: #ABB2BF">.</span><span style="color: #E06C75">__name__</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> classname.</span><span style="color: #61AFEF">find</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'Conv'</span><span style="color: #ABB2BF">) </span><span style="color: #56B6C2">!=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        nn.init.</span><span style="color: #61AFEF">normal_</span><span style="color: #ABB2BF">(m.weight.data, </span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.02</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">elif</span><span style="color: #ABB2BF"> classname.</span><span style="color: #61AFEF">find</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'BatchNorm'</span><span style="color: #ABB2BF">) </span><span style="color: #56B6C2">!=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        nn.init.</span><span style="color: #61AFEF">normal_</span><span style="color: #ABB2BF">(m.weight.data, </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.02</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        nn.init.</span><span style="color: #61AFEF">constant_</span><span style="color: #ABB2BF">(m.bias.data, </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The following <code>init_weights</code> handler is triggered at the start of the engine run and it is responsible for applying the <code>initialize_fn</code> function to randomly generate weights for the Generator <code>netD</code> and the Discriminator <code>netG</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">STARTED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">init_weights</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    netD.</span><span style="color: #61AFEF">apply</span><span style="color: #ABB2BF">(initialize_fn)</span></span>
+<span class="line"><span style="color: #ABB2BF">    netG.</span><span style="color: #61AFEF">apply</span><span style="color: #ABB2BF">(initialize_fn)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The <code>store_losses</code> handler is responsible for storing the generator and discriminator losses in <code>G_losses</code> and <code>D_losses</code> respectively. It is triggered at the end of every iteration.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">G_losses </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"><span style="color: #ABB2BF">D_losses </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">ITERATION_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">store_losses</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    o </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> engine.state.output</span></span>
+<span class="line"><span style="color: #ABB2BF">    G_losses.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(o[</span><span style="color: #98C379">"Loss_G"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">    D_losses.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(o[</span><span style="color: #98C379">"Loss_D"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The <code>store_images</code> handler is responsible for storing the images generated by the generator model during training. It provides us with a visual progress of the training. It is triggered every <code>500</code> iterations.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">img_list </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">ITERATION_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">500</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">store_images</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">no_grad</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        fake </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netG</span><span style="color: #ABB2BF">(fixed_noise).</span><span style="color: #61AFEF">cpu</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    img_list.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(fake)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="evaluation-metrics">
+<a href="#evaluation-metrics" class="header-anchor">
+Evaluation Metrics
+</a>
+</h3><p>For this tutorial, we will be showcasing two GAN based metric, namely, Frechet Inception Distance (FID) and Inception Score (IS).</p>
+<p>Inception Score (IS) is an objective metric for evaluating the quality of generated images, specifically synthetic images output by generative adversarial network models. It uses the classification probabilities provided by a pre-trained Inceptionv3 Model to measure performance of a GAN. You can find more Inception Score in the paper found
+<a href="https://arxiv.org/pdf/1801.01973.pdf" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<p>Frechet Inception Distance (FID) is a metric that calculates the distance between feature vectors calculated for real and generated images. Like IS, it also uses a pre-trained Inceptionv3 model. It uses the mean and covariance between the real and generated images' feature vectors to measure performance of a GAN. You can find more about Frechet Inception Distance in the paper found
+<a href="https://arxiv.org/pdf/1706.08500.pdf" target="_blank" rel="noopener noreferrer">here</a></p>
+<p>These metric are provided by the
+<a href="https://pytorch.org/ignite/v0.4.5/metrics.html" target="_blank" rel="noopener noreferrer"><code>ignite.metric</code></a> submodule which provides a way to compute various quantities of interest in an online fashion without having to store the entire output history of a model.</p>
+<p>In this example, the <code>FID</code> and <code>IS</code> metrics are computed every epoch, therefore an specific handler <code>log_training_results</code> should be triggered every epoch. Since the metric run on the entire dataset a separate engine <code>train_evaluator</code> is defined which will be run by <code>log_training_results</code> handler.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">FID</span><span style="color: #ABB2BF">, InceptionScore</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The <code>FID</code> and <code>InceptionScore</code> metrics are created as the following. Here we wish to use <code>gpu</code> so we set the device to <code>idist.device()</code> but the metrics will be on <code>cpu</code> device by default if no metric is passed.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">fid_metric </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">FID</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>Downloading: "https://download.pytorch.org/models/inception_v3_google-0cc3c7bd.pth" to /root/.cache/torch/hub/checkpoints/inception_v3_google-0cc3c7bd.pth
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=108949747.0), HTML(value='')))
+</code></pre>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">is_metric </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">InceptionScore</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">: x[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The argument <code>output_transform</code> is run on the value returned by the engine. Since <code>InceptionScore</code> takes only single image as input whereas two values are returned by the engine, the function <code>output_transform</code> is used. As the name suggests, <code>output_transform</code> function is applied to the engine’s output before it is provided to the metric for evaluation, so using <code>lambda x: x[0]</code> will ensure the InceptionScore metric only gets the first value for evaluation.</p>
+<h3 id="evaluators">
+<a href="#evaluators" class="header-anchor">
+Evaluators
+</a>
+</h3><p>We define the function for the evaluation engine, namely, <code>evaluation_step</code>. Our dataset provides <code>64 x 64 x 3</code> images but both <code>IS</code> and <code>FID</code> metrics use the <code>Inceptionv3</code> model for evaluation which requires images of minimum size <code>299 x 299 x 3</code>, so the images from the dataset and the images generated by the generator model must be interpolated.</p>
+<p>Although pytorch has a native interpolate function, <code>PIL</code> interpolation is used instead because of poor anitaliasing in torch which can lead to poor scaling of images. These inconsistencies among implementations can have a drastic effect on the evaluations metrics and their final results.
+<a href="https://arxiv.org/abs/2104.11222" target="_blank" rel="noopener noreferrer">Parmar et al. (2021)</a> explains in much greater detail about the differences and inconsistencies in the interpolation functions of various libraries.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">PIL</span><span style="color: #ABB2BF">.Image </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> Image</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">interpolate</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    arr </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> img </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> batch:</span></span>
+<span class="line"><span style="color: #ABB2BF">        pil_img </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> transforms.</span><span style="color: #61AFEF">ToPILImage</span><span style="color: #ABB2BF">()(img)</span></span>
+<span class="line"><span style="color: #ABB2BF">        resized_img </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> pil_img.</span><span style="color: #61AFEF">resize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">299</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">299</span><span style="color: #ABB2BF">), Image.</span><span style="color: #D19A66">BILINEAR</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        arr.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(transforms.</span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">()(resized_img))</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">stack</span><span style="color: #ABB2BF">(arr)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">evaluation_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">no_grad</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        noise </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">randn</span><span style="color: #ABB2BF">(batch_size, latent_dim, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"><span style="color: #ABB2BF">        netG.</span><span style="color: #61AFEF">eval</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">        fake_batch </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">netG</span><span style="color: #ABB2BF">(noise)</span></span>
+<span class="line"><span style="color: #ABB2BF">        fake </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">interpolate</span><span style="color: #ABB2BF">(fake_batch)</span></span>
+<span class="line"><span style="color: #ABB2BF">        real </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">interpolate</span><span style="color: #ABB2BF">(batch[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> fake, real</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The <code>train_evaluator</code> engine will run the metric on the entire dataset every epoch and attach <code>IS</code> and <code>FID</code> metrics to it.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(evaluation_step)</span></span>
+<span class="line"><span style="color: #ABB2BF">fid_metric.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"fid"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">is_metric.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"is"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The following handler attached to the <code>trainer</code> engine triggered every epoch will run the <code>train_evaluator</code> engine to evaluate the <code>IS</code> and <code>FID</code> metrics. The results are finally stored per epoch.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">fid_values </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"><span style="color: #ABB2BF">is_values </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">@trainer</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">EPOCH_COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_training_results</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(test_dataloader,</span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> evaluator.state.metrics</span></span>
+<span class="line"><span style="color: #ABB2BF">    fid_score </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> metrics[</span><span style="color: #98C379">'fid'</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    is_score </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> metrics[</span><span style="color: #98C379">'is'</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    fid_values.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(fid_score)</span></span>
+<span class="line"><span style="color: #ABB2BF">    is_values.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(is_score)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Epoch [</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">engine.state.epoch</span><span style="color: #D19A66">}</span><span style="color: #98C379">/5] Metric Scores"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"*   FID : </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">fid_score</span><span style="color: #C678DD">:4f</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #56B6C2">print</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"*    IS : </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">is_score</span><span style="color: #C678DD">:4f</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="loss-metrics">
+<a href="#loss-metrics" class="header-anchor">
+Loss metrics
+</a>
+</h3><p>The <code>RunningAverage</code> metric is used to keep track of the generator and discriminator Losses. Like the name suggests, <code>RunningAverage</code> keeps the track of average of all the values provided to it.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> RunningAverage</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">RunningAverage</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">: x[</span><span style="color: #98C379">"Loss_G"</span><span style="color: #ABB2BF">]).</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer, </span><span style="color: #98C379">'Loss_G'</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #61AFEF">RunningAverage</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">: x[</span><span style="color: #98C379">"Loss_D"</span><span style="color: #ABB2BF">]).</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer, </span><span style="color: #98C379">'Loss_D'</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="progress-bars">
+<a href="#progress-bars" class="header-anchor">
+Progress bars
+</a>
+</h3><p>Since the training process can take a lot of time and have a lot of iterations and epochs, a <code>ProgressBar</code> handler is added to show progress to prevent all the training data from filling up our screen.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ProgressBar</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color: #61AFEF">ProgressBar</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(trainer, </span><span style="color: #E06C75; font-style: italic">metric_names</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">[</span><span style="color: #98C379">'Loss_G'</span><span style="color: #ABB2BF">,</span><span style="color: #98C379">'Loss_D'</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #61AFEF">ProgressBar</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="training">
+<a href="#training" class="header-anchor">
+Training
+</a>
+</h3><p>Finally, the <code>trainer</code> engine is run here. The helper method
+<a href="https://pytorch.org/ignite/v0.4.5/generated/ignite.distributed.launcher.Parallel.html#parallel" target="_blank" rel="noopener noreferrer"><code>Parallel</code></a> of <code>idist</code> will help setting up a distributed configuration to run the <code>trainer</code> engine. It supports <code>nccl</code>, <code>gloo</code> and <code>mpi</code> native torch backends, <code>XLA</code> on <code>TPU</code> and <code>Horovod</code> distributed framework.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">training</span><span style="color: #ABB2BF">(*</span><span style="color: #D19A66; font-style: italic">args</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_dataloader, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #98C379">'nccl'</span><span style="color: #ABB2BF">) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+/usr/local/lib/python3.7/dist-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [1/5] Metric Scores
+*   FID : 0.074513
+*    IS : 2.016599
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [2/5] Metric Scores
+*   FID : 0.033024
+*    IS : 2.243377
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [3/5] Metric Scores
+*   FID : 0.024583
+*    IS : 2.346609
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [4/5] Metric Scores
+*   FID : 0.015189
+*    IS : 2.514534
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=1582.0), HTML(value='')))
+
+
+
+HBox(children=(FloatProgress(value=0.0, max=23.0), HTML(value='')))
+
+
+Epoch [5/5] Metric Scores
+*   FID : 0.015975
+*    IS : 2.544078
+</code></pre>
+<h3 id="inference">
+<a href="#inference" class="header-anchor">
+Inference
+</a>
+</h3><p>Finally, let’s check out the results. First, how the discriminator’s and generator’s losses changed during training. Second, the <code>FID</code> and <code>IS</code> performance improvments of the model. And last, look a batch of real data next to a batch of fake data from the generator.</p>
+<p><strong>Losses versus training iterations</strong></p>
+<p>Below is a plot of the discriminator’s and generator’s losses versus training iterations.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #56B6C2">%</span><span style="color: #ABB2BF">matplotlib inline</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">figure</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">figsize</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Generator and Discriminator Loss During Training"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">plot</span><span style="color: #ABB2BF">(G_losses,</span><span style="color: #E06C75; font-style: italic">label</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"G"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">plot</span><span style="color: #ABB2BF">(D_losses,</span><span style="color: #E06C75; font-style: italic">label</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"D"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">xlabel</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"iterations"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">ylabel</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Loss"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">legend</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>&lt;matplotlib.legend.Legend at 0x7f2ca90dd3d0&gt;
+</code></pre>
+<p>
+<img src="/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_93_1.png" alt="png" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><strong>Evaluation Metric versus training iterations</strong></p>
+<p>Below is a plot of Evaluation versus training iterations.
+As we can see <code>IS</code> increases sharply at first indicating the generator model is learning quickly how to generate faces. Unlike <code>IS</code>, <code>FID</code> is decreasing sharply at first similarly indicating the learning process of the generator model.</p>
+<p>Note: Higher value of <code>FID</code> implies better results and lower value of <code>IS</code> implies better results.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">fig, ax1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> plt.</span><span style="color: #61AFEF">subplots</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Evaluation Metric During Training"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">color </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'tab:red'</span></span>
+<span class="line"><span style="color: #ABB2BF">ax1.</span><span style="color: #61AFEF">set_xlabel</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'epochs'</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">ax1.</span><span style="color: #61AFEF">set_ylabel</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'IS'</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">color</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">color)</span></span>
+<span class="line"><span style="color: #ABB2BF">ax1.</span><span style="color: #61AFEF">plot</span><span style="color: #ABB2BF">(is_values, </span><span style="color: #E06C75; font-style: italic">color</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">color)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">ax2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> ax1.</span><span style="color: #61AFEF">twinx</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">color </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">'tab:blue'</span></span>
+<span class="line"><span style="color: #ABB2BF">ax2.</span><span style="color: #61AFEF">set_ylabel</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'FID'</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">color</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">color)</span></span>
+<span class="line"><span style="color: #ABB2BF">ax2.</span><span style="color: #61AFEF">plot</span><span style="color: #ABB2BF">(fid_values, </span><span style="color: #E06C75; font-style: italic">color</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">color)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">fig.</span><span style="color: #61AFEF">tight_layout</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>
+<img src="/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_95_0.png" alt="png" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><strong>Real Images vs. Fake Images</strong></p>
+<p>Finally, lets take a look at some real images and fake images side by side.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #56B6C2">%</span><span style="color: #ABB2BF">matplotlib inline</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Grab a batch of real images from the dataloader</span></span>
+<span class="line"><span style="color: #ABB2BF">real_batch </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">next</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">iter</span><span style="color: #ABB2BF">(train_dataloader))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Plot the real images</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">figure</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">figsize</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">15</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">15</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">subplot</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">axis</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"off"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Real Images"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">imshow</span><span style="color: #ABB2BF">(np.</span><span style="color: #61AFEF">transpose</span><span style="color: #ABB2BF">(vutils.</span><span style="color: #61AFEF">make_grid</span><span style="color: #ABB2BF">(real_batch[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">][:</span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">], </span><span style="color: #E06C75; font-style: italic">padding</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">normalize</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">).</span><span style="color: #61AFEF">cpu</span><span style="color: #ABB2BF">(),(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># Plot the fake images from the last epoch</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">subplot</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">axis</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"off"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">title</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Fake Images"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">plt.</span><span style="color: #61AFEF">imshow</span><span style="color: #ABB2BF">(np.</span><span style="color: #61AFEF">transpose</span><span style="color: #ABB2BF">(vutils.</span><span style="color: #61AFEF">make_grid</span><span style="color: #ABB2BF">(img_list[</span><span style="color: #56B6C2">-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">], </span><span style="color: #E06C75; font-style: italic">padding</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">normalize</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">).</span><span style="color: #61AFEF">cpu</span><span style="color: #ABB2BF">(),(</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">)))</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7f2b1b872250&gt;
+</code></pre>
+<p>
+<img src="/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png" alt="png" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/gan-evaluation/">
+#GAN Evaluation
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/inception-score/">
+#Inception Score
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/frechet-inception-distance/">
+#Frechet Inception Distance
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>Sangho's Internship at Quansight with PyTorch-Ignite project
+</a>
+</div>
+<div>
+<a href="/blog/introducing-code-generator-v020/" class="group float-right">
+<span class="overflow-hidden">Introducing PyTorch-Ignite's Code Generator v0.2.0</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics">GAN Evaluation : the Frechet Inception Distance and Inception Score metrics</a>
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a></li>
+<li><a href="#import-libraries">Import Libraries</a></li>
+<li><a href="#reproductibility-and-logging-details">Reproductibility and logging details</a></li>
+<li><a href="#processing-data">Processing Data</a></li>
+<li><a href="#models-for-gan">Models for GAN</a></li>
+<li><a href="#optimizers">Optimizers</a></li>
+<li><a href="#ignite-training-concepts">Ignite Training Concepts</a></li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#evaluators">Evaluators</a></li>
+<li><a href="#loss-metrics">Loss metrics</a></li>
+<li><a href="#progress-bars">Progress bars</a></li>
+<li><a href="#training">Training</a></li>
+<li><a href="#inference">Inference</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',appId:'7EWYE1JCT3',apiKey:'841e93e60c16975ba1bd8c7c716eed82',indexName:'pytorch-ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:Website']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ClearML on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/clearml/</link><description>Recent content in ClearML on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 25 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/clearml/index.xml" rel="self" type="application/rss+xml"/><item><title>How to use Loggers</title><link>https://pytorch-ignite.ai/how-to-guides/10-loggers/</link><pubDate>Mon, 25 Oct 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/how-to-guides/10-loggers/</guid><description>&lt;h1 id="how-to-use-loggers">
+&lt;a href="#how-to-use-loggers" class="header-anchor">
+How to use Loggers
+&lt;/a>
+&lt;/h1>&lt;p>This how-to guide demonstrates the usage of loggers with Ignite. As part of this guide, we will be using the
+&lt;a href="https://clear.ml/docs/latest/docs/fundamentals/logger/" target="_blank" rel="noopener noreferrer">ClearML&lt;/a> logger and also highlight how this code can be easily modified to make use of other loggers. You can see all the other loggers supported
+&lt;a href="https://pytorch.org/ignite/contrib/handlers.html#loggers" target="_blank" rel="noopener noreferrer">here&lt;/a>.&lt;/p></description></item></channel></rss>

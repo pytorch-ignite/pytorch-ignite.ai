@@ -1,0 +1,23 @@
+name: ci
+on:
+  push:
+    paths:
+      - "generate.py"
+      - ".github/workflows/ci.yml"
+
+  pull_request:
+    paths:
+      - "generate.py"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  Run-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install pytest
+      - name: Run tests
+        run: |
+          pytest tests -vvv

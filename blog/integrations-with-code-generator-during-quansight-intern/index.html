@@ -1,0 +1,636 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="Code-Generator project during internship at Quansight">
+<meta property="og:description" content="Code-Generator project during internship at Quansight">
+<meta name="twitter:description" content="Code-Generator project during internship at Quansight">
+<title>
+Bridging Data Science Tools with PyTorch-Ignite&amp;rsquo;s Code-Generator and Nebari
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Bridging Data Science Tools with PyTorch-Ignite&amp;rsquo;s Code-Generator and Nebari
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Bridging Data Science Tools with PyTorch-Ignite&amp;rsquo;s Code-Generator and Nebari
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.9acd436c5609f4c6f7c0a9a9c6536f57.min.css">
+<link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/integrations-with-code-generator-during-quansight-intern/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/integrations-with-code-generator-during-quansight-intern/" class="text-$c-primary hover:text-$c-primary py-1">Bridging Data Science Tools with PyTorch-Ignite's Code-Generator and Nebari</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-project-itself">The project itself</a></li>
+<li><a href="#the-issues-i-worked-on">The issues I worked on</a>
+<ul>
+<li><a href="#1-working-on-enhancing-templates-and-existing-reproducibility-scope-of-the-results-from-experiments">1. Working on enhancing templates and existing reproducibility scope of the results from experiments</a></li>
+<li><a href="#2-integration-with-nebari-and-other-infrastructure-management-tools">2. Integration with Nebari and other infrastructure management tools</a></li>
+<li><a href="#3-the-changes-in-the-ci-and-other-vuejs-based-parts-of-the-code-base-mainly-based-on-js">3. The changes in the CI and other Vuejs based parts of the code base (mainly based on JS)</a></li>
+</ul>
+</li>
+<li><a href="#the-way-forward-for-the-project">The way forward for the project</a>
+<ul>
+<li><a href="#1-separate-metadatajson-for-each-template">1. Separate <code>metadata.json</code> for each template</a></li>
+<li><a href="#2-script-to-contribute-new-templates">2. Script to contribute new templates</a></li>
+<li><a href="#3-more-templates-and-feature-options">3. More templates and feature options</a></li>
+</ul>
+</li>
+<li><a href="#some-lessons-i-learnt-along-the-way">Some lessons I learnt along the way</a>
+<ul>
+<li><a href="#1-try-to-make-the-code-changes-more-developer-centric">1. Try to make the code changes more developer centric</a></li>
+<li><a href="#2-try-to-have-separate-prs-for-big-changes">2. Try to have separate PRs for big changes</a></li>
+</ul>
+</li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="hover:text-$c-primary py-1">Sangho's Internship at Quansight with PyTorch-Ignite project</a>
+</li>
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<h1 id="bridging-data-science-tools-with-pytorch-ignites-code-generator-and-nebari">
+<a href="#bridging-data-science-tools-with-pytorch-ignites-code-generator-and-nebari" class="header-anchor">
+Bridging Data Science Tools with PyTorch-Ignite’s Code-Generator and Nebari
+</a>
+</h1><p>
+<img src="/_images/2023-09-20-code-generator-intern/hero-feature-image.png" alt="The Code-Generator and Nebari" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>To the readers, I am Aryan Gupta(
+<a href="https://github.com/guptaaryan16/" target="_blank" rel="noopener noreferrer">@guptaaryan16</a>), an EE Junior at IIT Roorkee, and this summer, I had a chance to work on PyTorch-Ignite’s Code-Generator project, a tailor-made web application to help machine learning researchers and enthusiasts and also keeping in mind the growing Kaggle community.</p>
+<p>Crossposted from
+<a href="https://labs.quansight.org/blog" target="_blank" rel="noopener noreferrer">https://labs.quansight.org/blog</a></p>
+<h2 id="the-project-itself">
+<a href="#the-project-itself" class="header-anchor">
+The project itself
+</a>
+</h2><p>Let’s see the project itself.
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer">Code-Generator</a>&nbsp;is a
+<a href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue.js</a>&nbsp;application that streamlines the process of working on machine learning tasks. The app generates preconfigured code templates for tasks like vision classification, text classification, and other common themes in ML competitions.</p>
+<p>The aim is not to be another abstraction over PyTorch and PyTorch-Ignite. Instead, Code-Generator is a web app that generates the boilerplate code, which means you still have complete control over the generated code. You can start by selecting the minimal template like ‘text-classification’ and turn options on or off according to your needs, select a particular logger like&nbsp;
+<a href="https://tensorboard.dev/" target="_blank" rel="noopener noreferrer">Tensorboard</a>&nbsp;or an arg-parser like&nbsp;
+<a href="https://github.com/google/python-fire/blob/master/docs/guide.md" target="_blank" rel="noopener noreferrer">Python-Fire</a>. This app can be helpful in data science competitions on Kaggle or in writing papers, especially with easy integration of loggers and checkpoint handlers. Also, the templates are well-tested on CI and hopefully will require minimal changes to work on your workflows.</p>
+<p>This app was created with the great efforts of members of the PyTorch-Ignite community, particularly @
+<a href="https://github.com/ydcjeff" target="_blank" rel="noopener noreferrer">ydcjeff</a>&nbsp;@
+<a href="https://github.com/trsvchn" target="_blank" rel="noopener noreferrer">trsvchn</a> @
+<a href="https://github.com/vfdev-5" target="_blank" rel="noopener noreferrer">vfdev-5</a>.</p>
+<p>
+<img src="/_images/2023-09-20-code-generator-intern/app.png" alt="The Code-Generator App" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<h2 id="the-issues-i-worked-on">
+<a href="#the-issues-i-worked-on" class="header-anchor">
+The issues I worked on
+</a>
+</h2><p>My tasks were primarily to work on features that could improve the reproducibility-related features of the templates. Also, I had to contribute to new features and libraries which can be best for experiments' configuration management. My contributions to the project were mainly three-fold, and are detailed below.</p>
+<h3 id="1-working-on-enhancing-templates-and-existing-reproducibility-scope-of-the-results-from-experiments">
+<a href="#1-working-on-enhancing-templates-and-existing-reproducibility-scope-of-the-results-from-experiments" class="header-anchor">
+1. Working on enhancing templates and existing reproducibility scope of the results from experiments
+</a>
+</h3><p>In this part, I worked on improving the readability and API of the templates. This led me to make some necessary API changes and test the existing libraries used for writing the research literature in data science and Kaggle competitions. One funny error we caught in the PyYaml project was</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic">#~~ Saving config.yaml for reproducibility</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">#-------------------------------------</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">## Config file 1 (config1.yaml)</span></span>
+<span class="line"><span style="color: #ABB2BF">lr: </span><span style="color: #D19A66">1e-10</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">## Config file 2 (config2.yaml)</span></span>
+<span class="line"><span style="color: #ABB2BF">lr: </span><span style="color: #D19A66">1.0e-10</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">#-------------------------------------</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">open</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"config1.yaml"</span><span style="color: #ABB2BF">, </span><span style="color: #98C379">"r"</span><span style="color: #ABB2BF">) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> f1:</span></span>
+<span class="line"><span style="color: #ABB2BF">	config1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> yaml.</span><span style="color: #61AFEF">safe_load</span><span style="color: #ABB2BF">(f1) </span><span style="color: #7F848E; font-style: italic"># loads lr -&gt; string</span></span>
+<span class="line"><span style="color: #56B6C2">&gt;&gt;</span><span style="color: #ABB2BF"> config1 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> { </span><span style="color: #98C379">'lr'</span><span style="color: #ABB2BF">: </span><span style="color: #98C379">'1e-10'</span><span style="color: #ABB2BF"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">open</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"config2.yaml"</span><span style="color: #ABB2BF">, </span><span style="color: #98C379">"r"</span><span style="color: #ABB2BF">) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> f2:</span></span>
+<span class="line"><span style="color: #ABB2BF">  config2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> yaml.</span><span style="color: #61AFEF">safe_load</span><span style="color: #ABB2BF">(f2) </span><span style="color: #7F848E; font-style: italic"># loads lr -&gt; python-floating point</span></span>
+<span class="line"><span style="color: #56B6C2">&gt;&gt;</span><span style="color: #ABB2BF"> config2 </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> { </span><span style="color: #98C379">'lr'</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">1e-10</span><span style="color: #ABB2BF"> } </span><span style="color: #7F848E; font-style: italic"># (the expected behaviour)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>There were other problems as well, like not being able to store Python objects using
+<a href="https://github.com/yaml/pyyaml" target="_blank" rel="noopener noreferrer">PyYAML API</a>. This led us to adopt
+<a href="https://omegaconf.readthedocs.io/en/2.3_branch/api_reference.html#the-omegaconf-api" target="_blank" rel="noopener noreferrer">OmegaConf.DictConfig</a> as the API standard for maintaining config data in the templates. This worked great on testing and is well maintained by the developers. Also, methods like resolution of config dict are very well written in this <code>OmegaConf</code> project.</p>
+<p>Also, we added support for
+<a href="http://hydra.cc" target="" rel="">Hydra</a> and
+<a href="https://github.com/google/python-fire/blob/master/docs/guide.md" target="_blank" rel="noopener noreferrer">Python-Fire</a> as they are great in terms of configuration management and also worked very well with PyTorch-Ignite. They also allow overriding existing configurations using the following bash commands.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">[For Python Fire]</span></span>
+<span class="line"><span style="color: #ABB2BF">&gt;&gt; python main.py config.yaml </span><span style="color: #E06C75">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.001</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">[For hydra]</span></span>
+<span class="line"><span style="color: #ABB2BF">&gt;&gt; python main.py </span><span style="color: #E06C75">lr</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">0.001</span><span style="color: #ABB2BF"> ++</span><span style="color: #E06C75">checkpoint_dir</span><span style="color: #56B6C2">=</span><span style="color: #98C379">./logs</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Note that you have to use <code>++</code> only for overrides not present in <code>config.yaml</code> for the <code>Hydra CLI</code> use. For more info, do check the docs for
+<a href="https://omegaconf.readthedocs.io" target="_blank" rel="noopener noreferrer">OmegaConf</a>,
+<a href="https://github.com/google/python-fire/blob/master/docs/guide.md" target="_blank" rel="noopener noreferrer">Python-Fire</a> and
+<a href="http://hydra.cc" target="" rel="">Hydra</a> .</p>
+<p>Some of the related PRs can be found here:
+<a href="https://github.com/pytorch-ignite/code-generator/pull/292" target="_blank" rel="noopener noreferrer">#292</a>
+<a href="https://github.com/pytorch-ignite/code-generator/pull/300" target="_blank" rel="noopener noreferrer">#300</a>
+<a href="https://github.com/pytorch-ignite/code-generator/pull/302" target="_blank" rel="noopener noreferrer">#302</a></p>
+<h3 id="2-integration-with-nebari-and-other-infrastructure-management-tools">
+<a href="#2-integration-with-nebari-and-other-infrastructure-management-tools" class="header-anchor">
+2. Integration with Nebari and other infrastructure management tools
+</a>
+</h3><p>I worked on testing this great infrastructure tool,&nbsp;
+<a href="http://nebari.dev/" target="" rel="">Nebari</a>, which is used for managing GPU clusters and Cloud infrastructure for data scientists and other professionals. It provides a&nbsp;
+<a href="https://jupyterhub.readthedocs.io/" target="_blank" rel="noopener noreferrer">JupyterHub</a>&nbsp;interface, which can be very helpful for deploying code and running tools. So, to explain the integration of my project with Nebari, firstly, I would like to discuss how the project stores the templates with a particular configuration.</p>
+<center>
+<img src="/_images/2023-09-20-code-generator-intern/nebari-image.png" alt="The Nebari-server Option in Code-Generator App" width="250px">
+
+</center>
+<p>To explain it quickly, let’s see how the app works when you click on <code>Open in Nebari</code> . After the button is clicked, we use a <code>netlify</code> function to commit a zip file and Jupyter notebook using
+<a href="https://github.com/octokit" target="_blank" rel="noopener noreferrer"><code>github/octokit</code></a> to the
+<a href="https://github.com/pytorch-ignite/nbs" target="_blank" rel="noopener noreferrer">pytorch-ignite/nbs</a> repository. We can see a committed notebook example below. To understand this better, you can read the code in&nbsp;
+<a href="https://github.com/pytorch-ignite/code-generator/tree/main/functions/nebari.js" target="_blank" rel="noopener noreferrer">pytorch-ignite/code-generator/functions/nebari.js</a>.</p>
+<p>
+<img src="/_images/2023-09-20-code-generator-intern/github-notebook-push.png" alt="GitHub Notebook Pushed By Code-Generator" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Now, to integrate this with the <code>Nebari</code> server, we used an extension called&nbsp;
+<a href="https://github.com/jupyterlab/jupyterlab-github" target="_blank" rel="noopener noreferrer">Jupyterlab-Github</a>. I wrote a <code>netlify</code> function to create a URL that can use this extension, open the generated link in the new tab, pull the notebook committed by the above <code>netlify</code> function, and open this notebook in the server. An example can be seen here. Pretty cool, right?</p>
+<p>
+<img src="/_images/2023-09-20-code-generator-intern/template-open-in-nebari.png" alt="Template Opened in Nebari" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>For this, I appreciate the Jupyter community’s extension ecosystem. They have great extensions for everything and maybe in the future, I may work or try to add more extensions to increase the functionality in the app. Also, I would like to thank the Nebari-dev community here, who provided such great support in testing this in the Nebari server.</p>
+<p>Some of the related PRs can be found here:
+<a href="https://github.com/pytorch-ignite/code-generator/pull/265" target="_blank" rel="noopener noreferrer">#265</a>
+<a href="https://github.com/pytorch-ignite/code-generator/pull/314" target="_blank" rel="noopener noreferrer">#314</a></p>
+<h3 id="3-the-changes-in-the-ci-and-other-vuejs-based-parts-of-the-code-base-mainly-based-on-js">
+<a href="#3-the-changes-in-the-ci-and-other-vuejs-based-parts-of-the-code-base-mainly-based-on-js" class="header-anchor">
+3. The changes in the CI and other Vuejs based parts of the code base (mainly based on JS)
+</a>
+</h3><p>I had to contribute some JavaScript-based code to the app, but since I had not worked on a JS project before, I needed to learn the basics before contributing to these issues, especially
+<a href="https://vuejs.org" target="_blank" rel="noopener noreferrer">Vue.js</a> :-( . So, I tried to learn by reading some online tutorials and documentation. I particularly liked this
+<a href="https://www.youtube.com/watch?v=YrxBCBibVo0&amp;list=PL4cUxeGkcC9hYYGbV60Vq3IXYNfDk8At1" target="_blank" rel="noopener noreferrer">tutorial</a> series on YouTube.</p>
+<p>To explain more about how to generates templates, let’s assume I made some files like <code>main.py</code>, <code>model.py</code>, and <code>utils.py</code> as a template. Now we use the
+<a href="https://ejs.co" target="_blank" rel="noopener noreferrer">ejs</a> project to add and select specific options and render them during runtime in the browser. To illustrate this, let us take an example from the templates.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #7F848E; font-style: italic">#::: if ((it.argparser == 'fire')) { :::#</span></span>
+<span class="line"><span style="color: #ABB2BF">    fire.</span><span style="color: #61AFEF">Fire</span><span style="color: #ABB2BF">(main)</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">#::: } else if ((it.argparser == 'hydra')){ :::#</span></span>
+<span class="line"><span style="color: #ABB2BF">    sys.argv.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"hydra.run.dir=."</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    sys.argv.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"hydra.output_subdir=null"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    sys.argv.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"hydra/job_logging=stdout"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">main</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">#::: } else { :::#</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">main</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #7F848E; font-style: italic">#::: } :::#</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Now, as you can see, there are some commented codes. This is part of JS, which helps select different configurations of argparsers. Seems easy, right?</p>
+<p>But it can be challenging to manage, and we also need to ensure we satisfy the <code>lint</code> formatting for the CI (which can be pretty tricky with templates :-( ). Still, these JS features can be very powerful, and we are trying to improve these as much as possible. By the way, if you are confused about where this <code>it.argparser</code> selector came from, better check the project, but the short answer is it comes from a <code>metadata.json</code> file that maintains the options for all the templates in the app.</p>
+<p>Some of the related PRs can be found here:
+<a href="https://github.com/pytorch-ignite/code-generator/pull/283" target="_blank" rel="noopener noreferrer">#283</a>
+<a href="https://github.com/pytorch-ignite/code-generator/pull/288" target="_blank" rel="noopener noreferrer">#288</a></p>
+<h2 id="the-way-forward-for-the-project">
+<a href="#the-way-forward-for-the-project" class="header-anchor">
+The way forward for the project
+</a>
+</h2><p>The Code-Generator project seems to be moving forward at a great pace and is expected to have many more additions in the future. Starting and maintaining a new project is challenging in open source and can have a very high risk/reward ratio. Still, good communities try their best to make and maintain projects that can be helpful for the maximum number of people and reduce the friction for new people entering the community. Here are some of the issues I suggest and may work on in the future.</p>
+<h3 id="1-separate-metadatajson-for-each-template">
+<a href="#1-separate-metadatajson-for-each-template" class="header-anchor">
+1. Separate <code>metadata.json</code> for each template
+</a>
+</h3><p>We are considering providing separate metadata.json files for each template or something similar to that in the future. I proposed an issue to the project for the same&nbsp;
+<a href="https://github.com/pytorch-ignite/code-generator/issues/308" target="_blank" rel="noopener noreferrer">here</a> and will try to work on this in the future.</p>
+<h3 id="2-script-to-contribute-new-templates">
+<a href="#2-script-to-contribute-new-templates" class="header-anchor">
+2. Script to contribute new templates
+</a>
+</h3><p>Since it is hard for Data science enthusiasts to learn JS and contribute templates easily, which also seems to be a point of friction in adopting the app, we proposed adding a script that can help make JS and CI-related changes to the app as suggested in the issue&nbsp;
+<a href="https://github.com/pytorch-ignite/code-generator/issues/316" target="_blank" rel="noopener noreferrer">here</a>. This issue may take a bit of hard work, but it can be a great addition to the app.</p>
+<h3 id="3-more-templates-and-feature-options">
+<a href="#3-more-templates-and-feature-options" class="header-anchor">
+3. More templates and feature options
+</a>
+</h3><p>We will add more templates and feature options in the future to the project. Templates like object detection, text summarisation, and diffusion models can be an excellent addition to the project.</p>
+<p>P.S. If you feel excited about the project, please feel free to suggest more changes and contribute to the project.</p>
+<h2 id="some-lessons-i-learnt-along-the-way">
+<a href="#some-lessons-i-learnt-along-the-way" class="header-anchor">
+Some lessons I learnt along the way
+</a>
+</h2><p>This internship experience increased my confidence in maintaining an open-source codebase and understanding how to test functions and debug changes. It also helped me understand the value of real-life design decisions and CI and how they can significantly influence the project for the good or the bad. Some of the best practices I learned in the open-source projects are listed below.</p>
+<h3 id="1-try-to-make-the-code-changes-more-developer-centric">
+<a href="#1-try-to-make-the-code-changes-more-developer-centric" class="header-anchor">
+1. Try to make the code changes more developer centric
+</a>
+</h3><p>When we try to write new code or change the existing files, we often try to do it in a way that adds most features and often forget to write quality code. While working on new changes, try to organize the code better and simplify the common code in a separate <code>utils</code> file. This can make the codebase better and more accessible for other developers to view and understand. Also, leave meaningful short comments, as it can save some time for the next Developer that lands on your project.</p>
+<h3 id="2-try-to-have-separate-prs-for-big-changes">
+<a href="#2-try-to-have-separate-prs-for-big-changes" class="header-anchor">
+2. Try to have separate PRs for big changes
+</a>
+</h3><p>While making a pull request(PR) seems very exciting on a project, you should know what and how much you want to accomplish in one pull request. Sometimes, we can make too many functional changes in one pull request, making testing and removing all the bugs difficult. This issue was evident in my time as an intern as some of my PRs were terribly formatted, and this led to me completely rebasing them and making 4-5 more PRs to the main project to remove many bugs in those changes. This was painful for me and my mentor, but I thank him for helping me with great suggestions and reviews.
+Also, this experience increased my learning and helped me improve the quality of my pull requests. So don’t be afraid to make mistakes; learn from them and make your way in this incredible world of OSS!</p>
+<h2 id="acknowledgements">
+<a href="#acknowledgements" class="header-anchor">
+Acknowledgements
+</a>
+</h2><p>In this section, I would like to thank my mentor,
+<a href="https://github.com/vfdev-5" target="_blank" rel="noopener noreferrer">@vfdev-5</a>, and other members of the PyTorch-Ignite community for helping me in this internship. Also, I would like to thank the people at&nbsp;
+<a href="https://quansight.com/" target="_blank" rel="noopener noreferrer">Quansight-Labs</a>&nbsp;for providing me with such a great opportunity, especially
+<a href="https://github.com/rgommers" target="_blank" rel="noopener noreferrer">@rgommers</a>,
+<a href="https://github.com/trallard" target="_blank" rel="noopener noreferrer">@trallard</a>,
+<a href="https://github.com/melissawm" target="_blank" rel="noopener noreferrer">@melissawm</a>, and others for their invaluable guidance and time during this internship.</p>
+<h2 id="references">
+<a href="#references" class="header-anchor">
+References
+</a>
+</h2><ul>
+<li>
+<a href="https://pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer">https://pytorch-ignite.ai</a></li>
+<li>
+<a href="https://www.nebari.dev/" target="_blank" rel="noopener noreferrer">https://www.nebari.dev</a></li>
+<li>
+<a href="http://hydra.cc/" target="" rel="">http://hydra.cc</a></li>
+<li>
+<a href="https://github.com/google/python-fire/blob/master/docs/guide.md" target="_blank" rel="noopener noreferrer">https://github.com/google/python-fire/blob/master/docs/guide.md</a></li>
+<li>
+<a href="https://vuejs.org/guide/introduction.html" target="_blank" rel="noopener noreferrer">https://vuejs.org/guide/introduction.html</a></li>
+<li>
+<a href="https://ejs.co/" target="_blank" rel="noopener noreferrer">https://ejs.co</a></li>
+<li>
+<a href="https://omegaconf.readthedocs.io/" target="_blank" rel="noopener noreferrer">https://omegaconf.readthedocs.io</a></li>
+<li>
+<a href="https://github.com/yaml/pyyaml" target="_blank" rel="noopener noreferrer">https://github.com/yaml/pyyaml</a></li>
+<li>
+<a href="https://github.com/octokit" target="_blank" rel="noopener noreferrer">https://github.com/octokit</a></li>
+</ul>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/deep-learning/">
+#Deep Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/machine-learning/">
+#Machine Learning
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch-ignite/">
+#PyTorch-Ignite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch/">
+#PyTorch
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/internship/">
+#Internship
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/nebari/">
+#Nebari
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+</div>
+<div>
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="group float-right">
+<span class="overflow-hidden">Sangho's Internship at Quansight with PyTorch-Ignite project</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-project-itself">The project itself</a></li>
+<li><a href="#the-issues-i-worked-on">The issues I worked on</a>
+<ul>
+<li><a href="#1-working-on-enhancing-templates-and-existing-reproducibility-scope-of-the-results-from-experiments">1. Working on enhancing templates and existing reproducibility scope of the results from experiments</a></li>
+<li><a href="#2-integration-with-nebari-and-other-infrastructure-management-tools">2. Integration with Nebari and other infrastructure management tools</a></li>
+<li><a href="#3-the-changes-in-the-ci-and-other-vuejs-based-parts-of-the-code-base-mainly-based-on-js">3. The changes in the CI and other Vuejs based parts of the code base (mainly based on JS)</a></li>
+</ul>
+</li>
+<li><a href="#the-way-forward-for-the-project">The way forward for the project</a>
+<ul>
+<li><a href="#1-separate-metadatajson-for-each-template">1. Separate <code>metadata.json</code> for each template</a></li>
+<li><a href="#2-script-to-contribute-new-templates">2. Script to contribute new templates</a></li>
+<li><a href="#3-more-templates-and-feature-options">3. More templates and feature options</a></li>
+</ul>
+</li>
+<li><a href="#some-lessons-i-learnt-along-the-way">Some lessons I learnt along the way</a>
+<ul>
+<li><a href="#1-try-to-make-the-code-changes-more-developer-centric">1. Try to make the code changes more developer centric</a></li>
+<li><a href="#2-try-to-have-separate-prs-for-big-changes">2. Try to have separate PRs for big changes</a></li>
+</ul>
+</li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',appId:'7EWYE1JCT3',apiKey:'841e93e60c16975ba1bd8c7c716eed82',indexName:'pytorch-ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:Website']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>
