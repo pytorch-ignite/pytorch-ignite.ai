@@ -264,7 +264,7 @@ tb_logger = TensorboardLogger(log_dir="tb-logger")
 # Attach handler to plot trainer's loss every 100 iterations
 tb_logger.attach_output_handler(
     trainer,
-    event_name=Events.ITERATION_COMPLETED(every=100),
+    event_name=Events.ITERATION_COMPLETED(every=log_interval),
     tag="training",
     output_transform=lambda loss: {"batch_loss": loss},
 )
@@ -466,7 +466,7 @@ tb_logger = TensorboardLogger(log_dir="tb-logger")
 
 tb_logger.attach_output_handler(
     trainer,
-    event_name=Events.ITERATION_COMPLETED(every=100),
+    event_name=Events.ITERATION_COMPLETED(every=log_interval),
     tag="training",
     output_transform=lambda loss: {"batch_loss": loss},
 )
