@@ -1,0 +1,1562 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta property="og:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<meta name="twitter:description" content="High-level library to help with training and evaluating neural networks in PyTorch flexibly and transparently.">
+<title>
+Distributed Training with Ignite on CIFAR10
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Distributed Training with Ignite on CIFAR10
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Distributed Training with Ignite on CIFAR10
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.9acd436c5609f4c6f7c0a9a9c6536f57.min.css">
+<link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/tutorials/intermediate/01-cifar10-distributed/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold
+py-1
+uppercase
+active">
+Tutorials
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/tutorials/beginner/01-getting-started/" class="hover:text-$c-primary py-1">Getting Started</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/beginner/02-transformers-text-classification/" class="hover:text-$c-primary py-1">Transformers for Text Classification with IMDb Reviews</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/01-cifar10-distributed/" class="text-$c-primary hover:text-$c-primary py-1">Distributed Training on CPUs, GPUs or TPUs</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a>
+<ul>
+<li><a href="#for-parsing-arguments">For parsing arguments</a></li>
+<li><a href="#for-tpus">For TPUs</a></li>
+<li><a href="#with-clearml-optional">With ClearML (Optional)</a></li>
+</ul>
+</li>
+<li><a href="#download-data">Download Data</a></li>
+<li><a href="#common-configuration">Common Configuration</a></li>
+<li><a href="#basic-setup">Basic Setup</a>
+<ul>
+<li><a href="#imports">Imports</a></li>
+<li><a href="#dataloaders">Dataloaders</a></li>
+<li><a href="#model">Model</a></li>
+<li><a href="#optimizer">Optimizer</a></li>
+<li><a href="#criterion">Criterion</a></li>
+<li><a href="#lr-scheduler">LR Scheduler</a></li>
+</ul>
+</li>
+<li><a href="#trainer">Trainer</a>
+<ul>
+<li><a href="#save-models">Save Models</a></li>
+<li><a href="#resume-from-checkpoint">Resume from Checkpoint</a></li>
+<li><a href="#create-trainer">Create Trainer</a></li>
+</ul>
+</li>
+<li><a href="#evaluator">Evaluator</a></li>
+<li><a href="#training">Training</a>
+<ul>
+<li><a href="#logging">Logging</a></li>
+<li><a href="#begin-training">Begin Training</a></li>
+</ul>
+</li>
+<li><a href="#running-distributed-code">Running Distributed Code</a></li>
+<li><a href="#single-node-one-or-more-gpus">Single Node, One or More GPUs</a>
+<ul>
+<li><a href="#run-with-torchrun-recommended">Run with <code>torchrun</code> (Recommended)</a></li>
+<li><a href="#run-with-internal-spawning-torchmultiprocessingspawn">Run with internal spawning (<code>torch.multiprocessing.spawn</code>)</a></li>
+<li><a href="#run-with-horovodrun">Run with horovodrun</a></li>
+</ul>
+</li>
+<li><a href="#multiple-nodes-multiple-gpus">Multiple Nodes, Multiple GPUs</a>
+<ul>
+<li><a href="#run-with-torchrun-recommended-1">Run with <code>torchrun</code> (Recommended)</a></li>
+<li><a href="#run-with-internal-spawning">Run with internal spawning</a></li>
+<li><a href="#run-with-horovodrun-1">Run with horovodrun</a></li>
+</ul>
+</li>
+<li><a href="#single-node-multiple-cpus">Single Node, Multiple CPUs</a></li>
+<li><a href="#tpus-on-google-colab">TPUs on Google Colab</a></li>
+<li><a href="#run-in-jupyter-notebook">Run in Jupyter Notebook</a></li>
+<li><a href="#important-links">Important Links</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/" class="hover:text-$c-primary py-1">Machine Translation using PyTorch Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/intermediate/03-reinforcement-learning/" class="hover:text-$c-primary py-1">Reinforcement Learning with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/tutorials/advanced/01-collective-communication/" class="hover:text-$c-primary py-1">Collective Communication with Ignite</a>
+</li>
+</ul>
+<h5 class="font-semibold
+py-1
+uppercase">
+How-to-Guides
+</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/how-to-guides/01-installation/" class="hover:text-$c-primary py-1">How to install PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/02-convert-pytorch-to-ignite/" class="hover:text-$c-primary py-1">How to convert pure PyTorch code to Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/03-time-profiling/" class="hover:text-$c-primary py-1">How to do time profiling</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/04-fastai-lr-finder/" class="hover:text-$c-primary py-1">How to use FastaiLRFinder with Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/05-gradient-accumulation/" class="hover:text-$c-primary py-1">How to effectively increase batch size on limited compute</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/06-data-iterator/" class="hover:text-$c-primary py-1">How to work with data iterators</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/07-cross-validation/" class="hover:text-$c-primary py-1">How to do Cross Validation in Ignite</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/08-custom-events/" class="hover:text-$c-primary py-1">How to create Custom Events based on Forward or Backward Pass</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/09-switch-data-training/" class="hover:text-$c-primary py-1">How to switch data provider during training</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/10-loggers/" class="hover:text-$c-primary py-1">How to use Loggers</a>
+</li>
+<li class="py-1">
+<a href="/how-to-guides/11-load-checkpoint/" class="hover:text-$c-primary py-1">How to load checkpoint and resume training</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<div class="flex flex-wrap pb-2 justify-center">
+<a class="flex py-1 px-2 items-center" href="https://colab.research.google.com/github/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/tutorials/intermediate/01-cifar10-distributed.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M16.941 4.976a7.033 7.033.0 00-4.93 2.064 7.033 7.033.0 00-.124 9.807l2.395-2.395a3.646 3.646.0 015.15-5.148l2.397-2.399a7.033 7.033.0 00-4.888-1.93zm-9.871.01A7.033 7.033.0 002.182 6.917l2.391 2.391a3.643 3.643.0 015.023.127l1.734-2.973-.1-.08A7.033 7.033.0 007.07 4.986zm15.01 2.172-2.39 2.39a3.646 3.646.0 01-5.15 5.15l-2.406 2.407a7.036 7.036.0 009.945-9.947zm-20.148.01a7.033 7.033.0 00-.002 9.681l2.397-2.397A3.643 3.643.0 014.323 9.56zm7.664 7.423a3.635 3.635.0 01-5.017.113L2.182 17.1a7.029 7.029.0 009.007.546l.137-.112z" fill="currentcolor"></path></svg>
+<span class="ml-1">Run in Google Colab</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="/tutorials/intermediate/01-cifar10-distributed.ipynb" target="_blank" rel="noopener noreferrer" download="01-cifar10-distributed.ipynb"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4-4 4m0 0-4-4m4 4V4"></path></svg>
+<span class="ml-1">Download as Jupyter Notebook</span>
+</a>
+<a class="flex py-1 px-2 items-center" href="https://github.com/pytorch-ignite/pytorch-ignite.ai/blob/gh-pages/tutorials/intermediate/01-cifar10-distributed.ipynb" target="_blank" rel="noopener noreferrer"><svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" viewBox="0 0 24 24"><path d="M12 2A10 10 0 002 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92.0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64.0.0.84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71.0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" fill="currentcolor"></path></svg>
+<span class="ml-1">View on GitHub</span>
+</a>
+</div>
+<h1 id="distributed-training-with-ignite-on-cifar10">
+<a href="#distributed-training-with-ignite-on-cifar10" class="header-anchor">
+Distributed Training with Ignite on CIFAR10
+</a>
+</h1><p>This tutorial is a brief introduction on how you can do distributed training with Ignite on one or more CPUs, GPUs or TPUs. We will also introduce several helper functions and Ignite concepts (setup common training handlers, save to/ load from checkpoints, etc.) which you can easily incorporate in your code.</p>
+<p>We will use distributed training to train a predefined
+<a href="https://pytorch.org/vision/stable/models.html#torchvision.models.resnet18" target="_blank" rel="noopener noreferrer">ResNet18</a> on
+<a href="https://pytorch.org/vision/stable/datasets.html#torchvision.datasets.CIFAR10" target="_blank" rel="noopener noreferrer">CIFAR10</a> using either of the following configurations:</p>
+<ul>
+<li>Single Node, One or More GPUs</li>
+<li>Multiple Nodes, Multiple GPUs</li>
+<li>Single Node, Multiple CPUs</li>
+<li>TPUs on Google Colab</li>
+<li>On Jupyter Notebooks</li>
+</ul>
+<p>The type of distributed training we will use is called data parallelism in which we:</p>
+<blockquote>
+<ol>
+<li>Copy the model on each GPU</li>
+<li>Split the dataset and fit the models on different subsets</li>
+<li>Communicate the gradients at each iteration to keep the models in sync</li>
+</ol>
+<p>– <cite>
+<a href="https://towardsdatascience.com/distributed-deep-learning-101-introduction-ebfc1bcd59d9" target="_blank" rel="noopener noreferrer">Distributed Deep Learning 101: Introduction</a></cite></p>
+</blockquote>
+<p>PyTorch provides a
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html" target="_blank" rel="noopener noreferrer">torch.nn.parallel.DistributedDataParallel</a> API for this task however the implementation that supports different backends + configurations is tedious. In this example, we will see how to enable data distributed training which is adaptable to various backends in just a few lines of code alongwith:</p>
+<ul>
+<li>Computing training and validation metrics</li>
+<li>Setup logging (and connecting with ClearML)</li>
+<li>Saving the best model weights</li>
+<li>Setting LR Scheduler</li>
+<li>Using Automatic Mixed Precision</li>
+</ul>
+<h2 id="required-dependencies">
+<a href="#required-dependencies" class="header-anchor">
+Required Dependencies
+</a>
+</h2><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install pytorch</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">ignite</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="for-parsing-arguments">
+<a href="#for-parsing-arguments" class="header-anchor">
+For parsing arguments
+</a>
+</h3><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install fire</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="for-tpus">
+<a href="#for-tpus" class="header-anchor">
+For TPUs
+</a>
+</h3><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #D19A66">VERSION</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">curl </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">s https:</span><span style="color: #56B6C2">//</span><span style="color: #ABB2BF">api.github.com</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">repos</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">pytorch</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">xla</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">releases</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">latest </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> grep </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">Po </span><span style="color: #98C379">'"tag_name": "v\K.*?(?=")'</span></span>
+<span class="line"><span style="color: #D19A66">VERSION</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">VERSION</span><span style="color: #ABB2BF">[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">].</span><span style="color: #61AFEF">rstrip</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">'.0'</span><span style="color: #ABB2BF">) </span><span style="color: #7F848E; font-style: italic"># remove trailing zero</span></span>
+<span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install cloud</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">tpu</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">client</span><span style="color: #56B6C2">==</span><span style="color: #D19A66">0.10</span><span style="color: #ABB2BF"> https:</span><span style="color: #56B6C2">//</span><span style="color: #ABB2BF">storage.googleapis.com</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">tpu</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">pytorch</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">wheels</span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF">torch_xla</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">{</span><span style="color: #D19A66">VERSION</span><span style="color: #ABB2BF">}</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">cp37</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">cp37m</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">linux_x86_64.whl</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="with-clearml-optional">
+<a href="#with-clearml-optional" class="header-anchor">
+With ClearML (Optional)
+</a>
+</h3><p>We can enable logging with ClearML to track experiments as follows:</p>
+<ul>
+<li>Make sure you have a ClearML account:
+<a href="https://app.community.clear.ml/" target="_blank" rel="noopener noreferrer">https://app.community.clear.ml/</a></li>
+<li>Create a credential: Profile &gt; Create new credentials &gt; Copy to clipboard</li>
+<li>Run <code>clearml-init</code> and paste the credentials</li>
+</ul>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">pip install clearml</span></span>
+<span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">clearml</span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">init</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Specify <code>with_clearml=True</code> in <code>config</code> below and monitor the experiment on the dashboard. Refer to the end of this tutorial to see an example of such an experiment.</p>
+<h2 id="download-data">
+<a href="#download-data" class="header-anchor">
+Download Data
+</a>
+</h2><p>Let’s download our data first which can later be used by all the processes to instantiate our dataloaders. The following command will download the CIFAR10 dataset to a folder <code>cifar10</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #FFFFFF">!</span><span style="color: #ABB2BF">python </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">c </span><span style="color: #98C379">"from torchvision.datasets import CIFAR10; CIFAR10('cifar10', download=True)"</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="common-configuration">
+<a href="#common-configuration" class="header-anchor">
+Common Configuration
+</a>
+</h2><p>We maintain a <code>config</code> dictionary which can be extended or changed to store parameters required during training. We can refer back to this code when we will use these parameters later.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">config </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"seed"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">543</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"data_path"</span><span style="color: #ABB2BF">: </span><span style="color: #98C379">"cifar10"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">: </span><span style="color: #98C379">"output-cifar10/"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: </span><span style="color: #98C379">"resnet18"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"batch_size"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">512</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"momentum"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">0.9</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"weight_decay"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">1e-4</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"num_workers"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"num_epochs"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">5</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"learning_rate"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">0.4</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"num_warmup_epochs"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"validate_every"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">3</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"checkpoint_every"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">200</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"resume_from"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"log_every_iters"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">15</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"nproc_per_node"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"with_clearml"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #98C379">"with_amp"</span><span style="color: #ABB2BF">: </span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">}</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="basic-setup">
+<a href="#basic-setup" class="header-anchor">
+Basic Setup
+</a>
+</h2>
+<h3 id="imports">
+<a href="#imports" class="header-anchor">
+Imports
+</a>
+</h3><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> datetime </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> datetime</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> pathlib </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Path</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.nn </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> nn</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> torch.optim </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> optim</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> datasets, models</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torchvision.transforms </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> (</span></span>
+<span class="line"><span style="color: #ABB2BF">    Compose,</span></span>
+<span class="line"><span style="color: #ABB2BF">    Normalize,</span></span>
+<span class="line"><span style="color: #ABB2BF">    Pad,</span></span>
+<span class="line"><span style="color: #ABB2BF">    RandomCrop,</span></span>
+<span class="line"><span style="color: #ABB2BF">    RandomHorizontalFlip,</span></span>
+<span class="line"><span style="color: #ABB2BF">    ToTensor,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ignite.distributed </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> idist</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.engines </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> common</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> PiecewiseLinear</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.engine </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Events, create_supervised_trainer, create_supervised_evaluator</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.handlers </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Checkpoint, global_step_from_engine</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.metrics </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Accuracy, Loss</span></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.utils </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> manual_seed, setup_logger</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Next we will take the help of <code>auto_</code> methods in <code>idist</code> (
+<a href="https://pytorch.org/ignite/distributed.html#" target="_blank" rel="noopener noreferrer"><code>ignite.distributed</code></a>) to make our dataloaders, model and optimizer automatically adapt to the current configuration <code>backend=None</code> (non-distributed) or for backends like <code>nccl</code>, <code>gloo</code>, and <code>xla-tpu</code> (distributed).</p>
+<p>Note that we are free to partially use or not use <code>auto_</code> methods at all and instead can implement something custom.</p>
+<h3 id="dataloaders">
+<a href="#dataloaders" class="header-anchor">
+Dataloaders
+</a>
+</h3><p>Next we are going to instantiate the train and test datasets from <code>data_path</code>, apply transforms to it and return them via <code>get_train_test_datasets()</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_train_test_datasets</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">path</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    train_transform </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Compose</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        [</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">Pad</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">4</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">RandomCrop</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66">32</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">fill</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">RandomHorizontalFlip</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">Normalize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">0.485</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.456</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.406</span><span style="color: #ABB2BF">), (</span><span style="color: #D19A66">0.229</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.224</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.225</span><span style="color: #ABB2BF">)),</span></span>
+<span class="line"><span style="color: #ABB2BF">        ]</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    test_transform </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Compose</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        [</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">ToTensor</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #61AFEF">Normalize</span><span style="color: #ABB2BF">((</span><span style="color: #D19A66">0.485</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.456</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.406</span><span style="color: #ABB2BF">), (</span><span style="color: #D19A66">0.229</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.224</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.225</span><span style="color: #ABB2BF">)),</span></span>
+<span class="line"><span style="color: #ABB2BF">        ]</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_ds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> datasets.</span><span style="color: #61AFEF">CIFAR10</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">root</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">path, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">download</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">train_transform</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    test_ds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> datasets.</span><span style="color: #61AFEF">CIFAR10</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">root</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">path, </span><span style="color: #E06C75; font-style: italic">train</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">download</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">test_transform</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> train_ds, test_ds</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Finally, we pass the datasets to
+<a href="https://pytorch.org/ignite/generated/ignite.distributed.auto.auto_dataloader.html#ignite.distributed.auto.auto_dataloader" target="_blank" rel="noopener noreferrer"><code>auto_dataloader()</code></a>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_dataflow</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    train_dataset, test_dataset </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_train_test_datasets</span><span style="color: #ABB2BF">(config[</span><span style="color: #98C379">"data_path"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_dataloader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        train_dataset,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"batch_size"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">num_workers</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"num_workers"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">drop_last</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    test_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_dataloader</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        test_dataset,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">batch_size</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"batch_size"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">num_workers</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"num_workers"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">shuffle</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> train_loader, test_loader</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="model">
+<a href="#model" class="header-anchor">
+Model
+</a>
+</h3><p>We check if the model given in <code>config</code> is present in
+<a href="https://pytorch.org/vision/stable/models.html" target="_blank" rel="noopener noreferrer">torchvision.models</a>, change the last layer to output 10 classes (as present in CIFAR10) and pass it to
+<a href="https://pytorch.org/ignite/generated/ignite.distributed.auto.auto_model.html#auto-model" target="_blank" rel="noopener noreferrer"><code>auto_model()</code></a> which makes it automatically adaptable for non-distributed and distributed configurations.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_model</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    model_name </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> model_name </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> models.</span><span style="color: #E06C75">__dict__</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        fn </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> models.</span><span style="color: #E06C75">__dict__</span><span style="color: #ABB2BF">[model_name]</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">raise</span><span style="color: #ABB2BF"> RuntimeError(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Unknown model name </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">model_name</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_model</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">fn</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">num_classes</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">10</span><span style="color: #ABB2BF">))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> model</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="optimizer">
+<a href="#optimizer" class="header-anchor">
+Optimizer
+</a>
+</h3><p>Then we can setup the optimizer using hyperparameters from <code>config</code> and pass it through
+<a href="https://pytorch.org/ignite/generated/ignite.distributed.auto.auto_optim.html#ignite.distributed.auto.auto_optim" target="_blank" rel="noopener noreferrer"><code>auto_optim()</code></a>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_optimizer</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">model</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> optim.</span><span style="color: #61AFEF">SGD</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        model.</span><span style="color: #61AFEF">parameters</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">lr</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"learning_rate"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">momentum</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"momentum"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">weight_decay</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"weight_decay"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">nesterov</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">auto_optim</span><span style="color: #ABB2BF">(optimizer)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> optimizer</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="criterion">
+<a href="#criterion" class="header-anchor">
+Criterion
+</a>
+</h3><p>We put the loss function on <code>device</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_criterion</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">CrossEntropyLoss</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">())</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="lr-scheduler">
+<a href="#lr-scheduler" class="header-anchor">
+LR Scheduler
+</a>
+</h3><p>We will use
+<a href="https://pytorch.org/ignite/generated/ignite.handlers.param_scheduler.PiecewiseLinear.html#ignite.handlers.param_scheduler.PiecewiseLinear" target="_blank" rel="noopener noreferrer">PiecewiseLinear</a> which is one of the
+<a href="https://pytorch.org/ignite/handlers.html#parameter-scheduler" target="_blank" rel="noopener noreferrer">various LR Schedulers</a> Ignite provides.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_lr_scheduler</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">optimizer</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    milestones_values </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span></span>
+<span class="line"><span style="color: #ABB2BF">        (</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">        (config[</span><span style="color: #98C379">"num_iters_per_epoch"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"num_warmup_epochs"</span><span style="color: #ABB2BF">], config[</span><span style="color: #98C379">"learning_rate"</span><span style="color: #ABB2BF">]),</span></span>
+<span class="line"><span style="color: #ABB2BF">        (config[</span><span style="color: #98C379">"num_iters_per_epoch"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">*</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"num_epochs"</span><span style="color: #ABB2BF">], </span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">    ]</span></span>
+<span class="line"><span style="color: #ABB2BF">    lr_scheduler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">PiecewiseLinear</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        optimizer, </span><span style="color: #E06C75; font-style: italic">param_name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"lr"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">milestones_values</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">milestones_values</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> lr_scheduler</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="trainer">
+<a href="#trainer" class="header-anchor">
+Trainer
+</a>
+</h2>
+<h3 id="save-models">
+<a href="#save-models" class="header-anchor">
+Save Models
+</a>
+</h3><p>We can create checkpoints using either a handler (in case of ClearML) or by simply passing the path of the checkpoint file to <code>save_handler</code>:
+If specified <code>with-clearml=True</code>, we will save the models in ClearML’s File Server using
+<a href="https://pytorch.org/ignite/generated/ignite.contrib.handlers.clearml_logger.html#ignite.contrib.handlers.clearml_logger.ClearMLSaver" target="_blank" rel="noopener noreferrer"><code>ClearMLSaver()</code></a>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_save_handler</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"with_clearml"</span><span style="color: #ABB2BF">]:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> ignite.contrib.handlers.clearml_logger </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> ClearMLSaver</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">ClearMLSaver</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">dirname</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="resume-from-checkpoint">
+<a href="#resume-from-checkpoint" class="header-anchor">
+Resume from Checkpoint
+</a>
+</h3><p>If a checkpoint file path is provided, we can resume training from there by loading the file.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">load_checkpoint</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">resume_from</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    checkpoint_fp </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Path</span><span style="color: #ABB2BF">(resume_from)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">assert</span><span style="color: #ABB2BF"> (</span></span>
+<span class="line"><span style="color: #ABB2BF">        checkpoint_fp.</span><span style="color: #61AFEF">exists</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    ), </span><span style="color: #C678DD">f</span><span style="color: #98C379">"Checkpoint '</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">checkpoint_fp.</span><span style="color: #61AFEF">as_posix</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">' is not found"</span></span>
+<span class="line"><span style="color: #ABB2BF">    checkpoint </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">load</span><span style="color: #ABB2BF">(checkpoint_fp.</span><span style="color: #61AFEF">as_posix</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">map_location</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"cpu"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> checkpoint</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="create-trainer">
+<a href="#create-trainer" class="header-anchor">
+Create Trainer
+</a>
+</h3><p>Finally, we can create our <code>trainer</code> in four steps:</p>
+<ol>
+<li>Create a <code>trainer</code> object using
+<a href="https://pytorch.org/ignite/generated/ignite.engine.create_supervised_trainer.html#ignite.engine.create_supervised_trainer" target="_blank" rel="noopener noreferrer"><code>create_supervised_trainer()</code></a> which internally defines the steps taken to process a single batch:</li>
+<li>Move the batch to <code>device</code> used in current distributed configuration.</li>
+<li>Put <code>model</code> in <code>train()</code> mode.</li>
+<li>Perform forward pass by passing the inputs through the <code>model</code> and calculating <code>loss</code>. If AMP is enabled then this step happens with
+<a href="https://pytorch.org/docs/stable/amp.html#torch.cuda.amp.autocast" target="_blank" rel="noopener noreferrer"><code>autocast</code></a> on which allows this step to run in mixed precision.</li>
+<li>Perform backward pass. If
+<a href="https://pytorch.org/docs/stable/amp.html" target="_blank" rel="noopener noreferrer">Automatic Mixed Precision</a> (AMP) is enabled (speeds up computations on large neural networks and reduces memory usage while retaining performance), then the losses will be
+<a href="https://pytorch.org/docs/stable/amp.html#torch.cuda.amp.GradScaler.scale" target="_blank" rel="noopener noreferrer">scaled</a> before calling <code>backward()</code>, <code>step()</code> the optimizer while discarding batches that contain NaNs and
+<a href="https://pytorch.org/docs/stable/amp.html#torch.cuda.amp.GradScaler.update" target="_blank" rel="noopener noreferrer">update()</a> the scale for the next iteration.</li>
+<li>Store the loss as <code>batch loss</code> in <code>state.output</code>.</li>
+</ol>
+<p>Internally, the above steps to create the <code>trainer</code> would look like:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">train_step</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">batch</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">      x, y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> batch[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">], batch[</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">      </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> x.device </span><span style="color: #56B6C2">!=</span><span style="color: #ABB2BF"> device:</span></span>
+<span class="line"><span style="color: #ABB2BF">          x </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> x.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device, </span><span style="color: #E06C75; font-style: italic">non_blocking</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">          y </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> y.</span><span style="color: #61AFEF">to</span><span style="color: #ABB2BF">(device, </span><span style="color: #E06C75; font-style: italic">non_blocking</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">      model.</span><span style="color: #61AFEF">train</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">      </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">autocast</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">enabled</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">with_amp):</span></span>
+<span class="line"><span style="color: #ABB2BF">          y_pred </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(x)</span></span>
+<span class="line"><span style="color: #ABB2BF">          loss </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">criterion</span><span style="color: #ABB2BF">(y_pred, y)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">      optimizer.</span><span style="color: #61AFEF">zero_grad</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">      scaler.</span><span style="color: #61AFEF">scale</span><span style="color: #ABB2BF">(loss).</span><span style="color: #61AFEF">backward</span><span style="color: #ABB2BF">()  </span><span style="color: #7F848E; font-style: italic"># If with_amp=False, this is equivalent to loss.backward()</span></span>
+<span class="line"><span style="color: #ABB2BF">      scaler.</span><span style="color: #61AFEF">step</span><span style="color: #ABB2BF">(optimizer)  </span><span style="color: #7F848E; font-style: italic"># If with_amp=False, this is equivalent to optimizer.step()</span></span>
+<span class="line"><span style="color: #ABB2BF">      scaler.</span><span style="color: #61AFEF">update</span><span style="color: #ABB2BF">()  </span><span style="color: #7F848E; font-style: italic"># If with_amp=False, this step does nothing</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">      </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> {</span><span style="color: #98C379">"batch loss"</span><span style="color: #ABB2BF">: loss.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">()}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Engine</span><span style="color: #ABB2BF">(train_step)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><ol start="3">
+<li>Setup some common Ignite training handlers. You can do this individually or use
+<a href="https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.common.setup_common_training_handlers" target="_blank" rel="noopener noreferrer">setup_common_training_handlers()</a> that takes the <code>trainer</code> and a subset of the dataset (<code>train_sampler</code>) alongwith:</li>
+</ol>
+<ul>
+<li>A dictionary mapping on what to save in the checkpoint (<code>to_save</code>) and how often (<code>save_every_iters</code>).</li>
+<li>The LR Scheduler</li>
+<li>The output of <code>train_step()</code></li>
+<li>Other handlers</li>
+</ul>
+<ol start="4">
+<li>If <code>resume_from</code> file path is provided, load the states of objects <code>to_save</code> from the checkpoint file.</li>
+</ol>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_trainer</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #D19A66; font-style: italic">model</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">optimizer</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">criterion</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">lr_scheduler</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">train_sampler</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">logger</span></span>
+<span class="line"><span style="color: #ABB2BF">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    device </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    amp_mode </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span></span>
+<span class="line"><span style="color: #ABB2BF">    scaler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">False</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_trainer</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        model,</span></span>
+<span class="line"><span style="color: #ABB2BF">        optimizer,</span></span>
+<span class="line"><span style="color: #ABB2BF">        criterion,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">device,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">non_blocking</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #C678DD">lambda</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66; font-style: italic">x</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">y</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">y_pred</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">loss</span><span style="color: #ABB2BF">: {</span><span style="color: #98C379">"batch loss"</span><span style="color: #ABB2BF">: loss.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">()},</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">amp_mode</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"amp"</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"with_amp"</span><span style="color: #ABB2BF">] </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">scaler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"with_amp"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    trainer.logger </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> logger</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    to_save </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"trainer"</span><span style="color: #ABB2BF">: trainer,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: model,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"optimizer"</span><span style="color: #ABB2BF">: optimizer,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"lr_scheduler"</span><span style="color: #ABB2BF">: lr_scheduler,</span></span>
+<span class="line"><span style="color: #ABB2BF">    }</span></span>
+<span class="line"><span style="color: #ABB2BF">    metric_names </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"batch loss"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    ]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    common.</span><span style="color: #61AFEF">setup_common_training_handlers</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">trainer</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">trainer,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">train_sampler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">train_sampler,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">to_save</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">to_save,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">save_every_iters</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"checkpoint_every"</span><span style="color: #ABB2BF">],</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">save_handler</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">get_save_handler</span><span style="color: #ABB2BF">(config),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">lr_scheduler</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">lr_scheduler,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">output_names</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">metric_names </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"log_every_iters"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">&gt;</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">with_pbars</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">clear_cuda_cache</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">False</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"resume_from"</span><span style="color: #ABB2BF">] </span><span style="color: #C678DD; font-style: italic">is</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">not</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        checkpoint </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">load_checkpoint</span><span style="color: #ABB2BF">(config[</span><span style="color: #98C379">"resume_from"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">        Checkpoint.</span><span style="color: #61AFEF">load_objects</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">to_load</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">to_save, </span><span style="color: #E06C75; font-style: italic">checkpoint</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">checkpoint)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> trainer</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="evaluator">
+<a href="#evaluator" class="header-anchor">
+Evaluator
+</a>
+</h2><p>The evaluator will be created via
+<a href="https://pytorch.org/ignite/generated/ignite.engine.create_supervised_evaluator.html#ignite.engine.create_supervised_evaluator" target="_blank" rel="noopener noreferrer"><code>create_supervised_evaluator()</code></a> which internally will:</p>
+<ol>
+<li>Set the <code>model</code> to <code>eval()</code> mode.</li>
+<li>Move the batch to <code>device</code> used in current distributed configuration.</li>
+<li>Perform forward pass. If AMP is enabled, <code>autocast</code> will be on.</li>
+<li>Store the predictions and labels in <code>state.output</code> to compute metrics.</li>
+</ol>
+<p>It will also attach the Ignite metrics passed to the <code>evaluator</code>.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_evaluator</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">model</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">metrics</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    device </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    amp_mode </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"amp"</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"with_amp"</span><span style="color: #ABB2BF">] </span><span style="color: #C678DD; font-style: italic">else</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span></span>
+<span class="line"><span style="color: #ABB2BF">    evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_supervised_evaluator</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        model, </span><span style="color: #E06C75; font-style: italic">metrics</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">metrics, </span><span style="color: #E06C75; font-style: italic">device</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">device, </span><span style="color: #E06C75; font-style: italic">non_blocking</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">amp_mode</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">amp_mode</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">return</span><span style="color: #ABB2BF"> evaluator</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="training">
+<a href="#training" class="header-anchor">
+Training
+</a>
+</h2><p>Before we begin training, we must setup a few things on the master process (<code>rank</code> = 0):</p>
+<ul>
+<li>Create folder to store checkpoints, best models and output of tensorboard logging in the format - model_backend_rank_time.</li>
+<li>If ClearML FileServer is used to save models, then a <code>Task</code> has to be created, and we pass our <code>config</code> dictionary and the specific hyper parameters that are part of the experiment.</li>
+</ul>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">setup_rank_zero</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">logger</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    device </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">device</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    now </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> datetime.</span><span style="color: #61AFEF">now</span><span style="color: #ABB2BF">().</span><span style="color: #61AFEF">strftime</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"%Y%m</span><span style="color: #D19A66">%d</span><span style="color: #98C379">-%H%M%S"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    output_path </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    folder_name </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> (</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">'model'</span><span style="color: #ABB2BF">]</span><span style="color: #D19A66">}</span><span style="color: #98C379">_backend-</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">backend</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">-</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">get_world_size</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">_</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">now</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    output_path </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Path</span><span style="color: #ABB2BF">(output_path) </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> folder_name</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">not</span><span style="color: #ABB2BF"> output_path.</span><span style="color: #61AFEF">exists</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        output_path.</span><span style="color: #61AFEF">mkdir</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">parents</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    config[</span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> output_path.</span><span style="color: #61AFEF">as_posix</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Output path: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">'output_path'</span><span style="color: #ABB2BF">]</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> config[</span><span style="color: #98C379">"with_clearml"</span><span style="color: #ABB2BF">]:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> clearml </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> Task</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        task </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> Task.</span><span style="color: #61AFEF">init</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"CIFAR10-Training"</span><span style="color: #ABB2BF">, </span><span style="color: #E06C75; font-style: italic">task_name</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">output_path.stem)</span></span>
+<span class="line"><span style="color: #ABB2BF">        task.</span><span style="color: #61AFEF">connect_configuration</span><span style="color: #ABB2BF">(config)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #7F848E; font-style: italic"># Log hyper parameters</span></span>
+<span class="line"><span style="color: #ABB2BF">        hyper_params </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"batch_size"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"momentum"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"weight_decay"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"num_epochs"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"learning_rate"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #98C379">"num_warmup_epochs"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        ]</span></span>
+<span class="line"><span style="color: #ABB2BF">        task.</span><span style="color: #61AFEF">connect</span><span style="color: #ABB2BF">({k: v </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> k, v </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> config.</span><span style="color: #61AFEF">items</span><span style="color: #ABB2BF">()})</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="logging">
+<a href="#logging" class="header-anchor">
+Logging
+</a>
+</h3><p>This step is optional, however, we can pass a
+<a href="https://pytorch.org/ignite/utils.html#ignite.utils.setup_logger" target="_blank" rel="noopener noreferrer"><code>setup_logger()</code></a> object to <code>log_basic_info()</code> and log all basic information such as different versions, current configuration, <code>device</code> and <code>backend</code> used by the current process (identified by its local rank), and number of processes (world size). <code>idist</code> (<code>ignite.distributed</code>) provides several utility functions like
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.get_local_rank" target="_blank" rel="noopener noreferrer"><code>get_local_rank()</code></a>,
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.backend" target="_blank" rel="noopener noreferrer"><code>backend()</code></a>,
+<a href="https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.get_world_size" target="_blank" rel="noopener noreferrer"><code>get_world_size()</code></a>, etc. to make this possible.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_basic_info</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">logger</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"Train on CIFAR10"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"- PyTorch version: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">torch.</span><span style="color: #E06C75">__version__</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"- Ignite version: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">ignite.</span><span style="color: #E06C75">__version__</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> torch.cuda.</span><span style="color: #61AFEF">is_available</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #7F848E; font-style: italic"># explicitly import cudnn as torch.backends.cudnn can not be pickled with hvd spawning procs</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">from</span><span style="color: #ABB2BF"> torch.backends </span><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> cudnn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #C678DD">f</span><span style="color: #98C379">"- GPU Device: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">torch.cuda.</span><span style="color: #61AFEF">get_device_name</span><span style="color: #ABB2BF">(idist.</span><span style="color: #61AFEF">get_local_rank</span><span style="color: #ABB2BF">())</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"- CUDA version: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">torch.version.cuda</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"- CUDNN version: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">cudnn.</span><span style="color: #61AFEF">version</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Configuration:"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> key, value </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> config.</span><span style="color: #61AFEF">items</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\t</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">key</span><span style="color: #D19A66">}</span><span style="color: #98C379">: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">value</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_world_size</span><span style="color: #ABB2BF">() </span><span style="color: #56B6C2">&gt;</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">Distributed setting:"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\t</span><span style="color: #98C379">backend: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">backend</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\t</span><span style="color: #98C379">world size: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">idist.</span><span style="color: #61AFEF">get_world_size</span><span style="color: #ABB2BF">()</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>This is a standard utility function to log <code>train</code> and <code>val</code> metrics after <code>validate_every</code> epochs.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">log_metrics</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">logger</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">epoch</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">elapsed</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">tag</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">metrics</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    metrics_output </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">"</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">join</span><span style="color: #ABB2BF">([</span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\t</span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">k</span><span style="color: #D19A66">}</span><span style="color: #98C379">: </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">v</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD; font-style: italic">for</span><span style="color: #ABB2BF"> k, v </span><span style="color: #C678DD; font-style: italic">in</span><span style="color: #ABB2BF"> metrics.</span><span style="color: #61AFEF">items</span><span style="color: #ABB2BF">()])</span></span>
+<span class="line"><span style="color: #ABB2BF">    logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD">f</span><span style="color: #98C379">"</span><span style="color: #56B6C2">\n</span><span style="color: #98C379">Epoch </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">epoch</span><span style="color: #D19A66">}</span><span style="color: #98C379"> - Evaluation time (seconds): </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">elapsed</span><span style="color: #C678DD">:.2f</span><span style="color: #D19A66">}</span><span style="color: #98C379"> - </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">tag</span><span style="color: #D19A66">}</span><span style="color: #98C379"> metrics:</span><span style="color: #56B6C2">\n</span><span style="color: #98C379"> </span><span style="color: #D19A66">{</span><span style="color: #ABB2BF">metrics_output</span><span style="color: #D19A66">}</span><span style="color: #98C379">"</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="begin-training">
+<a href="#begin-training" class="header-anchor">
+Begin Training
+</a>
+</h3><p>This is where the main logic resides, i.e. we will call all the above functions from within here:</p>
+<ol>
+<li>Basic Setup</li>
+<li>We set a
+<a href="https://pytorch.org/ignite/utils.html#ignite.utils.manual_seed" target="_blank" rel="noopener noreferrer"><code>manual_seed()</code></a> and
+<a href="https://pytorch.org/ignite/utils.html#ignite.utils.setup_logger" target="_blank" rel="noopener noreferrer"><code>setup_logger()</code></a>, then log all basic information.</li>
+<li>Initialise <code>dataloaders</code>, <code>model</code>, <code>optimizer</code>, <code>criterion</code> and <code>lr_scheduler</code>.</li>
+<li>We use the above objects to create a <code>trainer</code>.</li>
+<li>Evaluator</li>
+<li>Define some relevant Ignite metrics like
+<a href="https://pytorch.org/ignite/generated/ignite.metrics.Accuracy.html#accuracy" target="_blank" rel="noopener noreferrer"><code>Accuracy()</code></a> and
+<a href="https://pytorch.org/ignite/generated/ignite.metrics.Loss.html#loss" target="_blank" rel="noopener noreferrer"><code>Loss()</code></a>.</li>
+<li>Create two evaluators: <code>train_evaluator</code> and <code>val_evaluator</code> to compute metrics on the <code>train_dataloader</code> and <code>val_dataloader</code> respectively, however <code>val_evaluator</code> will store the best models based on validation metrics.</li>
+<li>Define <code>run_validation()</code> to compute metrics on both dataloaders and log them. Then we attach this function to <code>trainer</code> to run after <code>validate_every</code> epochs and after training is complete.</li>
+<li>Setup TensorBoard logging using
+<a href="https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.common.setup_tb_logging" target="_blank" rel="noopener noreferrer"><code>setup_tb_logging()</code></a> on the master process for the trainer and evaluators so that training and validation metrics along with the learning rate can be logged.</li>
+<li>Define a
+<a href="https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#ignite.handlers.checkpoint.Checkpoint" target="_blank" rel="noopener noreferrer"><code>Checkpoint()</code></a> object to store the two best models (<code>n_saved</code>) by validation accuracy (defined in <code>metrics</code> as <code>Accuracy()</code>) and attach it to <code>val_evaluator</code> so that it can be executed everytime <code>val_evaluator</code> runs.</li>
+<li>Try training on <code>train_loader</code> for <code>num_epochs</code></li>
+<li>Close Tensorboard logger once training is completed.</li>
+</ol>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">training</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">local_rank</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66; font-style: italic">config</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    rank </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">get_rank</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">manual_seed</span><span style="color: #ABB2BF">(config[</span><span style="color: #98C379">"seed"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">+</span><span style="color: #ABB2BF"> rank)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    logger </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">setup_logger</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"CIFAR10-Training"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">log_basic_info</span><span style="color: #ABB2BF">(logger, config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> rank </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">setup_rank_zero</span><span style="color: #ABB2BF">(logger, config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_loader, val_loader </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_dataflow</span><span style="color: #ABB2BF">(config)</span></span>
+<span class="line"><span style="color: #ABB2BF">    model </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_model</span><span style="color: #ABB2BF">(config)</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_optimizer</span><span style="color: #ABB2BF">(config, model)</span></span>
+<span class="line"><span style="color: #ABB2BF">    criterion </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_criterion</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"><span style="color: #ABB2BF">    config[</span><span style="color: #98C379">"num_iters_per_epoch"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">len</span><span style="color: #ABB2BF">(train_loader)</span></span>
+<span class="line"><span style="color: #ABB2BF">    lr_scheduler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">get_lr_scheduler</span><span style="color: #ABB2BF">(config, optimizer)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    trainer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_trainer</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        model, optimizer, criterion, lr_scheduler, train_loader.sampler, config, logger</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    metrics </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"Accuracy"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">(),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #98C379">"Loss"</span><span style="color: #ABB2BF">: </span><span style="color: #61AFEF">Loss</span><span style="color: #ABB2BF">(criterion),</span></span>
+<span class="line"><span style="color: #ABB2BF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    train_evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_evaluator</span><span style="color: #ABB2BF">(model, metrics, config)</span></span>
+<span class="line"><span style="color: #ABB2BF">    val_evaluator </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">create_evaluator</span><span style="color: #ABB2BF">(model, metrics, config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run_validation</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        epoch </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> trainer.state.epoch</span></span>
+<span class="line"><span style="color: #ABB2BF">        state </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> train_evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">log_metrics</span><span style="color: #ABB2BF">(logger, epoch, state.times[</span><span style="color: #98C379">"COMPLETED"</span><span style="color: #ABB2BF">], </span><span style="color: #98C379">"train"</span><span style="color: #ABB2BF">, state.metrics)</span></span>
+<span class="line"><span style="color: #ABB2BF">        state </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> val_evaluator.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(val_loader)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">log_metrics</span><span style="color: #ABB2BF">(logger, epoch, state.times[</span><span style="color: #98C379">"COMPLETED"</span><span style="color: #ABB2BF">], </span><span style="color: #98C379">"val"</span><span style="color: #ABB2BF">, state.metrics)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    trainer.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        Events.</span><span style="color: #61AFEF">EPOCH_COMPLETED</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">every</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"validate_every"</span><span style="color: #ABB2BF">]) </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        run_validation,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> rank </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        evaluators </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {</span><span style="color: #98C379">"train"</span><span style="color: #ABB2BF">: train_evaluator, </span><span style="color: #98C379">"val"</span><span style="color: #ABB2BF">: val_evaluator}</span></span>
+<span class="line"><span style="color: #ABB2BF">        tb_logger </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> common.</span><span style="color: #61AFEF">setup_tb_logging</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            config[</span><span style="color: #98C379">"output_path"</span><span style="color: #ABB2BF">], trainer, optimizer, </span><span style="color: #E06C75; font-style: italic">evaluators</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">evaluators</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    best_model_handler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Checkpoint</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        {</span><span style="color: #98C379">"model"</span><span style="color: #ABB2BF">: model},</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #61AFEF">get_save_handler</span><span style="color: #ABB2BF">(config),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">filename_prefix</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"best"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">n_saved</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">global_step_transform</span><span style="color: #56B6C2">=</span><span style="color: #61AFEF">global_step_from_engine</span><span style="color: #ABB2BF">(trainer),</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">score_name</span><span style="color: #56B6C2">=</span><span style="color: #98C379">"val_accuracy"</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E06C75; font-style: italic">score_function</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">Checkpoint.</span><span style="color: #61AFEF">get_default_score_fn</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Accuracy"</span><span style="color: #ABB2BF">),</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"><span style="color: #ABB2BF">    val_evaluator.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        best_model_handler,</span></span>
+<span class="line"><span style="color: #ABB2BF">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">try</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        trainer.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(train_loader, </span><span style="color: #E06C75; font-style: italic">max_epochs</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"num_epochs"</span><span style="color: #ABB2BF">])</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">except</span><span style="color: #ABB2BF"> Exception </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> e:</span></span>
+<span class="line"><span style="color: #ABB2BF">        logger.</span><span style="color: #61AFEF">exception</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">""</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD; font-style: italic">raise</span><span style="color: #ABB2BF"> e</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> rank </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        tb_logger.</span><span style="color: #61AFEF">close</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h2 id="running-distributed-code">
+<a href="#running-distributed-code" class="header-anchor">
+Running Distributed Code
+</a>
+</h2><p>We can easily run the above code with the context manager
+<a href="https://pytorch.org/ignite/generated/ignite.distributed.launcher.Parallel.html#ignite.distributed.launcher.Parallel" target="_blank" rel="noopener noreferrer">Parallel</a>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">backend, </span><span style="color: #E06C75; font-style: italic">nproc_per_node</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">nproc_per_node) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p><code>Parallel</code> enables us to run the same code across all supported distributed backends and non-distributed configurations in a seamless manner. Here backend refers to a distributed communication framework. Read more about which backend to choose
+<a href="https://pytorch.org/docs/stable/distributed.html#backends" target="_blank" rel="noopener noreferrer">here</a>. <code>Parallel</code> accepts a <code>backend</code> and either:</p>
+<blockquote>
+<p>Spawns <code>nproc_per_node</code> child processes and initialize a processing group according to provided backend (useful for standalone scripts).</p>
+</blockquote>
+<p>This way uses <code>torch.multiprocessing.spawn</code> and is the default way to spawn processes. However, this way is slower due to initialization overhead.</p>
+<p>or</p>
+<blockquote>
+<p>Only initialize a processing group given the backend (useful with tools like <code>torchrun</code>, <code>horovodrun</code>, etc).</p>
+</blockquote>
+<p>This way is recommended since training is faster and easier to extend to multiple scripts.</p>
+<p>We can pass additional information to <code>Parallel</code> collectively as <code>spawn_kwargs</code> as we will see below.</p>
+<p><strong>Note:</strong> It is recommended to run distributed code as scripts for ease of use, however we can also spawn processes in a Jupyter notebook (see end of tutorial). The complete code as a script can be found
+<a href="https://github.com/pytorch-ignite/examples/blob/main/tutorials/intermediate/cifar10-distributed.py" target="_blank" rel="noopener noreferrer">here</a>. Choose one of the suggested ways below to run the script.</p>
+<h2 id="single-node-one-or-more-gpus">
+<a href="#single-node-one-or-more-gpus" class="header-anchor">
+Single Node, One or More GPUs
+</a>
+</h2><p>We will use <code>fire</code> to convert <code>run()</code> into a CLI, use the arguments parsed inside <code>run()</code> directly and begin training in the script:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> fire</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">backend</span><span style="color: #ABB2BF">=</span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">, **</span><span style="color: #D19A66; font-style: italic">spawn_kwargs</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> backend</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">], **spawn_kwargs) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">        parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> </span><span style="color: #E06C75">__name__</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"__main__"</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">    fire.</span><span style="color: #61AFEF">Fire</span><span style="color: #ABB2BF">({</span><span style="color: #98C379">"run"</span><span style="color: #ABB2BF">: run})</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Then we can run the script (e.g. for 2 GPUs) as:</p>
+<h3 id="run-with-torchrun-recommended">
+<a href="#run-with-torchrun-recommended" class="header-anchor">
+Run with <code>torchrun</code> (Recommended)
+</a>
+</h3><pre tabindex="0"><code>torchrun --nproc_per_node=2 main.py run --backend="nccl"
+</code></pre>
+<h3 id="run-with-internal-spawning-torchmultiprocessingspawn">
+<a href="#run-with-internal-spawning-torchmultiprocessingspawn" class="header-anchor">
+Run with internal spawning (<code>torch.multiprocessing.spawn</code>)
+</a>
+</h3><pre tabindex="0"><code>python -u main.py run --backend="nccl" --nproc_per_node=2
+</code></pre>
+<h3 id="run-with-horovodrun">
+<a href="#run-with-horovodrun" class="header-anchor">
+Run with horovodrun
+</a>
+</h3><p>Please make sure that <code>backend=horovod</code>. <code>np</code> below is number of processes.</p>
+<pre tabindex="0"><code>horovodrun -np=2 python -u main.py run --backend="horovod"
+</code></pre>
+<h2 id="multiple-nodes-multiple-gpus">
+<a href="#multiple-nodes-multiple-gpus" class="header-anchor">
+Multiple Nodes, Multiple GPUs
+</a>
+</h2><p>The code inside the script is similar to Single Node, One or More GPUs:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #C678DD; font-style: italic">import</span><span style="color: #ABB2BF"> fire</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">backend</span><span style="color: #ABB2BF">=</span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">, **</span><span style="color: #D19A66; font-style: italic">spawn_kwargs</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> backend</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">], **spawn_kwargs) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">        parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">if</span><span style="color: #ABB2BF"> </span><span style="color: #E06C75">__name__</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"__main__"</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">    fire.</span><span style="color: #61AFEF">Fire</span><span style="color: #ABB2BF">({</span><span style="color: #98C379">"run"</span><span style="color: #ABB2BF">: run})</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>The only change is how we run the script. We need to provide the IP address of the master node and its port along with the node rank. For example, for 2 nodes (<code>nnodes</code>) and 2 GPUs (<code>nproc_per_node</code>), we can:</p>
+<h3 id="run-with-torchrun-recommended-1">
+<a href="#run-with-torchrun-recommended-1" class="header-anchor">
+Run with <code>torchrun</code> (Recommended)
+</a>
+</h3><p>On node 0 (master node):</p>
+<pre tabindex="0"><code>torchrun \
+    --nnodes=2 \
+    --nproc_per_node=2 \
+    --node_rank=0 \
+    --master_addr=master --master_port=2222 \
+    main.py run --backend="nccl"
+</code></pre><p>On node 1 (worker node):</p>
+<pre tabindex="0"><code>torchrun \
+    --nnodes=2 \
+    --nproc_per_node=2 \
+    --node_rank=1 \
+    --master_addr=master --master_port=2222 \
+    main.py run --backend="nccl"
+</code></pre>
+<h3 id="run-with-internal-spawning">
+<a href="#run-with-internal-spawning" class="header-anchor">
+Run with internal spawning
+</a>
+</h3><p>On node 0:</p>
+<pre tabindex="0"><code>python -u main.py run
+    --nnodes=2 \
+    --nproc_per_node=2 \
+    --node_rank=0 \
+    --master_addr=master --master_port=2222 \
+    --backend="nccl"
+</code></pre><p>On node 1:</p>
+<pre tabindex="0"><code>python -u main.py run
+    --nnodes=2 \
+    --nproc_per_node=2 \
+    --node_rank=1 \
+    --master_addr=master --master_port=2222 \
+    --backend="nccl"
+</code></pre>
+<h3 id="run-with-horovodrun-1">
+<a href="#run-with-horovodrun-1" class="header-anchor">
+Run with horovodrun
+</a>
+</h3><p><code>np</code> below is calculated by <code>nnodes</code> x <code>nproc_per_node</code>.</p>
+<pre tabindex="0"><code>horovodrun -np 4 -H hostname1:2,hostname2:2 python -u main.py run --backend="horovod"
+</code></pre>
+<h2 id="single-node-multiple-cpus">
+<a href="#single-node-multiple-cpus" class="header-anchor">
+Single Node, Multiple CPUs
+</a>
+</h2><p>This is similar to Single Node, One or More GPUs. The only difference is while running the script, <code>backend=gloo</code> instead of <code>nccl</code>.</p>
+<h2 id="tpus-on-google-colab">
+<a href="#tpus-on-google-colab" class="header-anchor">
+TPUs on Google Colab
+</a>
+</h2><p>Go to Runtime &gt; Change runtime type and select Hardware accelerator = TPU.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">nproc_per_node </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">8</span></span>
+<span class="line"><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"xla-tpu"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">], </span><span style="color: #E06C75; font-style: italic">nproc_per_node</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">nproc_per_node) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>2021-09-14 17:01:35,425 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'xla-tpu'
+2021-09-14 17:01:35,427 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes: 
+	nproc_per_node: 8
+	nnodes: 1
+	node_rank: 0
+2021-09-14 17:01:35,428 ignite.distributed.launcher.Parallel INFO: Spawn function '&lt;function training at 0x7fda404f4680&gt;' in 8 processes
+2021-09-14 17:01:47,607 CIFAR10-Training INFO: Train on CIFAR10
+2021-09-14 17:01:47,639 CIFAR10-Training INFO: - PyTorch version: 1.8.2+cpu
+2021-09-14 17:01:47,658 CIFAR10-Training INFO: - Ignite version: 0.4.6
+2021-09-14 17:01:47,678 CIFAR10-Training INFO: 
+
+2021-09-14 17:01:47,697 CIFAR10-Training INFO: Configuration:
+2021-09-14 17:01:47,721 CIFAR10-Training INFO: 	seed: 543
+2021-09-14 17:01:47,739 CIFAR10-Training INFO: 	data_path: cifar10
+2021-09-14 17:01:47,765 CIFAR10-Training INFO: 	output_path: output-cifar10/
+2021-09-14 17:01:47,786 CIFAR10-Training INFO: 	model: resnet18
+2021-09-14 17:01:47,810 CIFAR10-Training INFO: 	batch_size: 512
+2021-09-14 17:01:47,833 CIFAR10-Training INFO: 	momentum: 0.9
+2021-09-14 17:01:47,854 CIFAR10-Training INFO: 	weight_decay: 0.0001
+2021-09-14 17:01:47,867 CIFAR10-Training INFO: 	num_workers: 2
+2021-09-14 17:01:47,887 CIFAR10-Training INFO: 	num_epochs: 5
+2021-09-14 17:01:47,902 CIFAR10-Training INFO: 	learning_rate: 0.4
+2021-09-14 17:01:47,922 CIFAR10-Training INFO: 	num_warmup_epochs: 1
+2021-09-14 17:01:47,940 CIFAR10-Training INFO: 	validate_every: 3
+2021-09-14 17:01:47,949 CIFAR10-Training INFO: 	checkpoint_every: 200
+2021-09-14 17:01:47,960 CIFAR10-Training INFO: 	backend: xla-tpu
+2021-09-14 17:01:47,967 CIFAR10-Training INFO: 	resume_from: None
+2021-09-14 17:01:47,975 CIFAR10-Training INFO: 	log_every_iters: 15
+2021-09-14 17:01:47,984 CIFAR10-Training INFO: 	nproc_per_node: None
+2021-09-14 17:01:48,003 CIFAR10-Training INFO: 	with_clearml: False
+2021-09-14 17:01:48,019 CIFAR10-Training INFO: 	with_amp: False
+2021-09-14 17:01:48,040 CIFAR10-Training INFO: 
+
+2021-09-14 17:01:48,059 CIFAR10-Training INFO: 
+Distributed setting:
+2021-09-14 17:01:48,079 CIFAR10-Training INFO: 	backend: xla-tpu
+2021-09-14 17:01:48,098 CIFAR10-Training INFO: 	world size: 8
+2021-09-14 17:01:48,109 CIFAR10-Training INFO: 
+
+2021-09-14 17:01:48,130 CIFAR10-Training INFO: Output path: output-cifar10/resnet18_backend-xla-tpu-8_20210914-170148
+2021-09-14 17:01:50,917 ignite.distributed.auto.auto_dataloader INFO: Use data loader kwargs for dataset 'Dataset CIFAR10': 
+	{'batch_size': 64, 'num_workers': 2, 'drop_last': True, 'sampler': &lt;torch.utils.data.distributed.DistributedSampler object at 0x7fda404d0750&gt;, 'pin_memory': False}
+2021-09-14 17:01:50,950 ignite.distributed.auto.auto_dataloader INFO: DataLoader is wrapped by `MpDeviceLoader` on XLA
+2021-09-14 17:01:50,975 ignite.distributed.auto.auto_dataloader INFO: Use data loader kwargs for dataset 'Dataset CIFAR10': 
+	{'batch_size': 128, 'num_workers': 2, 'sampler': &lt;torch.utils.data.distributed.DistributedSampler object at 0x7fda404d0910&gt;, 'pin_memory': False}
+2021-09-14 17:01:51,000 ignite.distributed.auto.auto_dataloader INFO: DataLoader is wrapped by `MpDeviceLoader` on XLA
+2021-09-14 17:01:53,866 CIFAR10-Training INFO: Engine run starting with max_epochs=5.
+2021-09-14 17:02:23,913 CIFAR10-Training INFO: Epoch[1] Complete. Time taken: 00:00:30
+2021-09-14 17:02:41,945 CIFAR10-Training INFO: Epoch[2] Complete. Time taken: 00:00:18
+2021-09-14 17:03:13,870 CIFAR10-Training INFO: 
+Epoch 3 - Evaluation time (seconds): 14.00 - train metrics:
+    Accuracy: 0.32997744845360827
+	Loss: 1.7080145767054606
+2021-09-14 17:03:19,283 CIFAR10-Training INFO: 
+Epoch 3 - Evaluation time (seconds): 5.39 - val metrics:
+    Accuracy: 0.3424
+	Loss: 1.691359375
+2021-09-14 17:03:19,289 CIFAR10-Training INFO: Epoch[3] Complete. Time taken: 00:00:37
+2021-09-14 17:03:37,535 CIFAR10-Training INFO: Epoch[4] Complete. Time taken: 00:00:18
+2021-09-14 17:03:55,927 CIFAR10-Training INFO: Epoch[5] Complete. Time taken: 00:00:18
+2021-09-14 17:04:07,598 CIFAR10-Training INFO: 
+Epoch 5 - Evaluation time (seconds): 11.66 - train metrics:
+    Accuracy: 0.42823775773195877
+	Loss: 1.4969784451514174
+2021-09-14 17:04:10,190 CIFAR10-Training INFO: 
+Epoch 5 - Evaluation time (seconds): 2.56 - val metrics:
+    Accuracy: 0.4412
+	Loss: 1.47838994140625
+2021-09-14 17:04:10,244 CIFAR10-Training INFO: Engine run complete. Time taken: 00:02:16
+2021-09-14 17:04:10,313 ignite.distributed.launcher.Parallel INFO: End of run
+</code></pre>
+<h2 id="run-in-jupyter-notebook">
+<a href="#run-in-jupyter-notebook" class="header-anchor">
+Run in Jupyter Notebook
+</a>
+</h2><p>We will have to spawn processes in a notebook and therefore, we will use internal spawning to achieve that. For multiple GPUs, use <code>backend=nccl</code> and <code>backend=gloo</code> for multiple CPUs.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34"><code><span class="line"><span style="color: #ABB2BF">spawn_kwargs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> {}</span></span>
+<span class="line"><span style="color: #ABB2BF">spawn_kwargs[</span><span style="color: #98C379">"start_method"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"fork"</span></span>
+<span class="line"><span style="color: #ABB2BF">spawn_kwargs[</span><span style="color: #98C379">"nproc_per_node"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2</span></span>
+<span class="line"><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">] </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">"nccl"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #C678DD; font-style: italic">with</span><span style="color: #ABB2BF"> idist.</span><span style="color: #61AFEF">Parallel</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">backend</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">config[</span><span style="color: #98C379">"backend"</span><span style="color: #ABB2BF">], **spawn_kwargs) </span><span style="color: #C678DD; font-style: italic">as</span><span style="color: #ABB2BF"> parallel:</span></span>
+<span class="line"><span style="color: #ABB2BF">    parallel.</span><span style="color: #61AFEF">run</span><span style="color: #ABB2BF">(training, config)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><pre><code>2021-09-14 19:15:15,335 ignite.distributed.launcher.Parallel INFO: Initialized distributed launcher with backend: 'nccl'
+2021-09-14 19:15:15,337 ignite.distributed.launcher.Parallel INFO: - Parameters to spawn processes: 
+	nproc_per_node: 2
+	nnodes: 1
+	node_rank: 0
+	start_method: fork
+2021-09-14 19:15:15,338 ignite.distributed.launcher.Parallel INFO: Spawn function '&lt;function training at 0x7f0e44c88dd0&gt;' in 2 processes
+2021-09-14 19:15:18,910 CIFAR10-Training INFO: Train on CIFAR10
+2021-09-14 19:15:18,911 CIFAR10-Training INFO: - PyTorch version: 1.9.0
+2021-09-14 19:15:18,912 CIFAR10-Training INFO: - Ignite version: 0.4.6
+2021-09-14 19:15:18,913 CIFAR10-Training INFO: - GPU Device: GeForce GTX 1080 Ti
+2021-09-14 19:15:18,913 CIFAR10-Training INFO: - CUDA version: 11.1
+2021-09-14 19:15:18,914 CIFAR10-Training INFO: - CUDNN version: 8005
+2021-09-14 19:15:18,915 CIFAR10-Training INFO: 
+
+2021-09-14 19:15:18,916 CIFAR10-Training INFO: Configuration:
+2021-09-14 19:15:18,917 CIFAR10-Training INFO: 	seed: 543
+2021-09-14 19:15:18,918 CIFAR10-Training INFO: 	data_path: cifar10
+2021-09-14 19:15:18,919 CIFAR10-Training INFO: 	output_path: output-cifar10/
+2021-09-14 19:15:18,920 CIFAR10-Training INFO: 	model: resnet18
+2021-09-14 19:15:18,921 CIFAR10-Training INFO: 	batch_size: 512
+2021-09-14 19:15:18,922 CIFAR10-Training INFO: 	momentum: 0.9
+2021-09-14 19:15:18,923 CIFAR10-Training INFO: 	weight_decay: 0.0001
+2021-09-14 19:15:18,924 CIFAR10-Training INFO: 	num_workers: 2
+2021-09-14 19:15:18,925 CIFAR10-Training INFO: 	num_epochs: 5
+2021-09-14 19:15:18,925 CIFAR10-Training INFO: 	learning_rate: 0.4
+2021-09-14 19:15:18,926 CIFAR10-Training INFO: 	num_warmup_epochs: 1
+2021-09-14 19:15:18,927 CIFAR10-Training INFO: 	validate_every: 3
+2021-09-14 19:15:18,928 CIFAR10-Training INFO: 	checkpoint_every: 200
+2021-09-14 19:15:18,929 CIFAR10-Training INFO: 	backend: nccl
+2021-09-14 19:15:18,929 CIFAR10-Training INFO: 	resume_from: None
+2021-09-14 19:15:18,930 CIFAR10-Training INFO: 	log_every_iters: 15
+2021-09-14 19:15:18,931 CIFAR10-Training INFO: 	nproc_per_node: None
+2021-09-14 19:15:18,931 CIFAR10-Training INFO: 	with_clearml: False
+2021-09-14 19:15:18,932 CIFAR10-Training INFO: 	with_amp: False
+2021-09-14 19:15:18,933 CIFAR10-Training INFO: 
+
+2021-09-14 19:15:18,933 CIFAR10-Training INFO: 
+Distributed setting:
+2021-09-14 19:15:18,934 CIFAR10-Training INFO: 	backend: nccl
+2021-09-14 19:15:18,935 CIFAR10-Training INFO: 	world size: 2
+2021-09-14 19:15:18,935 CIFAR10-Training INFO: 
+
+2021-09-14 19:15:18,936 CIFAR10-Training INFO: Output path: output-cifar10/resnet18_backend-nccl-2_20210914-191518
+2021-09-14 19:15:19,725 ignite.distributed.auto.auto_dataloader INFO: Use data loader kwargs for dataset 'Dataset CIFAR10': 
+	{'batch_size': 256, 'num_workers': 1, 'drop_last': True, 'sampler': &lt;torch.utils.data.distributed.DistributedSampler object at 0x7f0f8b7df8d0&gt;, 'pin_memory': True}
+2021-09-14 19:15:19,727 ignite.distributed.auto.auto_dataloader INFO: Use data loader kwargs for dataset 'Dataset CIFAR10': 
+	{'batch_size': 512, 'num_workers': 1, 'sampler': &lt;torch.utils.data.distributed.DistributedSampler object at 0x7f0e44ca9ad0&gt;, 'pin_memory': True}
+2021-09-14 19:15:19,873 ignite.distributed.auto.auto_model INFO: Apply torch DistributedDataParallel on model, device id: 0
+2021-09-14 19:15:20,049 CIFAR10-Training INFO: Engine run starting with max_epochs=5.
+/opt/conda/lib/python3.7/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /opt/conda/conda-bld/pytorch_1623448265233/work/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+/opt/conda/lib/python3.7/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /opt/conda/conda-bld/pytorch_1623448265233/work/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+2021-09-14 19:15:28,800 CIFAR10-Training INFO: Epoch[1] Complete. Time taken: 00:00:09
+2021-09-14 19:15:37,474 CIFAR10-Training INFO: Epoch[2] Complete. Time taken: 00:00:09
+2021-09-14 19:15:54,675 CIFAR10-Training INFO: 
+Epoch 3 - Evaluation time (seconds): 8.50 - train metrics:
+    Accuracy: 0.5533988402061856
+	Loss: 1.2227583423103254
+2021-09-14 19:15:56,077 CIFAR10-Training INFO: 
+Epoch 3 - Evaluation time (seconds): 1.36 - val metrics:
+    Accuracy: 0.5699
+	Loss: 1.1869916015625
+2021-09-14 19:15:56,079 CIFAR10-Training INFO: Epoch[3] Complete. Time taken: 00:00:19
+2021-09-14 19:16:04,686 CIFAR10-Training INFO: Epoch[4] Complete. Time taken: 00:00:09
+2021-09-14 19:16:13,347 CIFAR10-Training INFO: Epoch[5] Complete. Time taken: 00:00:09
+2021-09-14 19:16:21,857 CIFAR10-Training INFO: 
+Epoch 5 - Evaluation time (seconds): 8.46 - train metrics:
+    Accuracy: 0.6584246134020618
+	Loss: 0.9565292830319748
+2021-09-14 19:16:23,269 CIFAR10-Training INFO: 
+Epoch 5 - Evaluation time (seconds): 1.38 - val metrics:
+    Accuracy: 0.6588
+	Loss: 0.9517111328125
+2021-09-14 19:16:23,271 CIFAR10-Training INFO: Engine run complete. Time taken: 00:01:03
+2021-09-14 19:16:23,547 ignite.distributed.launcher.Parallel INFO: End of run
+</code></pre>
+<h2 id="important-links">
+<a href="#important-links" class="header-anchor">
+Important Links
+</a>
+</h2><ol>
+<li>Complete code can be found
+<a href="https://github.com/pytorch-ignite/examples/blob/main/tutorials/intermediate/cifar10-distributed.py" target="_blank" rel="noopener noreferrer">here</a>.</li>
+<li>Example of the logs of a ClearML experiment run on this code:
+<ul>
+<li>
+<a href="https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/83ebffd99a3f47f49dff1075252e3371/output/execution" target="_blank" rel="noopener noreferrer">With torchrun</a></li>
+<li>
+<a href="https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/c2b82ec98e8445f29044c94f7efc8215/output/execution" target="_blank" rel="noopener noreferrer">With default internal spawning</a></li>
+<li>
+<a href="https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/2fedd7447b114b36af7066cdb81fddae/output/execution" target="_blank" rel="noopener noreferrer">On Jupyter</a></li>
+<li>
+<a href="https://app.community.clear.ml/projects/14efa0ee4c114401bd06b7748314b465/experiments/fbffb4d7f9324c57979a833a789df857/output/execution" target="_blank" rel="noopener noreferrer">On Colab with XLA</a></li>
+</ul>
+</li>
+</ol>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/multi-gpus-on-a-single-node/">
+#multi GPUs on a single node
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/multi-gpus-on-multiple-nodes/">
+#multi GPUs on multiple nodes
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/tpus-on-colab/">
+#TPUs on Colab
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/jupyter-notebooks/">
+#Jupyter Notebooks
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+</div>
+<div>
+<a href="/tutorials/beginner/01-getting-started/" class="group float-right">
+<span class="overflow-hidden">Getting Started</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#required-dependencies">Required Dependencies</a>
+<ul>
+<li><a href="#for-parsing-arguments">For parsing arguments</a></li>
+<li><a href="#for-tpus">For TPUs</a></li>
+<li><a href="#with-clearml-optional">With ClearML (Optional)</a></li>
+</ul>
+</li>
+<li><a href="#download-data">Download Data</a></li>
+<li><a href="#common-configuration">Common Configuration</a></li>
+<li><a href="#basic-setup">Basic Setup</a>
+<ul>
+<li><a href="#imports">Imports</a></li>
+<li><a href="#dataloaders">Dataloaders</a></li>
+<li><a href="#model">Model</a></li>
+<li><a href="#optimizer">Optimizer</a></li>
+<li><a href="#criterion">Criterion</a></li>
+<li><a href="#lr-scheduler">LR Scheduler</a></li>
+</ul>
+</li>
+<li><a href="#trainer">Trainer</a>
+<ul>
+<li><a href="#save-models">Save Models</a></li>
+<li><a href="#resume-from-checkpoint">Resume from Checkpoint</a></li>
+<li><a href="#create-trainer">Create Trainer</a></li>
+</ul>
+</li>
+<li><a href="#evaluator">Evaluator</a></li>
+<li><a href="#training">Training</a>
+<ul>
+<li><a href="#logging">Logging</a></li>
+<li><a href="#begin-training">Begin Training</a></li>
+</ul>
+</li>
+<li><a href="#running-distributed-code">Running Distributed Code</a></li>
+<li><a href="#single-node-one-or-more-gpus">Single Node, One or More GPUs</a>
+<ul>
+<li><a href="#run-with-torchrun-recommended">Run with <code>torchrun</code> (Recommended)</a></li>
+<li><a href="#run-with-internal-spawning-torchmultiprocessingspawn">Run with internal spawning (<code>torch.multiprocessing.spawn</code>)</a></li>
+<li><a href="#run-with-horovodrun">Run with horovodrun</a></li>
+</ul>
+</li>
+<li><a href="#multiple-nodes-multiple-gpus">Multiple Nodes, Multiple GPUs</a>
+<ul>
+<li><a href="#run-with-torchrun-recommended-1">Run with <code>torchrun</code> (Recommended)</a></li>
+<li><a href="#run-with-internal-spawning">Run with internal spawning</a></li>
+<li><a href="#run-with-horovodrun-1">Run with horovodrun</a></li>
+</ul>
+</li>
+<li><a href="#single-node-multiple-cpus">Single Node, Multiple CPUs</a></li>
+<li><a href="#tpus-on-google-colab">TPUs on Google Colab</a></li>
+<li><a href="#run-in-jupyter-notebook">Run in Jupyter Notebook</a></li>
+<li><a href="#important-links">Important Links</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',appId:'7EWYE1JCT3',apiKey:'841e93e60c16975ba1bd8c7c716eed82',indexName:'pytorch-ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:Website']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

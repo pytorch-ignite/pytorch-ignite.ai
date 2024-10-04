@@ -1,0 +1,15 @@
+/_hugo/css/*
+  cache-control: max-age=31536000
+  cache-control: immutable
+
+/_images/*
+  cache-control: max-age=31536000
+  cache-control: immutable
+
+/_hugo/js/*
+  cache-control: max-age=31536000
+  cache-control: immutable
+
+/assets/*
+  cache-control: max-age=31536000
+  cache-control: immutable
