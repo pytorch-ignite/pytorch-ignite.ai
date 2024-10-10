@@ -55,7 +55,7 @@ We encourage open source contributors from both frontend and data science commun
 
 ## Next Steps
 
-In future releases, we plan to extend our template store and add more features, for example, configuration systems, data loaders, datasets and models, optimizers, and schedulers. We will continue improving the app's reliability and usability. To stay in touch, follow us on [Twitter](https://twitter.com/pytorch_ignite) and [Facebook](https://facebook.com/PyTorch-Ignite-Community-105837321694508). We would love to get your feedback on the project.
+In future releases, we plan to extend our template store and add more features, for example, configuration systems, data loaders, datasets and models, optimizers, and schedulers. We will continue improving the app's reliability and usability. To stay in touch, follow us on [X](https://x.com/pytorch_ignite) and [Facebook](https://facebook.com/PyTorch-Ignite-Community-105837321694508). We would love to get your feedback on the project.
 
 ## Acknowledgements
 
