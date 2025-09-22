@@ -22,7 +22,7 @@ jobs:
           hugo-version: "0.88.1"
           extended: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
       - uses: pnpm/action-setup@v2
         with:
           version: latest
