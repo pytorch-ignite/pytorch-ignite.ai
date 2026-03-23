@@ -161,7 +161,7 @@ def log_validation():
 
 ### Progress Bar
 
-We use a built-in wrapper around `tqdm` called [`ProgressBar()`](https://pytorch.org/ignite/generated/ignite.handlers.tqdm_logger.ProgressBar.html).
+We use a built-in wrapper around `tqdm` called [`ProgressBar()`](https://pytorch.org/ignite/generated/ignite.handlers.tqdm_logger.html#ignite.handlers.tqdm_logger.ProgressBar).
 
 
 ```python

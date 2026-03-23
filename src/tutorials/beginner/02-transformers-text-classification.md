@@ -207,7 +207,7 @@ This is the reason we did not include `lr_scheduler.step()` in `train_step()`.
 
 ## Progress Bar
 
-Next we create an instance of Ignite's [`ProgessBar()`](https://pytorch.org/ignite/generated/ignite.handlers.tqdm_logger.ProgressBar.html) and attach it to the trainer to replace `progress_bar.update(1)`.
+Next we create an instance of Ignite's [`ProgressBar()`](https://pytorch.org/ignite/generated/ignite.handlers.tqdm_logger.html#ignite.handlers.tqdm_logger.ProgressBar) and attach it to the trainer to replace `progress_bar.update(1)`.
 
 
 ```python
@@ -361,7 +361,7 @@ trainer.add_event_handler(Events.EPOCH_COMPLETED, checkpointer, {'model': model}
 
 ## Begin Training!
 
-Next, we'll run the trainer for 10 epochs and monitor the results. Below we can see that `ProgessBar` prints the loss per iteration, and prints the results of training and validation as we specified in our custom function. 
+Next, we'll run the trainer for 10 epochs and monitor the results. Below we can see that `ProgressBar` prints the loss per iteration, and prints the results of training and validation as we specified in our custom function. 
 
 
 ```python

@@ -280,7 +280,7 @@ def get_lr_scheduler(config, optimizer):
 ### Save Models
 
 We can create checkpoints using either a handler (in case of ClearML) or by simply passing the path of the checkpoint file to `save_handler`:
-If specified `with-clearml=True`, we will save the models in ClearML's File Server using [`ClearMLSaver()`](https://pytorch.org/ignite/generated/ignite.handlers.clearml_logger.ClearMLSaver.html).
+If specified `with-clearml=True`, we will save the models in ClearML's File Server using [`ClearMLSaver()`](https://pytorch.org/ignite/generated/ignite.handlers.clearml_logger.html#ignite.handlers.clearml_logger.ClearMLSaver).
 
 
 ```python
