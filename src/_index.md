@@ -118,7 +118,7 @@ docs:
 ecosystem:
   - title: Project MONAI
     text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
-    url: https://monai.io/
+    url: https://project-monai.github.io/
   - title: Code-Generator
     text: Application to generate your training scripts with PyTorch-Ignite.
     url: https://code-generator.pytorch-ignite.ai
