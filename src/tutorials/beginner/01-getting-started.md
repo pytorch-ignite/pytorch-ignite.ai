@@ -254,7 +254,7 @@ model_checkpoint = ModelCheckpoint(
 val_evaluator.add_event_handler(Events.COMPLETED, model_checkpoint, {"model": model})
 ```
 
-We will use [`TensorboardLogger()`](https://pytorch.org/ignite/generated/ignite.handlers.tensorboard_logger.TensorboardLogger.html) to log trainer's loss, and training and validation metrics separately.
+We will use [`TensorboardLogger()`](https://pytorch.org/ignite/generated/ignite.handlers.tensorboard_logger.html#ignite.handlers.tensorboard_logger.TensorboardLogger) to log trainer's loss, and training and validation metrics separately.
 
 
 ```python
