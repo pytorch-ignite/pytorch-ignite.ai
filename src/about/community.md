@@ -50,6 +50,11 @@ The following people are currently core contributors to PyTorch-Ignite’s devel
 
 - Victor Fomin [@vfdev-5](https://github.com/vfdev-5)
 
+#### Triage members 
+
+- Aaishwarya Mishra [@aaishwarymishra](https://github.com/aaishwarymishra)
+- Taha Zahid [@TahaZahid05](https://github.com/TahaZahid05)
+
 ### Emeritus Core Developers
 
 The following people have been active contributors in the past, but are no longer active in the project:
@@ -57,7 +62,7 @@ The following people have been active contributors in the past, but are no longe
 - Alykhan Tejani [@alykhantejani](https://github.com/alykhantejani)
 - Jason Kriss [@jasonkriss](https://github.com/jasonkriss)
 - Anmol Joshi [@anmolsjoshi](https://github.com/anmolsjoshi)
-- Taras Savchyn [@trsvchn](https://github.com/trsvchn)
+- Taras Savchyn [@trsvchn](https://github.com/tarasio-mirror)
 - Sylvain Desroziers [@sdesrozis](https://github.com/sdesrozis)
 - Sadrodin Barikbin [@sadra-barikbin](https://github.com/sadra-barikbin)
 
@@ -89,7 +94,7 @@ who helped get this project off of the ground and supported the project.
 
 Special thanks and shout-out to Jeff Yang [@jeffydc](https://github.com/jeffydc) for creating this beatiful website for the project!
 
-Great work was done by Jeff Yang [@jeffydc](https://github.com/jeffydc) and Taras Savchyn [@trsvchn](https://github.com/trsvchn) on [PyTorch-Ignite Code-Generator app](https://code-generator.pytorch-ignite.ai/), thanks a lot!
+Great work was done by Jeff Yang [@jeffydc](https://github.com/jeffydc) and Taras Savchyn [@trsvchn](https://github.com/tarasio-mirror) on [PyTorch-Ignite Code-Generator app](https://code-generator.pytorch-ignite.ai/), thanks a lot!
 
 We especially appreciate amazing work of Isabela Presedo-Floyd [@isabela-pf](https://github.com/isabela-pf) on project's logo,
 its [elaboration](https://github.com/pytorch/ignite/issues/1221) and [guidelines](https://github.com/pytorch/ignite/blob/master/assets/logo/ignite_logo_guidelines.md).
