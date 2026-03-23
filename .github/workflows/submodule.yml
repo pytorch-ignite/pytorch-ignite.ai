@@ -32,7 +32,7 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.8
+          python-version: 3.14.3
 
       - run: |
           pip install pip wheel setuptools -Uqq
@@ -63,7 +63,7 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.8
+          python-version: 3.14.3
 
       - run: |
           pip install pip wheel setuptools -Uqq
