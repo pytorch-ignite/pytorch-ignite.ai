@@ -207,7 +207,7 @@ This is the reason we did not include `lr_scheduler.step()` in `train_step()`.
 
 ## Progress Bar
 
-Next we create an instance of Ignite's [`ProgessBar()`](https://pytorch.org/ignite/generated/ignite.contrib.handlers.tqdm_logger.html#ignite.contrib.handlers.tqdm_logger.ProgressBar) and attach it to the trainer to replace `progress_bar.update(1)`.
+Next we create an instance of Ignite's [`ProgessBar()`](https://pytorch.org/ignite/generated/ignite.handlers.tqdm_logger.ProgressBar.html) and attach it to the trainer to replace `progress_bar.update(1)`.
 
 
 ```python
