@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>seq2seq models on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/seq2seq-models/</link><description>Recent content in seq2seq models on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 27 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/seq2seq-models/index.xml" rel="self" type="application/rss+xml"/><item><title>Machine Translation using PyTorch Ignite</title><link>https://pytorch-ignite.ai/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/</link><pubDate>Wed, 27 Oct 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/tutorials/intermediate/02-machine_translation_using_pytorch_ignite/</guid><description>&lt;h1 id="machine-translation-using-pytorch-ignite">
+&lt;a href="#machine-translation-using-pytorch-ignite" class="header-anchor">
+Machine Translation using PyTorch Ignite
+&lt;/a>
+&lt;/h1>&lt;p>This tutorial is a brief introduction on how you can train a machine translation model (or any other seq2seq model) using PyTorch Ignite.
+This notebook uses Models, Dataset and Tokenizers from Huggingface, hence they can be easily replaced by other models from the 🤗 Hub.&lt;/p></description></item></channel></rss>
