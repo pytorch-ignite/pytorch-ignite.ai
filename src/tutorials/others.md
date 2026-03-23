@@ -1,7 +1,6 @@
 ## Other Tutorials
 
-- [Text Classification using Convolutional Neural
-  Networks](https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextCNN.ipynb)
+- [Text Classification using Transformers](https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextTransformers.ipynb)
 - [Variational Auto
   Encoders](https://github.com/pytorch/ignite/blob/master/examples/notebooks/VAE.ipynb)
 - [Convolutional Neural Networks for Classifying Fashion-MNIST

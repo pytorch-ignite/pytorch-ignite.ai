@@ -14,7 +14,7 @@ tags:
 
 # Introduction to PyTorch-Ignite
 
-![Ignite your PyTorch neural networks image](https://i.ibb.co/x8Bhqhj/habr-pytorch-ignite-image.png)
+![Ignite your PyTorch neural networks image](https://habrastorage.org/r/w1560/webt/35/ar/af/35arafc8y9aicrbpz5unazs-y-a.png)
 
 This post is a general introduction of PyTorch-Ignite. It intends to give a brief but illustrative overview of what PyTorch-Ignite can offer for Deep Learning enthusiasts, professionals and researchers. Following the same philosophy as PyTorch, PyTorch-Ignite aims to keep it simple, flexible and extensible but performant and scalable.
 
@@ -1002,7 +1002,7 @@ To start your project using PyTorch-Ignite is simple and can require only to pas
 
 In addition, PyTorch-Ignite also provides several tutorials:
 
-- [Text Classification using Convolutional Neural Networks](https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextCNN.ipynb)
+- [Text Classification using Convolutional Neural Networks](https://github.com/pytorch/ignite/blob/master/examples/notebooks/TextTransformers.ipynb)
 - [Variational Auto Encoders](https://github.com/pytorch/ignite/blob/master/examples/notebooks/VAE.ipynb)
 - [Convolutional Neural Networks for Classifying Fashion-MNIST Dataset](https://github.com/pytorch/ignite/blob/master/examples/notebooks/FashionMNIST.ipynb)
 - [Training Cycle-GAN on Horses to Zebras with Nvidia/Apex](https://github.com/pytorch/ignite/blob/master/examples/notebooks/CycleGAN_with_nvidia_apex.ipynb)
