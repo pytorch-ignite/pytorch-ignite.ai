@@ -3,7 +3,7 @@
   "devDependencies": {
     "jsdom": "^22.1.0",
     "prettier": "^2.8.8",
-    "shiki": "^0.14.7",
+    "shiki": "^4.0.2",
     "windicss": "^3.5.6"
   },
   "scripts": {
