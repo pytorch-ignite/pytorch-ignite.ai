@@ -3,4 +3,4 @@ IgnoreURLs:
   - 'twitter.com'
   - 'medium.com'
   - 'labs.quansight.org'
-  - 'pytorch-ignite.ai'
+  - 'pytorch-ignite.ai/tags'
