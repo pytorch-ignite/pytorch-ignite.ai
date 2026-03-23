@@ -26,7 +26,7 @@ Let’s see the project itself. [Code-Generator](https://code-generator.pytorch-
 
 The aim is not to be another abstraction over PyTorch and PyTorch-Ignite. Instead, Code-Generator is a web app that generates the boilerplate code, which means you still have complete control over the generated code. You can start by selecting the minimal template like ‘text-classification’ and turn options on or off according to your needs, select a particular logger like [Tensorboard](https://tensorboard.dev/) or an arg-parser like [Python-Fire](https://github.com/google/python-fire/blob/master/docs/guide.md). This app can be helpful in data science competitions on Kaggle or in writing papers, especially with easy integration of loggers and checkpoint handlers. Also, the templates are well-tested on CI and hopefully will require minimal changes to work on your workflows.
 
-This app was created with the great efforts of members of the PyTorch-Ignite community, particularly @[ydcjeff](https://github.com/ydcjeff) @[trsvchn](https://github.com/trsvchn) @[vfdev-5](https://github.com/vfdev-5).
+This app was created with the great efforts of members of the PyTorch-Ignite community, particularly @[jeffydc](https://github.com/jeffydc) @[trsvchn](https://github.com/trsvchn) @[vfdev-5](https://github.com/vfdev-5).
 
 ![The Code-Generator App](/_images/2023-09-20-code-generator-intern/app.png)
 

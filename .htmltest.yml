@@ -1,3 +1,5 @@
 IgnoreURLs:
   - 'towardsdatascience.com'
   - 'twitter.com'
+  - 'medium.com'
+  - 'labs.quansight.org'
