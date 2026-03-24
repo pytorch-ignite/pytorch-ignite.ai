@@ -143,8 +143,8 @@ sponsors:
 footer:
   - name: GitHub
     url: https://github.com/pytorch/ignite
-  - name: Twitter
-    url: https://twitter.com/pytorch_ignite
+  - name: X
+    url: https://x.com/pytorch_ignite
   - name: DEV
     url: https://dev.to/pytorch-ignite
   - name: Discord

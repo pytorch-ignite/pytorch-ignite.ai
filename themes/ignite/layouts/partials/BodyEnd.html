@@ -28,7 +28,7 @@
 <script src="{{ $script.RelPermalink }}" defer></script>
 
 {{ if .IsHome }}
-  <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script defer src="https://platform.x.com/widgets.js" charset="utf-8"></script>
   {{ $script := resources.Get "_hugo/js/embedTweets.js" | fingerprint "md5" | minify }}
   <script defer src="{{ $script.RelPermalink }}"></script>
 {{ end }}

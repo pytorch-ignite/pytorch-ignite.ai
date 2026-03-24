@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 
 async function embedTweet(iframe) {
   const tweets = []
@@ -48,7 +48,7 @@ async function embedTweet(iframe) {
     tweetWrapper += `<p class="children:break-all">${tweet.tweetHTML}</p>`
     tweetWrapper += `
     <div>
-      <a href="https://twitter.com/pytorch_ignite" target="_blank" rel="noopener noreferrer">
+      <a href="https://x.com/pytorch_ignite" target="_blank" rel="noopener noreferrer">
         @pytorch_ignite
       </a>
     </div>
