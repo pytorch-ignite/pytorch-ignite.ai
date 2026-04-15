@@ -58,6 +58,7 @@ from ignite.engine import Engine, Events, create_supervised_trainer, create_supe
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import ModelCheckpoint
 from ignite.contrib.handlers import TensorboardLogger, global_step_from_engine
+from ignite.handlers.logger_utils import setup_tb_logging
 ```
 
 Speed things up by setting [device](https://pytorch.org/docs/stable/tensor_attributes.html#torch.torch.device) to `cuda` if available else `cpu`.
@@ -280,6 +281,21 @@ for tag, evaluator in [("training", train_evaluator), ("validation", val_evaluat
     )
 ```
 
+If you prefer a simpler setup, Ignite also provides
+[`setup_tb_logging()`](https://docs.pytorch.org/ignite/master/_modules/ignite/contrib/engines/common.html#setup_tb_logging)
+as a helper that configures a `TensorboardLogger` for you. It automatically attaches common logging events such as
+training metrics, optimizer learning rate, and evaluator metrics:
+
+```python
+tb_logger = setup_tb_logging(
+    output_path="tb-logger",
+    trainer=trainer,
+    optimizers=optimizer,
+    evaluators={"training": train_evaluator, "validation": val_evaluator},
+    log_every_iters=log_interval,
+)
+```
+
 Finally, we start the engine on the training dataset and run it for 5
 epochs:
 
@@ -383,6 +399,7 @@ from ignite.engine import Engine, Events, create_supervised_trainer, create_supe
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import ModelCheckpoint
 from ignite.contrib.handlers import TensorboardLogger, global_step_from_engine
+from ignite.handlers.logger_utils import setup_tb_logging
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -479,6 +496,15 @@ for tag, evaluator in [("training", train_evaluator), ("validation", val_evaluat
         metric_names="all",
         global_step_transform=global_step_from_engine(trainer),
     )
+
+# Alternatively, setup_tb_logging can be used to configure the same TensorBoard logging setup.
+# tb_logger = setup_tb_logging(
+#     output_path="tb-logger",
+#     trainer=trainer,
+#     optimizers=optimizer,
+#     evaluators={"training": train_evaluator, "validation": val_evaluator},
+#     log_every_iters=log_interval,
+# )
 
 trainer.run(train_loader, max_epochs=5)
 
