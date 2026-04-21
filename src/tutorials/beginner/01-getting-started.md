@@ -256,6 +256,8 @@ val_evaluator.add_event_handler(Events.COMPLETED, model_checkpoint, {"model": mo
 
 We will use [`TensorboardLogger()`](https://pytorch.org/ignite/generated/ignite.handlers.tensorboard_logger.html#ignite.handlers.tensorboard_logger.TensorboardLogger) to log trainer's loss, and training and validation metrics separately.
 
+If you prefer less boilerplate, you can also use [`setup_tb_logging()`](https://pytorch.org/ignite/generated/ignite.handlers.logger_utils.html#ignite.handlers.logger_utils.setup_tb_logging). This helper automatically attaches common handlers for training metrics, evaluator metrics, and optimizer learning rates.
+
 
 ```python
 # Define a Tensorboard logger
@@ -278,6 +280,17 @@ for tag, evaluator in [("training", train_evaluator), ("validation", val_evaluat
         metric_names="all",
         global_step_transform=global_step_from_engine(trainer),
     )
+
+# Alternative: set up common TensorBoard logging in one call
+from ignite.handlers.logger_utils import setup_tb_logging
+
+tb_logger = setup_tb_logging(
+    output_path="tb-logger",
+    trainer=trainer,
+    optimizers=optimizer,
+    evaluators={"training": train_evaluator, "validation": val_evaluator},
+    log_every_iters=log_interval,
+)
 ```
 
 Finally, we start the engine on the training dataset and run it for 5
@@ -383,6 +396,7 @@ from ignite.engine import Engine, Events, create_supervised_trainer, create_supe
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import ModelCheckpoint
 from ignite.contrib.handlers import TensorboardLogger, global_step_from_engine
+from ignite.handlers.logger_utils import setup_tb_logging
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -479,6 +493,15 @@ for tag, evaluator in [("training", train_evaluator), ("validation", val_evaluat
         metric_names="all",
         global_step_transform=global_step_from_engine(trainer),
     )
+
+# Optional: equivalent helper API for common TensorBoard setup
+# tb_logger = setup_tb_logging(
+#     output_path="tb-logger",
+#     trainer=trainer,
+#     optimizers=optimizer,
+#     evaluators={"training": train_evaluator, "validation": val_evaluator},
+#     log_every_iters=log_interval,
+# )
 
 trainer.run(train_loader, max_epochs=5)
 
