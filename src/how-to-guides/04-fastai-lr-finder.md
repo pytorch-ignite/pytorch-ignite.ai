@@ -10,7 +10,7 @@ tags:
 
 # How to use FastaiLRFinder with Ignite
 
-This how-to guide demonstrates how we can leverage the [`FastaiLRFinder`](https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html) handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding.
+This how-to guide demonstrates how we can leverage the [`FastaiLRFinder`](https://pytorch.org/ignite/generated/ignite.handlers.FastaiLRFinder.html) handler to find an optimal learning rate to train our model on. We will compare the results produced with and without using the handler for better understanding.
 
 <!--more-->
 
@@ -119,7 +119,7 @@ print(evaluator.state.metrics)
     {'Accuracy': 0.8655, 'Loss': 0.602867822265625}
 
 
-Let's see how we can achieve better results by using the [`FastaiLRFinder`](https://pytorch.org/ignite/generated/ignite.handlers.lr_finder.FastaiLRFinder.html) handler. But first, let's restore the initial state of the model and optimizer so we can re-train them from scratch. 
+Let's see how we can achieve better results by using the [`FastaiLRFinder`](https://pytorch.org/ignite/generated/ignite.handlers.FastaiLRFinder.html) handler. But first, let's restore the initial state of the model and optimizer so we can re-train them from scratch. 
 
 
 ```python

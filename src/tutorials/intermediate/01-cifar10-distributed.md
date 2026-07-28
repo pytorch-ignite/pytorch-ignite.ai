@@ -520,7 +520,7 @@ This is where the main logic resides, i.e. we will call all the above functions 
   2. Create two evaluators: `train_evaluator` and `val_evaluator` to compute metrics on the `train_dataloader` and `val_dataloader` respectively, however `val_evaluator` will store the best models based on validation metrics.
   3. Define `run_validation()` to compute metrics on both dataloaders and log them. Then we attach this function to `trainer` to run after `validate_every` epochs and after training is complete.
 4. Setup TensorBoard logging using [`setup_tb_logging()`](https://pytorch.org/ignite/contrib/engines.html#ignite.contrib.engines.common.setup_tb_logging) on the master process for the trainer and evaluators so that training and validation metrics along with the learning rate can be logged.
-5. Define a [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#ignite.handlers.checkpoint.Checkpoint) object to store the two best models (`n_saved`) by validation accuracy (defined in `metrics` as `Accuracy()`) and attach it to `val_evaluator` so that it can be executed everytime `val_evaluator` runs.
+5. Define a [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.Checkpoint.html#ignite.handlers.checkpoint.Checkpoint) object to store the two best models (`n_saved`) by validation accuracy (defined in `metrics` as `Accuracy()`) and attach it to `val_evaluator` so that it can be executed everytime `val_evaluator` runs.
 6. Try training on `train_loader` for `num_epochs`
 7. Close Tensorboard logger once training is completed.
 
