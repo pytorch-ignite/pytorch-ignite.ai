@@ -333,7 +333,7 @@ trainer.add_event_handler(Events.EPOCH_COMPLETED, log_validation_results)
 
 ## Early Stopping
 
-Now we'll setup a [`EarlyStopping`](https://pytorch.org/ignite/generated/ignite.handlers.early_stopping.EarlyStopping.html#earlystopping) handler for the training process. `EarlyStopping` requires a score_function that allows the user to define whatever criteria to stop training. In this case, if the loss of the validation set does not decrease in 2 epochs (`patience`), the training process will stop early.  
+Now we'll setup a [`EarlyStopping`](https://pytorch.org/ignite/generated/ignite.handlers.EarlyStopping.html#earlystopping) handler for the training process. `EarlyStopping` requires a score_function that allows the user to define whatever criteria to stop training. In this case, if the loss of the validation set does not decrease in 2 epochs (`patience`), the training process will stop early.  
 
 
 ```python
@@ -349,7 +349,7 @@ validation_evaluator.add_event_handler(Events.COMPLETED, handler)
 
 ## Model Checkpoint
 
-Lastly, we want to save the best model weights. So we will use Ignite's [`ModelCheckpoint`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.ModelCheckpoint.html#modelcheckpoint) handler to checkpoint models at the end of each epoch. This will create a `models` directory and save the 2 best models (`n_saved`) with the prefix `bert-base-cased`.
+Lastly, we want to save the best model weights. So we will use Ignite's [`ModelCheckpoint`](https://pytorch.org/ignite/generated/ignite.handlers.ModelCheckpoint.html#modelcheckpoint) handler to checkpoint models at the end of each epoch. This will create a `models` directory and save the 2 best models (`n_saved`) with the prefix `bert-base-cased`.
 
 
 ```python
