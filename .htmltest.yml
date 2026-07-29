@@ -6,3 +6,4 @@ IgnoreURLs:
   - 'pytorch-ignite.ai/tags'
   - 'pytorch-ignite.ai/about/governance'
   - 'opencollective.com/pytorch-ignite'
+  - 'clear.ml'
