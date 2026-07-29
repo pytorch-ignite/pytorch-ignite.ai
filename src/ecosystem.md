@@ -43,6 +43,7 @@ The list below is unexhausted list of references that we are aware of.
 - [Tutorial on Transfer Learning in NLP held at NAACL 2019](https://github.com/huggingface/naacl_transfer_learning_tutorial)
 - [Deep-Reinforcement-Learning-Hands-On-Second-Edition, published by Packt](https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On-Second-Edition)
 - [Once Upon a Repository: How to Write Readable, Maintainable Code with PyTorch](https://towardsdatascience.com/once-upon-a-repository-how-to-write-readable-maintainable-code-with-pytorch-951f03f6a829)
+- [The Hero Rises: Build Your Own SSD](https://medium.com/data-science/the-hero-rises-build-your-own-ssd-febfbdd3bd03)
 - [Using Optuna to Optimize PyTorch Ignite Hyperparameters](https://medium.com/pytorch/using-optuna-to-optimize-pytorch-ignite-hyperparameters-626ffe6d4783)
 
 ## Toolkits
