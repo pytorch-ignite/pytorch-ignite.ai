@@ -4,6 +4,7 @@ IgnoreURLs:
   - 'medium.com'
   - 'labs.quansight.org'
   - 'pytorch-ignite.ai/tags'
+  - 'pytorch-ignite.ai/talks'
   - 'pytorch-ignite.ai/about/governance'
   - 'opencollective.com/pytorch-ignite'
   - 'clear.ml'
