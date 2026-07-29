@@ -233,7 +233,7 @@ def log_validation_results(trainer):
     print(f"Validation Results - Epoch[{trainer.state.epoch}] Avg accuracy: {metrics['accuracy']:.2f} Avg loss: {metrics['loss']:.2f}")
 ```
 
-We can use [`ModelCheckpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.ModelCheckpoint.html#modelcheckpoint) as shown below to save the `n_saved` best models determined by a metric (here accuracy) after each epoch is completed. We attach `model_checkpoint` to `val_evaluator` because we want the two models with the highest accuracies on the validation dataset rather than the training dataset. This is why we defined two separate evaluators (`val_evaluator` and `train_evaluator`) before.
+We can use [`ModelCheckpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.ModelCheckpoint.html#modelcheckpoint) as shown below to save the `n_saved` best models determined by a metric (here accuracy) after each epoch is completed. We attach `model_checkpoint` to `val_evaluator` because we want the two models with the highest accuracies on the validation dataset rather than the training dataset. This is why we defined two separate evaluators (`val_evaluator` and `train_evaluator`) before.
 
 
 ```python

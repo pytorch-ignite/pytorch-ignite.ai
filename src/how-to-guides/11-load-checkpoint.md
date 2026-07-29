@@ -130,7 +130,7 @@ def log_validation_results(trainer):
 
 ## Checkpoint
 
-We can use [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#checkpoint) as shown below to save the latest model after each epoch is completed. `to_save` here also saves the state of the optimizer and `trainer` in case we want to load this checkpoint and resume training.
+We can use [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.Checkpoint.html#checkpoint) as shown below to save the latest model after each epoch is completed. `to_save` here also saves the state of the optimizer and `trainer` in case we want to load this checkpoint and resume training.
 
 
 ```python
@@ -196,7 +196,7 @@ Now let's assume, we have reset our model, optimizer and trainer. After instanti
     checkpoint_2.pt
 
 
-We can use [`load_objects()`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#ignite.handlers.checkpoint.Checkpoint.load_objects) to apply the state of our checkpoint to the objects stored in `to_save`.
+We can use [`load_objects()`](https://pytorch.org/ignite/generated/ignite.handlers.Checkpoint.html#ignite.handlers.checkpoint.Checkpoint.load_objects) to apply the state of our checkpoint to the objects stored in `to_save`.
 
 
 ```python

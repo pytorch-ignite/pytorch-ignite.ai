@@ -178,7 +178,7 @@ if epoch % checkpoint_every == 0:
     checkpoint(model, optimizer, "checkpoint_dir")
 ```
 
-we can smartly save the best `n_saved` models (depending on `evaluator.state.metrics`), and the state of `optimizer` and `trainer` via the built-in [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.checkpoint.Checkpoint.html#checkpoint).
+we can smartly save the best `n_saved` models (depending on `evaluator.state.metrics`), and the state of `optimizer` and `trainer` via the built-in [`Checkpoint()`](https://pytorch.org/ignite/generated/ignite.handlers.Checkpoint.html#checkpoint).
 
 
 
