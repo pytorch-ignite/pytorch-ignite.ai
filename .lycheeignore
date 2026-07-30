@@ -1,7 +1,4 @@
 towardsdatascience\.com
-twitter\.com
-medium\.com
 labs\.quansight\.org
-pytorch-ignite\.ai
-opencollective\.com/pytorch-ignite
+https://.*pytorch-ignite\.ai
 algolia\.net
