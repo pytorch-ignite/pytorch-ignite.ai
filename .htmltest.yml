@@ -1,8 +1,0 @@
-IgnoreURLs:
-  - 'towardsdatascience.com'
-  - 'twitter.com'
-  - 'medium.com'
-  - 'labs.quansight.org'
-  - 'pytorch-ignite.ai/tags'
-  - 'pytorch-ignite.ai/about/governance'
-  - 'opencollective.com/pytorch-ignite'
