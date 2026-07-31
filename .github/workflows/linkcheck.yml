@@ -30,5 +30,8 @@ jobs:
       - name: Build
         run: bash scripts/build.sh
 
-      - run: curl https://htmltest.wjdp.uk | bash
-      - run: ./bin/htmltest dist -c .htmltest.yml
+      - name: Check links with Lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --base-url ${{ github.workspace }}/dist --timeout 120 --max-retries 3 --max-concurrency 20 --user-agent 'curl/8.21.0' './dist/**/*.html'
+          fail: true
