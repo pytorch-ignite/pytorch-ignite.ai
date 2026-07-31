@@ -33,5 +33,5 @@ jobs:
       - name: Check links with Lychee
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --base-url ${{ github.workspace }}/dist --timeout 120 --max-retries 3 --max-concurrency 20 --user-agent 'curl/7.81.0' './dist/**/*.html'
+          args: --base-url ${{ github.workspace }}/dist --timeout 120 --max-retries 3 --max-concurrency 20 --user-agent 'curl/8.21.0' './dist/**/*.html'
           fail: true
