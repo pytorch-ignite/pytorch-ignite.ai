@@ -29,7 +29,7 @@ The type of distributed training we will use is called data parallelism in which
 >   2. Split the dataset and fit the models on different subsets
 >   3. Communicate the gradients at each iteration to keep the models in sync
 >
-> -- <cite>[Distributed Deep Learning 101: Introduction](https://towardsdatascience.com/distributed-deep-learning-101-introduction-ebfc1bcd59d9)</cite>
+> -- <cite>[Distributed Deep Learning 101: Introduction](https://medium.com/data-science/distributed-deep-learning-101-introduction-ebfc1bcd59d9)</cite>
 
 PyTorch provides a [torch.nn.parallel.DistributedDataParallel](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html) API for this task however the implementation that supports different backends + configurations is tedious. In this example, we will see how to enable data distributed training which is adaptable to various backends in just a few lines of code alongwith:
 * Computing training and validation metrics
