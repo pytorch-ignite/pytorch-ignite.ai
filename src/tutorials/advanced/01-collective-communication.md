@@ -75,7 +75,7 @@ Now let's assume a more real world scenario - You need to find the average of al
 >
 > Finally, we can go on to update the model parameters using the averaged gradients!
 >
-> -- <cite>[Distributed Deep Learning 101: Introduction](https://medium.com/data-science/distributed-deep-learning-101-introduction-ebfc1bcd59d9)</cite>
+> -- <cite>[Distributed Deep Learning 101: Introduction](https://towardsdatascience.com/distributed-deep-learning-101-introduction-ebfc1bcd59d9)</cite>
 
 You can get the number of GPUs (processes) available using another helper method [`idist.get_world_size()`](https://pytorch.org/ignite/distributed.html#ignite.distributed.utils.get_world_size) and then use `all_reduce()` to collect the gradients and apply the SUM operation.
 
