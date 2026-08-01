@@ -1,14 +1,14 @@
 ---
-title: 'Reproducing "Knee-Deep in C-RASP" Experiments using Trainite'
+title: Reproducing "Knee-Deep in C-RASP" Experiments using Trainite
 slug: reproducing-crasp-experiments-using-trainite
-description: "A walkthrough of reproducing a transformer depth hierarchy paper using Trainite."
+description: A walkthrough of reproducing a transformer depth hierarchy paper using Trainite.
 date: 2026-08-01
 tags:
   - Trainite
   - PyTorch-Ignite
   - Transformers
   - Limitations-of-Transformer
-  - String-Reversal
+  - C-RASP
 ---
 
 # Reproducing "Knee-Deep in C-RASP: A Transformer Depth Hierarchy" Experiments using Trainite
