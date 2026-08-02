@@ -1,3 +1,16 @@
+---
+title: 'String Reversal Example: Exploring Small Transformers with Trainite'
+slug: string-reversal-example-trainite
+description: Exploring small Transformers with Trainite on the string-reversal task.
+date: 2026-08-01
+tags:
+  - Trainite
+  - PyTorch-Ignite
+  - Transformers
+  - Limitations-of-Transformer
+  - String-Reversal
+---
+
 # Exploring Small Transformers with Trainite on String-Reversal
 
 Hi, I am Aaishwarya Mishra, during my internship at Quansight, I worked on Trainite, a modular language training toolbox built with PyTorch and PyTorch-Ignite.
