@@ -285,9 +285,11 @@ Input:  abcdefgh
 Output: hgfedcba
 ```
 
-Rows represent query positions and columns represent key positions. During generation, a reversal-aligned pattern appears when queries from `[SEP]` onward move backwards through the source tokens.
+Rows represent query positions and columns represent key positions. During generation, a reversal-aligned pattern appears when queries from `[SEP]` onward move backwards through the source tokens
 
-![Layer 3 attention figure](https://github.com/user-attachments/assets/d2fbd869-3c92-408f-936d-528e2f971420)
+<p>
+    <img src="https://github.com/user-attachments/assets/d2fbd869-3c92-408f-936d-528e2f971420" alt="Layer 3 attention figure" width="1000" />
+</p>
 
 _Note: layers started with index 0 so layer 3 here represents final layer_
 
