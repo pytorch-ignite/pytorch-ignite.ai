@@ -2,7 +2,7 @@
 title: 'String Reversal Example: Exploring Small Transformers with Trainite'
 slug: string-reversal-example-trainite
 description: Exploring small Transformers with Trainite on the string-reversal task.
-date: 2026-08-01
+date: 2026-08-03
 tags:
   - Trainite
   - PyTorch-Ignite
@@ -10,6 +10,9 @@ tags:
   - Limitations-of-Transformer
   - String-Reversal
 ---
+
+# String Reversal Example: Exploring Small Transformers with Trainite
+
 
 Most of the time when you are working on a new project or just starting out or prototyping you have to write same boilerplate code again and again whether it's training loop, configs, logging etc.
 
