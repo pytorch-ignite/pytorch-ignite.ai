@@ -1,0 +1,833 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="Exploring small Transformers with Trainite on the string-reversal task.">
+<meta property="og:description" content="Exploring small Transformers with Trainite on the string-reversal task.">
+<meta name="twitter:description" content="Exploring small Transformers with Trainite on the string-reversal task.">
+<title>
+String Reversal Example: Exploring Small Transformers with Trainite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    String Reversal Example: Exploring Small Transformers with Trainite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    String Reversal Example: Exploring Small Transformers with Trainite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.9acd436c5609f4c6f7c0a9a9c6536f57.min.css">
+<link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/string-reversal-example-trainite/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/string-reversal-example-trainite/" class="text-$c-primary hover:text-$c-primary py-1">String Reversal Example: Exploring Small Transformers with Trainite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-string-reversal-task">The String Reversal Task</a></li>
+<li><a href="#generating-the-project">Generating The Project</a>
+<ul>
+<li><a href="#what-trainite-gives-you">What Trainite Gives You</a></li>
+</ul>
+</li>
+<li><a href="#customizing-trainite-for-string-reversal">Customizing Trainite for String Reversal</a></li>
+<li><a href="#experimental-setup">Experimental Setup</a>
+<ul>
+<li><a href="#a-small-vocabulary-detour">A small vocabulary detour</a></li>
+</ul>
+</li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#results">Results</a>
+<ul>
+<li><a href="#exact-match">Exact match</a></li>
+<li><a href="#token-accuracy-vs-exact-match">Token accuracy vs exact match</a></li>
+<li><a href="#autoregressive-evaluation">Autoregressive evaluation</a></li>
+<li><a href="#a-positional-encoding-detour">A positional-encoding detour</a></li>
+<li><a href="#did-fixing-the-vocabulary-help">Did fixing the vocabulary help?</a></li>
+</ul>
+</li>
+<li><a href="#a-quick-look-at-attention">A Quick Look At Attention</a>
+<ul>
+<li><a href="#can-we-force-the-correct-attention">Can we force the correct attention?</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/blog/reproducing-crasp-experiments-using-trainite/" class="hover:text-$c-primary py-1">Reproducing "Knee-Deep in C-RASP" Experiments using Trainite</a>
+</li>
+<li class="py-1">
+<a href="/blog/integrations-with-code-generator-during-quansight-intern/" class="hover:text-$c-primary py-1">Bridging Data Science Tools with PyTorch-Ignite's Code-Generator and Nebari</a>
+</li>
+<li class="py-1">
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="hover:text-$c-primary py-1">Sangho's Internship at Quansight with PyTorch-Ignite project</a>
+</li>
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<h1 id="string-reversal-example-exploring-small-transformers-with-trainite">
+<a href="#string-reversal-example-exploring-small-transformers-with-trainite" class="header-anchor">
+String Reversal Example: Exploring Small Transformers with Trainite
+</a>
+</h1><p>Most of the time when you are working on a new project or just starting out or prototyping you have to write same boilerplate code again and again whether it’s training loop, configs, logging etc.</p>
+<p>
+<a href="https://github.com/pytorch-ignite/trainite" target="_blank" rel="noopener noreferrer">Trainite</a> can help you with that. Trainite is an open-source machine learning toolbox built on top of
+<a href="https://github.com/pytorch/igxnite" target="_blank" rel="noopener noreferrer">PyTorch-Ignite</a> that takes care of generating this boilerplate code for you. Trainite generates clean, modular Python starter code that you fully own and can customize freely.</p>
+<p>Hi, I am Aaishwarya Mishra, during my internship at Quansight, I worked on Trainite, a modular language training toolbox built with PyTorch and PyTorch-Ignite.</p>
+<p>It scaffolds a complete training project — model, data pipeline, trainer, config, logging that you then own and edit, so a new experiment doesn’t start by reimplementing the same boilerplate and gets out of your way.</p>
+<p>We wanted example use cases, so I picked something simple: string reversal. Given <code>abcdef</code>, a decoder-only Transformer has to produce <code>fedcba</code>.</p>
+<p>The main experiment was varying model depth and width to see what mattered.</p>
+<ul>
+<li>Width the hidden size <code>d_model</code>, is how much room each token’s representation has.</li>
+<li>Depth is how many decoder blocks stack.</li>
+</ul>
+<p>The stack itself hasn’t changed much since
+<a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank" rel="noopener noreferrer">GPT-2</a> made the decoder-only design standard; recent families like
+<a href="https://arxiv.org/abs/2407.21783" target="_blank" rel="noopener noreferrer">Llama 3</a>,
+<a href="https://arxiv.org/abs/2408.00118" target="_blank" rel="noopener noreferrer">Gemma 2</a> and
+<a href="https://arxiv.org/abs/2412.15115" target="_blank" rel="noopener noreferrer">Qwen 2.5</a> add refinements RMSNorm, grouped-query attention, rotary embeddings on top of the same alternating attention and feed-forward blocks.</p>
+<p>Short answer: increasing embedding width gave the most promising results but take that with a grain of salt!</p>
+<h2 id="the-string-reversal-task">
+<a href="#the-string-reversal-task" class="header-anchor">
+The String Reversal Task
+</a>
+</h2><p>String reversal is simple given a sequence of characters, the model must generate the same characters in reverse order. It has no semantic meaning and easy to evaluate either the answer is correct or wrong.</p>
+<p>Because the experiment uses a decoder-only Transformer, each example is formatted as:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">[BOS] [source] [SEP] [reversed target] [EOS]</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>For example:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">[BOS] a b c [SEP] c b a [EOS]</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Causal attention prevents the model from looking ahead. To predict the first target character, the model must locate the final character of the source. It must then continue retrieving source characters in descending order until the complete reversal has been generated.</p>
+<p>During autoregressive evaluation, the model receives only:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">[BOS] [source] [SEP]</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>It then generates one token at a time until it predicts <code>[EOS]</code> or reaches the generation limit. This tests whether the model can produce the complete reversal without being given the correct preceding target tokens.</p>
+<h2 id="generating-the-project">
+<a href="#generating-the-project" class="header-anchor">
+Generating The Project
+</a>
+</h2><p>Now that we understand the problem, let’s generate a fresh experiment workspace using Trainite. First, we can run <code>trainite init --help</code> to explore the available models, datasets, and trainers.</p>
+<p>To initialize our experiment, we select the built-in <code>string-reverse</code> dataset along with the default <code>transformer</code> model and <code>decoder-trainer</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #61AFEF">trainite</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">init</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">string-reverse-exp</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">--dataset</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">string-reverse</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Trainite instantly creates a clean, self-contained project workspace:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">string-reverse-exp/</span></span>
+<span class="line"><span style="color: #abb2bf">├── config.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── config.yaml</span></span>
+<span class="line"><span style="color: #abb2bf">├── datasets/</span></span>
+<span class="line"><span style="color: #abb2bf">│   ├── string_reverse.py</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── transformed.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── main.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── models/</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── transformer.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── preprocessors/</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── char_tokenizer.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── pyproject.toml</span></span>
+<span class="line"><span style="color: #abb2bf">├── README.md</span></span>
+<span class="line"><span style="color: #abb2bf">├── trainer.py</span></span>
+<span class="line"><span style="color: #abb2bf">└── utils.py</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="what-trainite-gives-you">
+<a href="#what-trainite-gives-you" class="header-anchor">
+What Trainite Gives You
+</a>
+</h3><p>Trainite generates <strong>plain, readable Python code</strong> directly inside your project folder:</p>
+<ul>
+<li><strong><code>config.yaml</code></strong>: Configures all model hyperparameters, data ratios, and trainer settings.</li>
+<li><strong><code>models/</code> &amp; <code>datasets/</code></strong>: Standard PyTorch <code>nn.Module</code> and <code>Dataset</code> implementations.</li>
+<li><strong><code>trainer.py</code></strong>: A complete PyTorch-Ignite training and evaluation engine.</li>
+<li><strong><code>main.py</code></strong>: The clean entry point to trigger training.</li>
+</ul>
+<p>Because you own all these files, you are completely free to edit, refactor, or customize any part of the codebase to fit your task, just like we are about to do now!</p>
+<h2 id="customizing-trainite-for-string-reversal">
+<a href="#customizing-trainite-for-string-reversal" class="header-anchor">
+Customizing Trainite for String Reversal
+</a>
+</h2><p>Trainite generated the initial decoder-only language-model project, including the model, dataset pipeline, trainer, configuration files, and experiment logging. Because these are regular Python files, I could adapt the generated code to the needs of string reversal.</p>
+<p>The main changes were:</p>
+<ul>
+<li>
+<p><strong>Sequence-level accuracy:</strong> I added exact-match accuracy because high token accuracy can still hide incorrect complete reversals.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">_exact_accuracy_transform</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #D19A66; font-style: italic">output</span><span style="color: #ABB2BF">: dict[</span><span style="color: #56B6C2">str</span><span style="color: #ABB2BF">, torch.Tensor], </span><span style="color: #D19A66; font-style: italic">ignore_index</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">-</span><span style="color: #D19A66">100</span></span>
+<span class="line"><span style="color: #ABB2BF">) -&gt; tuple[torch.Tensor, torch.Tensor]:</span></span>
+<span class="line"><span style="color: #ABB2BF">    targets </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> output[</span><span style="color: #98C379">"targets"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    mask </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> targets </span><span style="color: #56B6C2">!=</span><span style="color: #ABB2BF"> ignore_index</span></span>
+<span class="line"><span style="color: #ABB2BF">    correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> (output[</span><span style="color: #98C379">"logits"</span><span style="color: #ABB2BF">].</span><span style="color: #61AFEF">argmax</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">) </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> targets) </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">~</span><span style="color: #ABB2BF">mask</span></span>
+<span class="line"><span style="color: #ABB2BF">    sequence_correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> correct.</span><span style="color: #61AFEF">all</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">return</span><span style="color: #ABB2BF"> sequence_correct.</span><span style="color: #61AFEF">long</span><span style="color: #ABB2BF">(), torch.</span><span style="color: #61AFEF">ones_like</span><span style="color: #ABB2BF">(sequence_correct)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">exact_transform_fn</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">output</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD">return</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">_exact_accuracy_transform</span><span style="color: #ABB2BF">(output, </span><span style="color: #E06C75; font-style: italic">ignore_index</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">ignore_index)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">exact_acc </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">exact_transform_fn)</span></span>
+<span class="line"><span style="color: #ABB2BF">exact_acc.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"exact_accuracy"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div></li>
+<li>
+<p><strong>Autoregressive evaluation:</strong> After training, the best checkpoint generates each test answer one token at a time, providing a more realistic measure than teacher-forced evaluation alone.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #7F848E; font-style: italic"># Feed only [BOS] source [SEP] — no target tokens</span></span>
+<span class="line"><span style="color: #ABB2BF">sequences </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">generate</span><span style="color: #ABB2BF">(input_ids, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.max_inference_new_tokens, attention_mask)</span></span>
+<span class="line"><span style="color: #ABB2BF">predictions </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.tokenizer.</span><span style="color: #61AFEF">decode</span><span style="color: #ABB2BF">(tokens.</span><span style="color: #61AFEF">tolist</span><span style="color: #ABB2BF">(), </span><span style="color: #E06C75; font-style: italic">skip_special_tokens</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">               </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> tokens </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> sequences[:, input_ids.shape[</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">]:]]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">exact_match </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">sum</span><span style="color: #ABB2BF">(p </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> t </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> p, t </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">zip</span><span style="color: #ABB2BF">(predictions, targets)) </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> total</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #7F848E; font-style: italic"># zip_longest so a short or over-long generation counts the missing positions as wrong</span></span>
+<span class="line"><span style="color: #ABB2BF">pairs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [pair </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> p, t </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">zip</span><span style="color: #ABB2BF">(predictions, targets) </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> pair </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">zip_longest</span><span style="color: #ABB2BF">(p, t)]</span></span>
+<span class="line"><span style="color: #ABB2BF">token_accuracy </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">sum</span><span style="color: #ABB2BF">(pred </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> tgt </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> pred, tgt </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> pairs) </span><span style="color: #56B6C2">/</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">len</span><span style="color: #ABB2BF">(pairs)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div></li>
+<li>
+<p><strong>Adaptive learning rate:</strong> I replaced the fixed warmup and decay schedule with <code>ReduceLROnPlateau</code>, allowing models of different sizes to converge at different rates.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #ABB2BF">scheduler </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">ReduceLROnPlateauScheduler</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">    optimizer,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">metric_name</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">metric_name,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">mode</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">mode,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">patience</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">patience,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">factor</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">factor,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">min_lr</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">min_lr,</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #E06C75; font-style: italic">save_history</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">engine.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">, scheduler)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div></li>
+<li>
+<p><strong>Experiment stopping:</strong> Runs stop after reaching perfect validation accuracy, reaching the minimum learning rate, or exhausting their wall-clock budget.</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">attach_perfect_accuracy_stopping</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">val_evaluator</span><span style="color: #ABB2BF">: Engine, </span><span style="color: #D19A66; font-style: italic">trainer_engine</span><span style="color: #ABB2BF">: Engine) -&gt; </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">_check</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">: Engine) -&gt; </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #C678DD">if</span><span style="color: #ABB2BF"> engine.state.metrics.</span><span style="color: #61AFEF">get</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"exact_accuracy"</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">) </span><span style="color: #56B6C2">&gt;=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">            trainer_engine.logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Perfect exact-match accuracy reached — terminating early."</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">            trainer_engine.</span><span style="color: #61AFEF">terminate</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    val_evaluator.</span><span style="color: #61AFEF">add_event_handler</span><span style="color: #ABB2BF">(Events.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">, _check)</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div></li>
+</ul>
+<p>That’s the workflow Trainite is built for: generate a working project, then edit the parts that are yours.</p>
+<p>The complete string-reversal example, including the configuration, training code, and evaluation workflow, is available
+<a href="https://github.com/pytorch-ignite/trainite/tree/main/examples/string_reversal" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h2 id="experimental-setup">
+<a href="#experimental-setup" class="header-anchor">
+Experimental Setup
+</a>
+</h2><p>Each model trained independently on one fixed source length, 8,000 random alphanumeric strings per length with 1,000 held out for validation:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #D19A66">SEQ_LENS</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">8</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">16</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">32</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">96</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">160</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">192</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">224</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #D19A66">SEEDS</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> [</span><span style="color: #D19A66">42</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">123</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">456</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>An earlier sweep went to length 320, but exact match had already hit zero well before that. Since each length trains separately, none of this says anything about generalizing to unseen lengths — and with 62 characters per position, memorization isn’t on the table even at length 8.</p>
+<p>All models used
+<a href="https://arxiv.org/abs/2104.09864" target="_blank" rel="noopener noreferrer">RoPE</a>, with feed-forward width fixed at <code>2 × d_model</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Sweep</th>
+<th style="text-align:right">Layers</th>
+<th style="text-align:right"><code>d_model</code></th>
+<th style="text-align:right">Heads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Width</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>Width</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>Width</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">64</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>Depth</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>Depth</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
+<p>Head dimension stayed fixed at 16, so widening the model added heads and feed-forward capacity along with hidden size, the width axis scales three things, the depth axis one. Worth remembering when reading the results.</p>
+<p>The four-layer <code>d_model=32</code> row belongs to both sweeps. Nine lengths × three seeds x 5 model configs gives <strong>135 runs</strong> in total.</p>
+<p>Runs ended on perfect validation accuracy, minimum learning rate, or a two-hour budget. The best checkpoint was then decoded greedily from <code>[BOS] source [SEP]</code>, stopping at <code>[EOS]</code> or after <code>source length + 2</code> tokens.</p>
+<p>The main width and depth sweeps used RoPE. I also reran the four-layer width sweep with sinusoidal absolute positional encoding as a separate comparison.</p>
+<h3 id="a-small-vocabulary-detour">
+<a href="#a-small-vocabulary-detour" class="header-anchor">
+A small vocabulary detour
+</a>
+</h3><p>While evaluating results I noticed the tokenizer was built from <code>ascii_letters + digits + punctuation + " "</code> — 99 tokens including specials, on a task needing 66. A third of the output layer was spent on classes that were never correct answers. I fixed it to alphanumerics only and reran everything, the comparison appears in the Results section. I think comparing results of the old and new runs would be intresting.</p>
+<p><em>My model had been predicting punctuation that nobody asked for. My apolocheese.</em></p>
+<h2 id="evaluation-metrics">
+<a href="#evaluation-metrics" class="header-anchor">
+Evaluation Metrics
+</a>
+</h2><p>I tracked two validation metrics: token accuracy and exact-match accuracy. Both were calculated only over the reversed target and <code>[EOS]</code>; the source and separator tokens were excluded.</p>
+<p><strong>Token accuracy</strong> measures the proportion of individual target tokens predicted correctly. It is useful for observing partial progress, but it can make a model appear successful even when its complete outputs contain errors.</p>
+<p><strong>Exact-match accuracy</strong> measures the proportion of examples for which every predicted token matches the target sequence. A single incorrect token makes the entire example incorrect, making this the stricter and more meaningful metric for string reversal.</p>
+<p>Heatmaps report the mean across three seeds, rounded to two decimals, so a token accuracy of 1.00 can still hide enough errors to decrease exact match.</p>
+<p>These validation metrics use teacher-forced predictions and are useful for comparing training runs. After training, the best checkpoint was also evaluated autoregressively by generating the reversed string one token at a time. Autoregressive exact match is therefore the primary end-to-end measure, while the validation metrics provide diagnostic information.</p>
+<h2 id="results">
+<a href="#results" class="header-anchor">
+Results
+</a>
+</h2><p>Accuracy dropped as strings got longer, but not smoothly. Models would do fine up to some length, then fall apart within a step or two.</p>
+<h3 id="exact-match">
+<a href="#exact-match" class="header-anchor">
+Exact match
+</a>
+</h3><p>
+<img src="https://github.com/user-attachments/assets/3e791d8a-02dc-4e2e-ac72-1edf311ea184" alt="Exact-match accuracy, width sweep" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Wider models reversed longer strings. <code>d_model=64</code> got everything right through length 96 and scored <code>0.97</code> at 128. At length 160, the mean exact-match accuracy was 0.63, but that hides a sharp split between seeds:
+<a href="https://app.clear.ml/projects/9fa782dff14848cf9d65c5be68b7b5cf/experiments/dbeb3f1403f049a3bdc0e66fe21ef4a0/output/execution" target="_blank" rel="noopener noreferrer">one run solved the task</a>, while
+<a href="https://app.clear.ml/projects/9fa782dff14848cf9d65c5be68b7b5cf/experiments/d7258b91f5e045f1b90e2d2ceda08d27/output/execution" target="_blank" rel="noopener noreferrer">another failed completely</a>. The model configuration was identical, only the random seed changed.</p>
+<p>
+<img src="https://github.com/user-attachments/assets/ad552b28-eb2a-4a87-a024-7a60da55fee2" alt="Exact-match accuracy, depth sweep" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Adding layers helped less reliably. At length 64 the six-layer model got <code>0.98</code>, four layers got <code>0.40</code>, and eight layers got <code>0.76</code>. At 128 the six- and eight-layer models both sat at <code>0.33</code> while four layers failed. The order isn’t consistent, and the six-layer model did better at 64 than at 32 which shouldn’t happen if depth were what mattered.</p>
+<p>Most of this is seed variance. In the eight-layer run at length 64,
+<a href="https://app.clear.ml/projects/025cc46dce1f4041bb5edb0a2f3633c9/experiments/330aff8f59014c5da0eabcf6bbcc56eb/output/execution" target="_blank" rel="noopener noreferrer">one seed got <code>0.98</code> token accuracy but only <code>0.27</code> exact match</a>, which pulled the mean down by itself. Near the failure boundary, some seeds learned the task and some never did. With only three seeds that’s enough to swing a mean a long way. So a low score here means the model didn’t learn reversal with this setup, not that it can’t.</p>
+<h3 id="token-accuracy-vs-exact-match">
+<a href="#token-accuracy-vs-exact-match" class="header-anchor">
+Token accuracy vs exact match
+</a>
+</h3><p>
+<img src="https://github.com/user-attachments/assets/5bc574d1-8b75-4cb9-b0ab-28730d0bb483" alt="Token accuracy, width sweep" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>
+<img src="https://github.com/user-attachments/assets/561079e2-decc-4dd2-a960-59b43ffdd6f9" alt="Token accuracy, depth sweep" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>Token accuracy was always higher, sometimes much higher. Four-layer <code>d_model=32</code> hit <code>0.94</code> token accuracy at length 64 but got only <code>0.40</code> of strings fully right. <code>d_model=16</code> reached <code>0.82</code> at length 16 without a single correct reversal.</p>
+<h3 id="autoregressive-evaluation">
+<a href="#autoregressive-evaluation" class="header-anchor">
+Autoregressive evaluation
+</a>
+</h3><p>I also evaluated each best checkpoint autoregressively, generating the reversed string one token at a time without access to the correct target tokens.</p>
+<p>The results were almost identical to validation exact match. Across both sweeps, the differences were no larger than <code>0.02</code>, and the same failure boundaries remained. Since autoregressive evaluation did not change the overall interpretation, I will not repeat the configuration-by-configuration analysis here.</p>
+<p><em>Note: Ar here means Autoregressive</em></p>
+<p>
+<img src="https://github.com/user-attachments/assets/79b0d164-32c0-49aa-9448-f618a7e8e84f" alt="Embedding-dimension autoregressive heatmap" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>
+<img src="https://github.com/user-attachments/assets/10210e2b-a922-44fd-a07a-13d00d2e228e" alt="Depth autoregressive heatmap" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<h3 id="a-positional-encoding-detour">
+<a href="#a-positional-encoding-detour" class="header-anchor">
+A positional-encoding detour
+</a>
+</h3><p>The main sweeps used RoPE, but I also reran the embedding-dimension sweep with sinusoidal absolute positional encoding. The difference was not subtle.</p>
+<p>With RoPE, the <code>d_model=64</code> model remained near-perfect through length 128. With absolute positional encoding, the same width averaged 0.54 at length 32 and was effectively at zero from length 64 onward. Interestingly, d_model=32 did slightly better at lengths 64 and 96, another reminder that these results are noisy across only three seeds.</p>
+<p>These results suggest that model size was not the only thing that mattered for string reversal the choice of positional encoding also had a substantial effect.</p>
+<p>
+<img src="https://github.com/user-attachments/assets/1464fdf8-64e5-43b0-9ce5-c7ea281632cd" alt="Absolute positional encoding plot" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<h3 id="did-fixing-the-vocabulary-help">
+<a href="#did-fixing-the-vocabulary-help" class="header-anchor">
+Did fixing the vocabulary help?
+</a>
+</h3><p>The earlier sweep used a 99-token vocabulary even though the dataset required only 66 tokens. After fixing the mismatch, I reran every experiment under the same setup.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align:right">Sequence length</th>
+<th style="text-align:right">Old vocabulary</th>
+<th style="text-align:right">Corrected vocabulary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 layers, <code>d_model=64</code></td>
+<td style="text-align:right">128</td>
+<td style="text-align:right">0.67</td>
+<td style="text-align:right">0.97</td>
+</tr>
+<tr>
+<td>4 layers, <code>d_model=64</code></td>
+<td style="text-align:right">160</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.63</td>
+</tr>
+<tr>
+<td>4 layers, <code>d_model=32</code></td>
+<td style="text-align:right">64</td>
+<td style="text-align:right">0.31</td>
+<td style="text-align:right">0.40</td>
+</tr>
+<tr>
+<td>6 layers, <code>d_model=32</code></td>
+<td style="text-align:right">64</td>
+<td style="text-align:right">0.50</td>
+<td style="text-align:right">0.98</td>
+</tr>
+<tr>
+<td>8 layers, <code>d_model=32</code></td>
+<td style="text-align:right">96</td>
+<td style="text-align:right">0.96</td>
+<td style="text-align:right">0.36</td>
+</tr>
+</tbody>
+</table>
+<p>The widest model showed the clearest improvement: after correcting the vocabulary, it remained near-perfect at length 128 and began solving length 160. The other configurations were less predictable. Some improved substantially, while the eight-layer result at length 96 became worse.</p>
+<p>So yes, the output vocabulary affected performance but it was not as simple as “smaller vocabulary, better model.” The rerun changed the failure boundaries while also revealing how sensitive these models were to initialization and training.</p>
+<h2 id="a-quick-look-at-attention">
+<a href="#a-quick-look-at-attention" class="header-anchor">
+A Quick Look At Attention
+</a>
+</h2><p>To get a qualitative view of what the model learned, I inspected the attention matrices from a successful four-layer, <code>d_model=64</code> model on a short example:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">Input:  abcdefgh</span></span>
+<span class="line"><span style="color: #abb2bf">Output: hgfedcba</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Rows represent query positions and columns represent key positions. During generation, a reversal-aligned pattern appears when queries from <code>[SEP]</code> onward move backwards through the source tokens</p>
+<p>
+<img src="https://github.com/user-attachments/assets/d2fbd869-3c92-408f-936d-528e2f971420" alt="Layer 3 attention figure" width="1000">
+</p>
+<p><em>Note: layers started with index 0 so layer 3 here represents final layer</em></p>
+<p>The clearest pattern appeared in the final layer. In the lower-left part of the matrices, successive target positions attend to source positions in reverse order, producing the bright diagonal visible across several heads. The earlier layers were more diffuse, while the final layer showed a much cleaner positional lookup.</p>
+<h3 id="can-we-force-the-correct-attention">
+<a href="#can-we-force-the-correct-attention" class="header-anchor">
+Can we force the correct attention?
+</a>
+</h3><p>As a small experiment, I injected an ideal reversal-aligned attention matrix into every possible head and layer of a failed model. Some interventions improved token accuracy by around <code>0.10</code>, while others made it worse. Correct attention alone was not enough the learned projections, other blocks, and residual stream still affected the output.</p>
+<p>I also built a hand-written attention demo using a reversal specific modification of RoPE. The key rotations are shifted using the known <code>[SEP]</code> position, making attention peak at the mirrored source token. It reverses perfectly, but both the reversal rule and separator position are built into the mechanism, so this is not a standard Transformer implementation. It is simply a constructive example showing that attention can express the required lookup. You can check it out
+<a href="https://colab.research.google.com/drive/1y7YjWYqchI-BQhdkiTCfzttfJMZ4q42p?usp=sharing" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<h2 id="conclusion">
+<a href="#conclusion" class="header-anchor">
+Conclusion
+</a>
+</h2><p>What started as a small example for Trainite turned into a useful stress test for small Transformers. String reversal looks trivial, but the models developed sharp failure boundaries as the sequences became longer.</p>
+<p>Increasing width produced the clearest improvement, while adding depth was much less predictable. Near the failure boundary, results often depended on the random seed, and the positional-encoding experiment showed that model size was not the only architectural choice that mattered. The gap between token accuracy and exact match was another useful reminder that getting most tokens right is not the same as solving the task.</p>
+<p>These experiments are too small to establish a general rule about Transformer scaling: the models were not parameter-matched, each length was trained separately, and only three seeds were used. Still, they served their purpose. Trainite gave me a complete project that I could freely modify, from the tokenizer and evaluation loop to the scheduler and attention inspection, without rebuilding the training infrastructure each time.</p>
+<p>That was the main takeaway for me: the experiment did not produce one clean scaling law, but it produced a much better example of the kind of iterative experimentation Trainite is meant to support.</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/trainite/">
+#Trainite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch-ignite/">
+#PyTorch-Ignite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/transformers/">
+#Transformers
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/limitations-of-transformer/">
+#Limitations-of-Transformer
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/string-reversal/">
+#String-Reversal
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+</div>
+<div>
+<a href="/blog/reproducing-crasp-experiments-using-trainite/" class="group float-right">
+<span class="overflow-hidden">Reproducing "Knee-Deep in C-RASP" Experiments using Trainite</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-string-reversal-task">The String Reversal Task</a></li>
+<li><a href="#generating-the-project">Generating The Project</a>
+<ul>
+<li><a href="#what-trainite-gives-you">What Trainite Gives You</a></li>
+</ul>
+</li>
+<li><a href="#customizing-trainite-for-string-reversal">Customizing Trainite for String Reversal</a></li>
+<li><a href="#experimental-setup">Experimental Setup</a>
+<ul>
+<li><a href="#a-small-vocabulary-detour">A small vocabulary detour</a></li>
+</ul>
+</li>
+<li><a href="#evaluation-metrics">Evaluation Metrics</a></li>
+<li><a href="#results">Results</a>
+<ul>
+<li><a href="#exact-match">Exact match</a></li>
+<li><a href="#token-accuracy-vs-exact-match">Token accuracy vs exact match</a></li>
+<li><a href="#autoregressive-evaluation">Autoregressive evaluation</a></li>
+<li><a href="#a-positional-encoding-detour">A positional-encoding detour</a></li>
+<li><a href="#did-fixing-the-vocabulary-help">Did fixing the vocabulary help?</a></li>
+</ul>
+</li>
+<li><a href="#a-quick-look-at-attention">A Quick Look At Attention</a>
+<ul>
+<li><a href="#can-we-force-the-correct-attention">Can we force the correct attention?</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',appId:'7EWYE1JCT3',apiKey:'841e93e60c16975ba1bd8c7c716eed82',indexName:'pytorch-ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:Website']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

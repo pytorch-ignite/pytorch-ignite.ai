@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>intermediate on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/intermediate/</link><description>Recent content in intermediate on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 22 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/intermediate/index.xml" rel="self" type="application/rss+xml"/><item><title>Reinforcement Learning with Ignite</title><link>https://pytorch-ignite.ai/tutorials/intermediate/03-reinforcement-learning/</link><pubDate>Mon, 22 Nov 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/tutorials/intermediate/03-reinforcement-learning/</guid><description>&lt;h1 id="reinforcement-learning-with-ignite">
+&lt;a href="#reinforcement-learning-with-ignite" class="header-anchor">
+Reinforcement Learning with Ignite
+&lt;/a>
+&lt;/h1>&lt;p>In this tutorial we will implement a
+&lt;a href="http://www.scholarpedia.org/article/Policy_gradient_methods" target="" rel="">policy gradient based algorithm&lt;/a> called
+&lt;a href="http://www.cs.toronto.edu/~tingwuwang/REINFORCE.pdf" target="" rel="">Reinforce&lt;/a> and use it to solve OpenAI&amp;rsquo;s
+&lt;a href="https://github.com/openai/gym/wiki/CartPole-v0" target="_blank" rel="noopener noreferrer">Cartpole problem&lt;/a> using PyTorch-Ignite.&lt;/p></description></item></channel></rss>

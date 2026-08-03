@@ -1,0 +1,771 @@
+<!DOCTYPE html><html lang="en-us" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ee4c2c">
+<meta name="keywords" content="pytorch,pytorch ignite,ignite,engine,events,handlers,metrics,website">
+<link rel="icon" type="image/svg+xml" href="/_images/ignite_logomark.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@pytorch_ignite">
+<meta name="twitter:creator" content="@pytorch_ignite">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta name="twitter:image:alt" content="PyTorch-Ignite logo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PyTorch-Ignite">
+<meta property="og:image" content="https://raw.githubusercontent.com/pytorch/ignite/master/assets/logo/ignite_logo.png">
+<meta property="og:image:alt" content="PyTorch-Ignite logo">
+<meta name="description" content="A walkthrough of reproducing a transformer depth hierarchy paper using Trainite.">
+<meta property="og:description" content="A walkthrough of reproducing a transformer depth hierarchy paper using Trainite.">
+<meta name="twitter:description" content="A walkthrough of reproducing a transformer depth hierarchy paper using Trainite.">
+<title>
+Reproducing &amp;ldquo;Knee-Deep in C-RASP: A Transformer Depth Hierarchy&amp;rdquo; Experiments using Trainite
+| PyTorch-Ignite</title>
+<meta property="og:title" content="  
+    Reproducing &amp;ldquo;Knee-Deep in C-RASP: A Transformer Depth Hierarchy&amp;rdquo; Experiments using Trainite
+   | PyTorch-Ignite">
+<meta name="twitter:title" content="  
+    Reproducing &amp;ldquo;Knee-Deep in C-RASP: A Transformer Depth Hierarchy&amp;rdquo; Experiments using Trainite
+   | PyTorch-Ignite">
+<link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+<link rel="stylesheet" href="/_hugo/css/style.3b470591ca1a50dbc1f43747f0bc429f.min.css">
+<link rel="stylesheet" href="/_hugo/css/main.9acd436c5609f4c6f7c0a9a9c6536f57.min.css">
+<link rel="preconnect" href="https://7EWYE1JCT3-dsn.algolia.net" crossorigin="" data-proofer-ignore="">
+<link rel="canonical" href="https://pytorch-ignite.ai/blog/reproducing-crasp-experiments-using-trainite/">
+<script>const saved=localStorage.getItem('ignite-color-scheme');(saved?saved==='dark':window.matchMedia(`(prefers-color-scheme: dark)`).matches)&&(document.documentElement.classList.add('dark'),document.documentElement.dataset.theme='dark')</script>
+</head>
+<body class="bg-white
+font-sans
+text-blue-gray-600
+antialiased
+dark:bg-dark-700 dark:text-warm-gray-200">
+<header class="bg-white
+border-b
+flex
+h-$header-height
+py-2
+px-6
+top-0
+right-0
+left-0
+z-10
+justify-between
+items-center
+sticky
+<sm:px-4
+dark:bg-dark-700
+dark:border-b-dark-200">
+<div class="flex items-center">
+<button class="mr-1 lg:hidden" id="sideBarBtn" aria-label="Toggle Sidebar"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+</button>
+<a href="/" class="flex items-center">
+<img src="/_images/ignite_logomark.svg" alt="PyTorch-Ignite" width="50" height="50" class="h-40px w-auto" loading="lazy">
+<span class="font-semibold">PyTorch-Ignite</span>
+</a>
+</div>
+<div class="flex-grow"></div>
+<div class="hidden lg:block">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav>
+</div>
+<button aria-label="Toggle Color Scheme" title="Toggle Color Scheme" id="toggleDark" class="mx-2"><svg id="sun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728.0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="moon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentcolor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003.0 0012 21a9.003 9.003.0 008.354-5.646z"></path></svg>
+</button>
+<div id="docsearch"></div>
+</header>
+<div class="grid-cols-[1fr,2fr,1fr] lg:grid xl:grid-cols-[1fr,3fr,1fr]">
+<aside class="bg-white
+h-$aside-height
+top-$header-height
+py-3
+px-6
+transform
+transition-transform
+z-10
+duration-300
+fixed
+overflow-y-auto
+lg:sticky <lg:border-r
+<lg:-translate-x-full
+<lg:w-75
+dark:bg-dark-700
+dark:border-dark-200" id="sidebar">
+<div class="border-b lg:hidden dark:border-dark-200">
+<nav class="place-content-center place-items-center block lg:flex">
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">Docs</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/how-to-guides/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Guides
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/tutorials/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Tutorials
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/concepts/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Concepts
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="https://pytorch.org/ignite/engine.html" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+API Reference
+</a>
+</li>
+</ul>
+</div>
+<a href="/blog/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary text-$c-primary">
+Blog
+</a>
+<a href="/ecosystem/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Ecosystem
+</a>
+<div class="p-1 relative group lg:p-2">
+<button class="dropDownBtn" aria-label="Toggle Dropdown">About</button><svg id="chevronRight" xmlns="http://www.w3.org/2000/svg" class="h-5 transition-transform duration-300 transform w-5 rotate-90 inline-block" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414.0z" clip-rule="evenodd"></path></svg>
+<ul id="dropDownList" class="bg-white
+border
+rounded-lg
+min-w-50
+p-2
+right-0
+hidden
+lg:absolute
+dark:bg-dark-700 dark:border-dark-200
+lg:group-hover:block">
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/community/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Community
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/contribution-guide/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Contribution Guide
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/coc/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code of Conduct
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/talks/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Talks
+</a>
+</li>
+<li class="children:rounded-lg children:hover:bg-gray-200
+dark:children:hover:bg-dark-200">
+<a href="/about/governance/" target="" rel="" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Governance
+</a>
+</li>
+</ul>
+</div>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+GitHub
+</a>
+<a href="https://pytorch-ignite.ai/playground" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Playground
+</a>
+<a href="https://code-generator.pytorch-ignite.ai/" target="_blank" rel="noopener noreferrer" class="p-1 lg:p-2 block whitespace-nowrap hover:text-$c-primary">
+Code-Generator
+</a>
+</nav></div>
+<nav class="py-3 px-1">
+<h5 class="font-semibold py-1 uppercase active">Blog</h5>
+<ul class="px-2 pb-4">
+<li class="py-1">
+<a href="/blog/string-reversal-example-trainite/" class="hover:text-$c-primary py-1">String Reversal Example: Exploring Small Transformers with Trainite</a>
+</li>
+<li class="py-1">
+<a href="/blog/reproducing-crasp-experiments-using-trainite/" class="text-$c-primary hover:text-$c-primary py-1">Reproducing "Knee-Deep in C-RASP" Experiments using Trainite</a>
+<div class="text-sm px-2 lg:hidden"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-counting-task">The Counting Task</a>
+<ul>
+<li><a href="#what-is-language-lsubksub">What is Language <em>L<sub>k</sub></em>?</a></li>
+<li><a href="#framing-as-a-machine-learning-problem">Framing as a Machine Learning Problem</a></li>
+<li><a href="#sequence-length-bins--ood-testing">Sequence Length Bins &amp; OOD Testing</a></li>
+</ul>
+</li>
+<li><a href="#project-generation-with-trainite">Project Generation with Trainite</a>
+<ul>
+<li><a href="#what-trainite-gives-you">What Trainite Gives You</a></li>
+</ul>
+</li>
+<li><a href="#customizing-the-code">Customizing the Code</a>
+<ul>
+<li><a href="#1-model-customizations-modelstransformerpy">1. Model Customizations (<code>models/transformer.py</code>)</a></li>
+<li><a href="#2-trainer-customizations-trainerpy">2. Trainer Customizations (<code>trainer.py</code>)</a></li>
+<li><a href="#3-sweep--visualization-scripts">3. Sweep &amp; Visualization Scripts</a></li>
+</ul>
+</li>
+<li><a href="#training--visualizing-results">Training &amp; Visualizing Results</a>
+<ul>
+<li><a href="#heatmap-results-across-length-bins">Heatmap Results Across Length Bins</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#get-started-with-trainite">Get Started with Trainite</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</li>
+<li class="py-1">
+<a href="/blog/integrations-with-code-generator-during-quansight-intern/" class="hover:text-$c-primary py-1">Bridging Data Science Tools with PyTorch-Ignite's Code-Generator and Nebari</a>
+</li>
+<li class="py-1">
+<a href="/blog/pytorch-ignite-during-quansight-internship/" class="hover:text-$c-primary py-1">Sangho's Internship at Quansight with PyTorch-Ignite project</a>
+</li>
+<li class="py-1">
+<a href="/blog/gan-evaluation-with-fid-and-is/" class="hover:text-$c-primary py-1">GAN evaluation using FID and IS</a>
+</li>
+<li class="py-1">
+<a href="/blog/introducing-code-generator-v020/" class="hover:text-$c-primary py-1">Introducing PyTorch-Ignite's Code Generator v0.2.0</a>
+</li>
+<li class="py-1">
+<a href="/blog/distributed-made-easy-with-ignite/" class="hover:text-$c-primary py-1">Distributed Training Made Easy with PyTorch-Ignite</a>
+</li>
+<li class="py-1">
+<a href="/blog/introduction/" class="hover:text-$c-primary py-1">Introduction to PyTorch-Ignite</a>
+</li>
+</ul>
+</nav>
+</aside>
+<main class="min-w-0 py-6 px-6">
+<div class="relative prose prose-red">
+<h1 id="reproducing-knee-deep-in-c-rasp-a-transformer-depth-hierarchy-experiments-using-trainite">
+<a href="#reproducing-knee-deep-in-c-rasp-a-transformer-depth-hierarchy-experiments-using-trainite" class="header-anchor">
+Reproducing “Knee-Deep in C-RASP: A Transformer Depth Hierarchy” Experiments using Trainite
+</a>
+</h1><p>When you get an idea for a new model or experiment, the worst part is losing momentum while spending hours setting up training loops, configuration files, and logging before you can even run your first epoch.</p>
+<p>This is where <strong>
+<a href="https://github.com/pytorch-ignite/trainite" target="_blank" rel="noopener noreferrer">Trainite</a></strong> comes in. Trainite is an open-source machine learning toolbox powered by <strong>
+<a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer">PyTorch-Ignite</a></strong> that takes you from zero to a running PyTorch experiment in minutes. Instead of locking you into rigid framework abstractions, Trainite generates clean, modular Python starter code that you fully own and can customize freely.</p>
+<p>Hi! I’m Taha Zahid, a GSoC'26 Contributor for NumFOCUS, actively building Trainite alongside my team. In this blog, I will walk you through how we used Trainite to reproduce the paper <strong>
+<a href="https://arxiv.org/pdf/2506.16055" target="_blank" rel="noopener noreferrer">Knee-Deep in C-RASP: A Transformer Depth Hierarchy</a></strong> using training configurations from the authors' official <strong>
+<a href="https://github.com/pentagonalize/CRASP_depth" target="_blank" rel="noopener noreferrer">CRASP_depth GitHub repository</a></strong>, covering everything from generating the initial project and customizing the code to running our training sweeps and plotting the results.</p>
+<h2 id="the-counting-task">
+<a href="#the-counting-task" class="header-anchor">
+The Counting Task
+</a>
+</h2><p>Before generating and customizing our experiment, let’s look at the problem that the paper explores.</p>
+<p>The authors train a Transformer (without positional encodings) to solve a counting task over an alternating language, <em>L<sub>k</sub></em>. Their key claim is that a model with depth <em>d</em> can recognize language <em>L<sub>k</sub></em> up to <em>k = d + 2</em>, but fails to generalize beyond that boundary.</p>
+<h3 id="what-is-language-lsubksub">
+<a href="#what-is-language-lsubksub" class="header-anchor">
+What is Language <em>L<sub>k</sub></em>?
+</a>
+</h3><p><em>L<sub>k</sub></em> is an alternating block language over the alphabet {a, b} with <em>k - 1</em> transition switches between blocks of <em>a</em>’s and <em>b</em>’s:</p>
+<ul>
+<li><em>L<sub>1</sub> = a<sup>+</sup></em> (all <em>a</em>’s, 0 switches)</li>
+<li><em>L<sub>2</sub> = a<sup>+</sup> b<sup>+</sup></em> (block of <em>a</em>’s followed by <em>b</em>’s, 1 switch)</li>
+<li><em>L<sub>3</sub> = a<sup>+</sup> b<sup>+</sup> a<sup>+</sup></em> (2 switches)</li>
+</ul>
+<h3 id="framing-as-a-machine-learning-problem">
+<a href="#framing-as-a-machine-learning-problem" class="header-anchor">
+Framing as a Machine Learning Problem
+</a>
+</h3><p>We frame this as a <strong>prefix classification task:</strong> the model receives an input sequence and must output <code>0</code> for all positions except for the final alternating block, which is labeled <code>1</code>.</p>
+<p>For example, for <em>k = 2</em> (<em>L<sub>2</sub></em>):</p>
+<ul>
+<li>Input: <code>&lt;bos&gt;aaabbb</code></li>
+<li>Label: <code>0000111</code></li>
+</ul>
+<p>Here, the <code>&lt;bos&gt;</code> token and the first block (<code>aaa</code>) are labeled <code>0</code>, and the final block (<code>bbb</code>) is labeled <code>1</code>. To predict the final block correctly, the Transformer must learn to count the alternating switches as it processes the sequence.</p>
+<h3 id="sequence-length-bins--ood-testing">
+<a href="#sequence-length-bins--ood-testing" class="header-anchor">
+Sequence Length Bins &amp; OOD Testing
+</a>
+</h3><p>To test whether the Transformer learns a true, length-invariant counting mechanism rather than memorizing fixed-length positions, the dataset is split into specific sequence length bins:</p>
+<ul>
+<li><strong>Training &amp; Validation Bin</strong>: Sequence lengths <strong>201 to 250</strong> (<code>[201, 250]</code>).</li>
+<li><strong>Out-of-Distribution (OOD) Test Bins</strong>: Sequence lengths <strong><code>[251, 300]</code></strong>, <strong><code>[301, 350]</code></strong>, and <strong><code>[351, 400]</code></strong>.</li>
+</ul>
+<p>The paper’s theoretical framework predicts that a model of depth <em>d</em> will generalize across all sequence lengths up to <em>k = d + 2</em>, but will fail when <em>k</em> ≥ <em>d + 3</em>. Below is the original paper’s reference result matrix (Figure 4 in <em>Knee-Deep in C-RASP</em>):</p>
+<p>
+<img src="/_images/2026-08-01-reproducing-crasp-experiments-using-trainite/paper_results.png" alt="paper_results" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><em>Figure: Theoretical and empirical results from the paper, demarcating the theoretical limit boundary at k = d + 2.</em></p>
+<hr>
+<h2 id="project-generation-with-trainite">
+<a href="#project-generation-with-trainite" class="header-anchor">
+Project Generation with Trainite
+</a>
+</h2><p>Now that we understand the problem, let’s generate a fresh experiment workspace using Trainite. First, we can run <code>trainite init --help</code> to explore the available models, datasets, and trainers:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">usage: trainite [-h] [OPTIONS]</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span>
+<span class="line"><span style="color: #abb2bf">Generate a starter training project.</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span>
+<span class="line"><span style="color: #abb2bf">Run ``trainite init`` without any arguments to enter interactive mode, where each option is prompted one at a time.</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span>
+<span class="line"><span style="color: #abb2bf">╭─ positional arguments ──────────────────────────────────────────────────────────────────────╮</span></span>
+<span class="line"><span style="color: #abb2bf">│ [STR]              Directory to create the starter project in. (default:                    │</span></span>
+<span class="line"><span style="color: #abb2bf">│                    my-cool-experiment)                                                      │</span></span>
+<span class="line"><span style="color: #abb2bf">╰─────────────────────────────────────────────────────────────────────────────────────────────╯</span></span>
+<span class="line"><span style="color: #abb2bf">╭─ options ───────────────────────────────────────────────────────────────────────────────────╮</span></span>
+<span class="line"><span style="color: #abb2bf">│ -h, --help         show this help message and exit                                          │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --model {transformer}                                                                       │</span></span>
+<span class="line"><span style="color: #abb2bf">│                    Starter model template to use. (default: transformer)                    │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --dataset {string-reverse,counting}                                                         │</span></span>
+<span class="line"><span style="color: #abb2bf">│                    Starter dataset template to use. (default: string-reverse)               │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --trainer {decoder-trainer}                                                                 │</span></span>
+<span class="line"><span style="color: #abb2bf">│                    Starter trainer template to use. (default: decoder-trainer)              │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --output-root STR  Output root for generated config. (default: outputs)                     │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --run-name STR     Run name for generated config. (default: '')                             │</span></span>
+<span class="line"><span style="color: #abb2bf">│ --force, --no-force                                                                         │</span></span>
+<span class="line"><span style="color: #abb2bf">│                    Overwrite existing starter files. (default: False)                       │</span></span>
+<span class="line"><span style="color: #abb2bf">╰─────────────────────────────────────────────────────────────────────────────────────────────╯</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>To initialize our counting experiment, we select the built-in <code>counting</code> dataset along with the default <code>transformer</code> model and <code>decoder-trainer</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #61AFEF">trainite</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">init</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">counting</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">--dataset</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">counting</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>Trainite instantly creates a clean, self-contained project workspace:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #abb2bf">counting/</span></span>
+<span class="line"><span style="color: #abb2bf">├── config.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── config.yaml</span></span>
+<span class="line"><span style="color: #abb2bf">├── datasets/</span></span>
+<span class="line"><span style="color: #abb2bf">│   ├── counting.py</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── transformed.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── main.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── models/</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── transformer.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── preprocessors/</span></span>
+<span class="line"><span style="color: #abb2bf">│   └── char_tokenizer.py</span></span>
+<span class="line"><span style="color: #abb2bf">├── pyproject.toml</span></span>
+<span class="line"><span style="color: #abb2bf">├── README.md</span></span>
+<span class="line"><span style="color: #abb2bf">├── trainer.py</span></span>
+<span class="line"><span style="color: #abb2bf">└── utils.py</span></span>
+<span class="line"><span style="color: #abb2bf"></span></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="what-trainite-gives-you">
+<a href="#what-trainite-gives-you" class="header-anchor">
+What Trainite Gives You
+</a>
+</h3><p>Trainite generates <strong>plain, readable Python code</strong> directly inside your project folder:</p>
+<ul>
+<li><strong><code>config.yaml</code></strong>: Configures all model hyperparameters, data ratios, and trainer settings.</li>
+<li><strong><code>models/</code> &amp; <code>datasets/</code></strong>: Standard PyTorch <code>nn.Module</code> and <code>Dataset</code> implementations.</li>
+<li><strong><code>trainer.py</code></strong>: A complete PyTorch-Ignite training and evaluation engine.</li>
+<li><strong><code>main.py</code></strong>: The clean entry point to trigger training.</li>
+</ul>
+<p>Because you own all these files, you are completely free to edit, refactor, or customize any part of the codebase to fit your task, just like we are about to do now!</p>
+<hr>
+<h2 id="customizing-the-code">
+<a href="#customizing-the-code" class="header-anchor">
+Customizing the Code
+</a>
+</h2><p>Now that we have generated the starter project, let’s adapt the codebase to match our paper’s experimental setup.</p>
+<h3 id="1-model-customizations-modelstransformerpy">
+<a href="#1-model-customizations-modelstransformerpy" class="header-anchor">
+1. Model Customizations (<code>models/transformer.py</code>)
+</a>
+</h3><p>First, we modify <code>models/transformer.py</code> to remove Rotary Position Embeddings (RoPE), as the paper investigates Transformers <strong>without positional encodings</strong>.</p>
+<p>We also switch to PyTorch’s built-in <code>nn.TransformerDecoderLayer</code> to match the authors' reference implementation, and add a <code>num_classes</code> parameter to project output logits to binary classification targets (2 classes) instead of vocabulary tokens:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">class</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">TransformerModel</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">nn</span><span style="color: #ABB2BF">.</span><span style="color: #E5C07B">Module</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B; font-style: italic">self</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">vocab_size</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">100</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">hidden_size</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">64</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">num_layers</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">num_heads</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">feedforward_dim</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">2048</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">dropout</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">float</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0.1</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">max_seq_len</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">128</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">pad_token_id</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #D19A66; font-style: italic">num_classes</span><span style="color: #ABB2BF">: </span><span style="color: #56B6C2">int</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">    ) -&gt; </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #56B6C2">super</span><span style="color: #ABB2BF">().</span><span style="color: #56B6C2">__init__</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.embedding </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Embedding</span><span style="color: #ABB2BF">(vocab_size, hidden_size)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        decoder_layer </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">TransformerDecoderLayer</span><span style="color: #ABB2BF">(</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">d_model</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">hidden_size,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">nhead</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">num_heads,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">dim_feedforward</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">feedforward_dim,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">dropout</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">dropout,</span></span>
+<span class="line"><span style="color: #ABB2BF">            </span><span style="color: #E06C75; font-style: italic">batch_first</span><span style="color: #56B6C2">=</span><span style="color: #D19A66">True</span><span style="color: #ABB2BF">,</span></span>
+<span class="line"><span style="color: #ABB2BF">        )</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.decoder </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">TransformerDecoder</span><span style="color: #ABB2BF">(decoder_layer, </span><span style="color: #E06C75; font-style: italic">num_layers</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">num_layers)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">        out_dim </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> num_classes </span><span style="color: #C678DD">if</span><span style="color: #ABB2BF"> num_classes </span><span style="color: #C678DD">is</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD">not</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">None</span><span style="color: #ABB2BF"> </span><span style="color: #C678DD">else</span><span style="color: #ABB2BF"> vocab_size</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.proj </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> nn.</span><span style="color: #61AFEF">Linear</span><span style="color: #ABB2BF">(hidden_size, out_dim)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="2-trainer-customizations-trainerpy">
+<a href="#2-trainer-customizations-trainerpy" class="header-anchor">
+2. Trainer Customizations (<code>trainer.py</code>)
+</a>
+</h3><p><strong>Sequence-Level Exact-Match Accuracy</strong>: The standard template measures token-level accuracy. For the counting task, a sequence is only correct if <em>every</em> character’s prefix label is predicted correctly. We add a custom <code>sequence_accuracy_transform</code> to <code>trainer.py</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">sequence_accuracy_transform</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">output</span><span style="color: #ABB2BF">) -&gt; tuple[torch.Tensor, torch.Tensor]:</span></span>
+<span class="line"><span style="color: #ABB2BF">    logits, targets </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> output[</span><span style="color: #98C379">"logits"</span><span style="color: #ABB2BF">], output[</span><span style="color: #98C379">"targets"</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    preds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">argmax</span><span style="color: #ABB2BF">(logits, </span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Identify non-ignored positions</span></span>
+<span class="line"><span style="color: #ABB2BF">    mask </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> targets </span><span style="color: #56B6C2">!=</span><span style="color: #ABB2BF"> ignore_index</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Sequence is correct if all non-ignored positions match</span></span>
+<span class="line"><span style="color: #ABB2BF">    correct_mask </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> (</span><span style="color: #56B6C2">~</span><span style="color: #ABB2BF">mask) </span><span style="color: #56B6C2">|</span><span style="color: #ABB2BF"> (preds </span><span style="color: #56B6C2">==</span><span style="color: #ABB2BF"> targets)</span></span>
+<span class="line"><span style="color: #ABB2BF">    seq_correct </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> correct_mask.</span><span style="color: #61AFEF">all</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">).</span><span style="color: #61AFEF">long</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Compare against target of 1s (representing fully correct sequence)</span></span>
+<span class="line"><span style="color: #ABB2BF">    seq_targets </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">ones_like</span><span style="color: #ABB2BF">(seq_correct)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">return</span><span style="color: #ABB2BF"> seq_correct, seq_targets</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>We then pass this transform function directly to PyTorch-Ignite’s <code>Accuracy</code> metric when attaching metrics in <code>trainer.py</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #ABB2BF">sequence_acc </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">Accuracy</span><span style="color: #ABB2BF">(</span><span style="color: #E06C75; font-style: italic">output_transform</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">sequence_accuracy_transform)</span></span>
+<span class="line"><span style="color: #ABB2BF">sequence_acc.</span><span style="color: #61AFEF">attach</span><span style="color: #ABB2BF">(evaluator, </span><span style="color: #98C379">"sequence_accuracy"</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p><strong>Early Termination</strong>: To save compute during large sweeps, we attach an Ignite event handler to stop training as soon as validation sequence accuracy reaches 100%:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #61AFEF">@self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">val_evaluator</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">on</span><span style="color: #ABB2BF">(</span><span style="color: #61AFEF">Events</span><span style="color: #ABB2BF">.</span><span style="color: #D19A66">COMPLETED</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #C678DD">def</span><span style="color: #ABB2BF"> </span><span style="color: #61AFEF">terminate_on_perfect_accuracy</span><span style="color: #ABB2BF">(</span><span style="color: #D19A66; font-style: italic">engine</span><span style="color: #ABB2BF">):</span></span>
+<span class="line"><span style="color: #ABB2BF">    acc </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> engine.state.metrics.</span><span style="color: #61AFEF">get</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"sequence_accuracy"</span><span style="color: #ABB2BF">, </span><span style="color: #D19A66">0.0</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #C678DD">if</span><span style="color: #ABB2BF"> acc </span><span style="color: #56B6C2">&gt;=</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">1.0</span><span style="color: #ABB2BF">:</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.logger.</span><span style="color: #61AFEF">info</span><span style="color: #ABB2BF">(</span><span style="color: #98C379">"Validation accuracy reached 100%. Terminating training early."</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"><span style="color: #ABB2BF">        </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.trainer.</span><span style="color: #61AFEF">terminate</span><span style="color: #ABB2BF">()</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p><strong>Constant Learning Rate</strong>: Since the paper uses a constant learning rate, we add <code>use_lr_scheduler: false</code> under <code>trainer</code> in <code>config.yaml</code> and wrap <code>attach_lr_scheduler</code> in a check inside <code>trainer.py</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">if</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.trainer_config.use_lr_scheduler:</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #61AFEF">attach_lr_scheduler</span><span style="color: #ABB2BF">(</span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.trainer, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.optimizer, </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.total_iters, config.optimizer.lr)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p><strong>Non-Autoregressive Qualitative Logging</strong>: Because prefix classification predicts all labels in a single forward pass, we update <code>_log_inference</code> to evaluate predictions directly without autoregressive token generation:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #C678DD">with</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">no_grad</span><span style="color: #ABB2BF">():</span></span>
+<span class="line"><span style="color: #ABB2BF">    logits </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #E5C07B">self</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">model</span><span style="color: #ABB2BF">(batch_input_ids, </span><span style="color: #E06C75; font-style: italic">attention_mask</span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF">batch_attention_mask)</span></span>
+<span class="line"><span style="color: #ABB2BF">    preds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> torch.</span><span style="color: #61AFEF">argmax</span><span style="color: #ABB2BF">(logits, </span><span style="color: #E06C75; font-style: italic">dim</span><span style="color: #56B6C2">=-</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #ABB2BF">decoded_strs </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> []</span></span>
+<span class="line"><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> idx </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> </span><span style="color: #56B6C2">range</span><span style="color: #ABB2BF">(num_samples):</span></span>
+<span class="line"><span style="color: #ABB2BF">    seq_len </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> prompt_ids_list[idx].shape[</span><span style="color: #D19A66">0</span><span style="color: #ABB2BF">]</span></span>
+<span class="line"><span style="color: #ABB2BF">    </span><span style="color: #7F848E; font-style: italic"># Extract prediction excluding the BOS prefix</span></span>
+<span class="line"><span style="color: #ABB2BF">    seq_preds </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> preds[idx, </span><span style="color: #56B6C2">-</span><span style="color: #ABB2BF">seq_len:][</span><span style="color: #D19A66">1</span><span style="color: #ABB2BF">:]</span></span>
+<span class="line"><span style="color: #ABB2BF">    pred_str </span><span style="color: #56B6C2">=</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">""</span><span style="color: #ABB2BF">.</span><span style="color: #61AFEF">join</span><span style="color: #ABB2BF">(</span><span style="color: #56B6C2">str</span><span style="color: #ABB2BF">(p.</span><span style="color: #61AFEF">item</span><span style="color: #ABB2BF">()) </span><span style="color: #C678DD">for</span><span style="color: #ABB2BF"> p </span><span style="color: #C678DD">in</span><span style="color: #ABB2BF"> seq_preds)</span></span>
+<span class="line"><span style="color: #ABB2BF">    decoded_strs.</span><span style="color: #61AFEF">append</span><span style="color: #ABB2BF">(pred_str)</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="3-sweep--visualization-scripts">
+<a href="#3-sweep--visualization-scripts" class="header-anchor">
+3. Sweep &amp; Visualization Scripts
+</a>
+</h3><p>To evaluate generalization across model depths (<em>d</em> ∈ [1, 10]), we test combinations of model dimensions (<code>dim = [256, 512]</code>) and learning rates (<code>lr = [1e-4, 1e-5]</code>). To keep compute manageable while still producing the meaningful results of the paper, we limit <em>k</em> to <em>d+2</em>, <em>d+3</em>, and <em>d+4</em> for each depth <em>d</em>, allowing us to clearly observe the sharp shift in accuracy right at the theoretical boundary.</p>
+<p>To automate this, we added two helper scripts to the project:</p>
+<ul>
+<li><strong><code>sweep.py</code></strong>: Loops through all hyperparameter configurations and appends metric results into a single <code>sweep.csv</code>.</li>
+<li><strong><code>plot_results.py</code></strong>: Reads <code>sweep.csv</code> to generate plots for visualizing results.</li>
+</ul>
+<p>Lastly, since we want to log all sweep runs under a unified ClearML project, we also added a <code>clearml_project</code> argument to <code>config.yaml</code> to specify the project name.</p>
+<hr>
+<h2 id="training--visualizing-results">
+<a href="#training--visualizing-results" class="header-anchor">
+Training &amp; Visualizing Results
+</a>
+</h2><p>To perform the multi-configuration experiment, we simply run <code>sweep.py</code>:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #61AFEF">python</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">sweep.py</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">--dims</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">256</span><span style="color: #98C379">,512</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">--lrs</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">0.0001</span><span style="color: #98C379">,0.00001</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div><p>All training metrics, console outputs, and checkpoints are logged to ClearML for experiment tracking. As a reference for how individual training runs look in ClearML, you can inspect the execution outputs for <em>d=1</em>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Configuration</th>
+<th style="text-align:center">ClearML Task Execution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><em>d=1, k=3</em></td>
+<td style="text-align:center">
+<a href="https://app.clear.ml/projects/0744ed77846043848a1322144c03c15a/experiments/fd36c90b8dfd4e1786ba7839e774fd66/output/execution" target="_blank" rel="noopener noreferrer">Link</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><em>d=1, k=4</em></td>
+<td style="text-align:center">
+<a href="https://app.clear.ml/projects/0744ed77846043848a1322144c03c15a/experiments/b0d42be0584040608875fb542c43c8d0/output/execution" target="_blank" rel="noopener noreferrer">Link</a></td>
+</tr>
+<tr>
+<td style="text-align:center"><em>d=1, k=5</em></td>
+<td style="text-align:center">
+<a href="https://app.clear.ml/projects/0744ed77846043848a1322144c03c15a/experiments/631a80487bbb4fcab620f9f693d4eaff/output/execution" target="_blank" rel="noopener noreferrer">Link</a></td>
+</tr>
+</tbody>
+</table>
+<p>Once the sweep completes, we run <code>plot_results.py</code> to aggregate the best-performing models across configurations:</p>
+<div class="highlight"><pre class="shiki one-dark-pro" style="background-color: #282c34" tabindex="0"><code><span class="line"><span style="color: #61AFEF">python</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">plot_results.py</span><span style="color: #ABB2BF"> </span><span style="color: #D19A66">--input-csv</span><span style="color: #ABB2BF"> </span><span style="color: #98C379">sweep.csv</span></span>
+<span class="line"></span></code></pre><button class="absolute top-1 right-1 copyBtn">
+      <svg id="copyIt" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28 10v18H10V10h18m0-2H10a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" fill="#fff"></path><path d="M4 18H2V4a2 2 0 0 1 2-2h14v2H4z" fill="#fff"></path></svg>
+      <svg id="copyDone" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="#0f0">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      </button></div>
+<h3 id="heatmap-results-across-length-bins">
+<a href="#heatmap-results-across-length-bins" class="header-anchor">
+Heatmap Results Across Length Bins
+</a>
+</h3><p><strong>Validation Set (<code>[201, 250]</code>)</strong>
+<img src="/_images/2026-08-01-reproducing-crasp-experiments-using-trainite/201_250.png" alt="sweep_heatmap_201_250_best" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><strong>OOD Test Set (<code>[251, 300]</code>)</strong>
+<img src="/_images/2026-08-01-reproducing-crasp-experiments-using-trainite/251_300.png" alt="sweep_heatmap_251_300_best" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><strong>OOD Test Set (<code>[301, 350]</code>)</strong>
+<img src="/_images/2026-08-01-reproducing-crasp-experiments-using-trainite/301_350.png" alt="sweep_heatmap_301_350_best" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p><strong>OOD Test Set (<code>[351, 400]</code>)</strong>
+<img src="/_images/2026-08-01-reproducing-crasp-experiments-using-trainite/351_400.png" alt="sweep_heatmap_351_400_best" width="120" height="100%" loading="lazy" class="rounded-lg mx-auto w-4/5 lg:w-3/5">
+</p>
+<p>As shown in the heatmaps above, every model with depth <em>d</em> achieves <strong>100% sequence accuracy</strong> on the validation set (<code>[201, 250]</code>) for <em>k</em> ≤ <em>d + 2</em>. As soon as the number of block alternations exceeds <em>k = d + 2</em> (i.e., <em>k = d + 3</em> or <em>k = d + 4</em>), sequence accuracy drops, exactly as predicted by the paper’s theoretical bounds.</p>
+<p>Additionally, for models satisfying <em>k</em> ≤ <em>d + 2</em>, high sequence accuracy is maintained on longer out-of-distribution (OOD) length bins up to 400 tokens. You might notice that for <em>d=8</em> and <em>d=9</em> at <em>k = d + 2</em>, test accuracy slightly decreases on the higher length bins (<code>[301, 350]</code> and <code>[351, 400]</code>). However, because <em>d=10</em> recovers 100% accuracy across all OOD bins, this minor drop in <em>d=8</em> and <em>d=9</em> is likely due to seed sensitivity during training rather than a breakdown in length generalization.</p>
+<hr>
+<h2 id="conclusion">
+<a href="#conclusion" class="header-anchor">
+Conclusion
+</a>
+</h2><p>In this post, we reproduced the empirical findings of <em>Knee-Deep in C-RASP: A Transformer Depth Hierarchy</em> by evaluating Transformers on alternating block languages. Our experiments confirmed the paper’s theoretical depth hierarchy: a Transformer of depth <em>d</em> reliably recognizes language <em>L<sub>k</sub></em> up to <em>k</em> ≤ <em>d + 2</em>, with sequence accuracy dropping sharply beyond this bound.</p>
+<p>Just as we demonstrated in this post by generating a Trainite project with <code>trainite init</code> and modifying it to our needs, Trainite allows you to eliminate repetitive boilerplate code and get straight to building, tweaking, and sweeping what actually matters.</p>
+<h3 id="get-started-with-trainite">
+<a href="#get-started-with-trainite" class="header-anchor">
+Get Started with Trainite
+</a>
+</h3><p>Check out the official <strong>
+<a href="https://github.com/pytorch-ignite/trainite" target="_blank" rel="noopener noreferrer">Trainite GitHub Repository</a></strong> to explore the codebase, read the documentation, and try out <code>trainite init</code> today!</p>
+<div class="pb-2">
+<span class="mx-2 inline-block">
+<a href="/tags/trainite/">
+#Trainite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/pytorch-ignite/">
+#PyTorch-Ignite
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/transformers/">
+#Transformers
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/limitations-of-transformer/">
+#Limitations-of-Transformer
+</a>
+</span>
+<span class="mx-2 inline-block">
+<a href="/tags/c-rasp/">
+#C-RASP
+</a>
+</span>
+</div>
+<div class="border-t grid py-6 gap-x-4 grid-cols-2 dark:border-dark-200">
+<div>
+<a href="/blog/string-reversal-example-trainite/" class="group"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 mr-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:-translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414.0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+<span class="overflow-hidden"></span>String Reversal Example: Exploring Small Transformers with Trainite
+</a>
+</div>
+<div>
+<a href="/blog/integrations-with-code-generator-during-quansight-intern/" class="group float-right">
+<span class="overflow-hidden">Bridging Data Science Tools with PyTorch-Ignite's Code-Generator and Nebari</span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 ml-1 transition-transform w-5 duration-300 inline-block group-hover:transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentcolor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414.0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</main>
+<aside class="h-$aside-height top-$header-height py-3 px-6 sticky overflow-y-auto <lg:hidden">
+<div class="py-3 px-2">
+<h5 class="font-semibold">Table of Contents</h5>
+<div class="text-sm py-1 px-2"><nav id="TableOfContents">
+<ul>
+<li><a href="#the-counting-task">The Counting Task</a>
+<ul>
+<li><a href="#what-is-language-lsubksub">What is Language <em>L<sub>k</sub></em>?</a></li>
+<li><a href="#framing-as-a-machine-learning-problem">Framing as a Machine Learning Problem</a></li>
+<li><a href="#sequence-length-bins--ood-testing">Sequence Length Bins &amp; OOD Testing</a></li>
+</ul>
+</li>
+<li><a href="#project-generation-with-trainite">Project Generation with Trainite</a>
+<ul>
+<li><a href="#what-trainite-gives-you">What Trainite Gives You</a></li>
+</ul>
+</li>
+<li><a href="#customizing-the-code">Customizing the Code</a>
+<ul>
+<li><a href="#1-model-customizations-modelstransformerpy">1. Model Customizations (<code>models/transformer.py</code>)</a></li>
+<li><a href="#2-trainer-customizations-trainerpy">2. Trainer Customizations (<code>trainer.py</code>)</a></li>
+<li><a href="#3-sweep--visualization-scripts">3. Sweep &amp; Visualization Scripts</a></li>
+</ul>
+</li>
+<li><a href="#training--visualizing-results">Training &amp; Visualizing Results</a>
+<ul>
+<li><a href="#heatmap-results-across-length-bins">Heatmap Results Across Length Bins</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#get-started-with-trainite">Get Started with Trainite</a></li>
+</ul>
+</li>
+</ul>
+</nav></div>
+</div>
+</aside>
+</div>
+<script src="/_hugo/js/app.319fb8141aac723ecc1c6db29dd5a576.min.js" defer=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+<script>fetch('https://api.github.com/repos/pytorch/ignite/releases/latest').then(a=>a.json()).then(a=>{docsearch({container:'#docsearch',appId:'7EWYE1JCT3',apiKey:'841e93e60c16975ba1bd8c7c716eed82',indexName:'pytorch-ignite',searchParameters:{facetFilters:[[`version:${a.tag_name}`,'tags:Website']]}})})</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NQNJSZEFB4"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-NQNJSZEFB4',{anonymize_ip:!1})}</script>
+
+</body></html>

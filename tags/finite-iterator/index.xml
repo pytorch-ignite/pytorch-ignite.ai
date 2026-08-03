@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>finite iterator on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/finite-iterator/</link><description>Recent content in finite iterator on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 04 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/finite-iterator/index.xml" rel="self" type="application/rss+xml"/><item><title>How to work with data iterators</title><link>https://pytorch-ignite.ai/how-to-guides/06-data-iterator/</link><pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/how-to-guides/06-data-iterator/</guid><description>&lt;h1 id="how-to-work-with-data-iterators">
+&lt;a href="#how-to-work-with-data-iterators" class="header-anchor">
+How to work with data iterators
+&lt;/a>
+&lt;/h1>&lt;p>When the data provider for training or validation is an iterator
+(infinite or finite with known or unknown size), here are some basic
+examples of how to setup trainer or evaluator.&lt;/p></description></item></channel></rss>
