@@ -11,7 +11,11 @@ tags:
   - String-Reversal
 ---
 
-# Exploring Small Transformers with Trainite on String-Reversal
+# String Reversal Example: Exploring Small Transformers with Trainite
+
+When you get an idea for a new model or experiment, the worst part is losing momentum while spending hours setting up training loops, configuration files, and logging before you can even run your first epoch.
+
+This is where [Trainite](https://github.com/pytorch-ignite/trainite) comes in. Trainite is an open-source machine learning toolbox powered by [PyTorch-Ignite](https://github.com/pytorch/ignite) that takes you from zero to a running PyTorch experiment in minutes. Instead of locking you into rigid framework abstractions, Trainite generates clean, modular Python starter code that you fully own and can customize freely.
 
 Hi, I am Aaishwarya Mishra, during my internship at Quansight, I worked on Trainite, a modular language training toolbox built with PyTorch and PyTorch-Ignite.
 
