@@ -11,7 +11,7 @@ tags:
   - String-Reversal
 ---
 
-Most of the time when you are working on a new project or just starting out or prototyping you have to write same boilerplate code again and again whether is training loop, configs, logging etc.
+Most of the time when you are working on a new project or just starting out or prototyping you have to write same boilerplate code again and again whether it's training loop, configs, logging etc.
 
 [Trainite](https://github.com/pytorch-ignite/trainite) can help you with that. Trainite is an open-source machine learning toolbox built on top of [PyTorch-Ignite](https://github.com/pytorch/ignite) that takes you from zero to a running PyTorch experiment in minutes. Instead of locking you into rigid framework abstractions, Trainite generates clean, modular Python starter code that you fully own and can customize freely.
 
