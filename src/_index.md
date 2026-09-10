@@ -120,7 +120,7 @@ ecosystem:
     text: MONAI is a PyTorch-based, open-source framework for deep learning in healthcare imaging, part of PyTorch Ecosystem.
     url: https://project-monai.github.io/
   - title: Trainite
-    text: Application to generate your training scripts with PyTorch-Ignite.
+    text: Trainite - your starting point for experimentations.
     url: https://github.com/pytorch-ignite/trainite
   - title: Nussl
     text: A flexible source separation library in Python
