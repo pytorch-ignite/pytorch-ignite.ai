@@ -412,7 +412,7 @@ class Net(nn.Module):
     
         self.model = resnet18(num_classes=10)
 
-        self.model.conv1 = self.model.conv1 = nn.Conv2d(
+        self.model.conv1 = nn.Conv2d(
             1, 64, kernel_size=3, padding=1, bias=False
         )
 
