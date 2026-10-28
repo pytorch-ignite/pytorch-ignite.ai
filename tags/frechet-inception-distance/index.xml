@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Frechet Inception Distance on PyTorch-Ignite</title><link>https://pytorch-ignite.ai/tags/frechet-inception-distance/</link><description>Recent content in Frechet Inception Distance on PyTorch-Ignite</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://pytorch-ignite.ai/tags/frechet-inception-distance/index.xml" rel="self" type="application/rss+xml"/><item><title>GAN evaluation using FID and IS</title><link>https://pytorch-ignite.ai/blog/gan-evaluation-with-fid-and-is/</link><pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate><guid>https://pytorch-ignite.ai/blog/gan-evaluation-with-fid-and-is/</guid><description>&lt;h2 id="gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics">
+&lt;a href="#gan-evaluation--the-frechet-inception-distance-and-inception-score-metrics" class="header-anchor">
+GAN Evaluation : the Frechet Inception Distance and Inception Score metrics
+&lt;/a>
+&lt;/h2>&lt;p>
+&lt;img src="https://pytorch-ignite.ai/_images/2021-08-11-GAN-evaluation-using-FID-and-IS_97_1.png" alt="GAN evaluation results using FID and IS" width="120" height="100%" loading="lazy"
+class="rounded-lg mx-auto w-4/5 lg:w-3/5" />
+&lt;/p>
+&lt;p>In this notebook, two &lt;code>PyTorch-Ignite&lt;/code>&amp;rsquo;s metrics to evaluate &lt;em>Generative Adversarial Networks&lt;/em> (or GAN in short) are introduced :&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Frechet Inception Distance&lt;/strong>, details can be found in
+&lt;a href="https://arxiv.org/pdf/1706.08500.pdf" target="_blank" rel="noopener noreferrer">&lt;code>Heusel et al. 2002&lt;/code>&lt;/a>&lt;/li>
+&lt;li>&lt;strong>Inception Score&lt;/strong>, details can be found in
+&lt;a href="https://arxiv.org/pdf/1801.01973.pdf" target="_blank" rel="noopener noreferrer">&lt;code>Barratt et al. 2018&lt;/code>&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>See
+&lt;a href="https://pytorch.org/ignite/metrics.html#complete-list-of-metrics" target="_blank" rel="noopener noreferrer">here&lt;/a> for more details about the implementation of the metrics in
+&lt;a href="https://github.com/pytorch/ignite" target="_blank" rel="noopener noreferrer">PyTorch-Ignite&lt;/a>.&lt;/p>
+&lt;p>Most of the code here is from
+&lt;a href="https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html" target="_blank" rel="noopener noreferrer">DCGAN example&lt;/a> in
+&lt;a href="https://github.com/pytorch/examples" target="_blank" rel="noopener noreferrer">pytorch/examples&lt;/a>. In addition to the original tutorial, this notebook will use in-built GAN based metric in &lt;code>ignite.metrics&lt;/code> to evaluate Frechet Inception Distnace and Inception Score and showcase other metric based features in &lt;code>ignite&lt;/code>.&lt;/p></description></item></channel></rss>
